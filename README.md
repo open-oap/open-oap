@@ -8,4 +8,4 @@ Partners here:
 
 contact for this project: open-oap-github@cosmoblonde.de
 
-Work is in progess. The first version will be published in spring 2022.
+Work is in progess. The first version will be published in sommer 2022.
