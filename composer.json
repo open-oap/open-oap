@@ -10,10 +10,6 @@
         {
             "name": "Ingeborg Hess",
             "role": "Developer"
-        },
-        {
-            "name": "Ian Goodger",
-            "role": "Developer"
         }
     ],
     "license": "GPL-2.0-or-later",
