@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_csh_tx_openoap_domain_model_grouptitle.xlf" date="2022-02-17T15:25:01Z" product-name="open_oap">
+		<header/>
+		<body>
+			<trans-unit id="title.description" resname="title.description">
+				<source>title</source>
+			</trans-unit>
+			<trans-unit id="internal_title.description" resname="internal_title.description">
+				<source>internalTitle</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

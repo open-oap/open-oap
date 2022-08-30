@@ -1,0 +1,189 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+     data-namespace-typo3-fluid="true">
+
+Available variables:
+    {proposal}
+    {comments}
+    {commentNewUri}
+    {answers}
+    {actionName}
+    {itemAnswerMap}
+    {groupsCounter}
+    {annotationButtonEnabled}
+    {limitEditableFields}
+
+    <f:layout name="ProposalsBELayout" />
+
+    <f:section name="content">
+        <f:render partial="Style" />
+
+        <f:flashMessages />
+
+        <h1><span class="highlighted">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.proposal_preview")}</span> {proposal.title}</h1>
+        
+        <p class="download-wrapper">
+                <f:link.action action="showProposal" arguments="{proposal:proposal,download:1}" class="download">
+                    <span>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:download.pdf.label")}</span>
+                </f:link.action>
+        </p>
+
+        <f:comment><!-- GLOBAL COMMENTS --></f:comment>
+        <div class="section">
+            <span class="section-label">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:preview.proposal.comments.label")}</span>
+            <div class="section-button">
+                <f:render partial="Proposal/ButtonNewComment" arguments="{labeled:1}" />
+            </div>
+            <div>
+                <f:render partial="Proposal/CommentForm" arguments="{proposal:proposal, id:'comment', section:''}" />
+            </div>
+
+            <table width="100%">
+                <f:if condition="{comments}">
+                    <f:then>
+                        <f:for each="{comments}" as="comment">
+                            <tr><td width="18%"><f:format.date format="d.m.Y, H:i">{comment.created}</f:format.date></td>
+                            <td> <div class="item_value">{comment.text -> f:format.nl2br()}</div></td></tr>
+                        </f:for>
+                    </f:then>
+                    <f:else>
+                        <tr><td width="18%"></td><td></td></tr>
+                    </f:else>
+                </f:if>
+            </table>
+        </div>
+
+        <f:comment><!-- STATUS --></f:comment>
+        <div class="section">
+            <span class="section-label">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.state")}</span>
+            <table width="100%">
+                <tr>
+                    <td width="19%"><strong>{f:translate(key:'tx_openoap_domain_model_proposal.state.{proposal.state}')}</strong></td>
+                    <td>
+                        <f:comment><!-- Status ändern --></f:comment>
+                        <f:if condition="{annotationButtonEnabled}">
+                            <f:then>
+                                <div class="form-inline table-bg">
+                                    <f:form action="showProposal" name="proposal" object="{proposal}">
+                                        <fieldset>
+                                            <f:if condition="{limitEditableFields}">
+                                                <f:then>
+                                                    <v:variable.set name="checkedLimit-1" value="true" />
+                                                    <v:variable.set name="checkedLimit-0" value="false" />
+                                                </f:then>
+                                                <f:else>
+                                                    <v:variable.set name="checkedLimit-1" value="false" />
+                                                    <v:variable.set name="checkedLimit-0" value="true" />
+                                                </f:else>
+                                            </f:if>
+                                            <div>
+                                                <label for="limit-0">
+                                                    <f:form.radio id="limit-0" name="selection[limitEdit]" value="0" checked="{checkedLimit-0}" />
+                                                    <span>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.metaInformation.limitEditableFields.0.label")}</span>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label for="limit-1">
+                                                    <f:form.radio id="limit-0" name="selection[limitEdit]" value="1" checked="{checkedLimit-1}" />
+                                                    <span>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.metaInformation.limitEditableFields.1.label")}</span>
+                                                </label>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset class="form-group">
+                                            <label for="state-select">
+                                                <f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.state.label' />:
+                                            </label>
+                                            <f:form.select
+                                            id="state-select"
+                                            name="selection[state]"
+                                            value="{proposal.state}"
+                                            options='{states}'
+                                            class="form-select" />
+                                        </fieldset>
+                                        <fieldset class="form-group">
+                                            <f:form.button class="button" name="selection[todo]" value="submit-state" >
+                                                <span class="button-text"><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.state.submit' /></span>
+                                            </f:form.button>
+                                        </fieldset>
+                                    </f:form>
+                                </div>
+                            </f:then>
+                            <f:else>
+                                <div class="form-inline table-bg">
+                                    <label for="limitation">
+                                        <span>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.metaInformation.limitEditableFields.{limitEditableFields}.label")}</span>
+                                    </label>
+                                </div>
+                            </f:else>
+                        </f:if>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <fieldset style="" class="formular">
+            <legend>{proposal.call.title}</legend>
+            <f:for each="{proposal.call.formPages}" as="formPage" iteration="pi">
+                <fieldset class="page">
+                    <legend>Page #{pi.cycle}: {formPage.title}</legend>
+                    <f:for each="{formPage.itemGroups}" as="itemGroup">
+                        <v:iterator.loop iteration="counter" count="{groupsCounter.{itemGroup.uid}}" >
+                            <v:variable.set name="elementCounter" value="{counter.index}" />
+
+                            <fieldset class="group">
+                                <legend>Group: {itemGroup.title} <f:if condition="{groupsCounter.{itemGroup.uid}} > 1">#{counter.cycle}</f:if></legend>
+                                <div class="items">
+                                    <table style="margin-left: 1rem;width:calc(100% - 6px);" class="info_table">
+                                        <f:for each="{itemGroup.items}" as="item" iteration="ii">
+
+                                            <f:variable name="mandatory" value="0" />
+                                            <f:for each="{item.validators}" as="validator">
+                                                <f:if condition="{validator.type} == 1">
+                                                    <f:variable name="mandatory" value="1" />
+                                                </f:if>
+                                            </f:for>
+
+                                            <tr>
+                                                <td class="comment-button">
+                                                    <f:if condition="{annotationButtonEnabled}">
+                                                        <f:render partial="Proposal/ButtonNewComment" arguments="{labeled:0}" />
+                                                    </f:if>
+                                                </td>
+                                                <td class="item--wrapper">
+                                                    <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{elementCounter}--{item.uid}" />
+                                                    <v:variable.set name="propertyKeyUid" value="answers.{itemAnswerMap.{propertyKeyIndex}}.uid" />
+                                                    <v:variable.set name="propertyKeyComments" value="answers.{itemAnswerMap.{propertyKeyIndex}}.comments" />
+                                                    <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+
+                                                    <strong title="FormItem: {item.uid}">{item.question} <f:if condition="{mandatory}">*</f:if></strong>
+                                                    <f:render partial="Proposal/CommentForm" arguments="{proposal:proposal, id:'comment{pi.cycle}-{ii.cycle}', section:'comments{pi.cycle}{ii.cycle}', answer:'{proposal.{propertyKeyUid}}'}" />
+                                                </td>
+                                                <td>
+                                                    <f:render partial="Utility/ValueOutput" arguments="{_all}" />
+
+                                                    <f:comment><!-- ANSWER NOTIFICATIONS --></f:comment>
+                                                    <f:if condition="{proposal.{propertyKeyComments}}">
+                                                        <div id="comments{pi.cycle}{ii.cycle}" class="answer_notifications">
+
+                                                            <f:render partial="Answer/Comments"
+                                                                      arguments="{mode:'BE',comments:'{proposal.{propertyKeyComments}}',commentStates:'{commentStates}',answersMap:'{answersMap}',answerId:'{answerId}', commentAuthorByUsername:1}"
+                                                            />
+                                                        </div>
+                                                    </f:if>
+                                                </td>
+                                            </tr>
+                                        </f:for>
+                                    </table>
+                                </div>
+                            </fieldset>
+                        </v:iterator.loop>
+                    </f:for>
+                </fieldset>
+            </f:for>
+        </fieldset>
+
+	</f:section>
+
+</html>

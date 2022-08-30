@@ -1,0 +1,13 @@
+/Build/Local/report
+/Build/Local/.phpunit.result.cache
+/Documentation-GENERATED-temp
+/tempfile.sh
+/out.txt
+/.Build/bin/
+/.Build/public/
+/.Build/vendor/
+/.Build/php-cs-fixer.cache
+
+composer.lock
+
+.ddev/

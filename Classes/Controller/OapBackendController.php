@@ -1,0 +1,242 @@
+<?php
+
+declare(strict_types=1);
+
+namespace OpenOAP\OpenOap\Controller;
+
+use OpenOAP\OpenOap\Domain\Model\Answer;
+use OpenOAP\OpenOap\Domain\Model\Comment;
+use OpenOAP\OpenOap\Domain\Model\Proposal;
+
+use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository;
+use TYPO3\CMS\Core\Pagination\ArrayPaginator;
+use TYPO3\CMS\Core\Pagination\SimplePagination;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Fluid\View\TemplatePaths;
+
+/***
+ *
+ * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ *  (c) 2020 Thorsten Born <thorsten.born@cosmoblonde.de>, cosmoblonde
+ *
+ ***/
+
+/**
+ * BackendController
+ */
+class OapBackendController extends OapBaseController
+{
+    protected string $ext = 'open_oap';
+
+    /**
+     * @var UriBuilder|null
+     */
+    protected $backendUriBuilder;
+
+    /**
+     * @var int
+     */
+    protected int $pageUid = 0;
+
+    /**
+     * @var string
+     */
+    protected string $siteIdentifier = '';
+
+    public function initializeAction()
+    {
+        parent::initializeAction();
+        // set messageSource
+        $this->messageSource = 'LLL:EXT:' . $this->ext . '/Resources/Private/Language/' . $this->messageFile . ':message.';
+
+        $this->pageUid = (integer)$GLOBALS['_GET']['id'];
+        $this->siteIdentifier = $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getIdentifier();
+
+        $this->backendUriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+
+        $this->resourceFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
+    }
+
+    /**
+     * @param array $allitems
+     * @param int $currentPage
+     * @return array
+     */
+    protected function createPaginator(array $allitems, int $currentPage): array
+    {
+        $pagination['array'] = [];
+        $pagination['pagination'] = null;
+
+        if (!count($allitems)) {
+            $this->setMessage('no_calls_found', self::WARNING);
+        } else {
+            $pagination['array'] = new ArrayPaginator($allitems, $currentPage, 100);
+            $pagination['pagination'] = new SimplePagination($pagination['array']);
+            $this->view->assign('pages', range(1, $pagination['pagination']->getLastPageNumber()));
+        }
+        return $pagination;
+    }
+
+    /*
+     * overview page
+     *
+     * @return void
+     */
+    public function showOverviewAction()
+    {
+        echo __FUNCTION__;
+        die();
+//        DebuggerUtility::var_dump($this->settings,(string)__LINE__);
+//        DebuggerUtility::var_dump($this->view,(string)__LINE__);
+//        die();
+    }
+
+    /*
+     * release notes
+     *
+     * @return void
+     */
+    public function showReleaseNotesAction()
+    {
+    }
+
+    /**
+     * @param string $messageId
+     * @param int $messageType
+     */
+    protected function setMessage(string $messageId, int $messageType): void
+    {
+        $messageText = $this->getLanguageService()->sL($this->messageSource . $messageId);
+
+        $this->addFlashMessage(
+            $messageText,
+            '',
+            $messageType,
+            false
+        );
+    }
+
+    /**
+     * @param int $currentPage
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     */
+    protected function listObjects($repository, int $currentPage): void
+    {
+        // /typo3/module/web/OpenOapBackend?token=3874b939922bd3f65d5e9fca2d5048782187b6ed&id=24&tx_openoap_web_openoapbackend%5Baction%5D=listForms&tx_openoap_web_openoapbackend%5Bcontroller%5D=OapBackend
+        // /typo3/module/web/OpenOapBackend?token=3874b939922bd3f65d5e9fca2d5048782187b6ed&id=24&tx_openoap_web_openoapbackend%5Bcontroller%5D=OapBackend
+        // /typo3/module/web/OpenOapBackend?token=3874b939922bd3f65d5e9fca2d5048782187b6ed&id=24&tx_openoap_web_openoapbackend%5Bcontroller%5D=OapBackend
+        // /typo3/module/web/OpenOapBackend?token=3874b939922bd3f65d5e9fca2d5048782187b6ed&id=24&tx_openoap_web_openoapbackend%5Bcontroller%5D=OapBackend
+
+//        DebuggerUtility::var_dump($uriBuilder->buildUriFromRoutePath('/module/web/OpenOapBackend'),(string) __LINE__);
+//        DebuggerUtility::var_dump($filter,(string) __LINE__);
+        $moduleUri = $this->backendUriBuilder->buildUriFromRoutePath('/module/web/OpenOapBackendforms');
+        $allItems = [];
+        $arrayPaginator = null;
+        $pagination = null;
+        if (!$this->pageUid) {
+            // $this->setMessage('no_page_selected', self::WARNING);
+            // use fall-back
+            $callPid = (integer)$this->settings['settings']['callPid'];
+        } else {
+            $callPid = $this->pageUid;
+        }
+        $allItems = $repository->findAllByPid($callPid)->toArray();
+//        DebuggerUtility::var_dump($allItems);
+        if (!count($allItems)) {
+            $this->setMessage('no_calls_found', self::WARNING);
+        } else {
+            $arrayPaginator = new ArrayPaginator($allItems, $currentPage, 100);
+            $pagination = new SimplePagination($arrayPaginator);
+            $this->view->assign('pages', range(1, $pagination->getLastPageNumber()));
+        }
+
+        $this->view->assignMultiple(
+            [
+                'moduleUri' => $moduleUri,
+                'paginator' => $arrayPaginator,
+                'pagination' => $pagination,
+            ]
+        );
+    }
+
+    /**
+     * Get URI to create a new record in backend
+     *
+     * @param string $tableName
+     * @param int $poolId pool identifier to store the new record in
+     * @return string
+     */
+    protected function getBackendNewUri(string $tableName, int $poolId): string
+    {
+        $uriParameters = [
+            'edit' => [
+                $tableName => [
+                    $poolId => 'new',
+                ],
+            ],
+            'returnUrl' => GeneralUtility::getIndpEnv('REQUEST_URI'),
+        ];
+
+        return (string)$this->backendUriBuilder->buildUriFromRoute('record_edit', $uriParameters);
+    }
+
+    /**
+     * Create comment for a proposal
+     *
+     * @param string $text
+     * @param Proposal $proposal
+     * @param Answer|null $answer
+     * @return Comment $comment
+     */
+    protected function createComment(string $text, Proposal $proposal, Answer $answer=null): Comment
+    {
+        $beUser = GeneralUtility::makeInstance(BackendUserRepository::class)->findByUid($GLOBALS['BE_USER']->user['uid']);
+        $comment = new Comment();
+        $comment->setCreated(time());
+        ObjectAccess::setProperty($comment, 'pid', $this->settings['commentsPoolId']);
+        if ($answer != null) {
+            $comment->setAnswer($answer);
+            $comment->setSource(self::COMMENT_SOURCE_EDIT_ANSWER);
+        } else {
+            $comment->setSource(self::COMMENT_SOURCE_EDIT);
+        }
+        $comment->setState(self::COMMENT_STATE_NEW);
+        $comment->setProposal($proposal);
+        $comment->setText($text);
+        $comment->setAuthor($beUser);
+        return $comment;
+    }
+
+    /**
+     * Returns an instance of TemplatePaths with custom paths added to
+     * the paths configured in $GLOBALS['TYPO3_CONF_VARS']['MAIL'].
+     *
+     * @return TemplatePaths
+     */
+    protected function getMailTemplatePaths(): TemplatePaths
+    {
+        $backendConfigurationManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager::class);
+        $typoscriptSetup = $backendConfigurationManager->getTypoScriptSetup();
+        $view = $typoscriptSetup['module.']['tx_openoap_web_openoapbackendproposals.']['view.'];
+        $pathArray = array_replace_recursive(
+            [
+                'layoutRootPaths'   => $GLOBALS['TYPO3_CONF_VARS']['MAIL']['layoutRootPaths'],
+                'templateRootPaths' => $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'],
+                'partialRootPaths'  => $GLOBALS['TYPO3_CONF_VARS']['MAIL']['partialRootPaths'],
+            ],
+            [
+                'layoutRootPaths'   => $view['layoutRootPaths.'],
+                'templateRootPaths' => $view['templateRootPaths.'],
+                'partialRootPaths'  => $view['partialRootPaths.'],
+            ]
+        );
+        return new TemplatePaths($pathArray);
+    }
+}

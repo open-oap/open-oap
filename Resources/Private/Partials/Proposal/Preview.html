@@ -1,0 +1,57 @@
+{namespace v=FluidTYPO3\Vhs\ViewHelpers}
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+     data-namespace-typo3-fluid="true"
+>
+
+
+    <div class="component component--layout-content-width">
+        <div class="form__text form__text--intro">
+            <f:format.html>{proposal.call.introText}</f:format.html>
+        </div>
+    </div>
+
+    <div class="preview">
+        <f:for each="{proposal.call.formPages}" as="formPage" key="pageId" iteration="pageIt">
+            <f:if condition="{formPage.type} == 'PAGETYPE_DEFAULT'">
+                <div class="preview__section">
+                    <h3 class="preview__section-headline">{formPage.title}</h3>
+                    <f:render partial="innerErrorList" arguments="{validationResults:validationResults, proposal:proposal, pageIdx:pageIt}" />
+
+                    <f:for each="{formPage.itemGroups}" as="itemGroup" key="groupId" iteration="groupIt">
+                        <v:iterator.loop iteration="counter" count="{groupsCounter.{itemGroup.uid}}" >
+                            <v:variable.set name="elementCounter" value="{counter.index}" />
+                            <h4 class="preview__headline">{itemGroup.title} <f:if condition="{groupsCounter.{itemGroup.uid}} > 1">#{counter.cycle}</f:if></h4>
+                            <dl class="preview__list">
+                                <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
+
+                                    <div class="preview__item">
+                                        <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{elementCounter}--{item.uid}" />
+                                        <v:variable.set name="propertyKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.value" />
+                                        <v:variable.set name="answerKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.uid" />
+                                        <v:variable.set name="itemValidation" value="{validationResults.answers.{proposal.{answerKey}}}" />
+                                        <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+
+                                        <dt id="preview__answer--{proposal.{answerKey}}" class="preview__term {f:if(condition: '{itemValidation.error}', then: 'preview__term--error', else: '')}" ><strong>{item.question}{answersMap.{answerId}.item.MSign}: {validationResults.pages.{groupId}.{item.uid}}</strong></dt>
+                                        <dd class="preview__definition">
+                                            <f:render partial="Utility/ValueOutput" arguments="{_all}" />
+                                            <f:if condition="{itemValidation.error}">
+                                                <ul class="preview__item-error-message">
+                                                    <f:for each="{itemValidation.messsages}" as="message">
+                                                        <li><f:render partial="ButtonIcon" arguments="{type:'error'}"/> {message}</li>
+                                                    </f:for>
+                                                </ul>
+                                            </f:if>
+                                        </dd>
+                                    </div>
+                                </f:for>
+                            </dl>
+                        </v:iterator.loop>
+                    </f:for>
+                </div>
+            </f:if>
+        </f:for>
+    </div>
+</div>

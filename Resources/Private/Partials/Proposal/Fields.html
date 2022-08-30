@@ -1,0 +1,262 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      xmlns:sd="http://typo3.org/ns/BeechIt/FalSecuredownload/ViewHelpers"
+      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+      data-namespace-typo3-fluid="true">
+
+<f:switch expression="{item.type}">
+    <f:case value="{itemTypes.TYPE_STRING}">
+        <f:form.textfield
+            type="{answersMap.{answerId}.item.type}"
+            property="{propertyKey}"
+            class="form__textfield {answersMap.{answerId}.item.classStr}"
+            id="oap-input-{propertyKeyIndex}"
+            additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+        /> <span class="form__unit">{item.unit}</span>
+    </f:case>
+    <f:case value="{itemTypes.TYPE_TEXT}">
+        <f:form.textarea
+            property="{propertyKey}"
+            class="form__textarea {answersMap.{answerId}.item.classStr}"
+            id="oap-input-{propertyKeyIndex}"
+            additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+        />
+    </f:case>
+    <f:case value="{itemTypes.TYPE_DATE1}">
+        <div class="form__date" >
+            <span class="form__date-icon"><f:render partial="ButtonIcon" arguments="{type:'datepicker',height:'32',width:'32', size:'large'}"/></span>
+            <f:form.textfield
+                type="{answersMap.{answerId}.item.type}"
+                property="{propertyKey}"
+                class="form__textfield form__textfield--date"
+                id="oap-input-{propertyKeyIndex}"
+                additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+            />
+        </div>
+    </f:case>
+    <f:case value="{itemTypes.TYPE_DATE2}">
+        <div {answersMap.{answerId}.item.dateRangeOptions -> f:format.raw()} >
+            <div class="form__date form__date--inline">
+                <span class="form__date-icon" ><f:render partial="ButtonIcon" arguments="{type:'datepicker',height:'32',width:'32', size:'large'}"/></span>
+                <f:form.textfield
+                    type="{answersMap.{answerId}.item.type}"
+                    property="{propertyKey}"
+                    class="form__textfield form__textfield--date"
+                    id="oap-input-{propertyKeyIndex}"
+                    additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                />
+            </div>
+                {f:translate(key:'tx_openoap.general.date-to')}
+            <div class="form__date form__date--inline" data-legend="oap-input-{propertyKeyIndex}--item">
+                <span class="form__date-icon"><f:render partial="ButtonIcon" arguments="{type:'datepicker',height:'32',width:'32', size:'large'}"/></span>
+                <f:form.textfield
+                    type="{answersMap.{answerId}.item.type}"
+                    property="{propertyKeyAdditionalValue}"
+                    class="form__textfield form__textfield--date"
+                    id="oap-input-{propertyKeyIndexAddValue}"
+                    additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                />
+            </div>
+        </div>
+    </f:case>
+    <f:case value="{itemTypes.TYPE_CHECKBOX}">
+        <fieldset>
+            <div class="form__checkable-group form__checkable-group--radio {f:if(condition: '{item.additionalValue}', then: 'form__checkable-group--additionalvalue', else: '')} ">
+                <f:form.hidden property="{propertyKey}" value="" />
+                <f:for each="{answersMap.{answerId}.item.options}" as="checkboxItem" iteration="i">
+                    <div class="checkbox">
+                        <label for="cb{itemAnswerMap.{propertyKeyIndex}}_{i.index}" class="form__checkable-label" <f:if condition="{i.isFirst}">data-legend="legend--{propertyKeyIndex}"</f:if> >
+                            <f:form.checkbox
+                                multiple="1"
+                                property="{propertyKeyArray}"
+                                value="{checkboxItem.key}"
+                                class="form__checkable"
+                                id="cb{itemAnswerMap.{propertyKeyIndex}}_{i.index}"
+                                additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                            />
+                        <span class="form__styled-checkbox"></span><f:format.raw>{checkboxItem.label}</f:format.raw>
+                        </label>
+                    </div>
+                </f:for>
+                <f:render partial="Proposal/AdditionalValue" arguments="{_all}" />
+
+            </div>
+        </fieldset>
+    </f:case>
+    <f:case value="{itemTypes.TYPE_RADIOBUTTON}">
+        <fieldset>
+            <div class="form__checkable-group form__checkable-group--radio {f:if(condition: '{item.additionalValue}', then: 'form__checkable-group--additionalvalue', else: '')} ">
+                <f:for each="{answersMap.{answerId}.item.options}" as="radiobuttonItem" iteration="i">
+                    <label for="rb{itemAnswerMap.{propertyKeyIndex}}_{i.index}" class="form__checkable-label" <f:if condition="{i.isFirst}">data-legend="legend--{propertyKeyIndex}"</f:if> >
+                        <f:form.radio
+                            property="{propertyKey}"
+                            value="{radiobuttonItem.key}"
+                            class="form__checkable"
+                            id="rb{itemAnswerMap.{propertyKeyIndex}}_{i.index}"
+                            additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                        />
+                        <span class="form__styled-radio"></span><f:format.raw>{radiobuttonItem.label}</f:format.raw>
+                    </label>
+                </f:for>
+                <f:render partial="Proposal/AdditionalValue" arguments="{_all}" />
+
+            </div>
+        </fieldset>
+    </f:case>
+    <f:case value="{itemTypes.TYPE_SELECT_SINGLE}">
+        <f:form.hidden property="{propertyKey}" value="" />
+        <f:form.select
+            property="{propertyKey}"
+            id="oap-input-{propertyKeyIndex}"
+            class="dualListBox"
+            additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+        >
+            <f:for each="{answersMap.{answerId}.item.options}" as="selectItem" iteration="i">
+                <f:form.select.option value="{selectItem.key}"><f:format.raw>{selectItem.label}</f:format.raw></f:form.select.option>
+            </f:for>
+        </f:form.select>
+    </f:case>
+    <f:case value="{itemTypes.TYPE_SELECT_MULTIPLE}">
+        <f:form.hidden property="{propertyKey}" value="" />
+        <f:form.select
+            property="{propertyKeyArray}"
+            id="oap-input-{propertyKeyIndex}"
+            multiple="1"
+            class="dualListBox"
+            additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+        >
+            <f:for each="{answersMap.{answerId}.item.options}" as="selectItem" iteration="i">
+                <f:form.select.option value="{selectItem.key}"><f:format.raw>{selectItem.label}</f:format.raw></f:form.select.option>
+            </f:for>
+        </f:form.select>
+    </f:case>
+    <f:case value="{itemTypes.TYPE_UPLOAD}">
+        <f:variable name="fileList" value="<v:resource.file identifier='{proposal.{propertyKey}}' treatIdAsUid='1' onlyProperties='0'/>"/>
+        <f:if condition="{fileList.name}">
+            <f:then>
+                <f:variable name="savedFilesN" value="1"/>
+            </f:then>
+            <f:else>
+                <f:variable name="savedFilesN" value="{fileList -> f:count()}"/>
+            </f:else>
+        </f:if>
+        <div class="form__upload" data-oap-propertykey="{propertyKey}" data-oap-upload="{answersMap.{answerId}.item.data-oap-upload}" data-oap-savedfiles="{savedFilesN}">
+            <div class="form__upload-files">
+                <f:if condition="{fileList.name}">
+                    <f:then>
+                        <f:comment><!-- just one file item --></f:comment>
+                        <div class="form__upload-label">{f:translate(key:'tx_openoap.general.uploaded_saved_file_label')}</div>
+                        <ul class="form__upload-fileslist">
+                            <f:variable name="countFiles" value="1" />
+                            <f:variable name="fileItem" value="{fileList}" />
+                            <f:render section="fileListItem" arguments="{_all}" />
+                        </ul>
+                    </f:then>
+                    <f:else if="{fileList -> f:count()} > 0">
+                        <f:comment><!-- a list of file items --></f:comment>
+                        <div class="form__upload-label">{f:translate(key:'tx_openoap.general.uploaded_saved_files_label')}</div>
+                        <f:variable name="countFiles" value="{fileList -> f:count()}" />
+                        <ul class="form__upload-fileslist">
+                            <f:for each="{fileList}" as="fileItem">
+                                <f:render section="fileListItem" arguments="{_all}" />
+                            </f:for>
+                        </ul>
+                    </f:else>
+                    <f:else>
+                        <f:comment><!-- o file uploaded/attached yet  --></f:comment>
+                        <div class="form__upload-label form__upload-label--empty">{f:translate(key:'tx_openoap.general.no_uploaded_saved_files_label')}</div>
+                    </f:else>
+                  </f:if>
+                <div class="form__upload-label form__upload-staged-label" style="display:none;">{f:translate(key:'tx_openoap.general.uploaded_files_label')}</div>
+                <ul class="form__upload-staged"></ul>
+            </div>
+           <!-- >{countFiles} // {answersMap.{answerId}.item.MaxValue} -->
+
+            <f:if condition="{answersMap.{answerId}.add_button.disabled} == 1">
+                <f:then>
+                    disabled *
+                    <f:form.button disabled="disabled" type="button"
+                                   class="button button--linkstyle button--linkstyle-reduced form__add-file-button form__add-file-button--disabled"  >
+                        <f:render partial="ButtonIcon" arguments="{type:'add'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.add_file')}</f:format.raw>
+                    </f:form.button>
+                    +
+                </f:then>
+                <f:else>
+                    active #
+                    <f:form.button type="button"
+                                   class="button button--linkstyle button--linkstyle-reduced form__add-file-button"  >
+                        <f:render partial="ButtonIcon" arguments="{type:'add'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.add_file')}</f:format.raw>
+                    </f:form.button>
+                    -
+                </f:else>
+            </f:if>
+
+            <f:comment><!--<div class="" <f:if condition="{countFiles} >= {answersMap.{answerId}.item.MaxValue} OR {answersMap.{answerId}.disabled}">style="display:none;"</f:if>>
+                <f:form.button type="button"
+                               class="button button--linkstyle button--linkstyle-reduced form__add-file-button"  >
+                    <f:render partial="ButtonIcon" arguments="{type:'add'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.add_file')}</f:format.raw>
+                </f:form.button>
+            </div> --></f:comment>
+
+            <f:form.hidden
+                property="{propertyKey}"
+                class="form__upload-value"
+                id="oap-input-{propertyKeyIndex}"
+                additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+            />
+            <f:if condition="{answersMap.{answerId}.item.MaxValue} > 1">
+                <f:then>
+                    <f:form.upload
+                        name="file_{propertyKey}"
+                        multiple="multiple"
+                        style="display: none;"
+                        additionalAttributes="{answersMap.{answerId}.item.additionalAttributes}"
+                    />
+                </f:then>
+                <f:else>
+                    <f:form.upload
+                        name="file_{propertyKey}"
+                        style="display: none;"
+                        additionalAttributes="{answersMap.{answerId}.item.additionalAttributes}"
+                    />
+                </f:else>
+            </f:if>
+
+            <div class="form__pre-upload" style="display:none;">
+                <div class="form__upload-label">{f:translate(key:'tx_openoap.general.files_for_upload_label')}</div>
+                <div class="form__upload-list"></div>
+                <f:form.button type="button"
+                               class="button button--alternative form__upload-file-button"  >
+                    <f:render partial="ButtonIcon" arguments="{type:'upload'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.upload_files')}</f:format.raw>
+                </f:form.button>
+                <f:form.button type="button"
+                               class="button button--linkstyle button--linkstyle-reduced form__upload-file-clear-button"  >
+                    <f:render partial="ButtonIcon" arguments="{type:'cancel'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.upload_files_clear')}</f:format.raw>
+                </f:form.button>
+            </div>
+            <div class="form__upload-msgbox"></div>
+
+        </div>
+    </f:case>
+</f:switch>
+
+<f:section name="fileListItem">
+    <li class="form__upload-filesitem">
+        <f:render partial="ButtonIcon" arguments="{type:'file-saved'}"/> {fileItem.name} ({fileItem.size -> f:format.bytes()})
+        <f:comment><!--
+            <a href="{fileItem.url}" >{fileItem.name} ({fileItem.size -> f:format.bytes()})</a>
+             < f :link.file src="{fileItem.uid}" treatIdAsReference="1">< / f:link.file>
+         --></f:comment>
+
+        <f:form.button type="button" value="{fileItem.uid}" title="<f:format.raw>{f:translate(key:'tx_openoap.general.remove_file')}</f:format.raw>"
+                       class="form__upload-btn-remove-file"  >
+            <f:render partial="ButtonIcon" arguments="{type:'delete'}"/>
+        </f:form.button>
+        <sd:downloadLink file="{fileItem}" target="_blank" title="<f:format.raw>{f:translate(key:'tx_openoap.general.download_file')}</f:format.raw>" class="form__upload-btn-download-file" >
+            <f:render partial="ButtonIcon" arguments="{type:'download'}" />
+        </sd:downloadLink>
+    </li>
+    <f:comment><!--<f:link.file file="{fileItem.url}">{fileItem.name} ({fileItem.size -> f:format.bytes()})</f:link.file>--></f:comment>
+</f:section>
+</html>

@@ -1,0 +1,245 @@
+plugin.tx_openoap_dashboard {
+    view {
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
+        templateRootPaths.1 = {$plugin.tx_openoap_dashboard.view.templateRootPath}
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
+        partialRootPaths.1 = {$plugin.tx_openoap_dashboard.view.partialRootPath}
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
+        layoutRootPaths.1 = {$plugin.tx_openoap_dashboard.view.layoutRootPath}
+    }
+    persistence {
+        storagePid = {$plugin.tx_openoap_dashboard.persistence.storagePid}
+        #recursive = 1
+    }
+    features {
+        #skipDefaultArguments = 1
+        # if set to 1, the enable fields are ignored in BE context
+        ignoreAllEnableFieldsInBe = 0
+    }
+    mvc {
+        #callDefaultActionIfActionCantBeResolved = 1
+    }
+    settings {
+        dashboardPageId = {$plugin.tx_openoap_dashboard.settings.dashboardPageId}
+        formPageId = {$plugin.tx_openoap_dashboard.settings.formPageId}
+        proposalsPageId = {$plugin.tx_openoap_dashboard.settings.proposalsPageId}
+        notificationsPageId = {$plugin.tx_openoap_dashboard.settings.notificationsPageId}
+        masterdataEditPageId = {$plugin.tx_openoap_dashboard.settings.masterdataEditPageId}
+        callPid = {$plugin.tx_openoap_dashboard.settings.callPoolId}
+        proposalPid = {$plugin.tx_openoap_dashboard.settings.proposalPoolId}
+        itemsPid = {$plugin.tx_openoap_dashboard.settings.itemsPoolId}
+        proposalsActiveLimit = {$plugin.tx_openoap_dashboard.settings.proposalsActiveLimit}
+        proposalsArchivedLimit = {$plugin.tx_openoap_dashboard.settings.proposalsArchivedLimit}
+        proposalsPoolId = {$plugin.tx_openoap_dashboard.settings.proposalsPoolId}
+        answersPoolId = {$plugin.tx_openoap_dashboard.settings.answersPoolId}
+        commentsPoolId = {$plugin.tx_openoap_dashboard.settings.commentsPoolId}
+        countriesItemOptionId = {$plugin.tx_openoap_dashboard.settings.countriesItemOptionId}
+        testerFeGroupsId = {$plugin.tx_openoap_dashboard.settings.testerFeGroupsId}
+        metaInfoSeparator = {$plugin.tx_openoap_dashboard.settings.metaInfoSeparator}
+        defaultMaxCharTextarea = {$plugin.tx_openoap_dashboard.settings.defaultMaxCharTextarea}
+        defaultMaxCharTextfield = {$plugin.tx_openoap_dashboard.settings.defaultMaxCharTextfield}
+        defaultSourcesModel = {$plugin.tx_openoap_dashboard.settings.defaultSourcesModel}
+        uploadFolder = {$plugin.tx_openoap_dashboard.settings.uploadFolder}
+        signatureFormat = {$plugin.tx_openoap_dashboard.settings.signatureFormat}
+        wordExportTemplateFile = {$plugin.tx_openoap_dashboard.settings.wordExportTemplateFile}
+    }
+}
+plugin.tx_openoap_proposals {
+    view {
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
+        templateRootPaths.1 = {$plugin.tx_openoap_proposals.view.templateRootPath}
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
+        partialRootPaths.1 = {$plugin.tx_openoap_proposals.view.partialRootPath}
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
+        layoutRootPaths.1 = {$plugin.tx_openoap_proposals.view.layoutRootPath}
+    }
+    persistence {
+        storagePid = {$plugin.tx_openoap_proposals.persistence.storagePid}
+        #recursive = 1
+    }
+    features {
+        #skipDefaultArguments = 1
+        # if set to 1, the enable fields are ignored in BE context
+        ignoreAllEnableFieldsInBe = 0
+    }
+    mvc {
+        #callDefaultActionIfActionCantBeResolved = 1
+    }
+    settings < plugin.tx_openoap_dashboard.settings
+}
+plugin.tx_openoap_applicant {
+    view {
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
+        templateRootPaths.1 = {$plugin.tx_openoap_applicant.view.templateRootPath}
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
+        partialRootPaths.1 = {$plugin.tx_openoap_applicant.view.partialRootPath}
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
+        layoutRootPaths.1 = {$plugin.tx_openoap_applicant.view.layoutRootPath}
+    }
+    persistence {
+        storagePid = {$plugin.tx_openoap_applicant.persistence.storagePid}
+        #recursive = 1
+    }
+    features {
+        #skipDefaultArguments = 1
+        # if set to 1, the enable fields are ignored in BE context
+        ignoreAllEnableFieldsInBe = 0
+    }
+    mvc {
+        #callDefaultActionIfActionCantBeResolved = 1
+    }
+    settings < plugin.tx_openoap_dashboard.settings
+}
+plugin.tx_openoap_applicantform {
+    view {
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
+        templateRootPaths.1 = {$plugin.tx_openoap_applicantform.view.templateRootPath}
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
+        partialRootPaths.1 = {$plugin.tx_openoap_applicantform.view.partialRootPath}
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
+        layoutRootPaths.1 = {$plugin.tx_openoap_applicantform.view.layoutRootPath}
+    }
+    persistence {
+        storagePid = {$plugin.tx_openoap_applicantform.persistence.storagePid}
+        #recursive = 1
+    }
+    features {
+        #skipDefaultArguments = 1
+        # if set to 1, the enable fields are ignored in BE context
+        ignoreAllEnableFieldsInBe = 0
+    }
+    mvc {
+        #callDefaultActionIfActionCantBeResolved = 1
+    }
+    settings < plugin.tx_openoap_dashboard.settings
+}
+plugin.tx_openoap_form {
+    view {
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
+        templateRootPaths.1 = {$plugin.tx_openoap_form.view.templateRootPath}
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
+        partialRootPaths.1 = {$plugin.tx_openoap_form.view.partialRootPath}
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
+        layoutRootPaths.1 = {$plugin.tx_openoap_form.view.layoutRootPath}
+    }
+    persistence {
+        storagePid = {$plugin.tx_openoap_form.persistence.storagePid}
+        #recursive = 1
+    }
+    features {
+        #skipDefaultArguments = 1
+        # if set to 1, the enable fields are ignored in BE context
+        ignoreAllEnableFieldsInBe = 0
+    }
+    mvc {
+        #callDefaultActionIfActionCantBeResolved = 1
+    }
+    settings < plugin.tx_openoap_dashboard.settings
+}
+plugin.tx_openoap_notifications {
+    view {
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
+        templateRootPaths.1 = {$plugin.tx_openoap_notifications.view.templateRootPath}
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
+        partialRootPaths.1 = {$plugin.tx_openoap_notifications.view.partialRootPath}
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
+        layoutRootPaths.1 = {$plugin.tx_openoap_notifications.view.layoutRootPath}
+    }
+    persistence {
+        storagePid = {$plugin.tx_openoap_notifications.persistence.storagePid}
+        #recursive = 1
+    }
+    features {
+        #skipDefaultArguments = 1
+        # if set to 1, the enable fields are ignored in BE context
+        ignoreAllEnableFieldsInBe = 0
+    }
+    mvc {
+        #callDefaultActionIfActionCantBeResolved = 1
+    }
+    settings < plugin.tx_openoap_dashboard.settings
+}
+
+# these classes are only used in auto-generated templates
+plugin.tx_openoap._CSS_DEFAULT_STYLE (
+    textarea.f3-form-error {
+        background-color:#FF9F9F;
+        border: 1px #FF0000 solid;
+    }
+
+    input.f3-form-error {
+        background-color:#FF9F9F;
+        border: 1px #FF0000 solid;
+    }
+
+    .tx-open-oap table {
+        border-collapse:separate;
+        border-spacing:10px;
+    }
+
+    .tx-open-oap table th {
+        font-weight:bold;
+    }
+
+    .tx-open-oap table td {
+        vertical-align:top;
+    }
+
+    .typo3-messages .message-error {
+        color:red;
+    }
+
+    .typo3-messages .message-ok {
+        color:green;
+    }
+)
+
+# Pdfviewhelper font configuration
+plugin.tx_pdfviewhelpers.settings.config.fonts {
+    addTTFFont {
+        opensansr {
+            path = EXT:open_oap/Resources/Public/Fonts/OpenSansRegular.ttf
+        }
+        opensansm {
+            path = EXT:open_oap/Resources/Public/Fonts/OpenSansMedium.ttf
+        }
+        opensansb {
+            path = EXT:open_oap/Resources/Public/Fonts/OpenSansBold.ttf
+        }
+        opensansl {
+            path = EXT:open_oap/Resources/Public/Fonts/OpenSansLight.ttf
+        }
+    }
+}
+
+# Module configuration
+module.tx_openoap_web_openoapbackendforms {
+    persistence {
+        storagePid = {$module.tx_openoap_BackendForms.persistence.storagePid}
+    }
+    view {
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Templates/
+        templateRootPaths.1 = {$module.tx_openoap_backendForms.view.templateRootPath}
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Partials/
+        partialRootPaths.1 = {$module.tx_openoap_backendForms.view.partialRootPath}
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Layouts/
+        layoutRootPaths.1 = {$module.tx_openoap_backendForms.view.layoutRootPath}
+    }
+    settings < plugin.tx_openoap_dashboard.settings
+}
+
+# Module configuration
+module.tx_openoap_web_openoapbackendproposals {
+    persistence {
+        storagePid = {$module.tx_openoap_backendproposals.persistence.storagePid}
+    }
+    view {
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Templates/
+        templateRootPaths.1 = {$module.tx_openoap_backendproposals.view.templateRootPath}
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Partials/
+        partialRootPaths.1 = {$module.tx_openoap_backendproposals.view.partialRootPath}
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Layouts/
+        layoutRootPaths.1 = {$module.tx_openoap_backendproposals.view.layoutRootPath}
+    }
+    settings < plugin.tx_openoap_dashboard.settings
+}

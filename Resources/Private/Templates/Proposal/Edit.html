@@ -1,0 +1,146 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+<f:layout name="Default" />
+
+<f:section name="content">
+
+    <f:asset.css identifier="open_oap_styles" href="EXT:open_oap/Resources/Public/Css/styles.css"/>
+    <script>(function () {window.OAP = window.OAP || {}; window.OAP.labels = <f:format.raw><f:format.json>{jsMessages}</f:format.json></f:format.raw>}());</script>
+    <f:asset.script identifier="open_oap_scripts" src="EXT:open_oap/Resources/Public/JavaScript/scripts.js" defer="1"/>
+
+    <f:render partial="FlashMessages" arguments="{_all}" />
+
+    <h1 class="page__title"><span class="hyphenated">{proposal.call.title}</span></h1>
+    <div class="component component--layout-content-width">
+        <h2><span class="hyphenated">{proposal.title}</span></h2>
+        <f:if condition="{pageControl.current} == 1">
+            <div class="form__text form__text--intro">
+                <f:format.html>{proposal.call.introText}</f:format.html>
+            </div>
+        </f:if>
+    </div>
+    <v:variable.set name="errorCounts" value="{validationResults.pages.{pageControl.current} -> f:count()}"/>
+    <f:form
+        action="update" name="proposal" object="{proposal}" class="form form--proposal" id="proposal-form-{proposal.uid}"
+        additionalAttributes="{'data-oap-servererror':errorCounts,'data-oap-proposal':proposal.uid}" enctype="multipart/form-data" method="post">
+        <div role="alert" id="proposal-form-{proposal.uid}-alert"></div>
+        <div>
+            <f:form.hidden name="currentPage" value="{pageControl.current}"/>
+            <f:for each="{proposal.answers}" as="answer" iteration="a">
+                <v:variable.set name="aIndex" value="{a.index}"/>
+                <f:form.hidden property="answers.{aIndex}.__identity" value="{answer.uid}"/>
+            </f:for>
+        </div>
+
+        <f:comment><!--               PAGES                                    --></f:comment>
+        <f:for each="{proposal.call.formPages}" as="formPage" key="pageId" iteration="pageIt">
+            <f:if condition="{formPage.type} == 'PAGETYPE_DEFAULT'">
+                <f:then>
+                    <f:form.hidden name="previewPage" value="0"/>
+                    <f:if condition="{pageControl.current} == {pageIt.cycle}">
+                        <div class="row">
+                            <div class="column column--size3">
+                                <f:render partial="Proposal/FormMenu" arguments="{_all}" />
+                            </div>
+                            <div class="column column--size9">
+
+                                <div class="form__page">
+                                    <div class="formpage__intro">
+                                        <h2 class="formpage-intro__headline">{formPage.title}</h2>
+                                        <f:if condition="{formPage.introText}">
+                                            <div class="formpage-intro__text">{formPage.introText -> f:format.html()}</div>
+                                        </f:if>
+                                        <f:comment><!--
+                                        <div class="component component--layout-content-width">
+                                            <f:render partial="FormErrors" arguments="{_all}"/>
+                                        </div>
+                                        --></f:comment>
+
+                                        <f:render partial="RequiredInfo"/>
+                                    </div>
+                                    <f:render partial="Proposal/Edit" arguments="{_all}" />
+                                    <div class="form__buttons">
+
+                                        <span class="form__buttons--left">
+                                            <f:if condition="{pageControl.previous} > 0">
+                                                <f:form.button
+                                                    additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"
+                                                    type="submit" class="button button--linkstyle"  name="gotoPage" value="{pageControl.previous}">{f:translate(key:'tx_openoap.general.save_back')}</f:form.button>
+                                            </f:if>
+                                        </span>
+                                        <span class="form__buttons--right">
+                                            <f:form.button
+                                                additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"
+                                                type="submit" class="button button--linkstyle" name="gotoPage" value="{pageControl.current}">{f:translate(key:'tx_openoap.general.save')}</f:form.button>
+                                            <f:if condition="{pageControl.next} > 0">
+                                                <f:form.button
+                                                    additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"
+                                                    type="submit" class="button" name="gotoPage" value="{pageControl.next}">{f:translate(key:'tx_openoap.general.save_next')}</f:form.button>
+                                            </f:if>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </f:if>
+                </f:then>
+                <f:else>
+                    <div class="component component--layout-content-width">
+                        <f:form.hidden name="previewPage" value="1"/>
+                        <f:render partial="Proposal/Preview" arguments="{_all}" />
+
+                        <div class="form__finish">
+                            <f:if condition="{validationResults.pages ->f:count()} == 0">
+                                <f:then>
+                                    <fieldset class="form__finishcheck">
+                                        <div class="form__checkable-group form__checkable-group--radio">
+                                            <div class="checkbox">
+                                                <label for="submit_accepted_1" class="form__checkable-label">
+                                                    <f:form.checkbox
+                                                            multiple="0"
+                                                            name="submit_accepted"
+                                                            value="1"
+                                                            class="form__checkable submit_accepted"
+                                                            id="submit_accepted_1"
+                                                    />
+                                                    <span class="form__styled-checkbox"></span>{f:translate(key:'tx_openoap.general.submit_accepted')}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </f:then>
+                                <f:else>
+                                    <div class="form__error-list-box">
+                                        <p class="form__error-list-text">{f:translate(key:'tx_openoap.general.submit_disabled')}</p>
+                                    </div>
+
+                                </f:else>
+                            </f:if>
+                            <div class="form__buttons">
+                                <span class="form__buttons--left">
+                                    <f:form.button type="submit" class="button button--linkstyle" name="gotoPage" value="{pageControl.last}"
+                                                   additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}">
+                                        {f:translate(key:'tx_openoap.general.back_to_proposal')}
+                                    </f:form.button>
+                                    <f:form.button type="submit" class="button" value="1" id="submit-proposal" name="submit" disabled="1"
+                                                   additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}">
+                                        {f:translate(key:'tx_openoap.general.submit')}
+                                    </f:form.button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </f:else>
+            </f:if>
+        </f:for>
+
+
+    </f:form>
+    <f:render partial="Modal"
+              arguments='{message:"{f:translate(key:\'tx_openoap_form.modal.hint\')}",cancel:"{f:translate(key:\'tx_openoap_form.modal.edit\')}",submit:"{f:translate(key:\'tx_openoap_form.modal.save\')}"}'
+    />
+
+</f:section>
+</html>

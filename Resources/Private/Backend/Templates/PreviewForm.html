@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
+
+    <f:layout name="FormsBELayout" />
+    <f:section name="content">
+        <f:render partial="Style" />
+
+        <f:flashMessages />
+
+        <h2>Check/Test-Protocol</h2>
+        <dl>
+        <f:for each="{evaluationResults}" as="evaluationResult">
+            <dt>{evaluationResult.text}</dt>
+                <dd>{evaluationResult.result}</dd>
+        </f:for>
+        </dl>
+
+        <fieldset style="" class="formular">
+            <legend>Form</legend>
+            <!-- <strong><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.preview_form" /></strong> -->
+            <h1 title="Call/Form: {call.uid}">{call.title}</h1>
+            <table width="100%">
+                <tr><td width="10%">teaserText</td><td> <div class="item_value"><f:if condition="{call.teaserText} == ''">--</f:if>{call.teaserText}</div></td></tr>
+                <tr><td width="10%">introText</td><td> <div class="item_value"><f:if condition="{call.introText} == ''">--</f:if>{call.introText -> f:format.raw()}</div></td></tr>
+            </table>
+
+
+        <f:for each="{call.formPages}" as="formPage" iteration="pi">
+            <fieldset class="page">
+                <legend>Page #{pi.cycle}</legend>
+            <h2 title="Page: {formPage.uid}">{formPage.title}</h2>
+            <table width="100%">
+                <tr><td width="10%">menuTitle</td><td> <div class="item_value"><f:if condition="{formPage.menuTitle} == ''">--</f:if>{formPage.menuTitle -> f:format.raw()}</div></td></tr>
+                <tr><td width="10%">introText</td><td> <div class="item_value">{formPage.introtext -> f:format.raw()}</div></td></tr>
+            </table>
+
+            <f:for each="{formPage.itemGroups}" as="formGroup">
+                <fieldset class="group">
+                    <legend>Group</legend>
+                <h3 title="FormGroup: {formGroup.uid}">{formGroup.title}</h3>
+                <div class="items">
+                    <f:for each="{formGroup.items}" as="formItem" iteration="ii">
+                        <f:variable name="mandatory" value="0" />
+                        <f:for each="{formItem.validators}" as="validator">
+                            <f:if condition="{validator.type} == 1">
+                                <f:variable name="mandatory" value="1" />
+                            </f:if>
+                        </f:for>
+                        <strong title="FormItem: {formItem.uid}">{formItem.question} <f:if condition="{mandatory}">*</f:if></strong>
+                        <table style="margin-left: 5rem;width:100%;">
+                        <tr>
+                            <td>
+                                <table class="info_table" style="width: calc(100% - 5rem);">
+                                    <tr><td>
+                                        <span class="item_label">type:</span> <span class="item_value">{formItem.type}</span>
+                                    </td></tr>
+                                    <tr><td>
+                                        <div class="item_label">introText:</div>
+                                        <div class="item_value"><f:if condition="{formItem.introText} == ''">--</f:if>{formItem.introText -> f:format.raw()}</div>
+                                    </td></tr>
+                                    <tr><td>
+                                        <div class="item_label">helpText:</div>
+                                        <div class="item_value"><f:if condition="{formItem.helpText} == ''">--</f:if>{formItem.helpText -> f:format.raw()}</div>
+                                    </td></tr>
+                                    <f:if condition="{formItem.options}">
+                                        <tr><td>
+                                            <div class="item_label">options:</div>
+                                            <div class="item_value">
+                                                <ul>
+                                                    <f:for each="{formItem.options}" as="itemOption">
+                                                        <li>{itemOption.title -> f:format.raw()}</li>
+                                                    </f:for>
+                                                </ul>
+                                            </div>
+                                        </td></tr>
+                                    </f:if>
+                                    <f:if condition="{formItem.validators}">
+                                        <tr><td>
+                                            <div class="item_label">validators:</div>
+                                            <div class="item_value">
+                                                <ul>
+                                                <f:for each="{formItem.validators}" as="validator">
+                                                    <li>{validator.title -> f:format.raw()} (#{validator.type})
+                                                        <f:if condition="{validator.param1}">Parameter 1: {validator.param1}</f:if>
+                                                        <f:if condition="{validator.param2}">Parameter 2: {validator.param2}</f:if>
+                                                    </li>
+                                                </f:for>
+                                                </ul>
+                                            </div>
+                                        </td></tr>
+                                    </f:if>
+                                </table>
+                            </td>
+                        </tr>
+                        </table>
+                        <f:if condition="!{ii.isLast}">
+                            <hr class="items_divider">
+                        </f:if>
+
+                    </f:for>
+                    </div>
+                </fieldset>
+            </f:for>
+            </fieldset>
+        </f:for>
+
+        </fieldset>
+	</f:section>
+
+
+</html>

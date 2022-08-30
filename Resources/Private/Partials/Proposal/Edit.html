@@ -1,0 +1,115 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+      data-namespace-typo3-fluid="true">
+
+<f:for each="{formPage.itemGroups}" as="itemGroup" key="groupId" iteration="groupIt">
+
+    <f:if condition="{groupsCounter.{itemGroup.uid}} == 0">
+        <fieldset>
+            <legend class="form__group-legend">{itemGroup.title}</legend>
+            <div class="formpage-group__intro">
+                <f:if condition="{itemGroup.introText}">
+                    <div class="form__group form__group--firstitem">
+                        <div class="form__text form__text--intro">
+                            {itemGroup.introText -> f:format.html()}
+                        </div>
+                    </div>
+                </f:if>
+            </div>
+
+        </fieldset>
+    </f:if>
+    <v:iterator.loop iteration="counter" count="{groupsCounter.{itemGroup.uid}}" >
+        <v:variable.set name="elementCounter" value="{counter.index}" />
+        <fieldset class="form__grouped-fieldset">
+
+            <f:if condition="{itemGroup.groupTitle}">
+                <f:then>
+                    <legend class="form__group-legend">{itemGroup.title}: {itemGroup.groupTitle.{counter.index}.title}</legend>
+                </f:then>
+                <f:else>
+                    <legend class="form__group-legend">{itemGroup.title} <f:if condition="{groupsCounter.{itemGroup.uid}} > 1">#{counter.cycle}</f:if></legend>
+                </f:else>
+            </f:if>
+
+            <f:if condition="{groupsCounter.{itemGroup.uid}} > {itemGroup.repeatableMin}">
+                <div class="form__section-delete">
+                    <f:form.button
+                        additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_DELETE_GROUP','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"
+                        type="submit" class="button button--linkstyle button--linkstyle-reduced"  name="removeGroup" value="{f:format.json(value: {itemGroup: '{itemGroup.uid}', elementCounter: '{elementCounter}'})}">
+                        <f:render partial="ButtonIcon" arguments="{type:'subtract'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.remove_group', arguments: {0: itemGroup.title} )} #{counter.cycle}</f:format.raw>
+                    </f:form.button>
+                </div>
+            </f:if>
+            <div class="formpage-group__intro">
+                <f:if condition="{itemGroup.introText}">
+                    <div class="form__text form__text--intro">
+                        {itemGroup.introText -> f:format.html()}
+                    </div>
+                </f:if>
+            </div>
+
+            <f:comment><!--                      ITEMS                                --></f:comment>
+            <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
+                <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{elementCounter}--{item.uid}" />
+                <v:variable.set name="propertyKeyIndexAddValue" value="{itemGroup.uid}--{elementCounter}--{item.uid}--a" />
+                <v:variable.set name="propertyKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.value" />
+                <v:variable.set name="propertyKeyAdditionalValue" value="answers.{itemAnswerMap.{propertyKeyIndex}}.additionalValue" />
+                <v:variable.set name="propertyKeyArray" value="answers.{itemAnswerMap.{propertyKeyIndex}}.arrayValue" />
+                <v:variable.set name="propertyKeyComments" value="answers.{itemAnswerMap.{propertyKeyIndex}}.comments" />
+                <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+
+                <div class="form__group {f:if(condition:itemIt.isFirst, then: 'form__group--firstitem')} {f:if(condition:itemIt.isLast, then: 'form__group--lastitem')}" id="oap-input-{propertyKeyIndex}--item">
+                    <f:if condition="{item.type}=={itemTypes.TYPE_RADIOBUTTON} OR {item.type}=={itemTypes.TYPE_CHECKBOX} ">
+                        <f:then>
+                            <fieldset>
+                                <legend class="form__label-question" for="oap-input-{propertyKeyIndex}" id="legend--{propertyKeyIndex}">{item.question} <f:if condition="{answersMap.{answerId}.item.MSign}"><f:render partial="Required.html" arguments="{MSign:'{answersMap.{answerId}.item.MSign}'}" /></f:if></legend>
+                        </f:then>
+                        <f:else>
+                            <label class="form__label-question" for="oap-input-{propertyKeyIndex}">{item.question} <f:if condition="{answersMap.{answerId}.item.MSign}"><f:render partial="Required.html" arguments="{MSign:'{answersMap.{answerId}.item.MSign}'}" /></f:if></label>
+                        </f:else>
+                    </f:if>
+
+                    <f:if condition="{item.introText}"><div class="form__text form__text--intro">{item.introText -> f:format.html()}</div></f:if>
+
+                    <f:if condition="{item.helpText}">
+                        <div class="form__helptext">
+                            <button type="button" class="form__helptext-control" aria-controls="oap-help-{propertyKeyIndex}" aria-expanded="false" data-disclosure-control>{f:translate(key:'tx_openoap_form.helptext.header')}</button>
+                            <div class="form__helptext-text" id="oap-help-{propertyKeyIndex}">{item.helpText -> f:format.html()}</div>
+                        </div>
+                    </f:if>
+
+                    <f:render partial="Proposal/Fields" arguments="{_all}" />
+
+
+
+                    <f:if condition="{item.type}=={itemTypes.TYPE_RADIOBUTTON}">
+                        </fieldset>
+                    </f:if>
+                    <f:comment><!--
+                        <span class="" style="font-size:small;">ID_{item.uid}</span>
+                    --></f:comment>
+                </div>
+
+                <f:if condition="{proposal.{propertyKeyComments}}">
+                    <f:render partial="Answer/Comments" arguments="{mode: 'FE', comments:'{proposal.{propertyKeyComments}}',commentStates:'{commentStates}',answersMap:'{answersMap}',answerId:'{answerId}'}" />
+                </f:if>
+            </f:for>
+        </fieldset>
+    </v:iterator.loop>
+
+    <f:if condition="{groupsCounter.{itemGroup.uid}} < {itemGroup.repeatableMax} AND {editState} == {proposalStates.META_PROPOSAL_EDITABLE_FIELDS_NO_LIMIT}">
+        <f:then>
+        <div class="form__section-add">
+            <f:form.button
+                additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"
+                type="submit" class="button button--linkstyle button--linkstyle-reduced"  name="addGroup" value="{itemGroup}">
+                <f:render partial="ButtonIcon" arguments="{type:'add'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.add_group', arguments: {0: itemGroup.title} )}</f:format.raw>
+            </f:form.button>
+        </div>
+        </f:then>
+    </f:if>
+</f:for>
+</html>

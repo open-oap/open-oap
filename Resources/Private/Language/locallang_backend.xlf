@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_mod" date="2022-02-03T10:35:30Z" product-name="open_oap">
+        <header/>
+        <body>
+<!-- headlines -->
+            <trans-unit id="module_headline.list_forms" resname="module_headline.list_forms">
+       <source>List of forms</source>
+    </trans-unit>
+    <trans-unit id="module_headline.preview_form" resname="module_headline.preview_form">
+                <source>Preview form</source>
+    </trans-unit>
+    <trans-unit id="module_headline.list_of_forms" resname="module_headline.list_of_forms">
+        <source>List of forms</source>
+    </trans-unit>
+    <trans-unit id="module_headline.list_of_proposals" resname="module_headline.list_of_proposals">
+        <source>List of proposals</source>
+    </trans-unit>
+    <trans-unit id="module_headline.filter" resname="module_headline.filter">
+        <source>Filter</source>
+    </trans-unit>
+    <trans-unit id="module_headline.results" resname="module_headline.results">
+        <source>Results</source>
+    </trans-unit>
+    <trans-unit id="module_headline.proposal_preview" resname="module_headline.proposal_preview">
+        <source>Preview</source>
+    </trans-unit>
+
+<!-- filter -->
+    <trans-unit id="filter.state" resname="filter.state">
+        <source>State</source>
+    </trans-unit>
+    <trans-unit id="filter.state.all" resname="filter.state.all">
+        <source>All states</source>
+    </trans-unit>
+    <trans-unit id="filter.calls" resname="filter.calls">
+        <source>Calls</source>
+    </trans-unit>
+    <trans-unit id="filter.calls.all" resname="filter.calls.all">
+        <source>All calls</source>
+    </trans-unit>
+    <trans-unit id="filter.options.all" resname="filter.options.all">
+        <source>All</source>
+    </trans-unit>
+
+    <trans-unit id="filter.searchword" resname="filter.searchword">
+        <source>Search word (applicant, title)</source>
+    </trans-unit>
+    <trans-unit id="filter.search" resname="filter.search">
+        <source>Search</source>
+    </trans-unit>
+    <trans-unit id="filter.clear" resname="filter.clear">
+        <source>Clear</source>
+    </trans-unit>
+
+<!-- selection -->
+    <trans-unit id="selection.header" resname="selection.header">
+        <source>Selection</source>
+    </trans-unit>
+    <trans-unit id="selection.state.label" resname="selection.state.label">
+        <source>Update state</source>
+    </trans-unit>
+    <trans-unit id="selection.state.submit" resname="selection.state.submit">
+        <source>Apply</source>
+    </trans-unit>
+    <trans-unit id="selection.option.checkAll" resname="selection.option.checkAll">
+        <source>Check all</source>
+    </trans-unit>
+    <trans-unit id="selection.option.uncheckAll" resname="selection.option.uncheckAll">
+        <source>Uncheck all</source>
+    </trans-unit>
+    <trans-unit id="selection.state.defaultOption" resname="selection.state.defaultOption">
+        <source>Select target state</source>
+    </trans-unit>
+
+<!-- sorting -->
+    <trans-unit id="sorting.order.0" resname="sorting.order.0">
+        <source>Sort ascending</source>
+    </trans-unit>
+    <trans-unit id="sorting.order.1" resname="sorting.order.1">
+        <source>Sort descending</source>
+    </trans-unit>
+
+<!-- export -->
+    <trans-unit id="selection.export.label" resname="selection.export.label">
+        <source>Export format</source>
+    </trans-unit>
+    <trans-unit id="selection.export.submit" resname="selection.export.submit">
+        <source>Export</source>
+    </trans-unit>
+    <trans-unit id="selection.export.defaultOption" resname="selection.export.defaultOption">
+        <source>Select export format</source>
+    </trans-unit>
+
+<!-- download-->
+<trans-unit id="download.pdf.label" resname="download.pdf.label">
+    <source>Download PDF</source>
+</trans-unit>
+
+<!-- messages -->
+    <trans-unit id="message.no_page_selected" resname="message.no_page_selected">
+        <source>No page selected, please choose a page.</source>
+    </trans-unit>
+    <trans-unit id="message.no_calls_found" resname="message.no_calls_found">
+        <source>No calls/forms found on in the selected folder.</source>
+    </trans-unit>
+    <trans-unit id="message.state_updated" resname="message.state_updated">
+        <source>Status update done.</source>
+    </trans-unit>
+
+<!-- MENU -->
+    <trans-unit id="menu.overview" resname="menu.overview">
+        <source>Overview</source>
+    </trans-unit>
+    <trans-unit id="menu.release_notes" resname="menu.release_notes">
+        <source>Release Notes</source>
+    </trans-unit>
+    <trans-unit id="menu.list_forms" resname="menu.list_forms">
+        <source>List Forms</source>
+    </trans-unit>
+    <trans-unit id="menu.list_proposals" resname="menu.list_proposals">
+        <source>List Proposals</source>
+    </trans-unit>
+    <trans-unit id="menu.show_proposal" resname="menu.show_proposal">
+        <source>Show Proposal</source>
+    </trans-unit>
+    <trans-unit id="menu.show_call_form" resname="menu.show_call_form">
+        <source>Show Call/Form</source>
+    </trans-unit>
+
+
+<!-- TABLE - common -->
+    <trans-unit id="table.uid" resname="table.uid">
+        <source>ID</source>
+    </trans-unit>
+    <trans-unit id="table.title" resname="table.title">
+        <source>Title</source>
+    </trans-unit>
+    <trans-unit id="table.signature" resname="table.signature">
+        <source>Signature</source>
+    </trans-unit>
+    <trans-unit id="table.metainfo" resname="table.metainfo">
+        <source>additional information:</source>
+    </trans-unit>
+
+<!-- TABLE - forms -->
+    <trans-unit id="table.callStarttime" resname="table.callStarttime">
+        <source>start date </source>
+    </trans-unit>
+    <trans-unit id="table.callEndTime" resname="table.callEndTime">
+        <source>start date </source>
+    </trans-unit>
+    <trans-unit id="table.formPages" resname="table.formPages">
+        <source>count of pages</source>
+    </trans-unit>
+    <trans-unit id="table.countForms" resname="table.countForms">
+        <source>Forms/calls found: </source>
+    </trans-unit>
+
+<!-- TABLE - proposal -->
+    <trans-unit id="table.countProposals" resname="table.countProposals">
+        <source>Proposals found: </source>
+    </trans-unit>
+    <trans-unit id="table.state" resname="table.state">
+        <source>Status</source>
+    </trans-unit>
+    <trans-unit id="table.applicant" resname="table.applicant">
+        <source>Applicant</source>
+    </trans-unit>
+    <trans-unit id="table.call" resname="table.call">
+        <source>Call</source>
+    </trans-unit>
+    <trans-unit id="table.tstamp" resname="table.tstamp">
+        <source>Last modified</source>
+    </trans-unit>
+    <trans-unit id="table.metaInformation.limitEditableFields.0.label" resname="table.metaInformation.limitEditableFields.0.label">
+        <source>All proposal fields should be editable in revision state</source>
+    </trans-unit>
+    <trans-unit id="table.metaInformation.limitEditableFields.1.label" resname="table.metaInformation.limitEditableFields.1.label">
+        <source>Only commented fields should be editable in revision state</source>
+    </trans-unit>
+
+
+    <trans-unit id="action.preview_form" resname="action.preview_form">
+        <source>show form preview</source>
+    </trans-unit>
+
+<!-- PREVIEW - proposal -->
+    <trans-unit id="preview.proposal.comments.label" resname="preview.proposal.comments.label">
+        <source>Comments</source>
+    </trans-unit>
+    <trans-unit id="preview.proposal.button.addComment" resname="preview.proposal.button.addComment">
+        <source>Add new comment</source>
+    </trans-unit>
+    <trans-unit id="preview.proposal.fieldComment.label" resname="preview.proposal.fieldComment.label">
+        <source>Comment</source>
+    </trans-unit>
+    <trans-unit id="preview.proposal.buttonSubmitComment.label" resname="preview.proposal.buttonSubmitComment.label">
+        <source>add</source>
+    </trans-unit>
+    <trans-unit id="preview.proposal.label" resname="preview.proposal.label">
+        <source>The proposal</source>
+    </trans-unit>
+
+<!-- Flexform -->
+    <trans-unit id="flexform.pluginSettings.title" resname="flexform.pluginSettings.title">
+        <source>Plugin settings</source>
+    </trans-unit>
+    <trans-unit id="flexform.mailtext.sheetTitle" resname="flexform.mailtext.sheetTitle">
+        <source>Mail texts</source>
+    </trans-unit>
+    <trans-unit id="flexform.mailtext.editor.description" resname="flexform.mailtext.editor.description">
+        <source>Note: To select and insert a placeholder, type two hash marks (add wanted quote marks only after selection): ##</source>
+    </trans-unit>
+    <trans-unit id="flexform.mailtextRevision.editor.description" resname="flexform.mailtextRevision.editor.description">
+        <source>Note: To select and insert a placeholder, type two hash marks (add wanted quote marks only after selection): ##. Use the comments placeholder to insert an automatic text if new comments have been made to proposal fields.</source>
+    </trans-unit>
+
+<!-- Mailing configuration -->
+    <trans-unit id="mailing.configuration.header.highlighted" resname="mailing.configuration.header.highlighted">
+        <source>Status Update</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.header" resname="mailing.configuration.header">
+        <source>Configure Mailing</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.proposalState.title" resname="mailing.configuration.proposalState.title">
+        <source>Proposal Status</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.emailSettings.title" resname="mailing.configuration.emailSettings.title">
+        <source>Email Settings</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.emailSubject.label" resname="mailing.configuration.emailSubject.label">
+        <source>Email Subject</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.emailCc.label" resname="mailing.configuration.emailCc.label">
+        <source>Email CC</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.emailReply.label" resname="mailing.configuration.emailReply.label">
+        <source>Email Reply To</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.previewMailtext.title" resname="mailing.configuration.previewMailtext.title">
+        <source>Preview Mailtext</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.actionSelectionIntro.text" resname="mailing.configuration.actionSelectionIntro.text">
+        <source><![CDATA[<p>Please select an option for each receiver:</p><ul><li><strong>Standard email</strong>: An email with the standard text will be sent automatically (Default)</li><li><strong>Individual email</strong>: You will receive a link in the next step that will automatically open the email in your email programme, where you can edit and send it individually</li><li><strong>No emailing</strong>: This applicant should not receive a status change email</li></ul>]]></source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.emailReceiver.title" resname="mailing.configuration.emailReceiver.title">
+        <source>Email Receiver</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.email.colHeader" resname="mailing.configuration.email.colHeader">
+        <source>Applicant Email</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.signature.colHeader" resname="mailing.configuration.signature.colHeader">
+        <source>Signature</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.mailActions.colHeader" resname="mailing.configuration.mailActions.colHeader">
+        <source>Select Mail Actions</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.option.standardEmail" resname="mailing.configuration.option.standardEmail">
+        <source>Standard email</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.option.individualEmail" resname="mailing.configuration.option.individualEmail">
+        <source>Individual email</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.option.noEmail" resname="mailing.configuration.option.noEmail">
+        <source>No emailing</source>
+    </trans-unit>
+    <trans-unit id="mailing.configuration.submit.label" resname="mailing.configuration.submit.label">
+        <source>Apply</source>
+    </trans-unit>
+
+    <trans-unit id="mailing.result.header.highlighted" resname="mailing.result.header.highlighted">
+        <source>Status Update</source>
+    </trans-unit>
+    <trans-unit id="mailing.result.header" resname="mailing.result.header">
+        <source>Mailing Result</source>
+    </trans-unit>
+    <trans-unit id="mailing.result.intro.text" resname="mailing.result.intro.text">
+        <source>Please click all available links for individual emailing before you close this page.</source>
+    </trans-unit>
+    <trans-unit id="mailing.result.emailReceiver.title" resname="mailing.result.emailReceiver.title">
+        <source>Email Receiver</source>
+    </trans-unit>
+    <trans-unit id="mailing.result.email.colHeader" resname="mailing.result.email.colHeader">
+        <source>Applicant Email</source>
+    </trans-unit>
+    <trans-unit id="mailing.result.signature.colHeader" resname="mailing.result.signature.colHeader">
+        <source>Signature</source>
+    </trans-unit>
+    <trans-unit id="mailing.result.mailAction.colHeader" resname="mailing.result.mailAction.colHeader">
+        <source>Mail Action</source>
+    </trans-unit>
+    <trans-unit id="mailing.result.mailAction.status.0" resname="mailing.result.mailAction.status.0">
+        <source>No email was sent</source>
+    </trans-unit>
+    <trans-unit id="mailing.result.mailAction.status.1" resname="mailing.result.mailAction.status.1">
+        <source>The standard email was sent</source>
+    </trans-unit>
+    <trans-unit id="mailing.result.mailAction.status.2" resname="mailing.result.mailAction.status.2">
+        <source>Edit and send email individually</source>
+    </trans-unit>
+    <trans-unit id="mailing.result.closeButton.label" resname="mailing.result.closeButton.label">
+        <source>Close</source>
+    </trans-unit>
+
+        </body>
+    </file>
+</xliff>

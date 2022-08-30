@@ -1,0 +1,22 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<v:variable.set name="statusStyle" value="proposals__status" />
+<f:if condition="{proposal.state} == {constants.PROPOSAL_RE_OPENED}">
+    <v:variable.set name="statusStyle" value="proposals__status proposals__status--highlighted" />
+</f:if>
+<div class="proposals__info">
+    <f:spaceless>
+        <span class="aural">{f:translate(key:'tx_openoap_domain_model_proposal.status')} </span><span class="{statusStyle}">{f:translate(key:'tx_openoap_domain_model_proposal.state.{proposal.state}')}</span>
+        <span class="">{f:translate(key:'tx_openoap_dashboard.proposal.lastChange.label')}:</span>&nbsp;<span title="{proposal.editTstamp -> f:format.date(format='d.m.Y - H:i')}"><f:format.date format="d.m.Y">{proposal.editTstamp}</f:format.date></span>
+        <v:variable.set name="jsonArray" value="{proposal.metaInformation -> v:format.json.decode()}"/>
+        <f:if condition="{jsonArray.info}">&nbsp;{settings.metaInfoSeparator}&nbsp;</f:if>
+        {jsonArray.info}
+        <f:if condition="{proposal.signature} > 0">
+            &nbsp;{settings.metaInfoSeparator}&nbsp;
+            <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}_</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+        </f:if>
+    </f:spaceless>
+</div>
+</html>

@@ -1,0 +1,23 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:femanager="In2code\Femanager\ViewHelpers"
+  data-namespace-typo3-fluid="true">
+ 
+<div class="form__group">
+    <label for="field_{field}">
+        <f:translate key="tx_openoap_domain_model_applicant.{labelIdent}" />
+        <f:if condition="{required}">
+            <f:render partial="Required" arguments="{}" />
+        </f:if>
+    </label>
+
+    <f:form.select
+        id="field_{field}"
+        property="{field}"
+        options="{options}"
+        prependOptionLabel = "{prependOptionLabel}"
+        prependOptionValue = "{prependOptionValue}"
+        class=""
+        additionalAttributes="{}" />
+</div>
+
+</html>

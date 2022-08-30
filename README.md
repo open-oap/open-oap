@@ -8,4 +8,15 @@ Partners here:
 
 contact for this project: open-oap-github@cosmoblonde.de
 
-Work is in progess. The first version will be published in sommer 2022.
+Work is in progess. This is still a pre-release version.
+
+The current version is 0.1 and that means there are still a few gaps. For example, the frontend parts still have to be transferred to this version (scss, js, build processes).
+There is also some documentation missing (but that's always the case, isn't it?).
+
+see further information:
+- [change log](./Documentation/ChangeLog/Index.md)
+- [roadmap](./Documentation/ChangeLog/Roadmap.md)
+
+see documentation:
+- [documentation](./Documentation/README.md)
+

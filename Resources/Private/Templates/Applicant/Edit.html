@@ -1,0 +1,62 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+Edit masterdata view
+Available variables:
+  {applicant}
+  {countries}
+  {settings}
+
+<f:section name="content">
+  <f:if condition="{applicant}">
+    <f:then>
+      <h2><f:translate key="tx_openoap_applicant.masterdataEdit.header" /></h2>
+      <p><f:translate key="tx_openoap_applicant.masterdataEdit.text" /></p>
+      
+      <f:render partial="FlashMessages" arguments="{_all}" />
+      <f:render partial="FormErrors" arguments="{object:Applicant}" />
+      
+      <f:form
+          name="applicant"
+          object="{applicant}"
+          action="update"
+          class="form form--register">
+          
+          <f:comment><f:form.hidden name="token" value="{token}" /></f:comment>
+          
+          <div>
+            <f:render partial="Applicant/FormFields" arguments="{applicant:applicant, countries:countries, stateEdit:1}" />
+          </div>
+          
+          <div class="form__buttons">
+            <f:link.typolink class="button button--alternative" parameter="{settings.dashboardPageId}">
+              <f:translate key="tx_openoap_applicant.form.submitClose" />
+            </f:link.typolink>
+            <f:form.button type="submit" class="button" value="1" data="{dialog-next:1}" name="save">
+                <f:translate key="tx_openoap_applicant.form.submitSave" />
+            </f:form.button>
+          </div>
+      </f:form> 
+    </f:then>
+    
+    <f:else>
+      <p><f:translate key="tx_openoap_applicant.notLoggedIn.text" /></p>
+    </f:else>
+    
+  </f:if>
+  
+  <f:comment>
+    <h1>Edit Applicant</h1>
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <f:form action="update" name="applicant" object="{applicant}" >
+    
+    <f:form.submit value="Save" />
+    </f:form>
+  </f:comment>
+  
+</f:section>
+</html>

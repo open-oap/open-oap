@@ -1,0 +1,17 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true" lang="en">
+
+<f:for each="{0:'tx_femanager_pi1', 1:'tx_felogin_login', 2:'tx_openoap_proposals', 3:'tx_openoap_form', 4:'tx_openoap_notifications', 5:'tx_openoap_applicantform', 6:'tx_openoap_dashboard'}" as="pluginIdentifier">
+	<v:variable.set name="queueIdentifier" value="extbase.flashmessages.{pluginIdentifier}" />
+
+	<f:flashMessages queueIdentifier="{queueIdentifier}" as="flashMessages">
+		<div role="alert" class="form__status">
+			<f:for each="{flashMessages}" as="flashMessage">
+				<p class="form__message form__message-{flashMessage.severity}">
+                    <f:format.raw>{flashMessage.message}</f:format.raw>
+				</p>
+			</f:for>
+		</div>
+	</f:flashMessages>
+
+</f:for>
+</html>

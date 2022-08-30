@@ -1,0 +1,27 @@
+# Load default processing options
+imports:
+    - { resource: "EXT:rte_ckeditor/Configuration/RTE/Processing.yaml" }
+    - { resource: "EXT:rte_ckeditor/Configuration/RTE/Editor/Base.yaml" }
+
+# Mailtext configuration for the editor
+# For complete documentation see http://docs.ckeditor.com/#!/api/CKEDITOR.config
+editor:
+#  externalPlugins:
+#    autocomplete: { resource: "EXT:open_oap/Resources/Public/JavaScript/RTE_Plugins/autocomplete/plugin.js" }
+  config:
+    extraPlugins:
+      - textwatcher
+      - autocomplete
+      - mentions
+    toolbarGroups:
+      - { name: basicstyles, groups: [ basicstyles] }
+      - { name: links, groups: [ links ] }
+      - { name: clipboard, groups: [clipboard, undo] }
+    removeButtons:
+      - Anchor
+      - Superscript
+      - Subscript
+      - Underline
+      - Strike
+    mentions:
+      - { feed: [ 'APPLICANT-TITLE##', 'APPLICANT-NAME##', 'CALL-TITLE##', 'PROPOSAL-TITLE##', 'PROPOSAL-SIGNATURE##', 'COMMENTS-NOTE##' ], minChars: 0, marker: '##' }

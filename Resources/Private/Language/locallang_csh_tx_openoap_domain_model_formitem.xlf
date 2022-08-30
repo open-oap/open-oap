@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_csh_tx_openoap_domain_model_formitem.xlf" date="2022-03-22T12:46:43Z" product-name="open_oap">
+		<header/>
+		<body>
+			<trans-unit id="question.description" resname="question.description">
+				<source>question</source>
+			</trans-unit>
+			<trans-unit id="intro_text.description" resname="intro_text.description">
+				<source>introText</source>
+			</trans-unit>
+			<trans-unit id="help_text.description" resname="help_text.description">
+				<source>helpText</source>
+			</trans-unit>
+			<trans-unit id="type.description" resname="type.description">
+				<source>type</source>
+			</trans-unit>
+			<trans-unit id="enabled_filter.description" resname="enabled_filter.description">
+				<source>enabledFilter</source>
+			</trans-unit>
+			<trans-unit id="filter_label.description" resname="filter_label.description">
+				<source>filterLabel</source>
+			</trans-unit>
+			<trans-unit id="enabled_info.description" resname="enabled_info.description">
+				<source>enabledInfo</source>
+			</trans-unit>
+			<trans-unit id="enabled_title.description" resname="enabled_title.description">
+				<source>enabled Title</source>
+			</trans-unit>
+			<trans-unit id="additional_value.description" resname="additional_value.description">
+				<source>additionalValue</source>
+			</trans-unit>
+			<trans-unit id="default_value.description" resname="default_value.description">
+				<source>defaultValue</source>
+			</trans-unit>
+			<trans-unit id="unit.description" resname="unit.description">
+				<source>unit</source>
+			</trans-unit>
+			<trans-unit id="additional_label.description" resname="additional_label.description">
+				<source>additionalLabel</source>
+			</trans-unit>
+			<trans-unit id="options.description" resname="options.description">
+				<source>options</source>
+			</trans-unit>
+			<trans-unit id="validators.description" resname="validators.description">
+				<source>validators</source>
+			</trans-unit>
+			<trans-unit id="dependent_on.description" resname="dependent_on.description">
+				<source>dependentOn</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
