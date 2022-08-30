@@ -1,56 +1,71 @@
 {
-    "name": "openoap/open-oap",
-    "type": "typo3-cms-extension",
-    "description": "Development project for an open-source TYPO3 extension: open application plattform",
-    "authors": [
-        {
-            "name": "Thorsten Born",
-            "role": "Developer"
-        },
-        {
-            "name": "Ingeborg Hess",
-            "role": "Developer"
-        }
-    ],
-    "license": "GPL-2.0-or-later",
-    "require": {
-        "typo3/cms-core": "^11.5",
-		"fluidtypo3/vhs": "^6.1",
-		"beechit/fal-securedownload": "^4.0",
-		"bithost-gmbh/pdfviewhelpers":  "^2.4",
-		"phpoffice/phpspreadsheet": "^1.22",
-		"phpoffice/phpword": "^0.18"
-    },
-    "require-dev": {
-        "typo3/testing-framework": "^6.9.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "OpenOAP\\OpenOap\\": "Classes"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "OpenOAP\\OpenOap\\Tests\\": "Tests"
-        }
-    },
-    "replace": {
-        "typo3-ter/open-oap": "self.version"
-    },
-    "config": {
-        "vendor-dir": ".Build/vendor",
-        "bin-dir": ".Build/bin"
-    },
-    "scripts": {
-        "post-autoload-dump": [
-            "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
-        ]
-    },
-    "extra": {
-        "typo3/cms": {
-            "cms-package-dir": "{$vendor-dir}/typo3/cms",
-            "web-dir": ".Build/public",
-            "extension-key": "open_oap"
-        }
+  "name": "openoap/open-oap",
+  "type": "typo3-cms-extension",
+  "description": "Development project for an open-source TYPO3 extension: open application plattform",
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "open application plattform"
+  ],
+  "authors": [
+    {
+      "name": "oap Development Team",
+      "role": "Developer"
     }
+  ],
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "typo3/cms-core": "^11.5",
+    "fluidtypo3/vhs": "^6.1",
+    "beechit/fal-securedownload": "^4.0",
+    "bithost-gmbh/pdfviewhelpers": "^2.4",
+    "phpoffice/phpspreadsheet": "^1.22",
+    "phpoffice/phpword": "^0.18",
+    "php": ">=7.2",
+    "ext-zip": "*",
+    "ext-dom": "*",
+	"ext-json": "*"
+  },
+  "require-dev": {
+    "typo3/testing-framework": "^6.9.0",
+    "friendsofphp/php-cs-fixer": "^3.10",
+    "typo3/coding-standards": "^0.5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "OpenOAP\\OpenOap\\": "Classes"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "OpenOAP\\OpenOap\\Tests\\": "Tests"
+    }
+  },
+  "replace": {
+    "typo3-ter/open-oap": "self.version"
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin",
+    "allow-plugins": {
+      "typo3/cms-composer-installers": true,
+      "typo3/class-alias-loader": true
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
+    ],
+    "code-styling": [
+      "php-cs-fixer fix --config=.Build/php-cs-fixer.php --cache-file=.Build/php-cs-fixer.cache"
+    ]
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "app-dir": ".Build",
+      "web-dir": ".Build/public",
+      "extension-key": "open_oap"
+    }
+  }
 }
