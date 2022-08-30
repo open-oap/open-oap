@@ -1,0 +1,15 @@
+<div id="oap-modal" class="modal" aria-labelledby="oap-modal-title" aria-hidden="true" role="alertdialog">
+    <div class="modal__overlay" data-a11y-dialog-hide></div>
+
+    <div class="modal__box" role="document">
+        <f:comment><!-- <h1 id="oap-modal-title" class="modal__title"></h1> --></f:comment>
+
+        <div id="oap-modal-content" class="modal__content">
+            {message}
+        </div>
+
+        <div id="oap-modal-controls" class="modal__controls">
+            <button type="button" id="oap-modal-cancel" class="modal__close" data-a11y-dialog-hide>{cancel}</button>
+            <button type="button" id="oap-modal-submit" class="modal__submit" disabled>{submit}</button>
+        </div>
+</div>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_csh_fe_users.xlf" date="2022-03-03T09:06:30Z" product-name="open_oap">
+		<header/>
+		<body>
+			<trans-unit id="company_email.description" resname="company_email.description">
+				<source>companyEmail</source>
+			</trans-unit>
+			<trans-unit id="preferred_lang.description" resname="preferred_lang.description">
+				<source>preferredLang</source>
+			</trans-unit>
+			<trans-unit id="privacypolicy.description" resname="privacypolicy.description">
+				<source>privacypolicy</source>
+			</trans-unit>
+			<trans-unit id="salutation.description" resname="salutation.description">
+				<source>salutation</source>
+			</trans-unit>
+			<trans-unit id="proposals.description" resname="proposals.description">
+				<source>Proposals of this applicant</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

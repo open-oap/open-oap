@@ -1,0 +1,204 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+     data-namespace-typo3-fluid="true">
+
+Available variables:
+    {proposalStates}
+    {proposals}
+    {proposalList}
+    {state}
+    {siteName}
+    {mailtext}
+    {submitted}
+    {settings}
+
+    <f:layout name="ProposalsBELayout" />
+
+    <f:section name="content">
+        <f:render partial="Style" />
+        <f:flashMessages />
+        
+        <f:if condition="{submitted}">
+            <f:then>
+                <f:render section="MailingResult" arguments="{_all}" />
+            </f:then>
+            <f:else>
+                <f:render section="MailingConfiguration" arguments="{_all}" />
+            </f:else>
+        </f:if>
+    </f:section>
+
+
+    <f:section name="MailingConfiguration">
+
+        <h1><span class="highlighted">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.header.highlighted")}</span> {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.header")}</h1>
+        <f:comment><!-- STATUS --></f:comment>
+        <div class="section top">
+            <span class="section-label">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.proposalState.title")}</span>
+            <p><strong>{f:translate(key:'tx_openoap_domain_model_proposal.state.{state}')}</strong></p>
+        </div>
+
+        <f:form action="customizeStatusMail" arguments="{proposals:proposals, selectedState:state}" name="mail">
+        <f:comment><!-- E-Mail Settings --></f:comment>
+        <div class="section">
+            <span class="section-label">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.emailSettings.title")}</span>
+            <div>
+
+                <div class="form-group">
+                    <strong>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.emailSubject.label")}</strong><br>
+                    <span>
+                        <f:if condition="{proposalList -> f:count()} > 1">
+                            <f:then>
+                                {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.email.status_{state}.subject", languageKey:0, arguments:"{0: siteName, 1: '[@signature]'}")}
+                            </f:then>
+                            <f:else>
+                                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.email.status_{state}.subject', languageKey:proposalList.0.maildata.langCode, arguments:'{0: siteName, 1: proposalList.0.maildata.signature}')}
+                            </f:else>
+                        </f:if>
+                    </span>
+                </div>
+                <fieldset>
+                    <div class="form-group">
+                        <label for="cc">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.emailCc.label")}</label><br>
+                        <f:form.textfield class="form-control" name="cc" value="{proposalList.0.defaultMailCc}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="reply">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.emailReply.label")}</label><br>
+                        <f:form.textfield class="form-control" name="reply" value="{proposalList.0.defaultMailReplyTo}" />
+                    </div>
+                </fieldset>
+
+            </div>
+        </div>
+        
+        <div class="section">
+            <span class="section-label">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.previewMailtext.title")}</span>
+            <div>
+                <f:format.html>{mailtext}</f:format.html>
+            </div>
+        </div>
+        
+        <div class="section">
+            <span class="section-label">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.emailReceiver.title")}</span>
+            <div><f:format.html>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.actionSelectionIntro.text")}</f:format.html></div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.email.colHeader")}
+                    </th>
+                    <th>
+                        {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.signature.colHeader")}
+                    </th>
+                    <th colspan="3">
+                        {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.mailActions.colHeader")}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <f:for each="{proposalList}" as="item">
+                <tr class="t3js-entity">
+                    <td>
+                        {item.proposal.applicant.username}
+                    </td>
+                    <td>
+                        <f:if condition="{item.proposal.signature} > 0">
+                            <f:if condition="{item.proposal.call.shortcut} !== ''">{item.proposal.call.shortcut}_</f:if><f:format.printf arguments="{0: '{item.proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+                        </f:if>
+                    </td>
+                    <td>
+                        <f:form.radio name="selection[{item.proposal.uid}]" value="1" checked="checked" /> {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.option.standardEmail")}
+                    </td>
+                    <td>
+                        <f:form.radio name="selection[{item.proposal.uid}]" value="2" /> {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.option.individualEmail")}
+                    </td>
+                    <td>
+                        <f:form.radio name="selection[{item.proposal.uid}]" value="0" /> {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.option.noEmail")}
+                    </td>
+                </tr>
+                </f:for>
+                </tbody>
+            </table>
+
+            <div class="form-group">
+                <f:form.button class="button" name="submit" value="submit" >
+                    <span class="button-text">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.submit.label")}</span>
+                </f:form.button>
+            </div>
+        </div>
+        </f:form>
+
+    </f:section>
+
+
+    <f:section name="MailingResult">
+
+        <h1><span class="highlighted">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.result.header.highlighted")}</span> {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.result.header")}</h1>
+        <div class="section">
+            <span class="section-label">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.result.emailReceiver.title")}</span>
+            <p><strong>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.result.intro.text")}</strong></p>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.result.email.colHeader")}
+                    </th>
+                    <th>
+                        {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.result.signature.colHeader")}
+                    </th>
+                    <th>
+                        {f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.result.mailAction.colHeader")}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <f:for each="{proposalList}" as="item">
+                <tr class="t3js-entity">
+                    <td>
+                        {item.proposal.applicant.username}
+                    </td>
+                    <td>
+                        <f:if condition="{item.proposal.signature} > 0">
+                            <f:if condition="{item.proposal.call.shortcut} !== ''">{item.proposal.call.shortcut}_</f:if><f:format.printf arguments="{0: '{item.proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+                        </f:if>
+                    </td>
+                    <td>
+                        <f:if condition="{item.mailaction}">
+                            <f:if condition="{item.mailaction.mailto}">
+                                <f:then>
+                                    <v:variable.set name="subject" value="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.email.status_{state}.subject', languageKey:item.maildata.langCode, arguments:'{0: siteName, 1: item.maildata.signature}')}" />
+                                    <v:variable.set name="mailtoBody" value="{v:format.replace(content:item.maildata.mailtext, substring:'<br>', replacement:'%0D%0A')}" />
+                                    <v:variable.set name="mailtoBody" value="{v:format.replace(content:item.maildata.mailtext, substring:'<p>', replacement:'%0D%0A')}" />
+                                    <v:variable.set name="mailtoBody" value="{v:format.replace(content:mailtoBody, substring:'</p>', replacement:'%0D%0A')}" />
+                                    <v:variable.set name="mailtoBody" value="{v:format.replace(content:mailtoBody, substring:'&nbsp;', replacement:' ')}" />
+                                    <v:variable.set name="mailtoBody" value="{mailtoBody -> f:format.stripTags(allowedTags:'')}" />
+                                    
+                                    <f:link.email email="{item.mailaction.mailto.href}&subject={subject}&body={mailtoBody}" class="button mailto-action-button">
+                                        <svg class="icon-color"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-open"></use></svg>
+                                        <span>{item.mailaction.text}</span>
+                                    </f:link.email>
+                                </f:then>
+                                <f:else>
+                                    {item.mailaction.text}
+                                </f:else>
+                            </f:if>
+                        </f:if>
+                    </td>
+                </tr>
+                </f:for>
+                </tbody>
+            </table>
+
+            <div class="form-group">
+                <f:link.action action="listProposals" class="button">
+                    <span class="button-text">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.result.closeButton.label")}</span>
+                </f:link.action>
+            </div>
+        </div>
+
+    </f:section>
+
+</html>

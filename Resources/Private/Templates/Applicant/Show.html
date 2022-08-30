@@ -1,0 +1,21 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+Applicant profile page view
+Available variables:
+  {applicant}
+  {countries}
+  {settings}
+  
+<f:section name="content">
+  <div class="profile">
+    <f:render partial="FlashMessages" arguments="{_all}" />
+    <f:if condition="{applicant}">
+      <div class="component">
+          <f:render partial="Applicant/Properties" section="Detail" arguments="{_all}" />
+      </div>
+    </f:if>	
+  <div>
+</f:section>
+
+</html>

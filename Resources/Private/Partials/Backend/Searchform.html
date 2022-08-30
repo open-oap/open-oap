@@ -1,0 +1,19 @@
+{namespace femanager=In2code\Femanager\ViewHelpers}
+{f:uri.action(controller: 'OapBackend', action: 'listForms')}
+<f:form action="{action}">
+	<div class="form-group">
+		<label for="searchword">
+			<f:translate key="BackendListFilterLabel" />
+		</label>
+		<f:form.textfield
+				name="filter[searchword]"
+				id="searchword"
+				class="form-control"
+				value="{femanager:Misc.Request(parameter:'tx_femanager_web_femanagerm1|filter|searchword')}" />
+	</div>
+	<div class="form-group">
+		<f:form.submit
+				class="btn btn-primary"
+				value="search{f:translate(key:'BackendListFilterLabel')}" />
+	</div>
+</f:form>

@@ -1,0 +1,50 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:if condition="{mode} == 'FE'">
+    <f:then>
+        <div class="accordion accordion--comments" {f:if(condition:'{answersMap.{answerId}.new_comments} == 1',then:'data-preopen="*"')} >
+            <div class="accordion__item">
+                <h2 class="accordion__item-header accordion__item-header--comments">
+                    <svg class="form__icon form__icon--{f:if(condition:'{answersMap.{answerId}.new_comments} == 1',then:'new-')}comments"
+                         width="21" height="21" focusable="false" aria-hidden="true">
+                        <use xlink:href="/typo3conf/ext/open_oap/Resources/Public/Icons/sprite.svg#icon-{f:if(condition:'{answersMap.{answerId}.new_comments} == 1',then:'new-comments',else:'comments-small')}" x="0" y="0"/>
+                    </svg>{f:translate(key:'tx_openoap_domain_model_proposal.comments')}
+                </h2>
+                <div class="accordion__item-content">
+                    <f:render section="listOfComments" arguments="{_all}" />
+                </div>
+            </div>
+        </div>
+    </f:then>
+    <f:else>
+        <div class="comments">
+            <p class="comments__header">
+                <svg class="form__icon form__icon--new-comments" width="21" height="21" focusable="false" aria-hidden="true"> <use xlink:href="/typo3conf/ext/open_oap/Resources/Public/Icons/sprite.svg#icon-new-comments" x="0" y="0"/> </svg>{f:translate(key:'tx_openoap_domain_model_proposal.comments')}
+            </p>
+            <f:render section="listOfComments" arguments="{_all}" />
+        </div>
+    </f:else>
+</f:if>
+
+
+<f:section name="listOfComments">
+    <dl class="comments__list" >
+        <f:for each="{comments -> v:iterator.sort(sortBy:'created', order:'DESC')}" as="comment">
+            <f:if condition="{comment.text}">
+                <div class="comments__item">
+                    <dt class="comments__date" >
+                        <f:render partial="Comment/Date" arguments="{time:comment.created}" />,
+                        <f:if condition="{comment.author} && {commentAuthorByUsername}">
+                            <f:then>{comment.author.username}</f:then>
+                            <f:else if="{comment.author} && {comment.author.realName}">{comment.author.realName}</f:else>
+                        </f:if>
+                    </dt>
+                    <dd class="comments__text"><f:format.raw>{comment.text}</f:format.raw></dd>
+                </div>
+            </f:if>
+        </f:for>
+    </dl>
+</f:section>
+
+</html>

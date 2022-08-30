@@ -1,0 +1,76 @@
+<T3DataStructure>
+    <sheets>
+        <sDEF>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:flexform.pluginSettings.title</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                </el>
+            </ROOT>
+        </sDEF>
+        <mail>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:flexform.mailtext.sheetTitle</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <settings.eventProposalSubmittedMailtext>
+                        <TCEforms>
+                            <label>Proposal submitted - Mailtext</label>
+                            <description>LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:flexform.mailtext.editor.description</description>
+                            <config>
+                                <type>text</type>
+                                <enableRichtext>true</enableRichtext>
+                                <richtextConfiguration>oap_mailtext</richtextConfiguration>
+                                <cols>40</cols>
+                                <rows>6</rows>
+                            </config>
+                        </TCEforms>
+                    </settings.eventProposalSubmittedMailtext>
+                    <settings.eventProposalInRevisionMailtext>
+                        <TCEforms>
+                            <label>Proposal in revision - Mailtext</label>
+                            <description>LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:flexform.mailtextRevision.editor.description</description>
+                            <config>
+                                <type>text</type>
+                                <enableRichtext>true</enableRichtext>
+                                <richtextConfiguration>oap_mailtext</richtextConfiguration>
+                                <cols>40</cols>
+                                <rows>6</rows>
+                            </config>
+                        </TCEforms>
+                    </settings.eventProposalInRevisionMailtext>
+                    <settings.eventProposalAcceptedMailtext>
+                        <TCEforms>
+                            <label>Proposal accepted - Mailtext</label>
+                            <description>LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:flexform.mailtext.editor.description</description>
+                            <config>
+                                <type>text</type>
+                                <enableRichtext>true</enableRichtext>
+                                <richtextConfiguration>oap_mailtext</richtextConfiguration>
+                                <cols>40</cols>
+                                <rows>6</rows>
+                            </config>
+                        </TCEforms>
+                    </settings.eventProposalAcceptedMailtext>
+                    <settings.eventProposalDeclinedMailtext>
+                        <TCEforms>
+                            <label>Proposal declined - Mailtext</label>
+                            <description>LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:flexform.mailtext.editor.description</description>
+                            <config>
+                                <type>text</type>
+                                <enableRichtext>true</enableRichtext>
+                                <richtextConfiguration>oap_mailtext</richtextConfiguration>
+                                <cols>40</cols>
+                                <rows>6</rows>
+                            </config>
+                        </TCEforms>
+                    </settings.eventProposalDeclinedMailtext>
+                </el>
+            </ROOT>
+        </mail>
+    </sheets>
+</T3DataStructure>

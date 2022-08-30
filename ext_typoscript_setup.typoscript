@@ -1,0 +1,27 @@
+
+config.tx_extbase {
+  persistence {
+    classes {
+
+      In2code\Femanager\Domain\Model\User {
+        subclasses {
+          Tx_OpenOap_Applicant = OpenOAP\OpenOap\Domain\Model\Applicant
+          
+        }
+      }
+      OpenOAP\OpenOap\Domain\Model\Applicant {
+        mapping {
+          tableName = fe_users
+          recordType = Tx_OpenOap_Applicant
+        }
+      }
+
+      OpenOAP\OpenOap\Domain\Model\Proposal {
+        mapping {
+          
+        }
+      }
+
+    }
+  }
+}

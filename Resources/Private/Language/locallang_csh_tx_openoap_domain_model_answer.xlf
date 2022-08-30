@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_csh_tx_openoap_domain_model_answer.xlf" date="2022-02-17T15:25:01Z" product-name="open_oap">
+		<header/>
+		<body>
+			<trans-unit id="value.description" resname="value.description">
+				<source>Value/answer</source>
+			</trans-unit>
+			<trans-unit id="type.description" resname="type.description">
+				<source>type</source>
+			</trans-unit>
+			<trans-unit id="element_counter.description" resname="element_counter.description">
+				<source>For repeating groups, the counter is saved here</source>
+			</trans-unit>
+			<trans-unit id="additional_value.description" resname="additional_value.description">
+				<source>If additional answers are allowed, they will be saved here</source>
+			</trans-unit>
+			<trans-unit id="past_answers.description" resname="past_answers.description">
+				<source>The past responses, saved as json.</source>
+			</trans-unit>
+			<trans-unit id="item.description" resname="item.description">
+				<source>item</source>
+			</trans-unit>
+			<trans-unit id="model.description" resname="model.description">
+				<source>model</source>
+			</trans-unit>
+			<trans-unit id="comments.description" resname="comments.description">
+				<source>comments</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  OpenOAP\OpenOap\:
+    resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
+
+  OpenOAP\OpenOap\UserFunctions\FormEngine\TypeSelectItemsProcFunc:
+    public: true

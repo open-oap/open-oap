@@ -1,0 +1,18 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<div class="comment-add-form">
+	<f:form action="showProposal" name="proposal" object="{proposal}" section="{section}">
+		<label for="{id}">
+			{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:preview.proposal.fieldComment.label")}
+		</label><br />
+		<f:form.textarea name="comment" value="" id="{id}" />
+		<f:if condition="{answer}">
+			<f:form.hidden name="answer" value="{answer}" />
+		</f:if>
+		<div>
+			<f:form.button type="submit" name="submit" class="button">
+				<span class="button-text">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:preview.proposal.buttonSubmitComment.label")}</span>
+			</f:form.button>
+		</div>
+	</f:form>
+</div>	
+</html>

@@ -1,0 +1,28 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:if condition="{validationResults.pages.{pageIdx.cycle}}">
+    <div role="alert" id="proposal-form-{proposal.uid}-{pageIdx.cycle}-alert">
+        <div class="form__error-list-box">
+            <p class="form__error-list-text">
+                <strong><f:translate key="tx_openoap.js_msg.error_label" />:</strong> <f:translate key="tx_openoap.js_msg.error_message" />
+            </p>
+            <ul class="form__error-list">
+                <f:for each="{validationResults.pages.{pageIdx.cycle}}" key="propertyIdx" as="answerId">
+                    <li class="form__error-list-item form__error-list-item--icon">
+                        <div>
+                            <f:render partial="ButtonIcon" arguments="{type:'error'}"/>
+                            <a href="#preview__answer--{answerId}" class="form__error-list-link">
+                                <q><f:format.raw>{validationResults.answers.{answerId}.field}</f:format.raw></q>
+                            </a>
+                        </div>
+                        <ul class="form__error-sublist">
+                            <f:for each="{validationResults.answers.{answerId}.messsages}" as="message"><li>{message}</li></f:for>
+                        </ul>
+                    </li>
+                </f:for>
+            </ul>
+        </div>
+    </div>
+</f:if>
+
+</html>

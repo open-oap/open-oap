@@ -1,0 +1,21 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+    xmlns:femanager="http://typo3.org/ns/In2code/Femanager/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+<f:layout name="Email/DefaultHTML" />
+
+    Email / Mail for proposal revision status
+
+    Available variables:
+        {proposal} proposal with submodells applicant, call...
+        {signature} dynamic builded signature (based upon call data and signature-number of proposal
+
+<f:section name="Subject">
+    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.email.revision_subject" languageKey="{languageKey}" arguments="{0: siteName, 1: signature}"/>
+</f:section>
+
+<f:section name="Mailcontent">
+    <f:format.html>{mailtext}</f:format.html>
+</f:section>
+
+</html>

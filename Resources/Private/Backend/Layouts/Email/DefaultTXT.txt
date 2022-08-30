@@ -1,0 +1,3 @@
+<f:spaceless>
+<f:render section="Mailcontent" arguments="{_all}" />
+</f:spaceless>

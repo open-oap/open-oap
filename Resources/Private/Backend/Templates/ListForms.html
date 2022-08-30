@@ -1,0 +1,133 @@
+{namespace core = TYPO3\CMS\Core\ViewHelpers}
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:layout name="FormsBELayout" />
+    <f:section name="content">
+
+        <f:flashMessages />
+        <f:comment><!-- <f:render partial="Backend/Searchform" /> --></f:comment>
+        <h1><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.preview_form" /></h1>
+
+        <table cellspacing="0" cellpadding="0" border="0" class="table table-striped table-hover">
+            <tbody>
+
+            <tr class="t3-row-header">
+                <td nowrap="nowrap" class="col-icon">&nbsp;</td>
+                <td nowrap="nowrap" colspan="9">
+                    <span class="c-table">
+                        <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.countForms"/> <f:count subject="{forms}"/>
+                    </span>
+                </td>
+                <td nowrap="nowrap" class="col-icon">&nbsp;</td>
+            </tr>
+            <tr class="c-headLine">
+                <!-- icon -->
+                <td nowrap="nowrap" class="col-icon">&nbsp;</td>
+                <!-- uid -->
+                <f:comment><!--
+                <td nowrap="nowrap" class="col-title">
+                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.uid" />
+                </td>
+                --></f:comment>
+                <!-- title -->
+                <td nowrap="nowrap">
+                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.title" />
+                </td>
+                <!-- startzeit -->
+                <td nowrap="nowrap">
+                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.callStarttime" />
+                </td>
+                <!-- endzeit -->
+                <td nowrap="nowrap">
+                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.callEndTime" />
+                </td>
+                <!-- Anzahl Seiten -->
+                <td nowrap="nowrap">
+                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.formPages" />
+                </td>
+                <!-- Cmd-Icons -->
+                <td nowrap="nowrap" class="col-icon"></td>
+            </tr>
+
+            <f:for each="{paginator.paginatedItems}" as="form">
+                <tr class="db_list_normal firstcol femanager_list_line">
+                    <!-- icon -->
+                    <td nowrap="nowrap" class="col-icon">
+                        <span title="id={form.uid}"
+                              class=""
+                              style="{f:if(condition:'{form.hidden}', then:'display:none', else:'')}">
+                            <core:icon identifier="open_oap-common" size="small" />
+                        </span>
+                        <span title="id={form.uid} - {f:translate(key:'BackendListUserVisibilityHidden')}"
+                              class=""
+                              style="{f:if(condition:'{user.hidden}', then:'', else:'display:none')}">
+                            <core:icon identifier="open_oap-common" size="small" state="disabled"/>
+                        </span>
+                    </td>
+                    <td nowrap="nowrap" class="col-title">
+                        <f:link.action action="previewForm" arguments="{call:form}" class="" title="{f:translate(key:'action.preview_form')}">
+                            {form.title}
+                        </f:link.action>
+                    </td>
+                    <td nowrap="nowrap">
+                        {form.callStarttime -> f:format.date()}
+                    </td>
+                    <td nowrap="nowrap">
+                        {form.callEndTime -> f:format.date()}
+                    </td>
+                    <td nowrap="nowrap">
+                        {form.formPages -> f:count()}
+                    </td>
+                    <td nowrap="nowrap">
+                        <f:if condition="1 == 0">
+                            <f:comment><!-- Edit Icon --></f:comment>
+                            <a title="{f:translate(key:'BackendListUserEdit')}" href="">
+                                <core:icon identifier="actions-document-open" />
+                            </a>
+
+                            <f:comment><!-- Delete Icon --></f:comment>
+                            <span class="deleteUser cursorpointer" title="{f:translate(key:'BackendListUserDelete')}">
+                                            <core:icon identifier="actions-edit-delete" />
+                                        </span>
+
+                            <f:comment><!-- Enable/Disable Icon --></f:comment>
+                            <span title="{f:translate(key: 'BackendListUserVisibilityUnhide')}"
+                                  class="unhideUser cursorpointer "
+                                  style="{f:if(condition:'{user.disable} == 1', then:'', else:'display:none')}">
+                                            <core:icon identifier="actions-edit-unhide" />
+                                        </span>
+                            <span title="{f:translate(key: 'BackendListUserVisibilityHide')}"
+                                  class="hideUser cursorpointer "
+                                  style="{f:if(condition:'{user.disable} == 1', then:'display:none', else:'')}">
+                                            <core:icon identifier="actions-edit-hide" />
+                                        </span>
+
+
+                            <span title="{f:translate(key:'BackendListUserLogout')}"
+                                  class=""
+                                  style="{f:if(condition:'{user.online}', then:'', else:'display:none')}">
+                                            <f:link.action action="userLogout" arguments="{user:user}" class="logoutUser" title="{f:translate(key:'BackendListUserLogout')}">
+                                                <core:icon identifier="apps-pagetree-drag-place-denied" />
+                                            </f:link.action>
+                                        </span>
+                            <span title="{f:translate(key:'BackendListUserLogout')}"
+                                  class=""
+                                  style="{f:if(condition:'{user.online}', then:'display:none', else:'')}">
+                                            <core:icon identifier="apps-pagetree-drag-place-denied" state="disabled" />
+                                        </span>
+
+                            <input type="hidden" class="container_uid" name="container_uid" value="{user.uid}" />
+                            <input type="hidden" class="container_module_uri" name="container_module_uri" value="{moduleUri}" />
+                            <input type="hidden" class="container_table" name="container_table" value="fe_users" />
+                            <input type="hidden" class="container_label_delete_confirmation" name="container_label_delete_confirmation" value="{f:translate(key:'BackendListUserDeleteConfirmation')}" />
+                        </f:if>
+                    </td>
+                </tr>
+            </f:for>
+
+            </tbody>
+        </table>
+        <f:render partial="Utility/Paginator" arguments="{pagination: pagination, pages: pages, paginator: paginator, actionName: 'listForms'}" />
+        <f:comment><!-- <f:debug>{forms}</f:debug> --></f:comment>
+	</f:section>
+</html>

@@ -1,0 +1,97 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+	
+<f:comment><f:render section="{section}" arguments="{_all}" /></f:comment>
+
+<f:section name="Summary">
+    <h2 class="h3"><f:translate key="tx_openoap_dashboard.masterdata.header" /></h2>
+    <f:if condition="{applicant.company}">
+        <f:then>
+            <dl class="profile__summary">
+                <f:render section="ProfileItem" arguments="{section:'summary',item:applicant.company,tKey:'tx_openoap_domain_model_applicant.company'}" />
+                <f:render section="ProfileItem" arguments="{section:'summary',item:'{applicant.firstName} {applicant.lastName}',tKey:'tx_openoap_domain_model_applicant.name'}" />
+                <f:render section="ProfileItem" arguments="{section:'summary',item:'{f:if(condition:applicant.address, then:\'{applicant.address}, \')} {applicant.zip} {applicant.city}',tKey:'tx_openoap_domain_model_applicant.addressCombined'}" />
+                <f:render section="ProfileItem" arguments="{section:'summary',item:'{countries.{applicant.country}}',tKey:'tx_openoap_domain_model_applicant.country'}" />
+                <f:render section="ProfileItem" arguments="{section:'summary',item:applicant.telephone,tKey:'tx_openoap_domain_model_applicant.telephone'}" />
+                <f:render section="ProfileItem" arguments="{section:'summary',item:applicant.companyEmail,tKey:'tx_openoap_domain_model_applicant.company_email', email:1}" />
+            </dl>
+        </f:then>
+        <f:else>
+            <div><f:translate key="tx_openoap_dashboard.masterdata.minimalInfo.text" /></div>
+        </f:else>
+    </f:if>
+</f:section>
+
+<f:section name="Detail">
+    <f:comment><!-- MASTERDATA BLOCK --></f:comment>
+    <h2 class="profile__header">
+        <span class="profile__header-text"><f:translate key="tx_openoap_applicant.masterdata.header" /></span>
+        <f:link.action action="edit" controller="Applicant" pageUid="{settings.masterdataEditPageId}" class="profile__section-edit">
+            <f:translate key="tx_openoap_applicant.linkMasterdataEdit.title" />
+        </f:link.action>
+    </h2>
+    <dl class="profile__detail">
+        <f:render section="ProfileItem" arguments="{section:'detail',item:applicant.company,tKey:'tx_openoap_domain_model_applicant.company'}" />
+        <f:render section="ProfileItem" arguments="{section:'detail',item:'{applicant.firstName} {applicant.lastName}',tKey:'tx_openoap_domain_model_applicant.name'}" />
+        <f:render section="ProfileItem" arguments="{section:'detail',item:'{f:if(condition:applicant.address, then:\'{applicant.address}, \')} {applicant.zip} {applicant.city}',tKey:'tx_openoap_domain_model_applicant.addressCombined'}" />
+        <f:render section="ProfileItem" arguments="{section:'detail',item:'{countries.{applicant.country}}',tKey:'tx_openoap_domain_model_applicant.country'}" />
+        <f:render section="ProfileItem" arguments="{section:'detail',item:applicant.telephone,tKey:'tx_openoap_domain_model_applicant.telephone'}" />
+        <f:render section="ProfileItem" arguments="{section:'detail',item:applicant.companyEmail,tKey:'tx_openoap_domain_model_applicant.company_email'}" />
+        <f:render section="ProfileItem" arguments="{section:'detail',item:applicant.www,tKey:'tx_openoap_domain_model_applicant.www', url:applicant.www}" />
+    </dl>
+
+    <f:comment><!-- Other Masterdata--></f:comment>
+<f:comment><!--
+    <h3 class="profile__header profile__header--sub"><f:translate key="tx_openoap_applicant.otherdata.header" /></h3>
+    <dl class="profile__detail">
+        <f:render section="ProfileItem" arguments="{section:'detail',item:applicant.preferredLang,tKey:'tx_openoap_domain_model_applicant.preferred_lang'}" />
+    </dl>
+--></f:comment>
+
+    <f:comment><!-- ACCESSDATA BLOCK --></f:comment>
+    <h2 class="profile__header">
+        <span class="profile__header-text"><f:translate key="tx_openoap_applicant.accessdata.header" /></span>
+<f:comment><!--
+        <f:link.action action="edit" controller="Edit" pageUid="{settings.accessdataEditPid}" class="profile__section-edit">
+            <f:translate key="tx_openoap_applicant.linkAccessdataEdit.title" />
+        </f:link.action>
+--></f:comment>
+    </h2>
+    <dl class="profile__detail">
+        <f:render section="ProfileItem" arguments="{section:'detail',item:applicant.username,tKey:'tx_openoap_domain_model_applicant.username'}" />
+        <f:render section="ProfileItem" arguments="{section:'detail',item:'password',tKey:'tx_openoap_domain_model_applicant.password'}" />
+    </dl>
+</f:section>
+
+<f:section name="ProfileItem">
+    <div class="profile__{section}-item">
+        <dt class="profile__{section}-term"><f:translate key="{tKey}" /></dt>
+        <dd class="profile__{section}-definition">
+            <f:if condition="{item}">
+                <f:then>
+                    <f:if condition="{url}">
+                        <f:then><f:link.typolink parameter="{url}">{item}</f:link.typolink></f:then>
+                        <f:else>
+                            <f:if condition="{item}=='password'">
+                                <f:then>
+                                    <span class="aural"><f:translate key="notDisplayed" /></span>
+                                    <span class="profile__password" aria-hidden="true">&#11044; &#11044; &#11044; &#11044; &#11044; &#11044; &#11044;</span>
+                                </f:then>
+                                <f:else if="{email}">
+                                    <f:comment><!-- Force breaking to avoid overflow --></f:comment>
+                                    <span class="profile__{section}-email">{item}</span>
+                                </f:else>
+                                <f:else>{item}</f:else>
+                            </f:if>
+                        </f:else>
+                    </f:if>
+                </f:then>
+                <f:else>
+                    <span class="aural"><f:translate key="empty" /></span>
+                    <span aria-hidden="true">-----</span>
+                </f:else>
+            </f:if>
+        </dd>
+    </div>
+</f:section>
+
+</html>

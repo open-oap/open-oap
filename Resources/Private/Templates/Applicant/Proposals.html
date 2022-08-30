@@ -1,0 +1,38 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+Proposals page view
+Available variables:
+  {applicant}
+  {archived}
+  {constants}
+  {proposals}
+  {$proposalsCommentsCount}
+  {settings}
+
+<f:section name="content">
+    <f:asset.css identifier="open_oap_styles" href="EXT:open_oap/Resources/Public/Css/styles.css"/>
+    <h2 class="accordion__item-header"><span class="hyphenated">{f:translate(key:'tx_openoap_dashboard.proposalsActive.header')} ({proposals -> f:count()})</span></h2>
+
+    <f:comment>LISTING</f:comment>
+    <div class="accordion__item-content">
+        <f:if condition="{proposals}">
+            <f:then>
+                <f:render partial="Applicant/Legend" arguments="{constants:constants}" />
+                <f:render partial="Applicant/Proposals" arguments="{proposals:proposals, commentsCount:proposalsCommentsCount, constants:constants}" />
+            </f:then>
+
+            <f:else>
+                <p>{f:translate(key:'tx_openoap_dashboard.noActiveProposals.text')}</p>
+            </f:else>
+        </f:if>
+    </div>
+
+    <div class="proposals__show-all">
+        <f:link.action pageUid="{settings.dashboardPageId}" action="dashboard" pluginName="Dashboard" class="button button--alternative">
+            {f:translate(key:'tx_openoap_proposals.button.dashboard.label')}
+        </f:link.action>
+    </div>
+</f:section>
+
+</html>

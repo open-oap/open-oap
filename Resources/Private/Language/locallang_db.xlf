@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_db.xlf" date="2022-03-25T09:12:02Z" product-name="open_oap">
+		<header/>
+		<body>
+			<trans-unit id="tx_openoap_domain_model_call" resname="tx_openoap_domain_model_call">
+				<source>Call</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.title" resname="tx_openoap_domain_model_call.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.intro_text" resname="tx_openoap_domain_model_call.intro_text">
+				<source>Intro Text</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.teaser_text" resname="tx_openoap_domain_model_call.teaser_text">
+				<source>Teaser Text</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.shortcut" resname="tx_openoap_domain_model_call.shortcut">
+				<source>Shortcut for signature</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.emails" resname="tx_openoap_domain_model_call.emails">
+				<source>Emails</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.call_start_time" resname="tx_openoap_domain_model_call.call_start_time">
+				<source>Call Start Time</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.call_end_time" resname="tx_openoap_domain_model_call.call_end_time">
+				<source>Call End Time</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.fe_user_exceptions" resname="tx_openoap_domain_model_call.fe_user_exceptions">
+				<source>Fe User Exceptions</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.project_start_time" resname="tx_openoap_domain_model_call.project_start_time">
+				<source>Project Start Time</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.project_end_time" resname="tx_openoap_domain_model_call.project_end_time">
+				<source>Project End Time</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.project_duration_max" resname="tx_openoap_domain_model_call.project_duration_max">
+				<source>Project Duration Max</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.project_duration_min" resname="tx_openoap_domain_model_call.project_duration_min">
+				<source>Project Duration Min</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.proposal_pid" resname="tx_openoap_domain_model_call.proposal_pid">
+				<source>Proposal Pid</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.form_pages" resname="tx_openoap_domain_model_call.form_pages">
+				<source>Form Pages</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formpage" resname="tx_openoap_domain_model_formpage">
+				<source>Form Page</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formpage.title" resname="tx_openoap_domain_model_formpage.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formpage.menu_title" resname="tx_openoap_domain_model_formpage.menu_title">
+				<source>Menu Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formpage.internal_title" resname="tx_openoap_domain_model_formpage.internal_title">
+				<source>Internal Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formpage.intro_text" resname="tx_openoap_domain_model_formpage.intro_text">
+				<source>Intro Text</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formpage.type" resname="tx_openoap_domain_model_formpage.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formpage.item_groups" resname="tx_openoap_domain_model_formpage.item_groups">
+				<source>Item Groups</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup" resname="tx_openoap_domain_model_formgroup">
+				<source>Form Group</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.title" resname="tx_openoap_domain_model_formgroup.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.intro_text" resname="tx_openoap_domain_model_formgroup.intro_text">
+				<source>Intro Text</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.help_text" resname="tx_openoap_domain_model_formgroup.help_text">
+				<source>Help Text</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.model_name" resname="tx_openoap_domain_model_formgroup.model_name">
+				<source>Model Name</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.repeatable_min" resname="tx_openoap_domain_model_formgroup.repeatable_min">
+				<source>Repeatable Min/default</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.repeatable_max" resname="tx_openoap_domain_model_formgroup.repeatable_max">
+				<source>Repeatable Max</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.items" resname="tx_openoap_domain_model_formgroup.items">
+				<source>Items</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.group_title" resname="tx_openoap_domain_model_formgroup.group_title">
+				<source>Group Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.dependent_on" resname="tx_openoap_domain_model_formgroup.dependent_on">
+				<source>Dependent On</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem" resname="tx_openoap_domain_model_formitem">
+				<source>Form Item</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.question" resname="tx_openoap_domain_model_formitem.question">
+				<source>Question</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.intro_text" resname="tx_openoap_domain_model_formitem.intro_text">
+				<source>Intro Text</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.help_text" resname="tx_openoap_domain_model_formitem.help_text">
+				<source>Help Text</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.type" resname="tx_openoap_domain_model_formitem.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.enabled_filter" resname="tx_openoap_domain_model_formitem.enabled_filter">
+				<source>Enabled Filter</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.filter_label" resname="tx_openoap_domain_model_formitem.filter_label">
+				<source>Filter Label</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.enabled_info" resname="tx_openoap_domain_model_formitem.enabled_info">
+				<source>Enabled Info</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.enabled_title" resname="tx_openoap_domain_model_formitem.enabled_title">
+				<source>Enabled Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.additional_value" resname="tx_openoap_domain_model_formitem.additional_value">
+				<source>Additional Value</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.default_value" resname="tx_openoap_domain_model_formitem.default_value">
+				<source>Default Value</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.unit" resname="tx_openoap_domain_model_formitem.unit">
+				<source>Unit</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.additional_label" resname="tx_openoap_domain_model_formitem.additional_label">
+				<source>Additional Label</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.options" resname="tx_openoap_domain_model_formitem.options">
+				<source>Options</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.validators" resname="tx_openoap_domain_model_formitem.validators">
+				<source>Validators</source>
+			</trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_formitem.tab.meta" resname="tx_openoap_domain_model_formitem.tab.meta">
+				<source>Meta-Settings</source>
+			</trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_formitem.dependent_on" resname="tx_openoap_domain_model_formitem.dependent_on">
+				<source>Dependent On</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemoption" resname="tx_openoap_domain_model_itemoption">
+				<source>Item Option</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemoption.title" resname="tx_openoap_domain_model_itemoption.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemoption.option_group" resname="tx_openoap_domain_model_itemoption.option_group">
+				<source>Option Group</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemoption.options" resname="tx_openoap_domain_model_itemoption.options">
+				<source>Options</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemoption.type" resname="tx_openoap_domain_model_itemoption.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemvalidator" resname="tx_openoap_domain_model_itemvalidator">
+				<source>Item Validator</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemvalidator.title" resname="tx_openoap_domain_model_itemvalidator.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemvalidator.type" resname="tx_openoap_domain_model_itemvalidator.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemvalidator.param1" resname="tx_openoap_domain_model_itemvalidator.param1">
+				<source>Param1</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemvalidator.param2" resname="tx_openoap_domain_model_itemvalidator.param2">
+				<source>Param2</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_applicant" resname="tx_openoap_domain_model_applicant">
+				<source>Applicant</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_applicant.company_email" resname="tx_openoap_domain_model_applicant.company_email">
+				<source>Company Email</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_applicant.preferred_lang" resname="tx_openoap_domain_model_applicant.preferred_lang">
+				<source>Preferred Lang</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_applicant.privacypolicy" resname="tx_openoap_domain_model_applicant.privacypolicy">
+				<source>Privacy Policy</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_applicant.salutation" resname="tx_openoap_domain_model_applicant.salutation">
+				<source>Salutation</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_applicant.salutation.item0" resname="tx_openoap_domain_model_applicant.salutation.item0">
+				<source>---</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_applicant.salutation.item1" resname="tx_openoap_domain_model_applicant.salutation.item1">
+				<source>Ms</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_applicant.salutation.item2" resname="tx_openoap_domain_model_applicant.salutation.item2">
+				<source>Mr</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_applicant.country" resname="tx_openoap_domain_model_applicant.country">
+				<source>Country</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_applicant.proposals" resname="tx_openoap_domain_model_applicant.proposals">
+				<source>Proposals</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal" resname="tx_openoap_domain_model_proposal">
+				<source>Proposal</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.title" resname="tx_openoap_domain_model_proposal.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.signature" resname="tx_openoap_domain_model_proposal.signature">
+				<source>Signature</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.state" resname="tx_openoap_domain_model_proposal.state">
+				<source>State</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.archived" resname="tx_openoap_domain_model_proposal.archived">
+				<source>Archived</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.meta_information" resname="tx_openoap_domain_model_proposal.meta_information">
+				<source>Meta Information</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.tx_openoap_call" resname="tx_openoap_domain_model_proposal.tx_openoap_call">
+				<source>Call</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.answers" resname="tx_openoap_domain_model_proposal.answers">
+				<source>Answers</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.comments" resname="tx_openoap_domain_model_proposal.comments">
+				<source>Comments</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.applicant" resname="tx_openoap_domain_model_proposal.applicant">
+				<source>Applicant</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_answer" resname="tx_openoap_domain_model_answer">
+				<source>Answer</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_answer.value" resname="tx_openoap_domain_model_answer.value">
+				<source>Value</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_answer.type" resname="tx_openoap_domain_model_answer.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_answer.element_counter" resname="tx_openoap_domain_model_answer.element_counter">
+				<source>Element Counter</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_answer.additional_value" resname="tx_openoap_domain_model_answer.additional_value">
+				<source>Additional Value</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_answer.past_answers" resname="tx_openoap_domain_model_answer.past_answers">
+				<source>Past Answers</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_answer.item" resname="tx_openoap_domain_model_answer.item">
+				<source>Item</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_answer.model" resname="tx_openoap_domain_model_answer.model">
+				<source>Model</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_answer.comments" resname="tx_openoap_domain_model_answer.comments">
+				<source>Comments</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_grouptitle" resname="tx_openoap_domain_model_grouptitle">
+				<source>Group Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_grouptitle.title" resname="tx_openoap_domain_model_grouptitle.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_grouptitle.internal_title" resname="tx_openoap_domain_model_grouptitle.internal_title">
+				<source>Internal Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_comment" resname="tx_openoap_domain_model_comment">
+				<source>Comment</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_comment.text" resname="tx_openoap_domain_model_comment.text">
+				<source>Text</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_comment.source" resname="tx_openoap_domain_model_comment.source">
+				<source>Source</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_comment.code" resname="tx_openoap_domain_model_comment.code">
+				<source>Code</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_comment.state" resname="tx_openoap_domain_model_comment.state">
+				<source>State</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_comment.answer" resname="tx_openoap_domain_model_comment.answer">
+				<source>Answer</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_logicatom" resname="tx_openoap_domain_model_logicatom">
+				<source>Logic Atom</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_logicatom.title" resname="tx_openoap_domain_model_logicatom.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_logicatom.item" resname="tx_openoap_domain_model_logicatom.item">
+				<source>Item</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_logicatom.logic" resname="tx_openoap_domain_model_logicatom.logic">
+				<source>Logic</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_logicatom.value" resname="tx_openoap_domain_model_logicatom.value">
+				<source>Value</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

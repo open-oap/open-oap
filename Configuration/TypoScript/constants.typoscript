@@ -1,0 +1,119 @@
+plugin.tx_openoap_dashboard {
+    view {
+        # cat=plugin.tx_openoap_dashboard/file; type=string; label=Path to template root (FE)
+        templateRootPath = EXT:open_oap/Resources/Private/Templates/
+        # cat=plugin.tx_openoap_dashboard/file; type=string; label=Path to template partials (FE)
+        partialRootPath = EXT:open_oap/Resources/Private/Partials/
+        # cat=plugin.tx_openoap_dashboard/file; type=string; label=Path to template layouts (FE)
+        layoutRootPath = EXT:open_oap/Resources/Private/Layouts/
+    }
+    persistence {
+        # cat=plugin.tx_openoap_dashboard//a; type=string; label=Default storage PID
+        storagePid =
+    }
+    settings {
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Page-ID des Dashboards
+        dashboardPageId = 38
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Page-ID des Antragformulars
+        formPageId = 55
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Page-ID der Antragsliste
+        proposalsPageId = 58
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Page-ID der Kommentarliste
+        notificationsPageId = 61
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Page-ID der Stammdatenbearbeitung
+        masterdataEditPageId = 46
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Pool ID der Formulare
+        callPoolId = 24
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Pool ID der Anträge
+        proposalPoolId = 28
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Pool ID der Items
+        itemsPoolId = 21
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Maximale Anzahl aktiver Anträge in der Dashboard-Liste
+        proposalsActiveLimit = 5
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Maximale Anzahl archivierter Anträge in der Dashboard-Liste
+        proposalsArchivedLimit = 5
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=PoolId of Proposals - Pool ID der Anträge
+        proposalsPoolId = 28
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=PoolId of Answers - Pool ID der Antworten
+        answersPoolId = 29
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=PoolId of Comments - Pool ID der Kommentare
+        commentsPoolId = 53
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=ItemOptionId of Masterdata Countries Selectoptions - ItemOption ID der Stammdaten Länderauswahl-Optionen
+        countriesItemOptionId = 28
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=ID of Frontend Tester Usergroup  - ID der Frontend Tester Benutzergruppe
+        testerFeGroupsId = 2
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=Separator of MetaInfos - Trennzeichen für Meta-Infos
+        metaInfoSeparator = |
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Default max char for textarea - Standard maximale Zeichen für Textbereich
+        defaultMaxCharTextarea = 2000
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=Default max char for textfield - Standard maximale Zeichen für Textfeld
+        defaultMaxCharTextfield = 200
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=List of usable sources for default values for items - Liste von nutzbaren Quellen für Default-Werte
+        defaultSourcesModel = applicant.companyEmail, applicant.firstName, applicant.lastName, applicant.address, applicant.country, applicant.telephone, applicant.fax, applicant.email, applicant.zip, applicant.city, applicant.www, applicant.company, applicant.salutation
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=fileStorage source - written as: id:path (e.g. 1:/user_upload/)
+        uploadFolder = 2:/
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=signature format for / Signatur-Format für sprintf
+        signatureFormat = %04d
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=word base file / Word-Datei als Grundlage für Export
+        wordExportTemplateFile = word-vorlage-oap.docx
+
+    }
+}
+plugin.tx_openoap_form {
+    view {
+        # cat=plugin.tx_openoap_form/file; type=string; label=Path to template root (FE)
+        templateRootPath = EXT:open_oap/Resources/Private/Templates/
+        # cat=plugin.tx_openoap_form/file; type=string; label=Path to template partials (FE)
+        partialRootPath = EXT:open_oap/Resources/Private/Partials/
+        # cat=plugin.tx_openoap_form/file; type=string; label=Path to template layouts (FE)
+        layoutRootPath = EXT:open_oap/Resources/Private/Layouts/
+    }
+    persistence {
+        # cat=plugin.tx_openoap_form//a; type=string; label=Default storage PID
+        storagePid =
+    }
+}
+plugin.tx_openoap_notifications {
+    view {
+        # cat=plugin.tx_openoap_notifications/file; type=string; label=Path to template root (FE)
+        templateRootPath = EXT:open_oap/Resources/Private/Templates/
+        # cat=plugin.tx_openoap_notifications/file; type=string; label=Path to template partials (FE)
+        partialRootPath = EXT:open_oap/Resources/Private/Partials/
+        # cat=plugin.tx_openoap_notifications/file; type=string; label=Path to template layouts (FE)
+        layoutRootPath = EXT:open_oap/Resources/Private/Layouts/
+    }
+    persistence {
+        # cat=plugin.tx_openoap_notifications//a; type=string; label=Default storage PID
+        storagePid =
+    }
+}
+
+module.tx_openoap_backendforms {
+    view {
+        # cat=module.tx_openoap_backendforms/file; type=string; label=Path to template root (BE)
+        templateRootPath = EXT:open_oap/Resources/Private/Backend/Templates/
+        # cat=module.tx_openoap_backendforms/file; type=string; label=Path to template partials (BE)
+        partialRootPath = EXT:open_oap/Resources/Private/Backend/Partials/
+        # cat=module.tx_openoap_backendforms/file; type=string; label=Path to template layouts (BE)
+        layoutRootPath = EXT:open_oap/Resources/Private/Backend/Layouts/
+    }
+    persistence {
+        # cat=module.tx_openoap_backendforms//a; type=string; label=Default storage PID
+        storagePid =
+    }
+}
+
+module.tx_openoap_backendproposals {
+    view {
+        # cat=module.tx_openoap_backendproposals/file; type=string; label=Path to template root (BE)
+        templateRootPath = EXT:open_oap/Resources/Private/Backend/Templates/
+        # cat=module.tx_openoap_backendproposals/file; type=string; label=Path to template partials (BE)
+        partialRootPath = EXT:open_oap/Resources/Private/Backend/Partials/
+        # cat=module.tx_openoap_backendproposals/file; type=string; label=Path to template layouts (BE)
+        layoutRootPath = EXT:open_oap/Resources/Private/Backend/Layouts/
+    }
+    persistence {
+        # cat=module.tx_openoap_backendproposals//a; type=string; label=Default storage PID
+        storagePid =
+    }
+}

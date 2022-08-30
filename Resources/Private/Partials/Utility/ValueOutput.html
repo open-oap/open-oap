@@ -1,0 +1,94 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:oap="OpenOAP\OpenOap\ViewHelpers"
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+     data-namespace-typo3-fluid="true">
+
+
+<v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{elementCounter}--{item.uid}" />
+<v:variable.set name="propertyKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.value" />
+<v:variable.set name="propertyKeyAdditionalValue" value="answers.{itemAnswerMap.{propertyKeyIndex}}.additionalValue" />
+
+<f:if condition="{proposal.{propertyKey}} == ''">
+<f:then>
+   <span class="aural"><f:translate key="empty" /></span>
+   <span aria-hidden="true">-----</span>
+</f:then>
+<f:else>
+    <f:switch expression="{item.type}">
+        <f:case value="{itemTypes.TYPE_SELECT_MULTIPLE}">
+            <f:format.raw><oap:getLabelOfOption value="{proposal.{propertyKey}}" options="{answersMap.{answerId}.item.options}" multiple="1"/></f:format.raw>
+        </f:case>
+        <f:case value="{itemTypes.TYPE_RADIOBUTTON}">
+            <f:format.raw><oap:getLabelOfOption value="{proposal.{propertyKey}}" options="{answersMap.{answerId}.item.options}" multiple="0" additionalValue="{proposal.{propertyKeyAdditionalValue}}"/></f:format.raw>
+            <f:comment><!--
+                <f:if condition="{proposal.{propertyKeyAdditionalValue}} !== ''">: {proposal.{propertyKeyAdditionalValue}}</f:if>
+            --></f:comment>
+        </f:case>
+        <f:case value="{itemTypes.TYPE_CHECKBOX}">
+            <f:format.raw><oap:getLabelOfOption value="{proposal.{propertyKey}}" options="{answersMap.{answerId}.item.options}" multiple="1" additionalValue="{proposal.{propertyKeyAdditionalValue}}"/></f:format.raw>
+            <f:comment><!--
+                <f:if condition="{proposal.{propertyKeyAdditionalValue}} !== ''">: {proposal.{propertyKeyAdditionalValue}}</f:if>
+            --></f:comment>
+        </f:case>
+        <f:case value="{itemTypes.TYPE_DATE2}">
+            {proposal.{propertyKey}} - {proposal.{propertyKeyAdditionalValue}}
+        </f:case>
+        <f:case value="{itemTypes.TYPE_UPLOAD}">
+            <f:variable name="fileList" value="<v:resource.file identifier='{proposal.{propertyKey}}' treatIdAsUid='1' />"/>
+            <f:if condition="{fileList}">
+                 <f:if condition="{pdfstyle}">
+                     <f:then>
+                         <f:render section="FileSectionInPdf" arguments="{_all}" />
+                     </f:then>
+                     <f:else>
+                         <f:render section="FileSection" arguments="{_all}" />
+                     </f:else>
+                 </f:if>
+            </f:if>
+        </f:case>
+        <f:defaultCase>
+            {proposal.{propertyKey}} {item.unit} <f:if condition="{proposal.{propertyKeyAdditionalValue}} !== ''">: {proposal.{propertyKeyAdditionalValue}}</f:if>
+        </f:defaultCase>
+    </f:switch>
+</f:else>
+</f:if>
+
+<f:section name="FileSection">
+   <ul class="form__upload-fileslist">
+        <f:if condition="{fileList.id}">
+            <f:then>
+                <f:variable name="countFiles" value="1" />
+                <f:variable name="fileItem" value="{fileList}" />
+                <li class="form__upload-filesitem form__upload-filesitem--preview">
+                     <f:render partial="ButtonIcon" arguments="{type:'file-saved'}"/> {fileItem.name} ({fileItem.size -> f:format.bytes()})
+                </li>
+            </f:then>
+            <f:else>
+                <f:for each="{fileList}" as="fileItem">
+                    <li class="form__upload-filesitem form__upload-filesitem--preview">
+                        <f:render partial="ButtonIcon" arguments="{type:'file-saved'}"/> {fileItem.name} ({fileItem.size -> f:format.bytes()})
+                    </li>
+                </f:for>
+            </f:else>
+        </f:if>
+    </ul>
+</f:section>
+
+<f:section name="FileSectionInPdf">
+     <f:if condition="{fileList.id}">
+         <f:then>
+             <f:variable name="countFiles" value="1" />
+             <f:variable name="fileItem" value="{fileList}" />
+             <span>{fileItem.name} ({fileItem.size -> f:format.bytes()})</span>
+         </f:then>
+         <f:else>
+             <f:for each="{fileList}" as="fileItem" iteration="fileItemIterator">
+                <f:if condition="{fileItemIterator.cycle} > 1"><br></f:if><span>{fileItem.name} ({fileItem.size -> f:format.bytes()})</span>
+             </f:for>
+         </f:else>
+     </f:if>
+</f:section>
+
+</html>

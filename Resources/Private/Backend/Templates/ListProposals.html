@@ -1,0 +1,381 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+Available variables:
+    {countOfItems}
+    {filter}
+    {states}
+    {filterSelects}
+    {stateReopenedValue}
+    {calls}
+    {actionName}
+    {paginator}
+    {pagination}
+    {sorted}
+
+<f:layout name="ProposalsBELayout" />
+    <f:section name="content">
+
+        <f:flashMessages />
+
+        <h2><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.list_of_proposals"/></h2>
+
+        <f:form action="{action}">
+            <div class="form-inline">
+                <fieldset class="form-group">
+                    <!-- <legend><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.filter"/></legend> -->
+
+                    <label>
+                        <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.calls" />:<br />
+
+                        <f:form.select
+                                name="filter[call]"
+                                value="{filter.call}"
+                                options="{calls}"
+                                optionValueField="uid"
+                                optionLabelField="title"
+                                prependOptionLabel="<f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.calls.all' />"
+                                prependOptionValue=""
+                                class="form-select"
+                        />
+                    </label>
+                </fieldset>
+                <fieldset class="form-group">
+                    <label>
+                        <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.state" />:<br />
+                        <f:form.select
+                                name="filter[state]"
+                                value="{filter.state}"
+                                options='{states}'
+                                prependOptionLabel="<f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.state.all' />"
+                                prependOptionValue=""
+                                class="form-select"
+                        />
+                    </label>
+                </fieldset>
+
+                <f:render section="DynamicFilter" arguments="{_all}" />
+
+                <fieldset class="form-group">
+                    <label>
+                        <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.searchword" />:<br />
+                        <f:form.textfield name="filter[searchword]" class="form-control" value="{filter.searchword}"/>
+                    </label>
+                    <f:form.button class="btn btn-primary" name="filter[todo]" value="submit" ><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.search' /> </f:form.button>
+                    <f:form.button class="btn btn-secondary" name="filter[todo]" value="clear" ><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.clear' /></f:form.button>
+                </fieldset>
+            </div>
+        </f:form>
+
+        <style>
+            #selection-row{background-color:#eeeeee;padding:0 10px}
+            #selection-row h3{padding-top: 10px;}
+            .form-toggle.form-check-disabled input[type=checkbox]:disabled {float: left;margin-left: -1.5em;}
+            .form-inline { display: inline-block; margin-right:1rem;}
+            .table > tbody > tr > td {vertical-align:top;}
+            .metainfo {margin-left:2rem;}
+        </style>
+
+        <div id="t3-table-tx_openoap_domain_model_proposal" data-multi-record-selection-identifier="t3-table-tx_openoap_domain_model_proposal">
+        <h2><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.results"/></h2>
+        <f:form action="{action}" name="list-table-form-tx_openoap_domain_model_proposal" id="form-selection-todo">
+
+            <div id="selection-row"  style="display:none;">
+                <h3><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.header' /></h3>
+                <div class="form-inline table-bg">
+                    <fieldset class="form-group">
+                        <label for="state-bulk-select">
+                            <f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.state.label' />:
+                        </label>
+                        <f:form.select
+                                id="state-bulk-select"
+                                name="selection[state]"
+                                value="{selection.state}"
+                                options='{states}'
+                                prependOptionLabel="<f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.state.defaultOption'/>"
+                                prependOptionValue="0"
+                                class="form-select" />
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <f:form.button class="btn btn-primary" name="selection[todo]" value="submit-state" ><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.state.submit' /> </f:form.button>
+                    </fieldset>
+                </div>
+                <div class="form-inline table-bg">
+                    <fieldset class="form-group">
+                        <label for="state-bulk-select">
+                            <f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.export.label' />:
+                        </label>
+                        <f:form.select
+                            id="export-bulk-select"
+                            name="selection[export]"
+                            value="{selection.export}"
+                            options='{exportFormats}'
+                            prependOptionLabel="<f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.export.defaultOption'/>"
+                            prependOptionValue="0"
+                            class="form-select" />
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <f:form.button class="btn btn-primary" name="selection[todo]" value="submit-export" ><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.export.submit' /> </f:form.button>
+                    </fieldset>
+                </div>
+            </div>
+
+            <table data-table="tx_openoap_domain_model_proposal" cellspacing="0" cellpadding="0" border="0" class="table table-striped table-hover">
+
+                <tr class="t3-row-header">
+                    <td nowrap="nowrap" class="col-icon">&nbsp;</td>
+                    <td nowrap="nowrap" class="col-icon">&nbsp;</td>
+                    <td nowrap="nowrap" colspan="9">
+                        <span class="c-table">
+                            <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.countProposals"/> {countOfItems}
+                        </span>
+                    </td>
+                    <td nowrap="nowrap" class="col-icon">&nbsp;</td>
+                </tr>
+
+                <tr class="c-headLine">
+                <!-- checkboxes -->
+                <td class="col-selector nowrap" colspan="2">
+                    <div class="btn-group dropdown position-static">
+                        <button type="button" id="record-selection-check-actions-toggle" class="btn btn-borderless dropdown-toggle t3js-multi-record-selection-check-actions-toggle" data-bs-toggle="dropdown" data-bs-boundary="window" aria-expanded="false">
+                            <span class="t3js-icon icon icon-size-small icon-state-default icon-content-special-div" data-identifier="content-special-div">
+                                <span class="icon-markup">
+                                    <svg class="icon-color"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/content.svg#content-special-div"></use></svg>
+                                 </span>
+                            </span>
+                        </button>
+                        <ul id="multi-check-actions" class="dropdown-menu t3js-multi-record-selection-check-actions">
+                            <li>
+                                <button id="action-check-all" type="button" class="btn btn-link dropdown-item" data-multi-record-selection-check-action="check-all" title="Alle auswählen">
+                                    <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-check-square" data-identifier="actions-check-square">
+                                        <span class="icon-markup">
+                                            <svg class="icon-color"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-check-square"></use></svg>
+                                        </span>
+
+                                    </span>
+                                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.option.checkAll"/>
+                                </button>
+                            </li>
+                            <li>
+                                <button id="action-check-none" type="button" class="btn btn-link dropdown-item disabled" data-multi-record-selection-check-action="check-none" title="Keine auswählen">
+                                    <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-square" data-identifier="actions-square">
+                                        <span class="icon-markup">
+                                            <svg class="icon-color"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-square"></use></svg>
+                                        </span>
+
+                                    </span>
+                                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.option.uncheckAll"/>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+
+                <!-- uid -->
+                <f:comment><!--
+                <td nowrap="nowrap" class="col-title">
+                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.uid" />
+                </td>
+                --></f:comment>
+                <!-- title -->
+                <td nowrap="nowrap">
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.title\')}', sortField:'title', sorted:sorted}" />
+                </td>
+                <!-- signature -->
+                <td nowrap="nowrap">
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.signature\')}', sortField:'signature', sorted:sorted}" />
+                </td>
+                <!-- state -->
+                <td nowrap="nowrap">
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.state\')}', sortField:'state', sorted:sorted}" />
+                </td>
+                <!-- tstamp -->
+                <td nowrap="nowrap">
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.tstamp\')}', sortField:'tstamp', sorted:sorted}" />
+                </td>
+                <!-- user-e-mail / applicant-->
+                <td nowrap="nowrap">
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.applicant\')}', sortField:'applicant', sorted:sorted}" />
+                </td>
+                <!-- call -->
+                <td nowrap="nowrap">
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call\')}', sortField:'call.title', sorted:sorted}" />
+                </td>
+                <!-- Cmd-Icons -->
+                <td nowrap="nowrap" class="col-icon"></td>
+            </tr>
+
+            <tbody id="proposals" data-multi-record-selection-row-selection="true">
+            <f:for each="{paginator.paginatedItems}" as="proposal">
+                <tr data-table="tx_openoap_domain_model_proposal" class="t3js-entity" data-uid="{proposal.uid}" title="id={proposal.uid}">
+                    <!-- check -->
+
+                        <f:if condition="{proposal.state} != {stateReopenedValue}">
+                            <f:then>
+                                <td nowrap="nowrap" class="col-selector nowrap">
+                                <span class="form-check form-toggle">
+                                    <f:form.checkbox class="form-check-input t3js-multi-record-selection-check check-toggle-selection" name="selection[records][]" value="{proposal.uid}" />
+                                </span>
+                                </td>
+                            </f:then>
+                            <f:else>
+                            <td nowrap="nowrap"><span class="form-check form-toggle form-check-disabled"><f:form.checkbox disabled="1" value="0" /> </span></td>
+                            </f:else>
+                        </f:if>
+
+                    <!-- icon -->
+                    <td nowrap="nowrap" class="col-icon">
+                        <span title="id={proposal.uid}"
+                              class=""
+                              style="{f:if(condition:'{form.hidden}', then:'display:none', else:'')}">
+                            <core:icon identifier="open_oap-common" size="small" />
+                        </span>
+                        <span title="id={proposal.uid} - {f:translate(key:'BackendListUserVisibilityHidden')}"
+                              class=""
+                              style="{f:if(condition:'{user.hidden}', then:'', else:'display:none')}">
+                            <core:icon identifier="open_oap-common" size="small" state="disabled"/>
+                        </span>
+                    </td>
+                    <td class="col-title">
+                        <f:link.action action="showProposal" arguments="{proposal:proposal}" class="" title="{f:translate(key:'action.show_proposal')}">
+                            {proposal.title}
+                        </f:link.action><br />
+                        <v:variable.set name="jsonArray" value="{proposal.metaInformation -> v:format.json.decode()}"/>
+                        <f:if condition="{jsonArray.info}">
+                        <div class="metainfo">
+                            <span class="metainfo__label">
+                                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.metainfo')}
+                            </span>{jsonArray.info}
+                        </div>
+                        </f:if>
+
+                    </td>
+                    <td nowrap="nowrap" class="col-title">
+                        <f:if condition="{proposal.signature} > 0">
+                            <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}_</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+                        </f:if>
+
+                    </td>
+                    <td nowrap="nowrap" class="col-title">
+                        <f:translate key="tx_openoap_domain_model_proposal.state.{proposal.state}" />
+                    </td>
+                    <td nowrap="nowrap">
+                        {proposal.editTstamp -> f:format.date(format:'d.m.Y H:i')}
+                    </td>
+                    <td nowrap="nowrap">
+                        <f:if condition="{proposal.applicant.company}">{proposal.applicant.company} </f:if><br>{proposal.applicant.username}
+                    </td>
+                    <td style="min-width: 200px;">
+                        {proposal.call.title}
+                    </td>
+                    <td nowrap="nowrap">
+                    </td>
+                    <td nowrap="nowrap">
+                        <f:if condition="1 == 0">
+                            <f:comment><!-- Edit Icon --></f:comment>
+                            <a title="{f:translate(key:'BackendListUserEdit')}" href="">
+                                <core:icon identifier="actions-document-open" />
+                            </a>
+
+                            <f:comment><!-- Delete Icon --></f:comment>
+                            <span class="deleteUser cursorpointer" title="{f:translate(key:'BackendListUserDelete')}">
+                                            <core:icon identifier="actions-edit-delete" />
+                                        </span>
+
+                            <f:comment><!-- Enable/Disable Icon --></f:comment>
+                            <span title="{f:translate(key: 'BackendListUserVisibilityUnhide')}"
+                                  class="unhideUser cursorpointer "
+                                  style="{f:if(condition:'{user.disable} == 1', then:'', else:'display:none')}">
+                                            <core:icon identifier="actions-edit-unhide" />
+                                        </span>
+                            <span title="{f:translate(key: 'BackendListUserVisibilityHide')}"
+                                  class="hideUser cursorpointer "
+                                  style="{f:if(condition:'{user.disable} == 1', then:'display:none', else:'')}">
+                                            <core:icon identifier="actions-edit-hide" />
+                                        </span>
+
+
+                            <span title="{f:translate(key:'BackendListUserLogout')}"
+                                  class=""
+                                  style="{f:if(condition:'{user.online}', then:'', else:'display:none')}">
+                                            <f:link.action action="userLogout" arguments="{user:user}" class="logoutUser" title="{f:translate(key:'BackendListUserLogout')}">
+                                                <core:icon identifier="apps-pagetree-drag-place-denied" />
+                                            </f:link.action>
+                                        </span>
+                            <span title="{f:translate(key:'BackendListUserLogout')}"
+                                  class=""
+                                  style="{f:if(condition:'{user.online}', then:'display:none', else:'')}">
+                                            <core:icon identifier="apps-pagetree-drag-place-denied" state="disabled" />
+                                        </span>
+
+                            <input type="hidden" class="container_uid" name="container_uid" value="{user.uid}" />
+                            <input type="hidden" class="container_module_uri" name="container_module_uri" value="{moduleUri}" />
+                            <input type="hidden" class="container_table" name="container_table" value="fe_users" />
+                            <input type="hidden" class="container_label_delete_confirmation" name="container_label_delete_confirmation" value="{f:translate(key:'BackendListUserDeleteConfirmation')}" />
+                        </f:if>
+                    </td>
+                </tr>
+            </f:for>
+
+            </tbody>
+        </table>
+        </f:form>
+        </div>
+        <f:render partial="Utility/Paginator" arguments="{pagination: pagination, pages: pages, paginator: paginator, actionName: 'listForms'}" />
+        <f:comment><!-- <f:debug>{forms}</f:debug> --></f:comment>
+
+    </f:section>
+
+    <f:section name="ColHeader">
+        <v:variable.set name="sortRev" value="0" />
+        <f:if condition="{sortField}">
+            <f:then>
+                <f:if condition="{sortField} == {sorted.sortField}">
+                    <f:if condition="0 == {sorted.sortRev}">
+                        <v:variable.set name="sortRev" value="1" />
+                    </f:if>
+                </f:if>
+                <f:link.action action="listProposals" arguments="{sortField:sortField, sortRev:sortRev}" class="" title="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:sorting.order.{sortRev}')}">
+                    {title}
+                    <f:if condition="{sortField} == {sorted.sortField} && 0 == {sorted.sortRev}">
+                        <f:then>
+                            <f:render section="SortIcon" arguments="{sortOrder:'asc', arrowMode:'up'}" />
+                        </f:then>
+                        <f:else if="{sortField} == {sorted.sortField} && 1 == {sorted.sortRev}">
+                            <f:render section="SortIcon" arguments="{sortOrder:'desc', arrowMode:'down'}" />
+                        </f:else>
+                    </f:if>
+                </f:link.action>
+            </f:then>
+            <f:else>
+                {title}
+            </f:else>
+        </f:if>
+    </f:section>
+
+    <f:section name="SortIcon">
+        <span class="t3js-icon icon icon-size-small icon-state-default icon-status-status-sorting-{sortOrder}" data-identifier="status-status-sorting-desc">
+            <span class="icon-markup">
+                <svg class="icon-color"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-caret-{arrowMode}"></use></svg>
+            </span>
+        </span>
+    </f:section>
+
+    <f:section name="DynamicFilter">
+        <f:for each="{filterSelects}" as="filterSelection" iteration="fs">
+            <fieldset class="form-group">
+                <label>
+                    {f:if(condition:filterSelection.item.filterLabel, then:filterSelection.item.filterLabel, else:filterSelection.item.question)}:<br />
+                    <f:form.select
+                            name="filter[item][{filterSelection.item.uid}]"
+                            value="{filter.item.{filterSelection.item.uid}}"
+                            options='{filterSelection.options}'
+                            prependOptionLabel="<f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.options.all' />"
+                            prependOptionValue=""
+                            class="form-select"
+                    />
+                </label>
+            </fieldset>
+        </f:for>
+    </f:section>
+
+</html>

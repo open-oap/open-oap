@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_csh_tx_openoap_domain_model_proposal.xlf" date="2022-03-25T09:12:02Z" product-name="open_oap">
+		<header/>
+		<body>
+			<trans-unit id="title.description" resname="title.description">
+				<source>title</source>
+			</trans-unit>
+			<trans-unit id="signature.description" resname="signature.description">
+				<source>signature</source>
+			</trans-unit>
+			<trans-unit id="state.description" resname="state.description">
+				<source>state</source>
+			</trans-unit>
+			<trans-unit id="archived.description" resname="archived.description">
+				<source>archived</source>
+			</trans-unit>
+			<trans-unit id="meta_information.description" resname="meta_information.description">
+				<source>metaInformation</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_call.description" resname="tx_openoap_call.description">
+				<source>call</source>
+			</trans-unit>
+			<trans-unit id="answers.description" resname="answers.description">
+				<source>answers</source>
+			</trans-unit>
+			<trans-unit id="comments.description" resname="comments.description">
+				<source>comments</source>
+			</trans-unit>
+			<trans-unit id="applicant.description" resname="applicant.description">
+				<source>applicant</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

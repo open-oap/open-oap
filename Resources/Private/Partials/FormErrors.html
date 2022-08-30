@@ -1,0 +1,29 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+    <f:if condition="{formPage.type} !== {pageTypes.PAGETYPE_PREVIEW}">
+    <f:then>
+        <f:for each="{proposal.call.formPages}" as="page" iteration="pageIdx">
+            <f:if condition="{validationResults.pages.{pageIdx.cycle}} AND {page.type} !== {pageTypes.PAGETYPE_PREVIEW} AND {page.uid} == {formPage.uid}">
+                <f:render partial="innerErrorList" arguments="{_all}" />
+            </f:if>
+        </f:for>
+    </f:then>
+    </f:if>
+
+
+<f:form.validationResults>
+	<f:if condition="{validationResults.flattenedErrors}">
+		<ul>
+		    <f:for each="{validationResults.flattenedErrors}" key="propertyPath" as="errors">
+                <li>
+                    {propertyPath}:
+                    <ul>
+                        <f:for each="{errors}" as="error"><li>{error}</li></f:for>
+                    </ul>
+                </li>
+		    </f:for>
+		</ul>
+    </f:if>
+</f:form.validationResults>
+
+
+</html>

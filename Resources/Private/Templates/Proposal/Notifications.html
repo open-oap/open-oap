@@ -1,0 +1,162 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+Notifications page view
+Available variables:
+  {proposal}
+  {comments}
+  {filtered}
+  {sort}
+  {settings}
+  {states}
+  {logSources}
+  {proposalAnnotatedCode}
+
+<f:section name="content">
+    <f:asset.css identifier="open_oap_styles" href="EXT:open_oap/Resources/Public/Css/styles.css"/>
+
+    <f:if condition="{proposal}">
+        <f:if condition="{proposal.state} < {states.PROPOSAL_SUBMITTED} || {proposal.state} == {states.PROPOSAL_RE_OPENED}">
+            <div class="notifications__edit-proposal">
+                <f:link.action pluginName="form" pageUid="{settings.formPageId}" action="edit" controller="Proposal" arguments="{proposal:proposal}" class="proposals__item-option proposals__item-option--edit">
+                    {f:translate(key:'tx_openoap_dashboard.proposal.linkEdit.title')}
+                </f:link.action>
+            </div>
+        </f:if>
+
+        <div id="notifications" class="notifications">
+            <div class="notifications__header">
+                <h2 class="notifications__proposal-title"><span class="hyphenated">{proposal.title}</span></h2>
+                <div class="proposal">
+                    <f:render partial="Proposal/Info" arguments="{proposal:proposal}" />
+                </div>
+            </div>
+
+            <div class="notifications__list">
+                <f:if condition="{comments}">
+                    <f:then>
+                        <div class="comments__item comments__item--notification comments__item--filters">
+                            <div class="notifications__filters">
+                                <div class="row">
+                                    <div class="column column--size6">
+                                        <f:comment>SORT</f:comment>
+                                        {f:translate(key:'tx_openoap_notifications.sort.title')}
+                                        <f:link.action action="notifications" section="notifications" arguments="{proposal:proposal,filter:filter, sort:'desc'}" class="notifications__filter">{f:translate(key:'tx_openoap_notifications.sort.latestFirst.label')}</f:link.action> | <f:link.action action="notifications" section="notifications" arguments="{proposal:proposal,filter:filter, sort:'asc'}" class="notifications__filter"> {f:translate(key:'tx_openoap_notifications.sort.oldestFirst.label')}</f:link.action>
+                                    </div>
+
+                                    <div class="column column--size6 column--right">
+                                        <div class="notifications__hide-auto">
+                                            <f:comment>FILTER</f:comment>
+                                            <f:if condition="{filter}">
+                                                <f:then>
+                                                    <f:link.action action="notifications" section="notifications" arguments="{proposal:proposal, sort:sort}" class="notifications__filter">{f:translate(key:'tx_openoap_notifications.filter.showAuto.label')}</f:link.action>
+                                                </f:then>
+                                                <f:else>
+                                                    <f:link.action action="notifications" section="notifications" arguments="{proposal:proposal, filter:'auto', sort:sort}" class="notifications__filter">{f:translate(key:'tx_openoap_notifications.filter.hideAuto.label')}</f:link.action>
+                                                </f:else>
+                                            </f:if>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="comments comments--notifications">
+                            <dl class="comments__list comments__list--notifications">
+                                <f:for each="{comments}" as="comment">
+                                    <f:if condition="{comment.code} || {comment.text}">
+                                        <f:if condition="{comment.source} == {logSources.COMMENT_SOURCE_EDIT}">
+                                            <f:then>
+                                                <div class="comments__item comments__item--notification">
+                                                    <dt class="comments__date">
+                                                        <f:render partial="Comment/Date" arguments="{time:comment.created}" />
+                                                    </dt>
+                                                    <dd class="comments__text">
+                                                <span class="comments__meta">
+                                                    <f:if condition="{comment.author} && {comment.author.realName}">
+                                                        <f:then>
+                                                            {f:translate(key:'tx_openoap_notifications.proposalCommentEdit.titleWithAuthor')} {comment.author.realName}
+                                                        </f:then>
+                                                        <f:else>
+                                                            {f:translate(key:'tx_openoap_notifications.proposalCommentEdit.title')}
+                                                        </f:else>
+                                                    </f:if>
+                                                </span>
+                                                        <div class="comments__highlight">{comment.text}</div>
+                                                    </dd>
+                                                </div>
+                                            </f:then>
+                                            <f:else if="{comment.source} == {logSources.COMMENT_SOURCE_AUTO}">
+                                                <div class="comments__item comments__item--notification">
+                                                    <dt class="comments__date">
+                                                        <f:render partial="Comment/Date" arguments="{time:comment.created}" />
+                                                    </dt>
+                                                    <dd class="comments__text">
+                                                        <f:if condition="{comment.code} == {proposalAnnotatedCode}">
+                                                            <f:then>
+                                                                <f:if condition="{comment.text}">
+                                                                  <f:if condition="{comment.text} == 1">
+                                                                      <f:then>
+                                                                          <f:translate key="tx_openoap_domain_model_proposal.log.{comment.code}.1" arguments="{0:comment.text}" />
+                                                                      </f:then>
+                                                                      <f:else>
+                                                                          <f:translate key="tx_openoap_domain_model_proposal.log.{comment.code}" arguments="{0:comment.text}" />
+                                                                      </f:else>
+                                                                  </f:if>
+                                                                </f:if>
+                                                            </f:then>
+                                                            <f:else>
+                                                                <span class="comments__meta">
+                                                                    <f:translate key="tx_openoap_domain_model_proposal.log.{comment.code}" />
+                                                                </span>
+                                                                <f:if condition="{comment.text}">
+                                                                    {comment.text}
+                                                                </f:if>
+                                                            </f:else>
+                                                        </f:if>
+                                                    </dd>
+                                                </div>
+                                            </f:else>
+                                        </f:if>
+                                        <f:comment><!--
+                                  ( Source: {comment.source} )</br>
+                                  ( State: {comment.state} )
+                                --></f:comment>
+                                    </f:if>
+                                </f:for>
+                            </dl>
+                        </div>
+
+                    </f:then>
+                    <f:else>
+                        <div class="comments__item comments__item--notification comments__item--filters">
+                            <div class="notifications__filters">
+                                <div class="row">
+                                    <div class="column column--size6"></div>
+
+                                    <div class="column column--size6 column--right">
+                                        <div class="notifications__hide-auto">
+                                            <f:link.action action="notifications" section="notifications" arguments="{proposal:proposal, sort:sort}">{f:translate(key:'tx_openoap_notifications.filter.showAuto.label')}</f:link.action>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comments__item comments__item--notification">
+                            {f:translate(key:'tx_openoap_notifications.listEmpty.text')}
+                        </div>
+                    </f:else>
+                </f:if>
+            </div>
+
+        </div>
+    </f:if>
+
+    <f:link.action pageUid="{settings.dashboardPageId}" action="dashboard" controller="Applicant" pluginName="Dashboard" class="notifications__close">
+        <f:render partial="ButtonIcon" arguments="{type:'cancel'}"/>{f:translate(key:'tx_openoap_notifications.buttonClose.title')}
+    </f:link.action>
+
+</f:section>
+
+</html>
