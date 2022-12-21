@@ -1,0 +1,78 @@
+// NOTE: these styles apply to both normal accordions and accordions in forms containing checkbox etc (see Suche). Check if any changes for one break the other!
+@use "sass:math";
+
+.accordion {
+    &--comments {
+        background-color: $color-dark-alt-3;
+
+        .accordion__control-icon {
+            width: rem(24);
+            height: rem(24);
+        }
+    }
+
+    &__item {
+        &:not(:last-child) {
+            margin-bottom: rem(5);
+        }
+    }
+
+    &__item-header {
+        @include headline-sizes-3;
+        position: relative;
+        padding: rem(10) $padding-accordion-right rem(12) $padding-accordion-left;
+        margin: 0;
+        border-radius: var(--border-radius-small);
+        background: $color-dark-alt-6;
+
+        .js-initialized & {
+            padding: 0;
+        }
+
+        &--comments {
+            font-size: rem(18);
+            background-color: $color-dark-alt-3;
+        }
+    }
+
+    &__item-content {
+        @include opacity-transition;
+        padding: rem(20) $padding-accordion-right rem(45) $padding-accordion-left;
+        opacity: 1;
+
+        &[aria-hidden] {
+            height: 0;
+            padding: 0;
+            overflow: hidden;
+            opacity: 0;
+
+            > * {
+                display: none;
+            }
+        }
+    }
+
+    &__control {
+        position: relative;
+        width: 100%;
+        padding: rem(10) rem(60) rem(12) $padding-accordion-left;
+        line-height: inherit;
+        font-family: $font-family;
+        font-weight: inherit;
+    }
+
+    &__control-icon {
+        position: absolute;
+        top: rem(13);
+        right: $padding-accordion-right;
+        width: rem(32);
+        height: rem(32);
+        color: $color-dark-alt-2-5;
+        transition: transform $duration-short ease;
+
+        .accordion__control[aria-expanded="true"] & {
+            transform: rotate(180deg);
+        }
+
+    }
+}

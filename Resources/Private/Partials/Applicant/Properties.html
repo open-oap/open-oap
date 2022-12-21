@@ -1,5 +1,5 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-	
+
 <f:comment><f:render section="{section}" arguments="{_all}" /></f:comment>
 
 <f:section name="Summary">
@@ -59,6 +59,15 @@
     <dl class="profile__detail">
         <f:render section="ProfileItem" arguments="{section:'detail',item:applicant.username,tKey:'tx_openoap_domain_model_applicant.username'}" />
         <f:render section="ProfileItem" arguments="{section:'detail',item:'password',tKey:'tx_openoap_domain_model_applicant.password'}" />
+    </dl>
+
+    <f:comment><!-- DELETE ACCOUNT BLOCK --></f:comment>
+    <h2 class="profile__header">
+        <span class="profile__header-text"><f:translate key="tx_openoap_applicant.deleteAccount.header" /></span>
+    </h2>
+    <dl class="profile__detail">
+        <dt class="profile__detail-term"><f:translate key="tx_openoap_applicant.deleteAccount.subheader" /></dt>
+        <dd class="profile__detail-definition"><f:format.raw><f:translate key="tx_openoap_applicant.deleteAccount.text" arguments="{0='{applicant.email}', 1='{applicant.uid}'}" /></f:format.raw></dd>
     </dl>
 </f:section>
 

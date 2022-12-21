@@ -33,7 +33,7 @@ return [
         // type_radiobutton 6
         '6' => ['showitem' => 'question, intro_text, help_text, type, options, additional_value, additional_label, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta,enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_select 7
-        '7' => ['showitem' => 'question, intro_text, help_text, type, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '7' => ['showitem' => 'question, intro_text, help_text, type, default_value, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_select multiple 8
         '8' => ['showitem' => 'question, intro_text, help_text, type, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_upload 8
@@ -283,6 +283,8 @@ return [
         ],
         'validators' => [
             'exclude' => false,
+            'l10n_display' => 'defaultAsReadonly',
+            'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.validators',
             'config' => [
                 'type' => 'select',

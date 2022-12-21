@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OpenOAP\OpenOap\Domain\Model;
 
 use JsonSerializable;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
@@ -216,5 +217,65 @@ class MetaInformation implements JsonSerializable
     public function setGroupsCounter(array $groupsCounter): void
     {
         $this->groupsCounter = $groupsCounter;
+    }
+
+    /**
+     * @return array
+     */
+    public function countGroups(array $groupCounter): array
+    {
+        foreach ($this->groupsCounter as $groupUidL0 => $groupDataL0) {
+            if (!$groupCounter[$groupUidL0]) {
+                $groupCounter[$groupUidL0]['min'] = 1;
+                $groupCounter[$groupUidL0]['max'] = $groupDataL0['current'];
+            }
+            if ($groupCounter[$groupUidL0]['min'] > $groupDataL0['current']) {
+                $groupCounter[$groupUidL0]['min'] = $groupDataL0['current'];
+            }
+            if ($groupCounter[$groupUidL0]['max'] < $groupDataL0['current']) {
+                $groupCounter[$groupUidL0]['max'] = $groupDataL0['current'];
+            }
+
+//            DebuggerUtility::var_dump($groupDataL0,(string) $groupUidL0);
+//            $this->calculateGroupCounter($groupData, $groupUidL0, $groupDataL0['current']);
+//            DebuggerUtility::var_dump($groupData,(string) $groupUidL0);
+
+            foreach ($groupDataL0['instances'] as $indexL1 => $nestedGroups) {
+                foreach ($nestedGroups as $groupUidL1 => $groupDataL1) {
+                    if (!$groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]) {
+                        $groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]['min'] = 1;
+                        $groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]['max'] = $groupDataL1['current'];
+                    }
+                    if ($groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]['min'] > $groupDataL1['current']) {
+                        $groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]['min'] = $groupDataL1['current'];
+                    }
+                    if ($groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]['max'] < $groupDataL1['current']) {
+                        $groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]['max'] = $groupDataL1['current'];
+                    }
+//                    $this->calculateGroupCounter($groupData, $groupUidL1, $groupDataL1['current']);
+                }
+            }
+        }
+        return $groupCounter;
+    }
+
+    /**
+     * @param array $groupCounter
+     * @param $groupId
+     * @param $current
+     */
+    protected function calculateGroupCounter($groupCounter, $groupId, $current): array
+    {
+        $groupCounter = [];
+        if (!$groupCounter) {
+            $groupCounter['min'] = 1;
+            $groupCounter['max'] = $current;
+        }
+        if ($groupCounter['min'] > $current) {
+            $groupCounter['min'] = $current;
+        }
+        if ($groupCounter['max'] < $current) {
+            $groupCounter['max'] = $current;
+        }
     }
 }

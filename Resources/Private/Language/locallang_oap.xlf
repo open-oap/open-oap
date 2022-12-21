@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_oap.xlf" date="2021-11-02T16:46:47Z" product-name="open_oap">
+		<header/>
+		<body>
+<!-- Form -->
+            <trans-unit id="tx_cboap_domain_model_itemvalidator.type_mandatory" resname="tx_cboap_domain_model_itemvalidator.type_mandatory">
+                <source>Mandatory</source><target>Mandatory</target>
+            </trans-unit>
+            <trans-unit id="tx_cboap_domain_model_itemvalidator.type_integer" resname="tx_cboap_domain_model_itemvalidator.type_integer">
+                <source>Whole number/integer</source>
+            </trans-unit>
+            <trans-unit id="tx_cboap_domain_model_itemvalidator.type_float" resname="tx_cboap_domain_model_itemvalidator.type_float">
+                <source>Float number/</source>
+            </trans-unit>
+            <trans-unit id="tx_cboap_domain_model_itemvalidator.type_maxChar" resname="tx_cboap_domain_model_itemvalidator.type_maxChar">
+                <source>Maximum Character</source>
+            </trans-unit>
+
+            <trans-unit id="tx_openoap_domain_model_formitem.type_string" resname="tx_openoap_domain_model_formitem.type_string">
+                <source>Text - single line</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.type_text" resname="tx_openoap_domain_model_formitem.type_text">
+                <source>Textarea</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.type_date1" resname="tx_openoap_domain_model_formitem.type_date1">
+                <source>One date</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.type_date2" resname="tx_openoap_domain_model_formitem.type_date2">
+                <source>Two dates</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.type_checkbox" resname="tx_openoap_domain_model_formitem.type_checkbox">
+                <source>Checkbox (multiple)</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.type_radiobutton" resname="tx_openoap_domain_model_formitem.type_radiobutton">
+                <source>Radiobutton (single)</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.type_select_single" resname="tx_openoap_domain_model_formitem.type_select_single">
+                <source>Select (single)</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.type_select_multiple" resname="tx_openoap_domain_model_formitem.type_select_multiple">
+                <source>Select (multiple)</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.type_upload" resname="tx_openoap_domain_model_formitem.type_upload">
+                <source>Upload file</source>
+            </trans-unit>
+
+<!-- Plugin -->
+            <trans-unit id="tx_openoap_applicant.name" resname="tx_open_oap_applicant.name">
+                <source>Applicant-Plugin</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_applicant.description" resname="tx_open_oap_applicant.description">
+                <source>Plugin zur Anzeige und Bearbeitung von Stammdaten und Antragsteller*innen-Profil</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.name" resname="tx_openoap_dashboard.name">
+                <source>Dashboard-Plugin</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.description" resname="tx_openoap_dashboard.description">
+                <source>Plugin zur Anzeige der vorhandenen Anträge für einen ausgewählten Call - wird im Plugin ausgewählt</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_form.name" resname="tx_openoap_form.name">
+                <source>Form/Proposal-Plugin</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_form.description" resname="tx_openoap_form.description">
+                <source>Plugin zur Erstellung und Nutzung des Formulars</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_proposals.name" resname="tx_open_oap_proposals.name">
+                <source>Proposals/Applicant-Plugin</source>
+                <target>Liste Anträge/Antragsteller*in-Plugin</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_proposals.description" resname="tx_open_oap_proposals.description">
+                <source>Plugin zur Anzeige aller aktuellen oder archivierten Anträge eines/r Antragsteller*in</source>
+                <target>Plugin zur Anzeige aller aktuellen oder archivierten Anträge eines/r Antragsteller*in</target>
+            </trans-unit>
+
+<!-- Comment -->
+            <trans-unit id="comment.state_new" resname="comment.state_new">
+                <source>New</source>
+            </trans-unit>
+            <trans-unit id="comment.state_accepted" resname="comment.state_accepted">
+                <source>Accepted</source>
+            </trans-unit>
+            <trans-unit id="comment.state_auto_accepted" resname="comment.state_auto_accepted">
+                <source>Auto Accepted</source>
+            </trans-unit>
+            <trans-unit id="comment.state_archived" resname="comment.state_archived">
+                <source>Archived</source>
+            </trans-unit>
+            <trans-unit id="comment.source_auto" resname="comment.source_auto">
+                <source>Auto</source>
+            </trans-unit>
+            <trans-unit id="comment.source_edit" resname="comment.source_edit">
+                <source>Edit</source>
+            </trans-unit>
+
+<!-- Formpage -->
+            <trans-unit id="formpage.type_default" resname="formpage.type_default">
+                <source>Default</source>
+            </trans-unit>
+            <trans-unit id="formpage.type_preview" resname="formpage.type_preview">
+                <source>Preview</source>
+            </trans-unit>
+            
+<!-- Status of proposal -->
+            <trans-unit id="tx_openoap_domain_model_proposal.state.0" resname="tx_openoap_domain_model_proposal.state.0">
+                <source>New</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.1" resname="tx_openoap_domain_model_proposal.state.1">
+                <source>Draft</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.2" resname="tx_openoap_domain_model_proposal.state.2">
+                <source>Submitted</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.3" resname="tx_openoap_domain_model_proposal.state.3">
+                <source>Processing</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.4" resname="tx_openoap_domain_model_proposal.state.4">
+                <source>Re-opened</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.5" resname="tx_openoap_domain_model_proposal.state.5">
+                <source>Contract</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.6" resname="tx_openoap_domain_model_proposal.state.6">
+                <source>Declined</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.9" resname="tx_openoap_domain_model_proposal.state.9">
+                <source>Archived</source>
+            </trans-unit>
+            
+<!-- Dashboard -->
+            <trans-unit id="tx_openoap_dashboard.proposalsActive.header" resname="tx_openoap_dashboard.proposalsActive.header">
+                <source>Active proposals</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.proposalsArchived.header" resname="tx_openoap_dashboard.proposalsArchived.header">
+                <source>Proposal history</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.proposalStatesLegend.header" resname="tx_openoap_dashboard.proposalStatesLegend.header">
+                <source>What does the proposal status mean?</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.0.legend" resname="tx_openoap_domain_model_proposal.state.0.legend">
+                <source>New</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.1.legend" resname="tx_openoap_domain_model_proposal.state.1.legend">
+                <source>The proposal has not yet been submitted</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.2.legend" resname="tx_openoap_domain_model_proposal.state.2.legend">
+                <source>The proposal has been successfully submitted</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.3.legend" resname="tx_openoap_domain_model_proposal.state.3.legend">
+                <source>The proposal is under review</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.4.legend" resname="tx_openoap_domain_model_proposal.state.4.legend">
+                <source>The proposal has been reopened</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.5.legend" resname="tx_openoap_domain_model_proposal.state.5.legend">
+                <source>The proposal is adopted</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.6.legend" resname="tx_openoap_domain_model_proposal.state.6.legend">
+                <source>The proposal has been declined</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.state.9.legend" resname="tx_openoap_domain_model_proposal.state.9.legend">
+                <source>The proposal has been archived</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.noActiveProposals.text" resname="tx_openoap_dashboard.noActiveProposals.text">
+                <source>There are no active proposals.</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.noArchivedProposals.text" resname="tx_openoap_dashboard.noArchivedProposals.text">
+                <source>There are no archived proposals.</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.button.proposalsActiveAll.label" resname="tx_openoap_dashboard.button.proposalsActiveAll.label">
+                <source>All active proposals</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.button.proposalsArchivedAll.label" resname="tx_openoap_dashboard.button.proposalsArchivedAll.label">
+                <source>All archived proposals</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.proposal.linkEdit.title" resname="tx_openoap_dashboard.proposal.linkEdit.title">
+                <source>Edit proposal</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.proposal.linkDownload.title" resname="tx_openoap_dashboard.proposal.linkDownload.title">
+                <source>Download</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.proposal.linkCommunication.title" resname="tx_openoap_dashboard.proposal.linkCommunication.title">
+                <source>Communication</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.proposal.linkDelete.title" resname="tx_openoap_dashboard.proposal.linkDelete.title">
+                <source>Delete proposal</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.proposal.links.show" resname="tx_openoap_dashboard.proposal.links.show">
+                <source>Show options</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_proposal.status" resname="tx_openoap_domain_model_proposal.status">
+                <source>Status</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.proposal.buttonCreateNew.title" resname="tx_openoap_dashboard.proposal.buttonCreateNew.title">
+                <source>Create new proposal</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.masterdata.header" resname="tx_openoap_dashboard.masterdata.header">
+                <source>Master data</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.masterdata.minimalInfo.text" resname="tx_openoap_dashboard.masterdata.minimalInfo.text">
+                <source>Complete information about your company is not yet available.</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.masterdata.linkEdit.title" resname="tx_openoap_dashboard.masterdata.linkEdit.title">
+                <source>Edit master data</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_dashboard.masterdata.addressCombined.label" resname="tx_openoap_dashboard.masterdata.addressCombined.label">
+                <source>Address</source>
+            </trans-unit>
+
+            <trans-unit id="tx_openoap_dashboard.call.active_until" resname="tx_openoap_dashboard.call.active_until">
+                <source>Active until</source>
+            </trans-unit>
+
+
+<!-- Proposals -->
+            <trans-unit id="tx_openoap_proposals.button.dashboard.label" resname="tx_openoap_proposals.button.dashboard.label">
+                <source>Dashboard</source>
+            </trans-unit>
+		</body>
+	</file>
+</xliff>

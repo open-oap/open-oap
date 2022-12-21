@@ -6,6 +6,7 @@ namespace OpenOAP\OpenOap\Controller;
 
 use OpenOAP\OpenOap\Domain\Model\Answer;
 use OpenOAP\OpenOap\Domain\Model\Applicant;
+use OpenOAP\OpenOap\Domain\Model\Call;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -51,7 +52,6 @@ class ApplicantController extends OapFrontendController
         if ($countriesItemOption != null) {
             $countryOptionsArray = GeneralUtility::trimExplode("\r\n", $countriesItemOption->getOptions());
             if (count($countryOptionsArray) > 0) {
-                //$this->countries = array_combine($countryOptionsArray, $countryOptionsArray);
                 foreach ($countryOptionsArray as $item) {
                     $itemArray = GeneralUtility::trimExplode(';', $item);
                     $this->countries[$itemArray[0]] = $itemArray[1];
@@ -151,7 +151,6 @@ class ApplicantController extends OapFrontendController
             $status = $this->status();
 
             $proposalsActive = $this->proposalRepository->findProposalsByApplicant(
-                (int)($this->settings['proposalPid']),
                 $this->applicant,
                 0,
                 (int)($this->settings['proposalsActiveLimit'])
@@ -160,7 +159,6 @@ class ApplicantController extends OapFrontendController
             $proposalsActiveAttachmentsCount = $this->countProposalAttachments($proposalsActive);
 
             $proposalsArchived = $this->proposalRepository->findProposalsByApplicant(
-                (int)($this->settings['proposalPid']),
                 $this->applicant,
                 1,
                 (int)($this->settings['proposalsArchivedLimit'])
@@ -171,18 +169,27 @@ class ApplicantController extends OapFrontendController
             $calls = $this->callRepository->findAllByPid((integer)$this->settings['callPid']);
 
             $countAllProposalsActive = $this->proposalRepository->countProposalsByApplicant(
-                (int)($this->settings['proposalPid']),
                 $this->applicant,
                 0
             );
 
             $countAllProposalsArchived = $this->proposalRepository->countProposalsByApplicant(
-                (int)($this->settings['proposalPid']),
                 $this->applicant,
                 1
             );
 
             $activeCalls = $this->callRepository->findActiveCalls((int)$this->settings['callPid'], $this->applicant, $this->settings['testerFeGroupsId']);
+
+            /** @var Call $activeCall */
+            foreach ($activeCalls as $i => $activeCall) {
+                if ($activeCall->getBlockedLanguages() !== '') {
+                    $blockedLanguages = explode(',', $activeCall->getBlockedLanguages());
+
+                    if (in_array($this->language->getLanguageId(), $blockedLanguages)) {
+                        $activeCalls[$i]->setHidden(1);
+                    }
+                }
+            }
         }
 
         $jsMessages = $this->getJsMessages();
@@ -201,6 +208,7 @@ class ApplicantController extends OapFrontendController
             'settings' => $this->settings,
             'activeCalls' => $activeCalls,
             'jsMessages'=> $jsMessages,
+            'nowTimestamp' => time(),
         ]);
         return $this->htmlResponse();
     }
@@ -218,7 +226,6 @@ class ApplicantController extends OapFrontendController
             $archived = $archive == null ? 0 : 1;
 
             $proposals = $this->proposalRepository->findProposalsByApplicant(
-                (int)($this->settings['proposalPid']),
                 $this->applicant,
                 $archived
             );

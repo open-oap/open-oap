@@ -30,24 +30,25 @@
 			<trans-unit id="tx_openoap_domain_model_call.fe_user_exceptions" resname="tx_openoap_domain_model_call.fe_user_exceptions">
 				<source>Fe User Exceptions</source>
 			</trans-unit>
-			<trans-unit id="tx_openoap_domain_model_call.project_start_time" resname="tx_openoap_domain_model_call.project_start_time">
-				<source>Project Start Time</source>
-			</trans-unit>
-			<trans-unit id="tx_openoap_domain_model_call.project_end_time" resname="tx_openoap_domain_model_call.project_end_time">
-				<source>Project End Time</source>
-			</trans-unit>
-			<trans-unit id="tx_openoap_domain_model_call.project_duration_max" resname="tx_openoap_domain_model_call.project_duration_max">
-				<source>Project Duration Max</source>
-			</trans-unit>
-			<trans-unit id="tx_openoap_domain_model_call.project_duration_min" resname="tx_openoap_domain_model_call.project_duration_min">
-				<source>Project Duration Min</source>
-			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.proposal_pid" resname="tx_openoap_domain_model_call.proposal_pid">
 				<source>Proposal Pid</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.form_pages" resname="tx_openoap_domain_model_call.form_pages">
 				<source>Form Pages</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.form_items" resname="tx_openoap_domain_model_call.form_items">
+				<source>Items for submit page</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.word_template" resname="tx_openoap_domain_model_call.word_template">
+				<source>Word template for exports of proposal</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.blocked_languages" resname="tx_openoap_domain_model_call.blocked_languages">
+				<source>Not accessible with these languages in the frontend</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.logo" resname="tx_openoap_domain_model_call.logo">
+				<source>Header-Logo for PDF</source>
+			</trans-unit>
+
 			<trans-unit id="tx_openoap_domain_model_formpage" resname="tx_openoap_domain_model_formpage">
 				<source>Form Page</source>
 			</trans-unit>
@@ -75,6 +76,15 @@
 			<trans-unit id="tx_openoap_domain_model_formgroup.title" resname="tx_openoap_domain_model_formgroup.title">
 				<source>Title</source>
 			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_formgroup.type' resname='tx_openoap_domain_model_formgroup.type'>
+				<source><![CDATA[group type]]></source>
+			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_formgroup.type_default' resname='tx_openoap_domain_model_formgroup.type_default'>
+				<source><![CDATA[Default group type (normal or nested inside))]]></source>
+			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_formgroup.type_meta' resname='tx_openoap_domain_model_formgroup.type_meta'>
+				<source><![CDATA[Meta group type (wrapper, outside)]]></source>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_formgroup.intro_text" resname="tx_openoap_domain_model_formgroup.intro_text">
 				<source>Intro Text</source>
 			</trans-unit>
@@ -83,6 +93,15 @@
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_formgroup.model_name" resname="tx_openoap_domain_model_formgroup.model_name">
 				<source>Model Name</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.display_type" resname="tx_openoap_domain_model_formgroup.display_type">
+				<source>Display Type</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.display_type_default" resname="tx_openoap_domain_model_formgroup.display_type_default">
+				<source>Normal</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.display_type_table" resname="tx_openoap_domain_model_formgroup.display_type_table">
+				<source>Table</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_formgroup.repeatable_min" resname="tx_openoap_domain_model_formgroup.repeatable_min">
 				<source>Repeatable Min/default</source>
@@ -177,19 +196,19 @@
 				<source>Type</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_itemvalidator.param1" resname="tx_openoap_domain_model_itemvalidator.param1">
-				<source>Param1</source>
+				<source>Parameter 1</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_itemvalidator.param2" resname="tx_openoap_domain_model_itemvalidator.param2">
-				<source>Param2</source>
+				<source>Parameter 2</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_applicant" resname="tx_openoap_domain_model_applicant">
 				<source>Applicant</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_applicant.company_email" resname="tx_openoap_domain_model_applicant.company_email">
-				<source>Company Email</source>
+				<source>Company email</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_applicant.preferred_lang" resname="tx_openoap_domain_model_applicant.preferred_lang">
-				<source>Preferred Lang</source>
+				<source>Preferred communication language</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_applicant.privacypolicy" resname="tx_openoap_domain_model_applicant.privacypolicy">
 				<source>Privacy Policy</source>

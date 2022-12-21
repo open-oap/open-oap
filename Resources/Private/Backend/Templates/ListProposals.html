@@ -1,5 +1,6 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 
+<f:comment><!--
 Available variables:
     {countOfItems}
     {filter}
@@ -11,41 +12,24 @@ Available variables:
     {paginator}
     {pagination}
     {sorted}
+--></f:comment>
 
 <f:layout name="ProposalsBELayout" />
     <f:section name="content">
 
         <f:flashMessages />
 
-        <h2><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.list_of_proposals"/></h2>
-
-        <f:form action="{action}">
+        <h2 style="margin-bottom:3rem;"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.list_of_proposals"/>: {call.title}</h2>
+        <f:form action="listProposals">
+            <f:form.hidden value="{call}" name="call" />
             <div class="form-inline">
-                <fieldset class="form-group">
-                    <!-- <legend><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.filter"/></legend> -->
-
-                    <label>
-                        <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.calls" />:<br />
-
-                        <f:form.select
-                                name="filter[call]"
-                                value="{filter.call}"
-                                options="{calls}"
-                                optionValueField="uid"
-                                optionLabelField="title"
-                                prependOptionLabel="<f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.calls.all' />"
-                                prependOptionValue=""
-                                class="form-select"
-                        />
-                    </label>
-                </fieldset>
                 <fieldset class="form-group">
                     <label>
                         <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.state" />:<br />
                         <f:form.select
                                 name="filter[state]"
                                 value="{filter.state}"
-                                options='{states}'
+                                options='{states.filter}'
                                 prependOptionLabel="<f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.state.all' />"
                                 prependOptionValue=""
                                 class="form-select"
@@ -77,8 +61,8 @@ Available variables:
 
         <div id="t3-table-tx_openoap_domain_model_proposal" data-multi-record-selection-identifier="t3-table-tx_openoap_domain_model_proposal">
         <h2><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.results"/></h2>
-        <f:form action="{action}" name="list-table-form-tx_openoap_domain_model_proposal" id="form-selection-todo">
-
+        <f:form action="listProposals" name="list-table-form-tx_openoap_domain_model_proposal" id="form-selection-todo">
+            <f:form.hidden value="{call}" name="call" />
             <div id="selection-row"  style="display:none;">
                 <h3><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.header' /></h3>
                 <div class="form-inline table-bg">
@@ -90,7 +74,7 @@ Available variables:
                                 id="state-bulk-select"
                                 name="selection[state]"
                                 value="{selection.state}"
-                                options='{states}'
+                                options='{states.task}'
                                 prependOptionLabel="<f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.state.defaultOption'/>"
                                 prependOptionValue="0"
                                 class="form-select" />
@@ -120,21 +104,21 @@ Available variables:
             </div>
 
             <table data-table="tx_openoap_domain_model_proposal" cellspacing="0" cellpadding="0" border="0" class="table table-striped table-hover">
-
+            <thead>
                 <tr class="t3-row-header">
-                    <td nowrap="nowrap" class="col-icon">&nbsp;</td>
-                    <td nowrap="nowrap" class="col-icon">&nbsp;</td>
-                    <td nowrap="nowrap" colspan="9">
+                    <th nowrap="nowrap" class="col-icon">&nbsp;</th>
+                    <th nowrap="nowrap" class="col-icon">&nbsp;</th>
+                    <th nowrap="nowrap" colspan="9">
                         <span class="c-table">
                             <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.countProposals"/> {countOfItems}
                         </span>
-                    </td>
-                    <td nowrap="nowrap" class="col-icon">&nbsp;</td>
+                    </th>
+                    <th nowrap="nowrap" class="col-icon">&nbsp;</th>
                 </tr>
 
                 <tr class="c-headLine">
                 <!-- checkboxes -->
-                <td class="col-selector nowrap" colspan="2">
+                <th class="col-selector nowrap" colspan="2">
                     <div class="btn-group dropdown position-static">
                         <button type="button" id="record-selection-check-actions-toggle" class="btn btn-borderless dropdown-toggle t3js-multi-record-selection-check-actions-toggle" data-bs-toggle="dropdown" data-bs-boundary="window" aria-expanded="false">
                             <span class="t3js-icon icon icon-size-small icon-state-default icon-content-special-div" data-identifier="content-special-div">
@@ -168,42 +152,36 @@ Available variables:
                             </li>
                         </ul>
                     </div>
-                </td>
+                </th>
 
                 <!-- uid -->
                 <f:comment><!--
-                <td nowrap="nowrap" class="col-title">
+                <th nowrap="nowrap" class="col-title">
                     <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.uid" />
-                </td>
+                </th>
                 --></f:comment>
                 <!-- title -->
-                <td nowrap="nowrap">
+                <th nowrap="nowrap">
                     <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.title\')}', sortField:'title', sorted:sorted}" />
-                </td>
+                </th>
                 <!-- signature -->
-                <td nowrap="nowrap">
+                <th nowrap="nowrap">
                     <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.signature\')}', sortField:'signature', sorted:sorted}" />
-                </td>
+                </th>
                 <!-- state -->
-                <td nowrap="nowrap">
+                <th nowrap="nowrap">
                     <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.state\')}', sortField:'state', sorted:sorted}" />
-                </td>
+                </th>
                 <!-- tstamp -->
-                <td nowrap="nowrap">
+                <th nowrap="nowrap">
                     <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.tstamp\')}', sortField:'tstamp', sorted:sorted}" />
-                </td>
+                </th>
                 <!-- user-e-mail / applicant-->
-                <td nowrap="nowrap">
+                <th nowrap="nowrap">
                     <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.applicant\')}', sortField:'applicant', sorted:sorted}" />
-                </td>
-                <!-- call -->
-                <td nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call\')}', sortField:'call.title', sorted:sorted}" />
-                </td>
-                <!-- Cmd-Icons -->
-                <td nowrap="nowrap" class="col-icon"></td>
+                </th>
             </tr>
-
+            </thead>
             <tbody id="proposals" data-multi-record-selection-row-selection="true">
             <f:for each="{paginator.paginatedItems}" as="proposal">
                 <tr data-table="tx_openoap_domain_model_proposal" class="t3js-entity" data-uid="{proposal.uid}" title="id={proposal.uid}">
@@ -251,7 +229,7 @@ Available variables:
                     </td>
                     <td nowrap="nowrap" class="col-title">
                         <f:if condition="{proposal.signature} > 0">
-                            <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}_</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+                            <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
                         </f:if>
 
                     </td>
@@ -263,55 +241,6 @@ Available variables:
                     </td>
                     <td nowrap="nowrap">
                         <f:if condition="{proposal.applicant.company}">{proposal.applicant.company} </f:if><br>{proposal.applicant.username}
-                    </td>
-                    <td style="min-width: 200px;">
-                        {proposal.call.title}
-                    </td>
-                    <td nowrap="nowrap">
-                    </td>
-                    <td nowrap="nowrap">
-                        <f:if condition="1 == 0">
-                            <f:comment><!-- Edit Icon --></f:comment>
-                            <a title="{f:translate(key:'BackendListUserEdit')}" href="">
-                                <core:icon identifier="actions-document-open" />
-                            </a>
-
-                            <f:comment><!-- Delete Icon --></f:comment>
-                            <span class="deleteUser cursorpointer" title="{f:translate(key:'BackendListUserDelete')}">
-                                            <core:icon identifier="actions-edit-delete" />
-                                        </span>
-
-                            <f:comment><!-- Enable/Disable Icon --></f:comment>
-                            <span title="{f:translate(key: 'BackendListUserVisibilityUnhide')}"
-                                  class="unhideUser cursorpointer "
-                                  style="{f:if(condition:'{user.disable} == 1', then:'', else:'display:none')}">
-                                            <core:icon identifier="actions-edit-unhide" />
-                                        </span>
-                            <span title="{f:translate(key: 'BackendListUserVisibilityHide')}"
-                                  class="hideUser cursorpointer "
-                                  style="{f:if(condition:'{user.disable} == 1', then:'display:none', else:'')}">
-                                            <core:icon identifier="actions-edit-hide" />
-                                        </span>
-
-
-                            <span title="{f:translate(key:'BackendListUserLogout')}"
-                                  class=""
-                                  style="{f:if(condition:'{user.online}', then:'', else:'display:none')}">
-                                            <f:link.action action="userLogout" arguments="{user:user}" class="logoutUser" title="{f:translate(key:'BackendListUserLogout')}">
-                                                <core:icon identifier="apps-pagetree-drag-place-denied" />
-                                            </f:link.action>
-                                        </span>
-                            <span title="{f:translate(key:'BackendListUserLogout')}"
-                                  class=""
-                                  style="{f:if(condition:'{user.online}', then:'display:none', else:'')}">
-                                            <core:icon identifier="apps-pagetree-drag-place-denied" state="disabled" />
-                                        </span>
-
-                            <input type="hidden" class="container_uid" name="container_uid" value="{user.uid}" />
-                            <input type="hidden" class="container_module_uri" name="container_module_uri" value="{moduleUri}" />
-                            <input type="hidden" class="container_table" name="container_table" value="fe_users" />
-                            <input type="hidden" class="container_label_delete_confirmation" name="container_label_delete_confirmation" value="{f:translate(key:'BackendListUserDeleteConfirmation')}" />
-                        </f:if>
                     </td>
                 </tr>
             </f:for>

@@ -7,13 +7,13 @@ CREATE TABLE tx_openoap_domain_model_call (
 	call_start_time datetime DEFAULT NULL,
 	call_end_time datetime DEFAULT NULL,
 	fe_user_exceptions varchar(255) NOT NULL DEFAULT '',
-	project_start_time datetime DEFAULT NULL,
-	project_end_time datetime DEFAULT NULL,
-	project_duration_max int(11) NOT NULL DEFAULT '0',
-	project_duration_min int(11) NOT NULL DEFAULT '0',
 	proposal_pid int(11) NOT NULL DEFAULT '0',
 	form_pages int(11) unsigned NOT NULL DEFAULT '0',
-	usergroup text
+	usergroup text,
+	items int(11) unsigned NOT NULL DEFAULT '0',
+	word_template int(11) unsigned DEFAULT '0',
+	logo int(11) unsigned DEFAULT '0',
+	blocked_languages varchar(255) NOT NULL DEFAULT ''
 );
 
 CREATE TABLE tx_openoap_domain_model_formpage (
@@ -32,9 +32,12 @@ CREATE TABLE tx_openoap_domain_model_formgroup (
 	model_name varchar(255) NOT NULL DEFAULT '',
 	repeatable_min int(11) NOT NULL DEFAULT 1,
 	repeatable_max int(11) NOT NULL DEFAULT 1,
+	display_type int(11) NOT NULL DEFAULT 0,
 	items int(11) unsigned NOT NULL DEFAULT '0',
 	group_title int(11) unsigned NOT NULL DEFAULT '0',
-	dependent_on int(11) unsigned NOT NULL DEFAULT '0'
+	dependent_on int(11) unsigned NOT NULL DEFAULT '0',
+	type int(11) DEFAULT '0' NOT NULL,
+	item_groups int(11) unsigned NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE tx_openoap_domain_model_formitem (
@@ -96,7 +99,9 @@ CREATE TABLE tx_openoap_domain_model_proposal (
 CREATE TABLE tx_openoap_domain_model_answer (
 	value text NOT NULL DEFAULT '',
 	type int(11) DEFAULT '0' NOT NULL,
-	element_counter int(11) NOT NULL DEFAULT '0',
+	element_counter int(11) DEFAULT '0' NOT NULL,
+	group_counter_0 int(11) DEFAULT '0' NOT NULL,
+	group_counter_1 int(11) DEFAULT '0' NOT NULL,
 	additional_value text NOT NULL DEFAULT '',
 	past_answers text NOT NULL DEFAULT '',
 	item int(11) unsigned DEFAULT '0',

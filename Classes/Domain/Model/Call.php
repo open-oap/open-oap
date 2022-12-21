@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace OpenOAP\OpenOap\Domain\Model;
 
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+
 /**
  * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
  *
@@ -81,34 +83,6 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $feUserExceptions = '';
 
     /**
-     * earliest project start
-     *
-     * @var \DateTime
-     */
-    protected $projectStartTime;
-
-    /**
-     * latest project end
-     *
-     * @var \DateTime
-     */
-    protected $projectEndTime;
-
-    /**
-     * maximum years of project duration
-     *
-     * @var int
-     */
-    protected $projectDurationMax = 0;
-
-    /**
-     * minimum years of project duration
-     *
-     * @var int
-     */
-    protected $projectDurationMin = 0;
-
-    /**
      * proposalPid
      *
      * @var int
@@ -123,11 +97,33 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $formPages;
 
     /**
+     * items
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormItem>
+     */
+    protected $items;
+
+    /**
      * usergroup
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup>
      */
     protected $usergroup;
+
+    /**
+     * @var FileReference|null
+     */
+    protected $wordTemplate;
+
+    /**
+     * @var FileReference|null
+     */
+    protected $logo;
+
+    /**
+     * @var string
+     */
+    protected $blockedLanguages;
 
     /**
      * __construct
@@ -271,86 +267,6 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the projectStartTime
-     *
-     * @return \DateTime projectStartTime
-     */
-    public function getProjectStartTime()
-    {
-        return $this->projectStartTime;
-    }
-
-    /**
-     * Sets the projectStartTime
-     *
-     * @param \DateTime $projectStartTime
-     */
-    public function setProjectStartTime(\DateTime $projectStartTime)
-    {
-        $this->projectStartTime = $projectStartTime;
-    }
-
-    /**
-     * Returns the projectEndTime
-     *
-     * @return \DateTime projectEndTime
-     */
-    public function getProjectEndTime()
-    {
-        return $this->projectEndTime;
-    }
-
-    /**
-     * Sets the projectEndTime
-     *
-     * @param \DateTime $projectEndTime
-     */
-    public function setProjectEndTime(\DateTime $projectEndTime)
-    {
-        $this->projectEndTime = $projectEndTime;
-    }
-
-    /**
-     * Returns the projectDurationMax
-     *
-     * @return int projectDurationMax
-     */
-    public function getProjectDurationMax()
-    {
-        return $this->projectDurationMax;
-    }
-
-    /**
-     * Sets the projectDurationMax
-     *
-     * @param int $projectDurationMax
-     */
-    public function setProjectDurationMax(int $projectDurationMax)
-    {
-        $this->projectDurationMax = $projectDurationMax;
-    }
-
-    /**
-     * Returns the projectDurationMin
-     *
-     * @return int projectDurationMin
-     */
-    public function getProjectDurationMin()
-    {
-        return $this->projectDurationMin;
-    }
-
-    /**
-     * Sets the projectDurationMin
-     *
-     * @param int $projectDurationMin
-     */
-    public function setProjectDurationMin(int $projectDurationMin)
-    {
-        $this->projectDurationMin = $projectDurationMin;
-    }
-
-    /**
      * Adds a FormPage
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormPage $formPage
@@ -480,5 +396,69 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setShortcut(string $shortcut): void
     {
         $this->shortcut = $shortcut;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getItems(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $items
+     */
+    public function setItems(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $items): void
+    {
+        $this->items = $items;
+    }
+
+    /**
+     * @return FileReference|null
+     */
+    public function getWordTemplate()
+    {
+        return $this->wordTemplate;
+    }
+
+    /**
+     * @param FileReference|null $wordTemplate
+     */
+    public function setWordTemplate($wordTemplate): void
+    {
+        $this->wordTemplate = $wordTemplate;
+    }
+
+    /**
+     * @return FileReference|null
+     */
+    public function getLogo(): ?FileReference
+    {
+        return $this->logo;
+    }
+
+    /**
+     * @param FileReference|null $logo
+     */
+    public function setLogo(?FileReference $logo): void
+    {
+        $this->logo = $logo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockedLanguages(): string
+    {
+        return $this->blockedLanguages;
+    }
+
+    /**
+     * @param string $blockedLanguages
+     */
+    public function setBlockedLanguages(string $blockedLanguages): void
+    {
+        $this->blockedLanguages = $blockedLanguages;
     }
 }

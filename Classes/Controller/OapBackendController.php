@@ -14,7 +14,6 @@ use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 
 /***
@@ -93,9 +92,6 @@ class OapBackendController extends OapBaseController
     {
         echo __FUNCTION__;
         die();
-//        DebuggerUtility::var_dump($this->settings,(string)__LINE__);
-//        DebuggerUtility::var_dump($this->view,(string)__LINE__);
-//        die();
     }
 
     /*
@@ -129,13 +125,6 @@ class OapBackendController extends OapBaseController
      */
     protected function listObjects($repository, int $currentPage): void
     {
-        // /typo3/module/web/OpenOapBackend?token=3874b939922bd3f65d5e9fca2d5048782187b6ed&id=24&tx_openoap_web_openoapbackend%5Baction%5D=listForms&tx_openoap_web_openoapbackend%5Bcontroller%5D=OapBackend
-        // /typo3/module/web/OpenOapBackend?token=3874b939922bd3f65d5e9fca2d5048782187b6ed&id=24&tx_openoap_web_openoapbackend%5Bcontroller%5D=OapBackend
-        // /typo3/module/web/OpenOapBackend?token=3874b939922bd3f65d5e9fca2d5048782187b6ed&id=24&tx_openoap_web_openoapbackend%5Bcontroller%5D=OapBackend
-        // /typo3/module/web/OpenOapBackend?token=3874b939922bd3f65d5e9fca2d5048782187b6ed&id=24&tx_openoap_web_openoapbackend%5Bcontroller%5D=OapBackend
-
-//        DebuggerUtility::var_dump($uriBuilder->buildUriFromRoutePath('/module/web/OpenOapBackend'),(string) __LINE__);
-//        DebuggerUtility::var_dump($filter,(string) __LINE__);
         $moduleUri = $this->backendUriBuilder->buildUriFromRoutePath('/module/web/OpenOapBackendforms');
         $allItems = [];
         $arrayPaginator = null;
@@ -148,7 +137,6 @@ class OapBackendController extends OapBaseController
             $callPid = $this->pageUid;
         }
         $allItems = $repository->findAllByPid($callPid)->toArray();
-//        DebuggerUtility::var_dump($allItems);
         if (!count($allItems)) {
             $this->setMessage('no_calls_found', self::WARNING);
         } else {

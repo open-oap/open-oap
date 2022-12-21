@@ -34,6 +34,9 @@
             <f:if condition="{comment.text}">
                 <div class="comments__item">
                     <dt class="comments__date" >
+                        <f:if condition="{item}">
+                            {item.question} -&gt; {colTitle} <br>
+                        </f:if>
                         <f:render partial="Comment/Date" arguments="{time:comment.created}" />,
                         <f:if condition="{comment.author} && {commentAuthorByUsername}">
                             <f:then>{comment.author.username}</f:then>

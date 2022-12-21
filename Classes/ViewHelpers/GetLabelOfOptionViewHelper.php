@@ -45,8 +45,6 @@ class GetLabelOfOptionViewHelper extends AbstractViewHelper
             $values = [$valueRaw];
         }
 
-        $output = implode('<br >', $values);
-
         if (!$options) {
             return $valueRaw;
         }
@@ -66,9 +64,11 @@ class GetLabelOfOptionViewHelper extends AbstractViewHelper
         }
 
         $output = '';
+        $returnItems = str_replace('|', '<br>', $returnItems);
         if (count($returnItems) > 1) {
             $output .= '<ul class="preview__value-list">';
             $output .= '<li class="preview__value-item">';
+
             $output .= implode('</li><li>', $returnItems);
             if ($additionalValue !== '') {
                 $output .= ': <i>' . $additionalValue . '</i>';

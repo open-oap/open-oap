@@ -1,6 +1,11 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+      data-namespace-typo3-fluid="true">
 <f:layout name="Default" />
 
+<f:comment><!--
 Dashboard page view
 Available variables:
   {activeCalls}
@@ -15,9 +20,9 @@ Available variables:
   {proposalsActiveFilesCount}
   {proposalsArchivedFilesCount}
   {settings}
+--></f:comment>
 
 <f:section name="content">
-    <f:asset.css identifier="open_oap_styles" href="EXT:open_oap/Resources/Public/Css/styles.css"/>
     <script>(function () {window.OAP = window.OAP || {}; window.OAP.labels = <f:format.raw><f:format.json>{jsMessages}</f:format.json></f:format.raw>}());</script>
   <f:asset.script identifier="open_oap_scripts" src="EXT:open_oap/Resources/Public/JavaScript/scripts.js" defer="1"/>
 
@@ -55,7 +60,7 @@ Available variables:
   <f:render partial="Modal"
      arguments='{message:"{f:translate(key:\'tx_openoap_form.modal.hint\')}",cancel:"{f:translate(key:\'tx_openoap_form.modal.edit\')}",submit:"{f:translate(key:\'tx_openoap_form.modal.save\')}"}'
   />
-
+  <f:render partial="Loader" />
 </f:section>
 
 
@@ -104,33 +109,50 @@ Available variables:
           <f:then>
             <ul class="call-list">
               <f:for each="{activeCalls}" as="call">
-                <v:variable.set name="byTester" value="0" />
-                <f:for each="{call.usergroup}" as="callUsergroup">
-                  <f:if condition="{settings.testerFeGroupsId} == {callUsergroup.uid}">
-                    <f:then>
-                      <f:for each="{applicant.usergroup}" as="applicantUsergroup">
-                        <f:if condition="{applicantUsergroup.uid} == {callUsergroup.uid}">
-                          <v:variable.set name="byTester" value="1" />
-                        </f:if>
+
+                  <v:variable.set name="byTester" value="0" />
+                  <f:if condition="{nowTimestamp} < {call.callStartTime.timestamp} || {nowTimestamp} > {call.callEndTime.timestamp}">
+                      <f:for each="{call.usergroup}" as="callUsergroup">
+                          <f:if condition="{settings.testerFeGroupsId} == {callUsergroup.uid}">
+                              <f:then>
+                                  <f:for each="{applicant.usergroup}" as="applicantUsergroup">
+                                      <f:if condition="{applicantUsergroup.uid} == {callUsergroup.uid}">
+                                          <v:variable.set name="byTester" value="1" />
+                                      </f:if>
+                                  </f:for>
+                              </f:then>
+                              <f:else if="{callUsergroup.subgroup}">
+                                  <f:for each="{callUsergroup.subgroup}" as="subgroup">
+                                      <f:if condition="{settings.testerFeGroupsId} == {subgroup.uid}">
+                                          <v:variable.set name="byTester" value="1" />
+                                      </f:if>
+                                  </f:for>
+                              </f:else>
+                          </f:if>
                       </f:for>
-                    </f:then>
-                    <f:else if="{callUsergroup.subgroup}">
-                      <f:for each="{callUsergroup.subgroup}" as="subgroup">
-                        <f:if condition="{settings.testerFeGroupsId} == {subgroup.uid}">
-                          <v:variable.set name="byTester" value="1" />
-                        </f:if>
-                      </f:for>
-                    </f:else>
                   </f:if>
-                </f:for>
-                <li class="call-list__item">
-                  <h2 class="call-list__title">{call.title} <f:if condition="{byTester} == 1"><span style="color:orange;">TEST</span></f:if></h2>
-                  <f:if condition="{call.teaserText}"><p class="call-list__text">{call.teaserText}</p></f:if>
-                  <f:if condition="{call.callEndTime}"><p class="call-list__text">{f:translate(key:'tx_openoap_dashboard.call.active_until')}: <f:format.date format="d.m.Y - H:i:s">{call.callEndTime}</f:format.date></p></f:if>
-                  <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form" action="create" controller="Proposal" arguments="{applicant:applicant,call:call}" class="call-list__create-proposal">
-                    {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title')}
-                  </f:link.action>
-                </li>
+
+                  <v:variable.set name="CallDisabled" value="0" />
+                  <f:if condition="{call.hidden} == 1 && {byTester} == 0">
+                          <v:variable.set name="CallDisabled" value="1" />
+                  </f:if>
+                  <li class="call-list__item">
+                      <h2 class="call-list__title">{call.title} <f:if condition="{byTester} == 1"><span style="color:orange;">TEST</span></f:if></h2>
+                      <f:if condition="{call.teaserText}"><p class="call-list__text">{call.teaserText}</p></f:if>
+                      <f:if condition="{call.callEndTime}"><p class="call-list__text">{f:translate(key:'tx_openoap_dashboard.call.active_until')}: <f:format.date format="d.m.Y - H:i:s">{call.callEndTime}</f:format.date></p></f:if>
+                      <f:if condition="!{CallDisabled}">
+                          <f:then>
+                          <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form" action="create" controller="Proposal" arguments="{applicant:applicant,call:call}" class="call-list__create-proposal">
+                              {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title')}
+                          </f:link.action>
+                          </f:then>
+                          <f:else>
+                              <p class="call-list__text"><f:format.raw>{f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage')}</f:format.raw></p>
+                          </f:else>
+                      </f:if>
+
+                  </li>
+
               </f:for>
             </ul>
           </f:then>

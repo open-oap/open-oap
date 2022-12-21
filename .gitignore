@@ -11,3 +11,6 @@
 composer.lock
 
 .ddev/
+/Documentation/PhpDoc/
+/.Build/phpDoc-cache/
+/.Build/phpDocumentor.phar

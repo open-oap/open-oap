@@ -1,0 +1,7 @@
+.formpage-intro {
+    @include rte-styles;
+
+    &__headline {
+        color: var(--headline-color);
+    }
+}

@@ -1,0 +1,41 @@
+.loader {
+    &__wrapper {
+        position: relative;
+        z-index: 3;
+        margin: auto;
+    }
+
+    &__box {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: calc(50% - 1.66667rem);
+            width: 3.33333rem;
+            height: 3.33333rem;
+            background-image: $icon-loader;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            animation: rotation 1.6s infinite linear;
+        }
+
+    }
+}
+
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(359deg);
+    }
+}
+

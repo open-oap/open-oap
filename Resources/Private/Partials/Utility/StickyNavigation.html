@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      xmlns:sd="http://typo3.org/ns/BeechIt/FalSecuredownload/ViewHelpers"
+      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+      data-namespace-typo3-fluid="true">
+<div class="form__navigation--sticky" >
+    <div class="form__navigation-content row" style="position:relative;">
+        <nav class="column column--size3 form__navigation-buttons " aria-label="{f:translate(key:'tx_openoap.general.formControls')}">
+            <f:render partial="Utility/FormControls" arguments="{_all}" />
+            <a href="#top" class=" form__jump-to-top" >
+                <f:render partial="ButtonIcon" arguments="{type:'jump-to-top',height:37,width:37,size:'large',additionalClass:'form__icon--jump-to-top'}"/>
+            </a>
+        </nav>
+        <div class="column column--size9 form__navigation-buttons form__navigation-buttons--second">
+            <f:if condition="{pageControl.previous} > 0">
+                <f:form.button
+                    additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"
+                    type="submit" class="button button--linkstyle button--linkstyle-reduced form__navigation-button form__navigation-button--slot1"  name="gotoPage" value="{pageControl.previous}">{f:translate(key:'tx_openoap.general.save_back')}</f:form.button>
+            </f:if>
+            <f:form.button
+                additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"
+                type="submit" class="button button--linkstyle button--linkstyle-reduced form__navigation-button form__navigation-button--slot5 " name="gotoPage" value="{pageControl.current}">{f:translate(key:'tx_openoap.general.save')}</f:form.button>
+            <f:if condition="{pageControl.next} > 0">
+                <f:form.button
+                    additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"
+                    type="submit" class="button form__navigation-button button--linkstyle-reduced form__navigation-button--slot6" name="gotoPage" value="{pageControl.next}">{f:translate(key:'tx_openoap.general.save_next')}</f:form.button>
+            </f:if>
+        </div>
+    </div>
+</div>
+</html>

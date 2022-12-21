@@ -4,11 +4,11 @@
         <header/>
         <body>
 <!-- headlines -->
-            <trans-unit id="module_headline.list_forms" resname="module_headline.list_forms">
+    <trans-unit id="module_headline.list_forms" resname="module_headline.list_forms">
        <source>List of forms</source>
     </trans-unit>
     <trans-unit id="module_headline.preview_form" resname="module_headline.preview_form">
-                <source>Preview form</source>
+        <source>Preview form</source>
     </trans-unit>
     <trans-unit id="module_headline.list_of_forms" resname="module_headline.list_of_forms">
         <source>List of forms</source>
@@ -24,6 +24,9 @@
     </trans-unit>
     <trans-unit id="module_headline.proposal_preview" resname="module_headline.proposal_preview">
         <source>Preview</source>
+    </trans-unit>
+    <trans-unit id="module_headline.list_of_calls" resname="module_headline.list_of_calls">
+        <source>List of Calls</source>
     </trans-unit>
 
 <!-- filter -->
@@ -127,6 +130,9 @@
     <trans-unit id="menu.show_call_form" resname="menu.show_call_form">
         <source>Show Call/Form</source>
     </trans-unit>
+    <trans-unit id="menu.list_calls" resname="menu.list_calls">
+        <source>Calls/Proposals</source>
+    </trans-unit>
 
 
 <!-- TABLE - common -->
@@ -183,6 +189,26 @@
 
     <trans-unit id="action.preview_form" resname="action.preview_form">
         <source>show form preview</source>
+    </trans-unit>
+
+<!-- TABLE - calls -->
+    <trans-unit id="table.call.countCalls" resname="table.call.countCalls">
+        <source>Calls found: </source>
+    </trans-unit>
+    <trans-unit id="table.call.count_submitted" resname="table.call.count_submitted">
+        <source>submitted or higher</source>
+    </trans-unit>
+    <trans-unit id="table.call.count_in_progress" resname="table.call.count_in_progress">
+        <source>draft versions</source>
+    </trans-unit>
+    <trans-unit id="table.call.title" resname="table.call.title">
+        <source>Title</source>
+    </trans-unit>
+    <trans-unit id="table.call.startTime" resname="table.call.startTime">
+        <source>Start of call</source>
+    </trans-unit>
+    <trans-unit id="table.call.endTime" resname="table.call.endTime">
+        <source>End of call</source>
     </trans-unit>
 
 <!-- PREVIEW - proposal -->
@@ -303,6 +329,71 @@
         <source>Close</source>
     </trans-unit>
 
+    <!-- Constants configuration -->
+    <trans-unit id="constants.dashboard_page_id">
+        <source>Page with dashboard plugin</source>
+    </trans-unit>
+    <trans-unit id="constants.form_page_id">
+        <source>Page with proposal form</source>
+    </trans-unit>
+    <trans-unit id="constants.proposals_page_id">
+        <source>Page with proposal list</source>
+    </trans-unit>
+    <trans-unit id="constants.notifications_page_id">
+        <source>Page with comment list</source>
+    </trans-unit>
+    <trans-unit id="constants.masterdata_edit_page_id">
+        <source>Page form for master data</source>
+    </trans-unit>
+    <trans-unit id="constants.call_pool_id">
+        <source>SysFolder for call data</source>
+    </trans-unit>
+    <trans-unit id="constants.proposal_pool_id">
+        <!-- probably no longer in use, as the location is contained in the call record. -->
+        <source>SysFolder for proposal data</source>
+    </trans-unit>
+    <trans-unit id="constants.items_pool_id">
+        <source>SysFolder for item data (questions)</source>
+    </trans-unit>
+    <trans-unit id="constants.dashboard.proposals_active_limit">
+        <source>Maximum number of items in active list on dashboard</source>
+    </trans-unit>
+    <trans-unit id="constants.dashboard.proposals_archived_limit">
+        <source>Maximum number of items in archive list on dashboard</source>
+    </trans-unit>
+    <trans-unit id="constants.answers_pool_id">
+        <source>SysFolder for answer data</source>
+    </trans-unit>
+    <trans-unit id="constants.comments_pool_id">
+        <source>SysFolder for comments data</source>
+    </trans-unit>
+    <trans-unit id="constants.masterdata.countries_item_option_id">
+        <source>Item Id - for country list on Master data</source>
+    </trans-unit>
+    <trans-unit id="constants.tester_fe_groups_id">
+        <source>ID of frontend tester usergroup</source>
+    </trans-unit>
+    <trans-unit id="constants.dashboard.meta_info_separator">
+        <source>Separator of meta infos</source>
+    </trans-unit>
+    <trans-unit id="constants.validation.default_max_char_textarea">
+        <source>Default max char for textarea</source>
+    </trans-unit>
+    <trans-unit id="constants.validation.default_max_char_textfield">
+        <source>Default max char for textfield</source>
+    </trans-unit>
+    <trans-unit id="constants.masterdata.default_sources_model">
+        <source>List of usable sources for default values for items</source>
+    </trans-unit>
+    <trans-unit id="constants.filestorage.upload_folder">
+        <source><![CDATA[fileStorage source - written as: id:path (e.g. 1:/user_upload/)]]></source>
+    </trans-unit>
+    <trans-unit id="constants.signature_format">
+        <source>signature format - using sprintf</source>
+    </trans-unit>
+    <trans-unit id="constants.word_export_template_file">
+        <source>word base file for export</source>
+    </trans-unit>
         </body>
     </file>
 </xliff>

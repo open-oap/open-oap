@@ -1,0 +1,4 @@
+# cat=EMail; type=boolean; label=suppress sending email to real user
+mailStage = 0
+# cat=EMail; type=string; label=substition email
+fakeUserMail =

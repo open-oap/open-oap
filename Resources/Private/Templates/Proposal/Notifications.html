@@ -13,8 +13,6 @@ Available variables:
   {proposalAnnotatedCode}
 
 <f:section name="content">
-    <f:asset.css identifier="open_oap_styles" href="EXT:open_oap/Resources/Public/Css/styles.css"/>
-
     <f:if condition="{proposal}">
         <f:if condition="{proposal.state} < {states.PROPOSAL_SUBMITTED} || {proposal.state} == {states.PROPOSAL_RE_OPENED}">
             <div class="notifications__edit-proposal">

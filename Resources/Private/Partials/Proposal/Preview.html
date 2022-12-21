@@ -1,11 +1,9 @@
-{namespace v=FluidTYPO3\Vhs\ViewHelpers}
-<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
      xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
      data-namespace-typo3-fluid="true"
 >
-
 
     <div class="component component--layout-content-width">
         <div class="form__text form__text--intro">
@@ -20,38 +18,254 @@
                     <h3 class="preview__section-headline">{formPage.title}</h3>
                     <f:render partial="innerErrorList" arguments="{validationResults:validationResults, proposal:proposal, pageIdx:pageIt}" />
 
-                    <f:for each="{formPage.itemGroups}" as="itemGroup" key="groupId" iteration="groupIt">
-                        <v:iterator.loop iteration="counter" count="{groupsCounter.{itemGroup.uid}}" >
-                            <v:variable.set name="elementCounter" value="{counter.index}" />
-                            <h4 class="preview__headline">{itemGroup.title} <f:if condition="{groupsCounter.{itemGroup.uid}} > 1">#{counter.cycle}</f:if></h4>
-                            <dl class="preview__list">
-                                <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
+                    <f:comment><!-- all groups in current page --></f:comment>
+                    <f:for each="{formPage.itemGroups}" as="itemGroupL0" key="groupId" iteration="groupIt">
 
-                                    <div class="preview__item">
-                                        <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{elementCounter}--{item.uid}" />
-                                        <v:variable.set name="propertyKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.value" />
-                                        <v:variable.set name="answerKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.uid" />
-                                        <v:variable.set name="itemValidation" value="{validationResults.answers.{proposal.{answerKey}}}" />
-                                        <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+                        <f:if condition="{itemGroupL0.type} == 1">
+                            <f:then>
 
-                                        <dt id="preview__answer--{proposal.{answerKey}}" class="preview__term {f:if(condition: '{itemValidation.error}', then: 'preview__term--error', else: '')}" ><strong>{item.question}{answersMap.{answerId}.item.MSign}: {validationResults.pages.{groupId}.{item.uid}}</strong></dt>
-                                        <dd class="preview__definition">
-                                            <f:render partial="Utility/ValueOutput" arguments="{_all}" />
-                                            <f:if condition="{itemValidation.error}">
-                                                <ul class="preview__item-error-message">
-                                                    <f:for each="{itemValidation.messsages}" as="message">
-                                                        <li><f:render partial="ButtonIcon" arguments="{type:'error'}"/> {message}</li>
-                                                    </f:for>
-                                                </ul>
-                                            </f:if>
-                                        </dd>
+                                <f:comment><!-- repeated meta group --></f:comment>
+                                <v:iterator.loop iteration="counterWrapper" count="{groupsCounter.{itemGroupL0.uid}.current}" >
+                                    <h4 class="preview__headline">{itemGroupL0.title} <f:if condition="{groupsCounter.{itemGroupL0.uid}.current} > 1">#{counterWrapper.cycle}</f:if></h4>
+                                    <div class="" style="position:relative;padding-left: 2rem; border-left: 3px solid #818994;margin-bottom: 2rem;padding-bottom: 1rem;">
+                                        <span style="position:absolute;bottom:0;left:-7px;"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="5" fill="#818994"/></svg></span>
+
+                                        <v:variable.set name="groupCounterL0" value="{counterWrapper.index}" />
+                                        <v:variable.set name="itemGroupSecondLevel" value="1" />
+
+                                        <f:comment><!-- all groups inside the meta group (repeated) --></f:comment>
+                                        <f:for each="{itemGroupL0.itemGroups}" as="itemGroup" key="groupIdL0" iteration="groupItL0">
+
+                                            <v:variable.set name="counterWrapperIndex" value="{counterWrapper.index}" />
+                                            <v:variable.set name="itemGroupL0Uid" value="{itemGroupL0.uid}" />
+                                            <v:variable.set name="itemGroupUid" value="{itemGroup.uid}" />
+                                            <v:variable.set name="groupsCounterIndex" value="{itemGroupL0Uid}.instances.{counterWrapperIndex}.{itemGroupUid}" />
+
+                                            <v:variable.set name="groupCurrentN" value="{groupsCounter.{groupsCounterIndex}.current}" />
+
+                                            <v:variable.set name="nestedGroupClass" value="form__icon--nested-group" />
+                                            <v:variable.set name="nestedGroup" value="1" />
+
+                                            <f:render section="outputGroup" arguments="{_all}" />
+
+                                            <f:comment><!-- repeated group - inside meta group --></f:comment>
+                                            <v:iterator.loop iteration="counter" count="{groupCurrentN}" >
+                                                <v:variable.set name="groupCounterL1" value="{counter.index}" />
+                                            </v:iterator.loop>
+                                        </f:for>
                                     </div>
-                                </f:for>
-                            </dl>
-                        </v:iterator.loop>
+                                </v:iterator.loop>
+                            </f:then>
+                            <f:else>
+                                <v:variable.set name="itemGroup" value="{itemGroupL0}" />
+                                <v:variable.set name="itemGroupUid" value="{itemGroup.uid}" />
+                                <v:variable.set name="groupCounterL0" value="0" />
+                                <v:variable.set name="groupCurrentN" value="{groupsCounter.{itemGroupUid}.current}" />
+                                <v:variable.set name="nestedGroupClass" value="" />
+                                <v:variable.set name="nestedGroup" value="0" />
+
+                                <f:render section="outputGroup" arguments="{_all}" />
+                                <f:comment><!-- <v:iterator.loop iteration="counter" count="{groupCurrentN}" >
+                                    <v:variable.set name="groupCounterL1" value="{counter.index}" />
+                                </v:iterator.loop>
+                                    --></f:comment>
+                            </f:else>
+                        </f:if>
+
                     </f:for>
                 </div>
             </f:if>
         </f:for>
     </div>
+</html>
+
+<f:section name="outputGroup">
+    <f:if condition="{itemGroup.displayType} == {groupDisplayTypes.GROUPDISPLAY_DEFAULT}">
+        <f:then>
+            <v:iterator.loop iteration="counter" count="{groupCurrentN}" >
+                <v:variable.set name="groupCounterL1" value="{counter.index}" />
+                <h4 class="preview__headline {f:if(condition: '{nestedGroupClass}', then: 'preview__headline--nested', else: '')}">
+                    <f:if condition="{nestedGroupClass}">
+                        <svg class="form__icon {nestedGroupClass} " width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#818994"/></svg>
+                    </f:if>
+                    {itemGroup.title} <f:if condition="{groupCurrentN} > 1">#{counter.cycle}</f:if>
+                </h4>
+                <dl class="preview__list">
+                    <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
+                        <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}" />
+                        <v:variable.set name="propertyKeyIndexAddValue" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}--a" />
+                        <v:variable.set name="propertyKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.value" />
+                        <v:variable.set name="propertyKeyAdditionalValue" value="answers.{itemAnswerMap.{propertyKeyIndex}}.additionalValue" />
+                        <v:variable.set name="propertyKeyArray" value="answers.{itemAnswerMap.{propertyKeyIndex}}.arrayValue" />
+                        <v:variable.set name="propertyKeyComments" value="answers.{itemAnswerMap.{propertyKeyIndex}}.comments" />
+                        <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+
+                        <v:variable.set name="errorClass" value="" />
+                        <f:if condition="{validationResults.answers.{answerId}.error}">
+                            <v:variable.set name="errorClass" value="preview__term--error" />
+                        </f:if>
+
+                        <div class="preview__item">
+                            <dt id="preview__answer--{answerId}" class="preview__term {errorClass}" ><strong>{item.question}{answersMap.{answerId}.item.MSign}: {validationResults.pages.{groupId}.{item.uid}}</strong></dt>
+                            <dd class="preview__definition">
+
+                                <f:render partial="Utility/ValueOutput" arguments="{_all}" />
+
+                                <f:if condition="{validationResults.answers.{answerId}.error}">
+                                    <ul class="preview__item-error-message">
+                                        <f:for each="{validationResults.answers.{answerId}.messsages}" as="message">
+                                            <li><f:render partial="ButtonIcon" arguments="{type:'error'}"/> {message}</li>
+                                        </f:for>
+                                    </ul>
+                                </f:if>
+                            </dd>
+                        </div>
+                    </f:for>
+                </dl>
+            </v:iterator.loop>
+        </f:then>
+        <f:else>
+            <f:comment><!-- group output as a table --></f:comment>
+            <f:if condition="{nestedGroup}">
+                <f:then>
+                    <v:variable.set name="groupsCounterIndex" value="{itemGroupL0Uid}.instances.{groupCounterL0}.{itemGroupUid}" />
+                    <v:variable.set name="cols" value="{groupsCounter.{groupsCounterIndex}.current}" />
+                </f:then>
+                <f:else>
+                    <v:variable.set name="cols" value="{groupsCounter.{itemGroupUid}.current}" />
+                </f:else>
+            </f:if>
+
+            <f:comment><!--
+                <v:variable.set name="groupsCounterIndex" value="{itemGroupL0Uid}.instances.{groupCounterL0}.{itemGroupUid}" />
+                <v:variable.set name="cols" value="{groupsCounter.{groupsCounterIndex}.current}" />
+            --></f:comment>
+
+            <h4 class="preview__headline {f:if(condition: '{nestedGroupClass}', then: 'preview__headline--nested', else: '')}">
+                <f:if condition="{nestedGroupClass}">
+                    <svg class="form__icon {nestedGroupClass} " width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#818994"/></svg>
+                </f:if>
+                {itemGroup.title}
+            </h4>
+
+                <div class="form__table form__table--{cols}cols">
+
+                <f:variable name="row">1</f:variable>
+
+                <v:iterator.loop count="{cols}" iteration="counter" >
+                    <v:variable.set name="groupCounterL1" value="{counter.index}" />
+                    <f:variable name="col-start">{counter.cycle + 1}</f:variable>
+                    <f:variable name="col-end">{counter.cycle + 2}</f:variable>
+
+                    <div class="form__table-cell form__table-cell--head" style="grid-area: {row}/{col-start}/{row}/{col-end};">
+                        <f:if condition="{itemGroup.groupTitle}">
+                            <f:then>
+                                {itemGroup.groupTitle.{counter.index}.title}
+                            </f:then>
+                            <f:else>
+                                #{counter.cycle}
+                            </f:else>
+                        </f:if>
+                    </div>
+                </v:iterator.loop>
+                <f:variable name="row">{row + 1}</f:variable>
+                <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
+
+                    <v:iterator.loop count="{cols}" iteration="counter" >
+                        <v:variable.set name="groupCounterL1" value="{counter.index}" />
+                        <f:variable name="col-start">{counter.cycle + 1}</f:variable>
+                        <f:variable name="col-end">{counter.cycle + 2}</f:variable>
+                        <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}" />
+                        <v:variable.set name="propertyKeyIndexAddValue" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}--a" />
+                        <v:variable.set name="propertyKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.value" />
+                        <v:variable.set name="propertyKeyAdditionalValue" value="answers.{itemAnswerMap.{propertyKeyIndex}}.additionalValue" />
+                        <v:variable.set name="propertyKeyArray" value="answers.{itemAnswerMap.{propertyKeyIndex}}.arrayValue" />
+                        <v:variable.set name="propertyKeyComments" value="answers.{itemAnswerMap.{propertyKeyIndex}}.comments" />
+                        <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+
+                        <f:if condition="{counter.isFirst}">
+                            <div class="form__table-cell form__table-cell--label" style="grid-area: {row}/1/{row}/1;">
+                                {item.question}
+                                <f:if condition="{item.unit}"><span class="form__unit">[{item.unit}]</span></f:if>
+                            </div>
+                        </f:if>
+                        <div id="preview__answer--{answerId}" class="form__table-cell form__table-cell--value {errorClass}" style="grid-area: {row}/{counter.cycle +1}/{row}/{counter.cycle +1};">
+                            <f:alias map="{hideUnit: '1'}">
+                                <f:render partial="Utility/ValueOutput" arguments="{_all}" />
+                                <f:if condition="{validationResults.answers.{answerId}.error}">
+                                    <ul class="preview__item-error-message">
+                                        <f:for each="{validationResults.answers.{answerId}.messsages}" as="message">
+                                            <li><f:render partial="ButtonIcon" arguments="{type:'error'}"/> {message}</li>
+                                        </f:for>
+                                    </ul>
+                                </f:if>
+                            </f:alias>
+                        </div>
+                    </v:iterator.loop>
+                    <f:variable name="row">{row + 1}</f:variable>
+                </f:for>
+            </div>
+
+
+        </f:else>
+    </f:if>
+</f:section>
+
+<f:comment><!--
+<div class="form__table form__table--{cols}cols">
+                <f:variable name="row">1</f:variable>
+
+                <v:iterator.loop count="{groupsCounter.{itemGroup.uid}}" iteration="counter" >
+                    <f:variable name="col-start">{counter.cycle + 1}</f:variable>
+                    <f:variable name="col-end">{counter.cycle + 2}</f:variable>
+
+                    <div class="form__table-cell form__table-cell--head" style="grid-area: {row}/{col-start}/{row}/{col-end};">
+                        <f:if condition="{itemGroup.groupTitle}">
+                            <f:then>
+                                {itemGroup.groupTitle.{counter.index}.title}
+                            </f:then>
+                            <f:else>
+                                #{counter.cycle}
+                            </f:else>
+                        </f:if>
+                    </div>
+                </v:iterator.loop>
+                <f:variable name="row">{row + 1}</f:variable>
+                <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
+
+                    <v:iterator.loop count="{groupsCounter.{itemGroup.uid}}" iteration="counter" >
+                        <v:variable.set name="elementCounter" value="{counter.index}" />
+                        <f:variable name="col-start">{counter.cycle + 1}</f:variable>
+                        <f:variable name="col-end">{counter.cycle + 2}</f:variable>
+
+                        <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{elementCounter}--{item.uid}" />
+                        <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+
+                        <f:if condition="{counter.isFirst}">
+                            <div class="form__table-cell form__table-cell--label" style="grid-area: {row}/1/{row}/1;">
+                                {item.question}
+                                <f:if condition="{item.unit}"><span class="form__unit">[{item.unit}]</span></f:if>
+                            </div>
+                        </f:if>
+                        <v:variable.set name="errorClass" value="" />
+                        <f:if condition="{validationResults.answers.{answerId}.error}">
+                            <v:variable.set name="errorClass" value="form__table-cell--error" />
+                        </f:if>
+                        <div id="preview__answer--{answerId}" class="form__table-cell form__table-cell--value {errorClass}" style="grid-area: {row}/{counter.cycle +1}/{row}/{counter.cycle +1};">
+                            <f:alias map="{hideUnit: '1'}">
+                                <f:render partial="Utility/ValueOutput" arguments="{_all}" />
+                                <f:if condition="{validationResults.answers.{answerId}.error}">
+                                    <ul class="preview__item-error-message">
+                                        <f:for each="{validationResults.answers.{answerId}.messsages}" as="message">
+                                            <li><f:render partial="ButtonIcon" arguments="{type:'error'}"/> {message}</li>
+                                        </f:for>
+                                    </ul>
+                                </f:if>
+                            </f:alias>
+                        </div>
+</v:iterator.loop>
+<f:variable name="row">{row + 1}</f:variable>
+</f:for>
 </div>
+--></f:comment>
+</html>

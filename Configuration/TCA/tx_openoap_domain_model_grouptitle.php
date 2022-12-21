@@ -3,7 +3,9 @@
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_grouptitle',
-        'label' => 'title',
+        'label' => 'internal_title',
+        'label_alt' => 'title',
+        'label_alt_force' => '1',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',

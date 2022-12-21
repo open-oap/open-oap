@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file target-language="de" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_db.xlf" date="2022-03-25T09:12:02Z" product-name="open_oap">
+		<header/>
+		<body>
+			<trans-unit id="tx_openoap_domain_model_formgroup.display_type" resname="tx_openoap_domain_model_formgroup.display_type">
+				<source>Display Type</source>
+				<target>Darstellungsform</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.display_type_default" resname="tx_openoap_domain_model_formgroup.display_type_default">
+				<source>Normal</source>
+				<target>Normal</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.display_type_table" resname="tx_openoap_domain_model_formgroup.display_type_table">
+				<source>Table</source>
+				<target>Tabelle</target>
+			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_formgroup.type' resname='tx_openoap_domain_model_formgroup.type'>
+				<source><![CDATA[Group type]]></source>
+				<target><![CDATA[Gruppentyp]]></target>
+			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_formgroup.type_default' resname='tx_openoap_domain_model_formgroup.type_default'>
+				<source><![CDATA[Default group type (normal or nested inside)]]></source>
+				<target><![CDATA[Normaler Gruppentyp (normal oder Verschachtelung innen]]></target>
+			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_formgroup.type_meta' resname='tx_openoap_domain_model_formgroup.type_meta'>
+				<source><![CDATA[Meta group type (wrapper, outside)]]></source>
+				<target><![CDATA[Meta-Gruppentyp (Verschachtelung außen)]]></target>
+			</trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_call.form_items" resname="tx_openoap_domain_model_call.form_items">
+				<source>Items for submit page</source>
+				<target>Fragen für die Abschlussseite</target>
+			</trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_call.word_template" resname="tx_openoap_domain_model_call.word_template">
+				<source>Word template for exports of proposal</source>
+				<target>Word-Datei für den Export als Word-Datei</target>
+			</trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_call.logo" resname="tx_openoap_domain_model_call.logo">
+				<source>Header-Logo for PDF</source>
+				<target>Kopfzeilen-Logo für PDF</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.blocked_languages" resname="tx_openoap_domain_model_call.blocked_languages">
+				<source>Not accessible with these languages in the frontend</source>
+				<target>Nicht mit diesen Sprachen im Frontend erreichbar</target>
+			</trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_proposal.state" resname="tx_openoap_domain_model_proposal.state">
+				<source>State</source>
+				<target>Status</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

@@ -125,13 +125,15 @@ $tmp_open_oap_columns = [
 //} else {
 //    $GLOBALS['TCA']['fe_users']['types']['Tx_OpenOap_Applicant']['showitem'] = '';
 //}
-$GLOBALS['TCA']['fe_users']['types']['0']['showitem'] .= ',--div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_applicant,';
-$GLOBALS['TCA']['fe_users']['types']['0']['showitem'] .= 'tx_openoap_salutation, tx_openoap_company_email, tx_openoap_preferred_lang, tx_openoap_privacypolicy, tx_openoap_proposals';
 
-$GLOBALS['TCA']['fe_users']['columns'][$GLOBALS['TCA']['fe_users']['ctrl']['type']]['config']['items'][] = [
-    'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:fe_users.tx_extbase_type.Tx_OpenOap_Applicant',
-    'Tx_OpenOap_Applicant',
-];
+// add tab for proposal data - removed by commenting out for access rule reasons #TB20221207 - conflict with folder access
+//$GLOBALS['TCA']['fe_users']['types']['0']['showitem'] .= ',--div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_applicant,';
+//$GLOBALS['TCA']['fe_users']['types']['0']['showitem'] .= 'tx_openoap_salutation, tx_openoap_company_email, tx_openoap_preferred_lang, tx_openoap_privacypolicy, tx_openoap_proposals';
+
+//$GLOBALS['TCA']['fe_users']['columns'][$GLOBALS['TCA']['fe_users']['ctrl']['type']]['config']['items'][] = [
+//    'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:fe_users.tx_extbase_type.Tx_OpenOap_Applicant',
+//    'Tx_OpenOap_Applicant',
+//];
 
 // repeated from open_oap_users
 $GLOBALS['TCA']['fe_users']['columns']['gender']['exclude'] = 1;

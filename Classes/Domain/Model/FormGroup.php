@@ -41,11 +41,23 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $helpText = '';
 
     /**
+     * type
+     *
+     * @var int
+     */
+    protected $type = 0;
+
+    /**
      * internalUse for repeating
      *
      * @var string
      */
     protected $modelName = '';
+
+    /**
+     * @var int
+     */
+    protected int $displayType = 0;
 
     /**
      * 0: optional
@@ -78,6 +90,13 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\GroupTitle>
      */
     protected $groupTitle;
+
+    /**
+     * itemGroups
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormGroup>
+     */
+    protected $itemGroups;
 
     /**
      * dependentOn
@@ -342,5 +361,53 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setDependentOn(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $dependentOn)
     {
         $this->dependentOn = $dependentOn;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDisplayType(): int
+    {
+        return $this->displayType;
+    }
+
+    /**
+     * @param int $displayType
+     */
+    public function setDisplayType(int $displayType): void
+    {
+        $this->displayType = $displayType;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param int $type
+     */
+    public function setType(int $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getItemGroups(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->itemGroups;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $itemGroups
+     */
+    public function setItemGroups(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $itemGroups): void
+    {
+        $this->itemGroups = $itemGroups;
     }
 }
