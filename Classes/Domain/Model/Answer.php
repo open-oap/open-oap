@@ -51,6 +51,16 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $elementCounter = 0;
 
     /**
+     * @var int
+     */
+    protected $groupCounter0 = 0;
+
+    /**
+     * @var int
+     */
+    protected $groupCounter1 = 0;
+
+    /**
      * If additional answers are allowed, they will be saved here
      *
      * @var string
@@ -89,10 +99,11 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @param FormItem|null $item
      * @param FormGroup|null $group
-     * @param int|null $elementCounter
+     * @param int $groupCounter0
+     * @param int $groupCounter1
      * @param int|null $pid
      */
-    public function __construct(FormItem $item = null, FormGroup $group = null, int $elementCounter = 0, int $pid = null)
+    public function __construct(FormItem $item = null, FormGroup $group = null, int $groupCounter0 = 0, int $groupCounter1 = 0, int $pid = null)
     {
         if ($item) {
             $this->item = $item;
@@ -100,8 +111,11 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         if ($group) {
             $this->model = $group;
         }
-        if ($elementCounter) {
-            $this->elementCounter = $elementCounter;
+        if ($groupCounter0) {
+            $this->groupCounter0 = $groupCounter0;
+        }
+        if ($groupCounter1) {
+            $this->groupCounter1 = $groupCounter1;
         }
         if ($pid) {
             ObjectAccess::setProperty($this, 'pid', $pid);
@@ -173,21 +187,21 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the elementCounter
      *
-     * @return int elementCounter
+     * @return array elementCounter
      */
     public function getElementCounter()
     {
-        return $this->elementCounter;
+        return json_decode((string)$this->elementCounter, true);
     }
 
     /**
      * Sets the elementCounter
      *
-     * @param int $elementCounter
+     * @param array $elementCounter
      */
-    public function setElementCounter(int $elementCounter)
+    public function setElementCounter(array $elementCounter)
     {
-        $this->elementCounter = $elementCounter;
+        $this->elementCounter = json_encode($elementCounter);
     }
 
     /**
@@ -308,5 +322,37 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setComments(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $comments)
     {
         $this->comments = $comments;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGroupCounter0(): int
+    {
+        return $this->groupCounter0;
+    }
+
+    /**
+     * @param int $groupCounter0
+     */
+    public function setGroupCounter0(int $groupCounter0): void
+    {
+        $this->groupCounter0 = $groupCounter0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGroupCounter1(): int
+    {
+        return $this->groupCounter1;
+    }
+
+    /**
+     * @param int $groupCounter1
+     */
+    public function setGroupCounter1(int $groupCounter1): void
+    {
+        $this->groupCounter1 = $groupCounter1;
     }
 }

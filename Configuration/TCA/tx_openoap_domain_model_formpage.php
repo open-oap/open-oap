@@ -140,6 +140,8 @@ return [
         ],
         'item_groups' => [
             'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'l10n_display' => 'defaultAsReadonly',
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formpage.item_groups',
             'config' => [
                 'type' => 'select',

@@ -100,6 +100,13 @@ class OapFrontendController extends OapBaseController
         foreach ($jsMsgErrorIndicies as $key => $jsMsgErrorIndex) {
             $jsMessages[$key] = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_JSMSG . $jsMsgErrorIndex);
         }
+
+        // translatable labels for certain frontend elements
+        $jsMsgLableIndicies = $this->getConstants()['JSLABEL'];
+        foreach ($jsMsgLableIndicies as $key => $jsMsgLabelIndex) {
+            $jsMessages[$key] = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_JSLABEL . $jsMsgLabelIndex);
+        }
+
         return $jsMessages;
     }
 

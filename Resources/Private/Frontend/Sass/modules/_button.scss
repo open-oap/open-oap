@@ -1,0 +1,34 @@
+@use "sass:math";
+
+.button {
+    &--linkstyle {
+        padding-right: 0;
+        padding-left: 0;
+        border: 0;
+        color: var(--link-color);
+        background-color: transparent;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &[disabled] {
+            border-color: inherit;
+            color: $color-text;
+            background-color: inherit;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+    &--linkstyle-plain {
+        color: $color-text;
+    }
+
+    &--linkstyle-reduced {
+        line-height: math.div(24, 16);
+        font-size: rem(16);
+    }
+}

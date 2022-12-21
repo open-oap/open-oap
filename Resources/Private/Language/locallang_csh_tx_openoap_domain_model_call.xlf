@@ -24,17 +24,8 @@
 			<trans-unit id="fe_user_exceptions.description" resname="fe_user_exceptions.description">
 				<source>Exceptions for login (before start or after closing call)</source>
 			</trans-unit>
-			<trans-unit id="project_start_time.description" resname="project_start_time.description">
-				<source>earliest project start</source>
-			</trans-unit>
-			<trans-unit id="project_end_time.description" resname="project_end_time.description">
-				<source>latest project end</source>
-			</trans-unit>
 			<trans-unit id="project_duration_max.description" resname="project_duration_max.description">
 				<source>maximum years of project duration</source>
-			</trans-unit>
-			<trans-unit id="project_duration_min.description" resname="project_duration_min.description">
-				<source>minimum years of project duration</source>
 			</trans-unit>
 			<trans-unit id="proposal_pid.description" resname="proposal_pid.description">
 				<source>proposalPid</source>

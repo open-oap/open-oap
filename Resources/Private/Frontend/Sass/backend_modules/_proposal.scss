@@ -1,0 +1,82 @@
+
+.proposal {
+
+    padding: rem($proposal-padding-1);
+    background-color: $color-background-1;
+
+    &__page {
+        padding: rem($proposal-padding-1);
+        margin-top: rem($proposal-margin-1);
+        margin-right: 0;
+        margin-bottom: rem($proposal-margin-1);
+        margin-left: rem($proposal-margin-1);
+        background-color: $color-background-2;
+
+        &:last-child {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+    }
+
+    &__group {
+        padding: rem($proposal-padding-2);
+        margin-top: rem($proposal-margin-2);
+        margin-right: 0;
+        margin-bottom: rem($proposal-margin-2);
+        margin-left: rem($proposal-margin-2);
+        background-color: $color-background-1;
+
+        &:last-child {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+    }
+
+    &__items {
+        padding: rem($proposal-padding-2);
+        margin-top: rem($proposal-margin-2);
+        margin-right: 0;
+        margin-bottom: rem($proposal-margin-2);
+        margin-left: rem($proposal-margin-2);
+        background-color: white;
+
+        &:last-child {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        //table .question_label {
+        //    width: 15rem;
+        //}
+
+        //.items_table {
+        //    width: 100%;
+        //}
+    }
+
+    &__infos {
+        width: calc(100% - 6px);
+        margin-left: 1rem;
+
+        &-col {
+            &__comment-button {
+                width: 20px;
+                padding: 0.5rem 0;
+
+                button {
+                    display: inline-block;
+                    padding: 2px;
+                    border: 1px solid $color-blue;
+                    border-radius: 3px;
+                }
+            }
+
+            &__item {
+                position: relative;
+                width: 300px;
+            }
+        }
+    }
+
+}

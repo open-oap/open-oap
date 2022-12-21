@@ -1,0 +1,56 @@
+.modal {
+    display: flex;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    align-items: center;
+
+    &[aria-hidden] {
+        display: none;
+    }
+
+    &__overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: $color-dark-transparent;
+    }
+
+    &__box {
+        position: relative;
+        z-index: 2;
+        width: rem(470);
+        max-width: calc(100% - #{rem(60)});
+        padding: rem(30) rem(30) rem(24);
+        margin: auto;
+        background-color: $color-light;
+    }
+
+    //&__title {
+    //    @include headline-h3(0);
+    //    margin: 0;
+    //}
+
+    &__controls {
+        margin-top: rem(32);
+        text-align: right;
+    }
+
+    &__close {
+        vertical-align: middle;
+        color: var(--link-color);
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &__submit {
+        @include button(1);
+        margin-left: $column_gutter;
+    }
+}

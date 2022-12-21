@@ -42,8 +42,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
             <th><f:translate key="tx_openoap_domain_model_call.fe_user_exceptions" /></th>
             <th><f:translate key="tx_openoap_domain_model_call.project_start_time" /></th>
             <th><f:translate key="tx_openoap_domain_model_call.project_end_time" /></th>
-            <th><f:translate key="tx_openoap_domain_model_call.project_duration_max" /></th>
-            <th><f:translate key="tx_openoap_domain_model_call.project_duration_min" /></th>
             <th><f:translate key="tx_openoap_domain_model_call.proposal_pid" /></th>
             <th></th>
             <th></th>
@@ -59,8 +57,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
                 <td><f:link.action action="show" arguments="{call: call}">{call.feUserExceptions}</f:link.action></td>
                 <td><f:link.action action="show" arguments="{call: call}">{call.projectStartTime -> f:format.date()}</f:link.action></td>
                 <td><f:link.action action="show" arguments="{call: call}">{call.projectEndTime -> f:format.date()}</f:link.action></td>
-                <td><f:link.action action="show" arguments="{call: call}">{call.projectDurationMax}</f:link.action></td>
-                <td><f:link.action action="show" arguments="{call: call}">{call.projectDurationMin}</f:link.action></td>
                 <td><f:link.action action="show" arguments="{call: call}">{call.proposalPid}</f:link.action></td>
                 <td><f:link.action action="edit" arguments="{call: call}" class="btn btn-default">Edit</f:link.action></td>
                 <td><f:link.action action="delete" arguments="{call: call}" class="btn btn-danger">Delete</f:link.action></td>

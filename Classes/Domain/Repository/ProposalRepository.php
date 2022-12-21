@@ -6,6 +6,7 @@ namespace OpenOAP\OpenOap\Domain\Repository;
 
 use OpenOAP\OpenOap\Domain\Model\Applicant;
 
+use OpenOAP\OpenOap\Domain\Model\Call;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -59,6 +60,25 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             return $result[0]->getSignature();
         }
         return 0;
+    }
+
+    /**
+     * @param Call $call
+     * @param int $state
+     * @return int
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function countByState(Call $call, int $state): int
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->matching(
+            $query->logicalAnd([
+               $query->equals('call', $call),
+               $query->greaterThanOrEqual('state', $state),
+           ])
+        );
+        return $query->count();
     }
 
     /**
@@ -190,13 +210,12 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * Find proposals by applicant
      *
-     * @param int $pid
      * @param Applicant $applicant
      * @param int $archived
      * @param int $limit
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
      */
-    public function findProposalsByApplicant(int $pid, Applicant $applicant, int $archived = 0, int $limit = 0)
+    public function findProposalsByApplicant(Applicant $applicant, int $archived = 0, int $limit = 0)
     {
         if ($applicant == null) {
             return [];
@@ -205,8 +224,8 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->getQuerySettings()->setIgnoreEnableFields(false);
         $query->getQuerySettings()->setRespectSysLanguage(false);
         $query->getQuerySettings()->setLanguageOverlayMode(false);
-        $query->getQuerySettings()->setRespectStoragePage(true);
-        $query->getQuerySettings()->setStoragePageIds([$pid]);
+        $query->getQuerySettings()->setRespectStoragePage(false);
+//        $query->getQuerySettings()->setStoragePageIds([$pid]);
         //$query->setOrderings(['crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
         $query->setOrderings(['edit_tstamp' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
 
@@ -223,12 +242,11 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * Find proposals by applicant
      *
-     * @param int $pid
      * @param Applicant $applicant
      * @param int $archived
      * @return int $count
      */
-    public function countProposalsByApplicant(int $pid, Applicant $applicant, int $archived = 0)
+    public function countProposalsByApplicant(Applicant $applicant, int $archived = 0)
     {
         if ($applicant == null) {
             return 0;
@@ -237,8 +255,8 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->getQuerySettings()->setIgnoreEnableFields(false);
         $query->getQuerySettings()->setRespectSysLanguage(false);
         $query->getQuerySettings()->setLanguageOverlayMode(false);
-        $query->getQuerySettings()->setRespectStoragePage(true);
-        $query->getQuerySettings()->setStoragePageIds([$pid]);
+        $query->getQuerySettings()->setRespectStoragePage(false);
+//        $query->getQuerySettings()->setStoragePageIds([$pid]);
         $constraints = [];
         $constraints[] = $query->equals('applicant', $applicant);
         $constraints[] = $query->equals('archived', $archived);

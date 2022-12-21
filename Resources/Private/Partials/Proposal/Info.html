@@ -9,13 +9,13 @@
 <div class="proposals__info">
     <f:spaceless>
         <span class="aural">{f:translate(key:'tx_openoap_domain_model_proposal.status')} </span><span class="{statusStyle}">{f:translate(key:'tx_openoap_domain_model_proposal.state.{proposal.state}')}</span>
-        <span class="">{f:translate(key:'tx_openoap_dashboard.proposal.lastChange.label')}:</span>&nbsp;<span title="{proposal.editTstamp -> f:format.date(format='d.m.Y - H:i')}"><f:format.date format="d.m.Y">{proposal.editTstamp}</f:format.date></span>
+        <span class="">{f:translate(key:'tx_openoap_dashboard.proposal.lastChange.label')}:</span>&nbsp;<span title="{proposal.editTstamp -> f:format.date(format='d.m.Y - H:i')}"><f:format.date format="d.m.Y H:i">{proposal.editTstamp}</f:format.date></span>
         <v:variable.set name="jsonArray" value="{proposal.metaInformation -> v:format.json.decode()}"/>
         <f:if condition="{jsonArray.info}">&nbsp;{settings.metaInfoSeparator}&nbsp;</f:if>
         {jsonArray.info}
         <f:if condition="{proposal.signature} > 0">
             &nbsp;{settings.metaInfoSeparator}&nbsp;
-            <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}_</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+            <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
         </f:if>
     </f:spaceless>
 </div>

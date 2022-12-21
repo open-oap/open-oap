@@ -1,0 +1,13 @@
+@use "sass:math";
+
+.error-message {
+    position: relative;
+    color: $color-alert;
+
+    &__item {
+        display: block;
+        margin-top: rem(6);
+        line-height: math.div(30, 16);
+        font-size: rem(16);
+    }
+}

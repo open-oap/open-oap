@@ -18,7 +18,7 @@ return [
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
     ],
     'types' => [
-        '1' => ['showitem' => 'value, type, element_counter, additional_value, past_answers, item, model, comments, '],
+        '1' => ['showitem' => 'value, type, element_counter, group_counter_0, group_counter_1, additional_value, past_answers, item, model, comments, '],
     ],
     'columns' => [
 //        'sys_language_uid' => [
@@ -80,6 +80,28 @@ return [
             'exclude' => false,
             'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_answer.element_counter',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+                'default' => '',
+            ],
+        ],
+        'group_counter_0' => [
+            'exclude' => true,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.group_counter_0',
+            'config' => [
+                'type' => 'input',
+                'size' => 4,
+                'eval' => 'int',
+                'default' => 0,
+            ],
+        ],
+        'group_counter_1' => [
+            'exclude' => true,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.group_counter_1',
             'config' => [
                 'type' => 'input',
                 'size' => 4,

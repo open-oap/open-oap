@@ -1,0 +1,50 @@
+@use "sass:math";
+
+.notifications {
+    &__edit-proposal {
+        padding-bottom: rem(8);
+        margin: rem(-34) 0 0;
+        text-align: right;
+    }
+
+    &__list {
+        padding-bottom: rem(12);
+        border: 1px solid $color-dark-alt-1;
+        border-top: 0;
+        border-radius: 0 0 4px 4px;
+    }
+
+    &__header {
+        position: relative;
+        z-index: 1;
+        padding: rem(19) rem(24) rem(25);
+        background: $color-dark-alt-6;
+    }
+
+    &__proposal-title {
+        @include headline-h3(0);
+        margin-bottom: rem(20);
+    }
+
+    &__hide-auto {
+        @include respond-up-from($screen-multicol-from) {
+            text-align: right;
+        }
+    }
+
+    &__close {
+        display: inline-block;
+        margin-top: rem(25);
+        color: $color-text;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &__filter {
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

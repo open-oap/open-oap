@@ -4,11 +4,11 @@
      xmlns:oap="OpenOAP\OpenOap\ViewHelpers"
      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
      data-namespace-typo3-fluid="true">
-
-
+<f:comment><!--
 <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{elementCounter}--{item.uid}" />
 <v:variable.set name="propertyKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.value" />
 <v:variable.set name="propertyKeyAdditionalValue" value="answers.{itemAnswerMap.{propertyKeyIndex}}.additionalValue" />
+--></f:comment>
 
 <f:if condition="{proposal.{propertyKey}} == ''">
 <f:then>
@@ -18,6 +18,9 @@
 <f:else>
     <f:switch expression="{item.type}">
         <f:case value="{itemTypes.TYPE_SELECT_MULTIPLE}">
+            <f:format.raw><oap:getLabelOfOption value="{proposal.{propertyKey}}" options="{answersMap.{answerId}.item.options}" multiple="1"/></f:format.raw>
+        </f:case>
+        <f:case value="{itemTypes.TYPE_SELECT_SINGLE}">
             <f:format.raw><oap:getLabelOfOption value="{proposal.{propertyKey}}" options="{answersMap.{answerId}.item.options}" multiple="1"/></f:format.raw>
         </f:case>
         <f:case value="{itemTypes.TYPE_RADIOBUTTON}">
@@ -49,7 +52,7 @@
             </f:if>
         </f:case>
         <f:defaultCase>
-            {proposal.{propertyKey}} {item.unit} <f:if condition="{proposal.{propertyKeyAdditionalValue}} !== ''">: {proposal.{propertyKeyAdditionalValue}}</f:if>
+            <v:format.replace substring="<" replacement="< " content="{proposal.{propertyKey}}" /><f:if condition="{hideUnit} != 1"> {item.unit}</f:if><f:if condition="{proposal.{propertyKeyAdditionalValue}} !== ''">: {proposal.{propertyKeyAdditionalValue} -> f:format.html()}</f:if>
         </f:defaultCase>
     </f:switch>
 </f:else>

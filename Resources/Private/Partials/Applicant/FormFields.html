@@ -1,0 +1,29 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" 
+	xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<v:variable.set name="salutationOption-1" value="{f:translate(key:'tx_openoap_domain_model_applicant.salutation.item1')}" />
+<v:variable.set name="salutationOption-2" value="{f:translate(key:'tx_openoap_domain_model_applicant.salutation.item2')}" />
+
+<f:render partial="Applicant/Form/SelectSingle" arguments="{field:'salutation', labelIdent:'salutation', options:'{1:salutationOption-1, 2:salutationOption-2}', prependOptionLabel:'', prependOptionValue:0}" />
+<f:render partial="Applicant/Form/Textfield" arguments="{field:'firstName', labelIdent:'first_name', maxlength:'50'}" />
+<f:render partial="Applicant/Form/Textfield" arguments="{field:'lastName', labelIdent:'last_name', maxlength:'50'}" />
+<f:render partial="Applicant/Form/Textfield" arguments="{field:'company', labelIdent:'company', maxlength:'80'}" />
+<f:render partial="Applicant/Form/Textfield" arguments="{field:'address', labelIdent:'address, maxlength:'255''}" />
+<f:render partial="Applicant/Form/Textfield" arguments="{field:'zip', labelIdent:'zip', maxlength:'10'}" />
+<f:render partial="Applicant/Form/Textfield" arguments="{field:'city', labelIdent:'city', maxlength:'50'}" />
+<f:render partial="Applicant/Form/SelectSingle" arguments="{field:'country', labelIdent:'country', options:'{countries}', prependOptionLabel:'', prependOptionValue:''}" />
+<f:render partial="Applicant/Form/Textfield" arguments="{field:'www', labelIdent:'www', maxlength:'80'}" />
+<f:render partial="Applicant/Form/Textfield" arguments="{field:'telephone', labelIdent:'telephone', maxlength:'30'}" />
+<f:render partial="Applicant/Form/Textfield" arguments="{field:'companyEmail', labelIdent:'company_email', maxlength:'255'}" />
+
+<f:comment><!--
+<fieldset>
+	<legend class="form__legend-register"><f:translate key="tx_openoap_applicant.otherdata.header" /></legend>
+</fieldset>
+
+<f:if condition="{stateEdit}">
+	<p><f:translate key="tx_openoap_applicant.otherdata.text" /></p>
+</f:if>
+<f:render partial="Applicant/Form/Textfield" arguments="{field:'preferredLang', labelIdent:'preferred_lang'}" />
+--></f:comment>
+</html>

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenOAP\OpenOAP\Middleware;
+namespace OpenOAP\OpenOap\Middleware;
 
 use OpenOAP\OpenOap\Controller\ProposalController;
 use OpenOAP\OpenOap\Domain\Repository\ProposalRepository;

@@ -4,6 +4,7 @@
     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
     data-namespace-typo3-fluid="true">
 
+<f:comment><!--
 Available variables:
     {proposal}
     {answers}
@@ -12,24 +13,40 @@ Available variables:
     {groupsCounter}
     {destination}
     {settings}
+    {callLogo}
+--></f:comment>
+
 
 <pdf:document outputDestination="{destination}" outputPath="{filepath}" title="{proposal.title}" pdfa="1">
-    <pdf:header>
-        <pdf:image src="EXT:cb_cosmobase/Resources/Public/Images/logos/logo-main.svg" width="20%" alignment="left" />
+    <pdf:header posY="10">
+
+    <f:if condition="{callLogo}">
+        <f:then>
+            <pdf:image src="{callLogo}" alignment="left" />
+        </f:then>
+        <f:else>
+            <pdf:image src="EXT:open_oap/Resources/Public/Images/logo-main.svg" width="20%" alignment="left" />
+        </f:else>
+    </f:if>
     </pdf:header>
+
     <pdf:footer>
         <pdf:text alignment="right" fontFamily="opensans" fontSize="9">{pdf:getPageNumberAlias()} / {pdf:getTotalNumberOfPagesAlias()}</pdf:text>
     </pdf:footer>
-    <pdf:page margin="{top:30, bottom:20}">
+
+    <pdf:page margin="{top:35, bottom:20}">
         {v:variable.set(name:'footnoteCounter', value:0)}
         <pdf:html styleSheet="EXT:open_oap/Resources/Public/Css/styles.css" autoHyphenation="1" padding="{bottom: 5}">
             {v:variable.set(name:'answerSection', value:1)}
             <f:render section="Style" />
+            <f:spaceless>
             <h1 class="page__title"><span class="hyphenated">{proposal.call.title}</span></h1>
             <f:if condition="{proposal.call.introText}">
                 {proposal.call.introText -> f:format.html()}
             </f:if>
-            <h2><span class="hyphenated">{proposal.title}</span></h2>
+            </f:spaceless>
+            <f:spaceless>
+            <h2>&nbsp;<br><span class="hyphenated">{proposal.title}</span></h2>
             <f:render section="StatusInfos" arguments="{proposal:proposal, generatedDate:generatedDate, generatedTime:generatedTime}" />
             <f:render section="MetaInfos" arguments="{proposal:proposal, settings:settings}" />
             <f:if condition="{commentsAtProposal -> f:count()} > 0">
@@ -37,15 +54,18 @@ Available variables:
                 {v:variable.set(name:'commentsAtProposalCount', value:'{commentsAtProposal -> f:count()}')}
                 <div><span class="footnote">({commentsAtProposalCount} {f:if(condition:'1 == {commentsAtProposalCount}', then:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.singular.label\')}', else:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.plural.label\')}')}) <sup>{footnoteCounter}</sup></span></div>
             </f:if>
+            </f:spaceless>
+
             <f:render section="ProposalPreview" arguments="{_all}" />
+
             <div>
-                <div>{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.general.submit_accepted')}</div>
+
             </div>
         </pdf:html>
 
-        <f:if condition="{footnoteCounter} > 0">
+        <f:if condition="{footnoteCounter} > 0 || {commentsAtItemsCounter} > 0">
             <pdf:pageBreak />
-            
+
             <pdf:html autoHyphenation="1" padding="{bottom: 5}">
                 {v:variable.set(name:'answerSection', value:0)}
                 <f:render section="Style" />
@@ -67,111 +87,251 @@ Available variables:
     </pdf:page>
 </pdf:document>
 
-<f:section name="Style">
-    <style>
-        * {font-family:"opensansregular",sans-serif;font-size:10pt;line-height:14pt;}
-        h1 {font-size:18pt;line-height:22pt;margin-bottom:0;}
-        h2 {font-size:16pt;line-height:20pt;margin-bottom:0;}
-        h3 {font-size:14pt;line-height:18pt;margin-bottom:0;}
-        h4 {font-size:12pt;line-height:16pt;margin-bottom:0;}
-        strong {font-family:"opensansbold",sans-serif;}
-        div {line-height:8pt;}
-        dt {font-family:"opensansregular",sans-serif;font-size:10pt;line-height:18pt;color:#686e78;}
-        dd {font-size:10pt;line-height:14pt}
-        br.brLineHeight {line-height:16pt;}
-        div.pdf_list__item .intro_text, .notification_list__label {line-height:14pt;color:#686e78;}
-        div.pdf_list__item p {font-size:10pt;line-height:14pt;}
-        .pdf_list__item {border-bottom:1px solid #dde0e2;}
-        .footnote {font-size:9pt;line-height:12pt;color:#686e78;}
-        .aural {display: none;}
-    </style>
-</f:section>
-
 <f:section name="ProposalPreview">
 <f:spaceless>
     <f:for each="{proposal.call.formPages}" as="formPage" key="pageId" iteration="pageIt">
         <f:if condition="{formPage.type} == 'PAGETYPE_DEFAULT'">
+        <f:then>
 
             <f:if condition="1 == {answerSection}">
-                <h3><span class="hyphenated">{formPage.title}</span></h3>
-                <f:if condition="{formPage.introText}">
-                    {formPage.introText -> f:format.html()}
-                </f:if>
+                <h3>&nbsp;<br><span class="hyphenated">{formPage.title}</span></h3><f:if condition="{formPage.introText}">{formPage.introText -> f:format.html()}</f:if>
             </f:if>
 
-            <f:for each="{formPage.itemGroups}" as="itemGroup">
-                <v:iterator.loop iteration="counter" count="{groupsCounter.{itemGroup.uid}}" >
-                    <v:variable.set name="elementCounter" value="{counter.index}" />
-                    
-                    <f:if condition="1 == {answerSection}">
-                        <h4><span class="hyphenated">{itemGroup.title}</span></h4>
-                        <f:if condition="{itemGroup.introText}">
-                            {itemGroup.introText -> f:format.html()}
-                        </f:if>
-                        <br>
-                        <div class="pdf_list">
-                    </f:if>
-                    
-                    <f:for each="{itemGroup.items}" as="item" iteration="ii">
-                        <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{elementCounter}--{item.uid}" />
-                        <v:variable.set name="propertyKeyUid" value="answers.{itemAnswerMap.{propertyKeyIndex}}.uid" />
-                        <v:variable.set name="propertyKeyComments" value="answers.{itemAnswerMap.{propertyKeyIndex}}.comments" />
-                        <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
-                        <v:variable.set name="pdfstyle" value="1" />
+            <f:comment><!-- all groups in current page --></f:comment>
+            <f:for each="{formPage.itemGroups}" as="itemGroupL0" key="groupId" iteration="groupIt">
 
-                        <f:if condition="1 == {answerSection}">
-                            <f:then>
+                <f:if condition="{itemGroupL0.type} == 1">
+                    <f:then>
+                        <f:comment><!-- repeated meta group --></f:comment>
+                        <v:iterator.loop iteration="counterWrapper" count="{groupsCounter.{itemGroupL0.uid}.current}" >
+                            <f:if condition="1 == {answerSection}">
+                                <h4>&nbsp;<br><span class="hyphenated">{itemGroupL0.title}</span> <f:if condition="{groupsCounter.{itemGroupL0.uid}.current} > 1">#{counterWrapper.cycle}</f:if></h4>
+                                <f:if condition="{itemGroupL0.introText}">
+                                    {itemGroupL0.introText -> f:format.html()}
+                                </f:if>
+                                <br>
+                                <div class="pdf_list pdf_list--wrapper">
+                            </f:if>
 
-                                <div class="pdf_list__item">
-                                    <div></div>
-                                    <p><strong>{item.question}:</strong></p>
-    
-                                    <f:if condition="{item.introText}">
-                                        <f:comment><!--
-                                        <p class="intro_text"><f:format.nl2br><f:format.stripTags allowedTags="<br>">{item.introText}</f:format.stripTags></f:format.nl2br></p>
-                                        --></f:comment>
-                                        <div class="intro_text">{item.introText -> f:format.html()}</div>
-                                    </f:if>
+                            <v:variable.set name="groupCounterL0" value="{counterWrapper.index}" />
+                            <v:variable.set name="itemGroupSecondLevel" value="1" />
 
-                                    <p class="pdf_list__answer"><f:format.nl2br>
-                                        <f:format.stripTags allowedTags="<br><ul><li>"><f:spaceless><f:render partial="Utility/ValueOutput" arguments="{_all}" /></f:spaceless></f:format.stripTags></f:format.nl2br>
-                                    
-                                        <f:if condition="{proposal.{propertyKeyComments}}">
-                                            {v:variable.set(name:'footnoteCounter', value:'{footnoteCounter+1}')}
-                                            {v:variable.set(name:'commentsCount', value:'{proposal.{propertyKeyComments} -> f:count()}')}
-                                            <br class="brLineHeight"><span class="footnote">({commentsCount} {f:if(condition:'1 == {commentsCount}', then:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.singular.label\')}', else:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.plural.label\')}')}) <sup>{footnoteCounter}</sup></span>
-                                        </f:if>
-                                    </p>
-                                    <br><br>
+                            <f:comment><!-- all groups inside the meta group (repeated) --></f:comment>
+                            <f:for each="{itemGroupL0.itemGroups}" as="itemGroup" key="groupIdL0" iteration="groupItL0">
+
+                                <v:variable.set name="counterWrapperIndex" value="{counterWrapper.index}" />
+                                <v:variable.set name="itemGroupL0Uid" value="{itemGroupL0.uid}" />
+                                <v:variable.set name="itemGroupUid" value="{itemGroup.uid}" />
+                                <v:variable.set name="groupsCounterIndex" value="{itemGroupL0Uid}.instances.{counterWrapperIndex}.{itemGroupUid}" />
+                                <v:variable.set name="groupCurrentN" value="{groupsCounter.{groupsCounterIndex}.current}" />
+                                <v:variable.set name="nestedGroupClass" value="form__icon--nested-group" />
+
+                                <f:render section="outputGroup" arguments="{_all}" />
+
+                                <f:comment><!-- repeated group - inside meta group --></f:comment>
+                                <v:iterator.loop iteration="counter" count="{groupCurrentN}" >
+                                    <v:variable.set name="groupCounterL1" value="{counter.index}" />
+                                </v:iterator.loop>
+                            </f:for>
+                            <f:if condition="1 == {answerSection}">
                                 </div>
+                            </f:if>
+                        </v:iterator.loop>
 
+                    </f:then>
+                    <f:else>
+                        <v:variable.set name="itemGroup" value="{itemGroupL0}" />
+                        <v:variable.set name="itemGroupUid" value="{itemGroup.uid}" />
+                        <v:variable.set name="groupCounterL0" value="0" />
+                        <v:variable.set name="groupCurrentN" value="{groupsCounter.{itemGroupUid}.current}" />
+                        <v:variable.set name="nestedGroupClass" value="" />
+
+                        <f:render section="outputGroup" arguments="{_all}" />
+
+
+                    </f:else>
+                </f:if>
+            </f:for>
+        </f:then>
+        <f:else>
+            <f:comment><!-- submit section --></f:comment>
+            <h4>&nbsp;<br>{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_proposals.pdf.submit_section.text')}</h4>
+            <f:for each="{proposal.call.items}" as="item" key="itemId" iteration="itemIt">
+                <div class="pdf_list__item">
+                    <div></div>
+                    <p><strong>{item.question}:</strong></p>
+
+                    <f:if condition="{item.introText}">
+                        <f:comment><!--
+                        <p class="intro_text"><f:format.nl2br><f:format.stripTags allowedTags="<br>">{item.introText}</f:format.stripTags></f:format.nl2br></p>
+                        --></f:comment>
+                        <div class="intro_text">{item.introText -> f:format.html()}</div>
+                    </f:if>
+                    <p class="pdf_list__answer">
+                        <f:format.nl2br>
+                        <f:if condition="{proposal.state} == {proposalStates.PROPOSAL_SUBMITTED} OR {proposal.state} > {proposalStates.PROPOSAL_RE_OPENED}">
+                            <f:then>
+                                <f:for each="{item.options}" as="option">
+                                    <f:format.stripTags allowedTags="<br><ul><li>"><f:spaceless>{option.options}</f:spaceless></f:format.stripTags>
+                                </f:for>
                             </f:then>
                             <f:else>
-
-                                <f:if condition="{proposal.{propertyKeyComments}}">
-                                    {v:variable.set(name:'footnoteCounter', value:'{footnoteCounter+1}')}
-                                    <div></div>
-                                    <p>
-                                        <strong><sup>{footnoteCounter}</sup> {item.question}:</strong>
-                                    </p>
-
-                                    <f:format.stripTags allowedTags="<br><dl><dt><dd>"><f:spaceless><f:render partial="Answer/Comments" section="listOfComments" arguments="{comments:'{proposal.{propertyKeyComments}}',answersMap:'{answersMap}',answerId:'{answerId}'}" /></f:spaceless></f:format.stripTags>
-                                </f:if>
+                                <span class="aural"><f:translate key="empty" /></span>
+                                <span aria-hidden="true">-----</span>
                             </f:else>
                         </f:if>
-
-                    </f:for>
-                    <f:if condition="1 == {answerSection}">
-                        </div>
-                    </f:if>
-                </v:iterator.loop>
+                        </f:format.nl2br>
+                    </p>
+                    <br><br>
+                </div>
             </f:for>
-
+        </f:else>
         </f:if>
     </f:for>
 </f:spaceless>
 </f:section>
 
+<f:section name="outputGroup">
+    <f:if condition="{itemGroup.displayType} == {groupDisplayTypes.GROUPDISPLAY_DEFAULT}">
+        <f:then>
+            <v:iterator.loop iteration="counter" count="{groupCurrentN}" >
+                <v:variable.set name="groupCounterL1" value="{counter.index}" />
+
+                <f:if condition="1 == {answerSection}">
+                    <h4><br><span class="hyphenated">{itemGroup.title}</span> <f:if condition="{groupCurrentN} > 1">#{counter.cycle}</f:if>
+                        <f:if condition="{counterWrapper}"><br>({itemGroupL0.title} #{counterWrapper.cycle})</f:if>
+                    </h4>
+                    <f:if condition="{itemGroup.introText}">
+                        {itemGroup.introText -> f:format.html()}
+                    </f:if>
+                    <br>
+                    <div class="pdf_list">
+                </f:if>
+
+                <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
+                    <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}" />
+                    <v:variable.set name="propertyKeyIndexAddValue" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}--a" />
+                    <v:variable.set name="propertyKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.value" />
+                    <v:variable.set name="propertyKeyAdditionalValue" value="answers.{itemAnswerMap.{propertyKeyIndex}}.additionalValue" />
+                    <v:variable.set name="propertyKeyArray" value="answers.{itemAnswerMap.{propertyKeyIndex}}.arrayValue" />
+                    <v:variable.set name="propertyKeyComments" value="answers.{itemAnswerMap.{propertyKeyIndex}}.comments" />
+                    <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+                    <v:variable.set name="pdfstyle" value="1" />
+
+                    <f:if condition="1 == {answerSection}">
+                        <f:then>
+
+                            <div class="pdf_list__item">
+                                <div></div>
+                                <p><strong>{item.question}:</strong></p>
+
+                                <f:if condition="{item.introText}">
+                                    <f:comment><!--
+                                                    <p class="intro_text"><f:format.nl2br><f:format.stripTags allowedTags="<br>">{item.introText}</f:format.stripTags></f:format.nl2br></p>
+                                                    --></f:comment>
+                                    <div class="intro_text">{item.introText -> f:format.html()}</div>
+                                </f:if>
+
+                                <p class="pdf_list__answer"><f:format.nl2br>
+                                    <f:format.stripTags allowedTags="<br><ul><li>"><f:spaceless><f:render partial="Utility/ValueOutput" arguments="{_all}" /></f:spaceless></f:format.stripTags></f:format.nl2br>
+                                    <f:if condition="{proposal.{propertyKeyComments}}">
+                                        {v:variable.set(name:'footnoteCounter', value:'{footnoteCounter+1}')}
+                                        {v:variable.set(name:'commentsCount', value:'{proposal.{propertyKeyComments} -> f:count()}')}
+                                        <br class="brLineHeight"><span class="footnote">({commentsCount} {f:if(condition:'1 == {commentsCount}', then:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.singular.label\')}', else:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.plural.label\')}')}) <sup>{footnoteCounter}</sup></span>
+                                    </f:if>
+                                </p>
+                                <br><br>
+                            </div>
+
+                        </f:then>
+                        <f:else>
+
+                            <f:if condition="{proposal.{propertyKeyComments}}">
+                                {v:variable.set(name:'footnoteCounter', value:'{footnoteCounter+1}')}
+                                <div></div>
+                                <p>
+                                    <strong><sup>{footnoteCounter}</sup> {item.question}:</strong>
+                                </p>
+
+                                <f:format.stripTags allowedTags="<br><dl><dt><dd>"><f:spaceless><f:render partial="Answer/Comments" section="listOfComments" arguments="{comments:'{proposal.{propertyKeyComments}}',answersMap:'{answersMap}',answerId:'{answerId}'}" /></f:spaceless></f:format.stripTags>
+                            </f:if>
+                        </f:else>
+                    </f:if>
+
+                </f:for>
+                <f:if condition="1 == {answerSection}">
+                    </div>
+                </f:if>
+            </v:iterator.loop>
+        </f:then>
+        <f:else>
+            <f:if condition="1 == {answerSection}">
+                <f:then>
+                    <h4><span class="hyphenated">{itemGroup.title}</span></h4>
+                    <f:if condition="{itemGroup.introText}">
+                        {itemGroup.introText -> f:format.html()}
+                    </f:if>
+                    <div class="pdf_list__item">
+                        <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
+                            <f:if condition="{item.introText}">
+                                <p><strong>{item.question}:</strong></p>{item.introText -> f:format.html()}
+                            </f:if>
+                        </f:for>
+                        <p>&nbsp;</p>
+                        <table >
+                            <tr>
+                                <th class="cell-border" ></th>
+                                <v:iterator.loop count="{groupCurrentN}" iteration="counter" >
+                                    <th class="cell-border cell-align-center" >
+                                        <f:if condition="{itemGroup.groupTitle}">
+                                            <f:then>
+                                                {itemGroup.groupTitle.{counter.index}.title}
+                                            </f:then>
+                                            <f:else>
+                                                #{counter.cycle}
+                                            </f:else>
+                                        </f:if><br>
+                                    </th>
+                                </v:iterator.loop>
+                            </tr>
+                            <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
+                                <tr>
+                                    <v:iterator.loop count="{groupCurrentN}" iteration="counter" >
+                                        <v:variable.set name="groupCounterL1" value="{counter.index}" />
+                                        <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}" />
+                                        <v:variable.set name="propertyKeyIndexAddValue" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}--a" />
+                                        <v:variable.set name="propertyKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.value" />
+                                        <v:variable.set name="propertyKeyAdditionalValue" value="answers.{itemAnswerMap.{propertyKeyIndex}}.additionalValue" />
+                                        <v:variable.set name="propertyKeyArray" value="answers.{itemAnswerMap.{propertyKeyIndex}}.arrayValue" />
+                                        <v:variable.set name="propertyKeyComments" value="answers.{itemAnswerMap.{propertyKeyIndex}}.comments" />
+                                        <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+                                        <v:variable.set name="pdfstyle" value="1" />
+
+                                        <f:if condition="{counter.isFirst}">
+                                            <td class="cell-border cell-default" >{item.question}<f:if condition="{item.unit}"><span class="form__unit"> [{item.unit}]</span></f:if></td>
+                                        </f:if>
+                                        <td class="cell-border cell-default cell-align-right" ><f:alias map="{hideUnit: '1'}"><f:render partial="Utility/ValueOutput" arguments="{_all}" /></f:alias></td>
+                                    </v:iterator.loop>
+                                </tr>
+                            </f:for>
+                        </table>
+                    </div>
+                </f:then>
+                <f:else>
+                    <f:if condition="{proposal.{propertyKeyComments}}">
+                        {v:variable.set(name:'footnoteCounter', value:'{footnoteCounter+1}')}
+                        <div></div>
+                        <p>
+                            <strong><sup>{footnoteCounter}</sup> {item.question}:</strong>
+                        </p>
+
+                        <f:format.stripTags allowedTags="<br><dl><dt><dd>"><f:spaceless><f:render partial="Answer/Comments" section="listOfComments" arguments="{comments:'{proposal.{propertyKeyComments}}',answersMap:'{answersMap}',answerId:'{answerId}'}" /></f:spaceless></f:format.stripTags>
+                    </f:if>
+                </f:else>
+            </f:if>
+        </f:else>
+    </f:if>
+</f:section>
 <f:section name="StatusInfos">
 <f:spaceless>
     <p>
@@ -192,10 +352,42 @@ Available variables:
     <f:if condition="{jsonArray.info}">&nbsp;{settings.metaInfoSeparator}&nbsp;</f:if>{jsonArray.info}
     <f:if condition="{proposal.signature} > 0">
         &nbsp;{settings.metaInfoSeparator}&nbsp;{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_dashboard.proposal.signature.label')}:
-        <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}_</f:if>
-        <f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+        <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
     </f:if>
     </p>
 </f:spaceless>
 </f:section>
+
+<f:section name="Style">
+    <f:comment><!--
+        naming fonts of custom fonts:
+        https://docs.typo3.org/p/bithost-gmbh/pdfviewhelpers/2.4/en-us/ConfigurationReference/CustomFonts/Index.html?highlight=font
+    --></f:comment>
+    <style>
+        * {font-family:"opensans",sans-serif;font-size:10pt;line-height:14pt;}
+        h1 {font-size:18pt;line-height:22pt;margin-bottom:0;}
+        h2 {font-size:16pt;line-height:20pt;margin-bottom:0;}
+        h3 {font-size:14pt;line-height:18pt;margin-bottom:0;}
+        h4 {font-size:12pt;line-height:16pt;margin-bottom:0;}
+        strong {font-family:"opensansb",sans-serif;}
+        div {line-height:8pt;}
+        dt {font-family:"opensans",sans-serif;font-size:10pt;line-height:12pt;color:#686e78;margin-bottom:0;}
+        dd {font-size:10pt;line-height:14pt;margin-top:0;}
+        br.brLineHeight {line-height:16pt;}
+        div.pdf_list--wrapper {}
+        div.pdf_list__item .intro_text, .notification_list__label {line-height:14pt;color:#686e78;}
+        div.pdf_list__item p {font-size:10pt;line-height:14pt;}
+        .pdf_list__item {border-bottom:1px solid #dde0e2;}
+        .footnote {font-size:9pt;line-height:12pt;color:#686e78;}
+        .aural {display: none;}
+        table, th, td {}
+        th, td {padding: 6pt;}
+        .cell-border {border-bottom:1px solid #686e78;}
+        .cell-align-center {text-align:center;}
+        .cell-align-right {text-align:right;}
+        .cell-default {padding-top:10pt;padding-right:10pt;line-height: 14pt;}
+        th {font-family:"opensans",sans-serif;padding-top:10pt;}
+    </style>
+</f:section>
+
 </html>

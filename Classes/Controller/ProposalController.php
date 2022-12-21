@@ -16,10 +16,9 @@ use OpenOAP\OpenOap\Domain\Model\FormPage;
 use OpenOAP\OpenOap\Domain\Model\ItemValidator;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
-use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\Shared\Html;
 use PhpOffice\PhpWord\TemplateProcessor;
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
+use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
@@ -29,7 +28,6 @@ use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\EmailAddressValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\FloatValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\IntegerValidator;
@@ -100,7 +98,23 @@ class ProposalController extends OapFrontendController
     {
         parent::initializeAction();
 
-        // todo check if applicant is logged in
+        $this->frontendAccessControlService = GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\FrontendAccessControlService::class);
+        $frontendUserId = $this->frontendAccessControlService->getFrontendUserId();
+        if ($frontendUserId == null) {
+            // todo resend to login
+        }
+        $this->applicant = $this->applicantRepository->findByUid($frontendUserId);
+
+        $action = $this->request->getArgument('action');
+        // todo check notification action cause there is proposal null possible - why?
+        $actionsWithProposal = ['delete', 'download', 'downloadAttachments', 'downloadWord', 'edit', 'update'];
+
+        if (isset($actionsWithProposal[$action]) and !$this->request->hasArgument('proposal')) {
+            $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_NOT_FOUND);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+
+            $this->redirectToDashboard();
+        }
 
         if ($this->request->hasArgument('proposal') and $this->arguments) {
             $propertyMappingConfiguration = $this->arguments->getArgument('proposal')->getPropertyMappingConfiguration();
@@ -147,28 +161,50 @@ class ProposalController extends OapFrontendController
 
 //        $logItem = $this->createLog(self::LOG_PROPOSAL_CREATE);
 //        $newProposal->addComment($logItem);
-
         $groupsCounter = [];
+        $groupsMap = [];
         /** @var FormPage $page */
         foreach ($call->getFormPages() as $page) {
+            $groupsMap[$page->getUid()] = [];
             /** @var FormGroup $group */
-            foreach ($page->getItemGroups() as $group) {
-                // the group is optional and no answers are required here - skip
-                $groupsCounter[$group->getUid()] = 0;
-                if ($group->getRepeatableMin() == 0) {
-                    continue;
+            foreach ($page->getItemGroups() as $groupL0) {
+                if (!isset($groupsCounter[$groupL0->getUid()])) {
+                    $groupsCounter[$groupL0->getUid()] = [];
                 }
+                $groupsCounter[$groupL0->getUid()]['current'] = $groupL0->getRepeatableMin();
+                $groupsCounter[$groupL0->getUid()]['min'] = $groupL0->getRepeatableMin();
+                $groupsCounter[$groupL0->getUid()]['max'] = $groupL0->getRepeatableMax();
+                $groupsCounter[$groupL0->getUid()]['instances'] = [];
+                $groupsCounter[$groupL0->getUid()]['meta'] = false;
 
-                // create all groups repeated for requirement - only mininal requirement
-                // maximum required will be set later on demand
-                for ($groupCounter = 0; $groupCounter < $group->getRepeatableMin(); $groupCounter++) {
-                    $groupsCounter[$group->getUid()]++;
-                    $this->createAnswersOfGroup($newProposal, $group, $groupCounter);
+                if ($groupL0->getType() == self::GROUPTYPE_META) {
+                    $groupsCounter[$groupL0->getUid()]['meta'] = true;
+                    for ($groupCounterL0 = 0; $groupCounterL0 < $groupL0->getRepeatableMin(); $groupCounterL0++) {
+                        $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0] = [];
+                        /** @var FormGroup $groupL1 */
+                        foreach ($groupL0->getItemGroups() as $groupL1) {
+                            if (!isset(
+                                $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]
+                            )) {
+                                $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid(
+                                )] = [];
+                            }
+                            $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]['current'] = $groupL1->getRepeatableMin();
+
+                            // create all items for the instances
+                            for ($groupCounterL1 = 0; $groupCounterL1 < $groupL1->getRepeatableMin(); $groupCounterL1++) {
+                                $this->createAnswersOfGroup($newProposal, $groupL1, $groupCounterL0, $groupCounterL1);
+                            }
+                        }
+                    }
+                } else {
+                    for ($groupCounterL0 = 0; $groupCounterL0 < $groupL0->getRepeatableMin(); $groupCounterL0++) {
+                        $this->createAnswersOfGroup($newProposal, $groupL0, 0, $groupCounterL0);
+                    }
                 }
             }
+            $this->persistenceManager->persistAll();
         }
-//        DebuggerUtility::var_dump($newProposal);die();
-        $this->persistenceManager->persistAll();
 
         // save groupsCounter in MetaInformation
         /** @var MetaInformation $metaInfo */
@@ -187,8 +223,6 @@ class ProposalController extends OapFrontendController
         // iterate through the call / pages / groups / items and create answer items
         // set meta information like state, create date and the meta object for the progress
         // persist this object
-//        $this->proposalRepository->add($newProposal);
-        //        $this->proposalRepository->update($newProposal);
 
         // Set auto comment with created state on the proposal
         $logItem = $this->createLog(self::LOG_PROPOSAL_CREATE, $newProposal);
@@ -216,7 +250,28 @@ class ProposalController extends OapFrontendController
      */
     public function editAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal, int $currentPage = 1): \Psr\Http\Message\ResponseInterface
     {
+        // current user is not able to edit the proposal cause not the right owner:
+        if ($proposal->getApplicant() !== $this->applicant) {
+            $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_ACCESS_DENIED);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+
+            $this->redirectToDashboard();
+        }
+
+        if (!$proposal->getCall()) {
+            $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_CALL_MISSING);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+
+            $this->redirectToDashboard();
+        }
+
         // todo Check if proposal in mode to edit!
+        if ($proposal->getState() !== self::PROPOSAL_IN_PROGRESS and $proposal->getState() !== self::PROPOSAL_RE_OPENED) {
+            $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_NOT_EDITABLE);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+
+            $this->redirectToDashboard();
+        }
 
         $itemsMap = [];
         // build linear items array
@@ -235,7 +290,6 @@ class ProposalController extends OapFrontendController
 
                 $this->getOptionsToItemsMap($item, $itemsMap);
                 $this->getValidatorsToItemsMap($item, $itemsMap);
-
                 $itemsMap[$item->getUid()]['classStr'] = implode(' ', $itemsMap[$item->getUid()]['classes']);
             }
 
@@ -252,9 +306,7 @@ class ProposalController extends OapFrontendController
                 $updated = true;
             }
         }
-//        DebuggerUtility::var_dump($proposal->getAnswers(),(string) __LINE__);
         $this->updateAnswersForRemovedItems($proposal);
-
         $metaInfo = new MetaInformation($proposal->getMetaInformation());
         $groupsCounter = $this->groupsCounterMetaInfo($proposal, $metaInfo);
 
@@ -292,7 +344,6 @@ class ProposalController extends OapFrontendController
 //            $error = new Error($this->getTranslationString('tx_openoap.js_msg.invalid_format',['e-mail']), 1646909921);
 //            $validationResults->forProperty('answers.5.value')->addError($error);
 //        }
-        // DebuggerUtility::var_dump($validationResults,'',20);
 
         // calculate Comments for menu
         $pageNo = 1;
@@ -322,11 +373,7 @@ class ProposalController extends OapFrontendController
 //                $answersMap[$answer->getUid()]['item']['additionalAttributes']['disabled'] = 'disabled';
 //            }
 //        }
-//        DebuggerUtility::var_dump($answersMap);
         $answersMap = $this->createAnswersMap($proposal, $metaInfo->getLimitEditableFields());
-//        DebuggerUtility::var_dump($answersMap_tmp);
-//        DebuggerUtility::var_dump(array_diff($answersMap_tmp,$answersMap));
-//        die();
         foreach ($proposal->getAnswers() as $answer) {
             /** @var Comment $answerComment */
             foreach ($answer->getComments() as $answerComment) {
@@ -346,8 +393,12 @@ class ProposalController extends OapFrontendController
             }
         }
 
-        $jsMessages = $this->getJsMessages();
+        $submitItemOptions = [];
+        foreach ($proposal->getCall()->getItems() as $item) {
+            $this->getOptionsToItemsMap($item, $submitItemOptions);
+        }
 
+        $jsMessages = $this->getJsMessages();
         $this->view->assignMultiple([
             'proposal' => $proposal,
             'editState' => $metaInfo->getLimitEditableFields(),
@@ -355,14 +406,16 @@ class ProposalController extends OapFrontendController
             'pageTypes' => $this->getConstants()['PAGETYPE'],
             'proposalStates' => $this->getConstants()['PROPOSAL'],
             'commentStates' => $this->getConstants()['COMMENT'],
+            'groupDisplayTypes' => $this->getConstants()['GROUPDISPLAY'],
             'answersMap' => $answersMap,
             'pageControl' => $pageControl,
             'itemAnswerMap' => $itemAnswerMap,
-//            'itemsMap' => $itemsMap,
+            'itemsMap' => $itemsMap,
             'jsMessages' => $jsMessages,
             'validationResults' => $validationResults,
             'pageMap' => $pageMap,
             'groupsCounter' => $groupsCounter,
+            'submitItemOptions' => $submitItemOptions,
         ]);
         return $this->htmlResponse();
     }
@@ -385,12 +438,13 @@ class ProposalController extends OapFrontendController
         $currentPage = 1;
         $nextPage = $currentPage;
 
+        $flashMessageSaved = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_SAVED);
+
         if ($this->request->hasArgument('cancel')) {
-            $uri = $this->uriBuilder
-                ->reset()
-                ->setTargetPageUid((int)$this->settings['dashboardPageId'])
-                ->build();
-            $this->redirectToURI($uri, 0, 200);
+            $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_CANCELLED);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+
+            $this->redirectToDashboard();
         }
 
         if ($this->request->hasArgument('close')) {
@@ -463,7 +517,20 @@ class ProposalController extends OapFrontendController
 
             if ($item->isEnabledInfo()) {
                 // todo: handling of different types, esp. usage of additionalValue and multiple Values
-                $infos[$item->getUid()] = $this->answers[$item->getUid()]->getValue();
+//                $itemsMap = [];
+//                if ($item->getOptions() !== '') {
+//                    $this->getOptionsToItemsMap($item, $itemsMap);
+//                }
+//                DebuggerUtility::var_dump($itemsMap);
+//                die();
+                $value = $this->answers[$item->getUid()]->getValue();
+                $data = json_decode($value, true);
+                if ($data) {
+                    $value = implode(',', $data);
+                }
+                if ($value !== '') {
+                    $infos[$item->getUid()] = $value;
+                }
             }
             if ($item->isEnabledFilter()) {
                 if (!$filter[$item->getUid()]) {
@@ -499,6 +566,11 @@ class ProposalController extends OapFrontendController
         $proposal->setMetaInformation($metaInfo->jsonSerialize());
 
         if ($this->request->hasArgument('submit')) {
+            // @todo: check submit_accepted
+            // how to check, if values of options are not pre-set?
+            // editorial guideline: use only yes?
+            // how do you can save without check the items?
+
             $validationResults = $this->validateProposal($proposal, $metaInfo, true);
             if (!$validationResults) {
                 $proposal->setState(self::PROPOSAL_SUBMITTED);
@@ -538,11 +610,15 @@ class ProposalController extends OapFrontendController
             $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
             $this->redirect('mail', 'Applicant', null, ['proposal' => $proposal, 'mailtextSetting' => 'eventProposalSubmittedMailtext', 'mailTemplate' => self::MAIL_TEMPLATE_PROPOSAL_SUBMIT], $this->settings['dashboardPageId']);
         } elseif ($close) {
+            $this->addFlashMessage($flashMessageSaved, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+
             $uri = $this->uriBuilder
                 ->reset()
                 ->setTargetPageUid((int)$this->settings['dashboardPageId'])
                 ->build();
         } else {
+            $this->addFlashMessage($flashMessageSaved, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+
             $uri = $this->uriBuilder
                 ->reset()
                 ->setTargetPageUid((int)$this->settings['formPageId'])
@@ -551,6 +627,9 @@ class ProposalController extends OapFrontendController
         $this->redirectToURI($uri, 0, 200);
     }
 
+    /**
+     * @throws FileDoesNotExistException
+     */
     public function downloadAttachmentsAction(Proposal $proposal)
     {
         /** @var ResourceStorage $storage */
@@ -564,7 +643,7 @@ class ProposalController extends OapFrontendController
 
         $createFolder = false;
         $zip = null;
-        list($zip, $zipFlag) = $this->addAttachmentsToZip($proposal, $zip, $zipFlag, $zipFile, $createFolder, $absoluteBasePath);
+        $zip = $this->addAttachmentsToZip($proposal, $zip, $zipFile, $createFolder, $absoluteBasePath);
 
         if ($zip) {
             $zip->close();
@@ -589,10 +668,13 @@ class ProposalController extends OapFrontendController
         list($absoluteBasePath, $uploadFolder) = $this->initializeUploadFolder($storage);
         $proposalTempFolder = $this->provideTargetFolder($storage->getRootLevelFolder(), '_temp_');
 
-        $file = $storage->getFile($this->settings['wordExportTemplateFile']);
+        if ($proposal->getCall()->getWordTemplate()) {
+            $file = $proposal->getCall()->getWordTemplate()->getOriginalResource()->getOriginalFile();
+        } else {
+            $file = $storage->getFile($this->settings['wordExportTemplateFile']);
+        }
 
         $targetFileName = $this->getWordFileName($proposal->getUid(), 'merge');
-//        $finshedFileName = $this->getWordFileName($proposal->getUid(), 'finished');
         /** @var File $copiedFile */
         $targetFile = $file->copyTo($proposalTempFolder)->rename($targetFileName);
 
@@ -632,13 +714,16 @@ class ProposalController extends OapFrontendController
     {
         $this->flattenAnswers($proposal);
         $itemAnswerMap = $this->buildItemAnswerMap($proposal);
-
         /** @var MetaInformation $metaInfo */
         $metaInfo = new MetaInformation($proposal->getMetaInformation());
         $groupsCounter = $this->groupsCounterMetaInfo($proposal, $metaInfo);
-
         $answersMap = $this->createAnswersMap($proposal, $metaInfo->getLimitEditableFields());
         $commentsAtProposal = $this->commentRepository->findDemanded($proposal, ['source' => self::COMMENT_SOURCE_EDIT]);
+        $commentsAtItemsCounter = 0;
+        foreach ($answersMap as $answer) {
+            $commentsAtItemsCounter += $answer['commentsCounter'];
+        }
+        $callLogo = $this->getCallLogo($proposal);
 
         $arguments = [
             'destination' => 'download',
@@ -647,21 +732,24 @@ class ProposalController extends OapFrontendController
             'generatedTime' => date('H:i'),
             'proposal' => $proposal,
             'commentsAtProposal' => $commentsAtProposal,
-            'itemTypes' => $this->getConstants()['TYPE'],
             'answers' => $this->answers,
             'answersMap' => $answersMap,
             'itemAnswerMap' => $itemAnswerMap,
             'groupsCounter' => $groupsCounter,
             'settings' => $this->settings,
+            'commentsAtItemsCounter' => $commentsAtItemsCounter,
+            'callLogo' => $callLogo,
+
+            'itemTypes' => $this->getConstants()['TYPE'],
+            'pageTypes' => $this->getConstants()['PAGETYPE'],
+            'proposalStates' => $this->getConstants()['PROPOSAL'],
+            'commentStates' => $this->getConstants()['COMMENT'],
+            'groupDisplayTypes' => $this->getConstants()['GROUPDISPLAY'],
         ];
 
         $this->renderPdfView(self::EXPORT_TEMPLATE_PATH_PDF, $arguments);
 
-        $uri = $this->uriBuilder
-            ->reset()
-            ->setTargetPageUid((int)$this->settings['dashboardPageId'])
-            ->build();
-        $this->redirectToURI($uri, 0, 200);
+        $this->redirectToDashboard();
     }
 
     /**
@@ -681,11 +769,7 @@ class ProposalController extends OapFrontendController
         $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_DELETED_OKAY);
         $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
 
-        $uri = $this->uriBuilder
-            ->reset()
-            ->setTargetPageUid((int)$this->settings['dashboardPageId'])
-            ->build();
-        $this->redirectToURI($uri, 0, 200);
+        $this->redirectToDashboard();
     }
 
     /**
@@ -831,17 +915,23 @@ class ProposalController extends OapFrontendController
                         }
                         break;
                     case self::VALIDATOR_MAXCHAR:
-                        if (mb_strlen($answer->getValue()) > (integer)$validator->getParam1()) {
-                            $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'max_len_exceeded');
+                        $cleanedString = preg_replace('~[\n\r\t]~', '', $answer->getValue());
+                        if (mb_strlen($cleanedString) > (integer)$validator->getParam1()) {
+                            $this->setValidationResult(
+                                $validationResult,
+                                $answer,
+                                self::XLF_BASE_IDENTIFIER_JSMSG . 'max_len_exceeded'
+                            );
                         }
                         break;
                     case self::VALIDATOR_MINVALUE:
                         if ($answer->getValue() == '') {
                             break;
                         }
-                        if ($item->getType() == self::TYPE_DATE1) {
+                        if ($item->getType() == self::TYPE_DATE1 or $item->getType() == self::TYPE_DATE2) {
                             $minDate = new DateTime($validator->getParam1());
                             $valueDate = new DateTime($answer->getValue());
+//                            die();
                             if ($minDate > $valueDate) {
                                 $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'min_value', [$validator->getParam1()]);
                             }
@@ -862,7 +952,7 @@ class ProposalController extends OapFrontendController
                         if ($answer->getValue() == '') {
                             break;
                         }
-                        if ($item->getType() == self::TYPE_DATE1) {
+                        if ($item->getType() == self::TYPE_DATE1 or $item->getType() == self::TYPE_DATE2) {
                             $date = $this->convertIntoDate($validator->getParam1());
 
                             $maxDate = new DateTime($date);
@@ -884,8 +974,12 @@ class ProposalController extends OapFrontendController
                         }
                         break;
                     case self::VALIDATOR_INTEGER:
-                        if ($this->integerValidator->validate($answer->getValue())->hasErrors() and $answer->getValue() !== '') {
-                            $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'is_not_an_integer');
+                        if ($answer->getValue() !== '') {
+                            // values are formatted with dots - remove for validation
+                            $cleanupValue = preg_replace('~\.~', '', $answer->getValue());
+                            if ($this->integerValidator->validate($cleanupValue)->hasErrors()) {
+                                $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'is_not_an_integer');
+                            }
                         }
                         break;
                     case self::VALIDATOR_FLOAT:
@@ -957,20 +1051,32 @@ class ProposalController extends OapFrontendController
     }
 
     /**
-     * @param FormGroup $group
-     * @param int $groupCounter
      * @param Proposal $proposal
+     * @param FormGroup $group
+     * @param int $groupCounterL0
+     * @param int $groupCounterL1
      * @throws IllegalObjectTypeException
      */
-    protected function createAnswersOfGroup(Proposal $proposal, FormGroup $group, int $groupCounter): void
+    protected function createAnswersOfGroup(Proposal $proposal, FormGroup $group, int $groupCounterL0, int $groupCounterL1): void
     {
         /** @var FormItem $item */
         foreach ($group->getItems() as $item) {
             // create new answer object
-            $answer = new Answer($item, $group, $groupCounter, (integer)$this->settings['answersPoolId']);
+            $answer = new Answer($item, $group, $groupCounterL0, $groupCounterL1, (integer)$this->settings['answersPoolId']);
             // set Default  depends on groupCounter (only first group will get the default value
-            $answerValue = $this->getDefaultValueFromForeignObject($item->getDefaultValue(), $groupCounter, $proposal);
-            $answer->setValue($answerValue);
+            // only in level 1 are items
+            if ($groupCounterL0 == 0 and $groupCounterL1 == 0) {
+                $answerValueDefault = $this->getDefaultValueFromForeignObject($item->getDefaultValue(), $groupCounterL1, $proposal);
+                // convert value to array - if item is multiple
+                if ($answerValueDefault !== '' and (in_array($item->getType(), [self::TYPE_CHECKBOX, self::TYPE_SELECT_SINGLE, self::TYPE_SELECT_MULTIPLE]))) {
+                    $answerValue = [];
+                    $answerValue[0] = $answerValueDefault;
+                    $answerValueDefault = json_encode($answerValue, JSON_FORCE_OBJECT);
+                }
+                $answer->setValue($answerValueDefault);
+            }
+            // todo just for testing
+//             $answer->setValue($group->getUid().'--'.$groupCounterL0.'--'.$groupCounterL1.' '.$item->getUid());
 
             $this->answerRepository->add($answer);
             $proposal->addAnswer($answer);
@@ -984,19 +1090,65 @@ class ProposalController extends OapFrontendController
      */
     protected function addGroupToAnswers(Proposal $proposal): void
     {
-        $addGroupUid = $this->request->getArgument('addGroup')['__identity'];
+//        DebuggerUtility::var_dump($proposal->getAnswers(),(string)__LINE__);
+        $addGroupValue = $this->request->getArgument('addGroup');
+        $addGroupData = json_decode($addGroupValue, true);
+        /** @var MetaInformation $metaInfo */
+        $metaInfo = new MetaInformation($proposal->getMetaInformation());
+        $groupsCounter = $metaInfo->getGroupsCounter();
         /** @var FormPage $formPage */
         foreach ($proposal->getCall()->getFormPages() as $formPage) {
             /** @var FormGroup $itemGroup */
             foreach ($formPage->getItemGroups() as $itemGroup) {
-                if ($itemGroup->getUid() == $addGroupUid) {
-                    /** @var MetaInformation $metaInfo */
-                    $metaInfo = new MetaInformation($proposal->getMetaInformation());
-                    $groupCounter = $metaInfo->getGroupsCounter();
-                    // take the number directly (without increment), cause index is starting with 0, but here it is a count
-                    $this->createAnswersOfGroup($proposal, $itemGroup, $groupCounter[$itemGroup->getUid()]);
-                    $groupCounter[$itemGroup->getUid()]++;
-                    $metaInfo->setGroupsCounter($groupCounter);
+                if ($itemGroup->getUid() == $addGroupData['L0GroupUid']) {
+                    if ($addGroupData['L0GroupUid'] == $addGroupData['L1GroupUid']) {
+                        // no meta group!
+                        // take the number directly (without increment), cause index is starting with 0, but here it is a count
+                        $this->createAnswersOfGroup(
+                            $proposal,
+                            $itemGroup,
+                            0,
+                            $groupsCounter[$itemGroup->getUid()]['current']
+                        );
+                        $groupsCounter[$itemGroup->getUid()]['current']++;
+                    } elseif ($addGroupData['L1GroupUid'] > 0) {
+                        // inside a meta group
+                        foreach ($itemGroup->getItemGroups() as $itemGroupL1) {
+                            if ($itemGroupL1->getUid() == (integer)$addGroupData['L1GroupUid']) {
+                                $this->createAnswersOfGroup(
+                                    $proposal,
+                                    $itemGroupL1,
+                                    (integer)$addGroupData['L0GroupIndex'],
+                                    $groupsCounter[$itemGroup->getUid()]['instances'][$addGroupData['L0GroupIndex']][$itemGroupL1->getUid()]['current']
+                                );
+                                $groupsCounter[$itemGroup->getUid()]['instances'][$addGroupData['L0GroupIndex']][$itemGroupL1->getUid()]['current']++;
+                            }
+                        }
+                    } else {
+                        // just to fit existing function for later refactoring
+                        $groupCounterL0 = $groupsCounter[$itemGroup->getUid()]['current'];
+                        $groupL0 = $itemGroup;
+                        $newProposal = $proposal;
+
+                        // here starts the code from createAction...
+                        foreach ($itemGroup->getItemGroups() as $groupL1) {
+                            if (!isset(
+                                $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]
+                            )) {
+                                $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid(
+                                )] = [];
+                            }
+                            $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]['current'] = $groupL1->getRepeatableMin();
+
+                            // create all items for the instances
+                            for ($groupCounterL1 = 0; $groupCounterL1 < $groupL1->getRepeatableMin(); $groupCounterL1++) {
+                                $this->createAnswersOfGroup($newProposal, $groupL1, $groupCounterL0, $groupCounterL1);
+                            }
+                        }
+                        $groupsCounter[$itemGroup->getUid()]['current']++;
+                    }
+
+                    $metaInfo->setGroupsCounter($groupsCounter);
                     $proposal->setMetaInformation($metaInfo->jsonSerialize());
                 }
             }
@@ -1014,19 +1166,96 @@ class ProposalController extends OapFrontendController
         $removeParameter = json_decode($removeParameterJsonStr);
 
         $metaInfo = new MetaInformation($proposal->getMetaInformation());
-        $groupCounter = $metaInfo->getGroupsCounter();
-        $groupCounter[$removeParameter->itemGroup]--;
-        $metaInfo->setGroupsCounter($groupCounter);
+        $groupsCounter = $metaInfo->getGroupsCounter();
 
-        /** @var Answer $answer */
-        foreach (clone $proposal->getAnswers() as $answer) {
-            if ($answer->getModel()->getUid() == $removeParameter->itemGroup and $answer->getElementCounter() == $removeParameter->elementCounter) {
-                $proposal->removeAnswer($answer);
-            } elseif ($answer->getModel()->getUid() == $removeParameter->itemGroup and $answer->getElementCounter() > $removeParameter->elementCounter) {
-                // correction of item elementCounter // shift all after the deleted answer down/increemnt counter
-                $answer->setElementCounter($answer->getElementCounter() - 1);
+        // unested group upper level
+        if ($removeParameter->L1GroupUid == ''
+            and (
+                count($groupsCounter[$removeParameter->L0GroupUid]['instances']) == 0
+                or
+                !isset(
+                    $groupsCounter[$removeParameter->L0GroupUid]['instances']
+                )
+            )
+        ) {
+            // remove none nested group from uppper level
+            $groupsCounter[$removeParameter->L0GroupUid]['current']--;
+            $removeType = 'unnested_group_level_0';
+            foreach (clone $proposal->getAnswers() as $answer) {
+                if ($answer->getModel()->getUid() == $removeParameter->L0GroupUid and
+                    $answer->getGroupCounter1() == $removeParameter->L0GroupIndex) {
+                    $proposal->removeAnswer($answer);
+                }
+                if ($answer->getModel()->getUid() == $removeParameter->L0GroupUid and
+                    $answer->getGroupCounter1() > $removeParameter->L0GroupIndex) {
+                    $newGroupIndex = $answer->getGroupCounter1() - 1;
+                    $answer->setGroupCounter1($newGroupIndex);
+                }
             }
         }
+
+        if ($removeParameter->L1GroupUid > 0 and $removeParameter->L0GroupUid > 0) {
+            $groupsCounter[$removeParameter->L0GroupUid]['instances'][$removeParameter->L0GroupIndex][$removeParameter->L1GroupUid]['current']--;
+            foreach (clone $proposal->getAnswers() as $answer) {
+                if ($answer->getModel()->getUid() == $removeParameter->L1GroupUid
+                    and $answer->getGroupCounter1() == $removeParameter->L1GroupIndex
+                        and $answer->getGroupCounter0() == $removeParameter->L0GroupIndex
+                ) {
+                    $proposal->removeAnswer($answer);
+                }
+                if ($answer->getModel()->getUid() == $removeParameter->L1GroupUid
+                    and $answer->getGroupCounter1() > $removeParameter->L1GroupIndex
+                        and $answer->getGroupCounter0() == $removeParameter->L0GroupIndex
+                ) {
+                    $newGroupIndex = $answer->getGroupCounter1() - 1;
+                    $answer->setGroupCounter1($newGroupIndex);
+                }
+            }
+        }
+
+        // remove nested groups upper level
+        if ($removeParameter->L1GroupUid == ''
+            and
+            count($groupsCounter[$removeParameter->L0GroupUid]['instances']) > 0
+        ) {
+            // remove nested group from upper level
+            $groupsCounter[$removeParameter->L0GroupUid]['current']--;
+
+            $newInstances = [];
+            foreach ($groupsCounter[$removeParameter->L0GroupUid]['instances'] as $nestedIndex => $nestedGroups) {
+                if ($nestedIndex < $removeParameter->L0GroupIndex) {
+                    $newInstances[] = $nestedGroups;
+                }
+                if ($nestedIndex == $removeParameter->L0GroupIndex) {
+                    foreach ($nestedGroups as $nestedGroupUid => $nestedData) {
+                        foreach (clone $proposal->getAnswers() as $answer) {
+                            if ($answer->getModel()->getUid() == $nestedGroupUid and
+                                $answer->getGroupCounter1() >= $removeParameter->L1GroupIndex and
+                                $answer->getGroupCounter0() == $nestedIndex) {
+                                $proposal->removeAnswer($answer);
+                            }
+                        }
+                    }
+                }
+                if ($nestedIndex > $removeParameter->L0GroupIndex) {
+                    foreach ($nestedGroups as $nestedGroupUid => $nestedData) {
+                        foreach (clone $proposal->getAnswers() as $answer) {
+                            if ($answer->getModel()->getUid() == $nestedGroupUid and
+                                $answer->getGroupCounter1() >= $removeParameter->L1GroupIndex and
+                                $answer->getGroupCounter0() == $nestedIndex) {
+                                $newGroupIndex = $answer->getGroupCounter0() - 1;
+                                $answer->setGroupCounter0($newGroupIndex);
+                            }
+                        }
+                    }
+
+                    $newInstances[] = $nestedGroups;
+                }
+            }
+            $groupsCounter[$removeParameter->L0GroupUid]['instances'] = $newInstances;
+        }
+
+        $metaInfo->setGroupsCounter($groupsCounter);
         $proposal->setMetaInformation($metaInfo->jsonSerialize());
     }
 
@@ -1036,6 +1265,9 @@ class ProposalController extends OapFrontendController
     protected function updateAnswersForRemovedItems(Proposal &$proposal): void
     {
         foreach (clone $proposal->getAnswers() as $answer) {
+            if (!$answer->getItem()) {
+                continue;
+            }
             $itemOfAnswer = $answer->getItem();
             if (!isset($this->items[$itemOfAnswer->getUid()])) {
                 // The question has been removed from the form - and therefore the answer must also be removed.
@@ -1215,86 +1447,5 @@ class ProposalController extends OapFrontendController
             }
         }
         return $answersMap;
-    }
-
-    /**
-     * @param Proposal $proposal
-     * @param $states
-     * @param TemplateProcessor $templateProcessor
-     */
-    private function wordVarReplacement(Proposal $proposal, $states, TemplateProcessor $templateProcessor): void
-    {
-        $applicant = $proposal->getApplicant();
-        $applicantName = $this->getApplicantName($applicant);
-        if (trim($applicantName) !== '') {
-            $applicantName .= ' (' . $applicant->getEmail() . ')';
-        } else {
-            $applicantName = $applicant->getEmail();
-        }
-
-        // signature-label
-        $proposalId = LocalizationUtility::translate(
-            $this->locallangFile . ':tx_openoap_dashboard.proposal.signature.label'
-        ) . ': ' . $this->buildSignature($proposal);
-        $author = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportAuthor.text') .
-                  ': ' .
-                  $applicantName;
-        $dateLastEdit = LocalizationUtility::translate(
-            $this->locallangFile . ':tx_openoap_dashboard.proposal.lastChange.label'
-        ) . ': ' . date('d.m.Y', $proposal->getEditTstamp());
-        $dateExport = LocalizationUtility::translate(
-            $this->locallangFile . ':tx_openoap_proposals.exportGenerated.text',
-            'open_oap',
-            [date('d.m.Y'), date('H:i')]
-        );
-        $callState = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportStatus.text') .
-                     ': ' .
-                     $states;
-
-        // <div><span class="footnote">({commentsAtProposalCount} {f:if(condition:'1 == {commentsAtProposalCount}', then:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.singular.label\')}', else:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.plural.label\')}')}) <sup>{footnoteCounter}</sup></span></div>
-        $commonComment = 0;
-        /** @var Comment $comment */
-        foreach ($proposal->getComments() as $comment) {
-            if ($comment->getSource() == self::COMMENT_SOURCE_EDIT) {
-                $commonComment++;
-            }
-        }
-        $commentsCount = '';
-        if ($commonComment > 0) {
-            $commentsCount = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_notifications.pdf.generalComments.label') .
-                             ': ' .
-                             $commonComment;
-        }
-//        DebuggerUtility::var_dump($proposal->getComments());
-//        DebuggerUtility::var_dump($proposal);
-//        die();
-
-        $templateProcessor->setValue(
-            ['proposalId', 'author', 'dateExport', 'dateLastEdit', 'callTitle', 'proposalTitle', 'callState', 'commentsCount'],
-            [
-                $proposalId,
-                $author,
-                $dateExport,
-                $dateLastEdit,
-                $proposal->getCall()->getTitle(),
-                $proposal->getTitle(),
-                $callState,
-                $commentsCount,
-            ],
-        );
-
-        // build intro text (complexElement from HTML)
-        // https://github.com/PHPOffice/PHPWord/issues/902#issuecomment-564561115
-        $introSection = (new PhpWord())->addSection();
-        $this->addHtmlToSection($introSection, $proposal->getCall()->getIntroText());
-        $containers = $introSection->getElements();
-        // clone the html block in the template
-        $templateProcessor->cloneBlock('callIntroBlock', count($containers), true, true);
-        // replace the variables with the elements
-        for ($i = 0; $i < count($containers); $i++) {
-            // be aware of using setComplexBlock
-            // and the $i+1 as the cloned elements start with #1
-            $templateProcessor->setComplexBlock('callIntro#' . ($i + 1), $containers[$i]);
-        }
     }
 }

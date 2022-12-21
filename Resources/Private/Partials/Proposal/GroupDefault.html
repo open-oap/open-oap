@@ -1,0 +1,132 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+      data-namespace-typo3-fluid="true">
+
+<v:iterator.loop iteration="counter" count="{groupCurrentN}" >
+    <v:variable.set name="groupCounterL1" value="{counter.index}" />
+
+    <fieldset class="form__grouped-fieldset">
+
+        <legend class="form__group-legend {f:if(condition: '{nestedGroupClass}', then: 'form__group-legend--nested', else: '')}">
+            <f:if condition="{nestedGroupClass}">
+                <svg class="form__icon {nestedGroupClass} " width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#818994"/></svg>
+            </f:if>
+            {itemGroup.title}
+            <f:if condition="{itemGroup.groupTitle}">
+                <f:then>
+                    : {itemGroup.groupTitle.{counter.index}.title}
+                </f:then>
+                <f:else>
+                    <f:if condition="{groupCurrentN} > 1">#{counter.cycle}</f:if>
+                </f:else>
+            </f:if>
+        </legend>
+
+        <f:if condition="{groupCurrentN} > {itemGroup.repeatableMin}  ">
+            <f:if condition="{nestedGroup}">
+                <f:then>
+                    <f:comment><!-- value="{f:format.json(value: {L1GroupUid: '', L0GroupUid: '{itemGroupL0.uid}', L0GroupIndex: '{counterWrapper.index}', L1GroupIndex: ''})}" --></f:comment>
+                    <v:variable.set name="L0_Uid" value="{itemGroupL0.uid}" />
+                    <v:variable.set name="L1_Uid" value="{itemGroup.uid}" />
+                    <v:variable.set name="L0_Index" value="{groupCounterL0}" />
+                    <v:variable.set name="L1_Index" value="{groupCounterL1}" />
+                </f:then>
+                <f:else>
+                    <v:variable.set name="L0_Uid" value="{itemGroup.uid}" />
+                    <v:variable.set name="L1_Uid" value="" />
+                    <v:variable.set name="L0_Index" value="{groupCounterL1}" />
+                    <v:variable.set name="L1_Index" value="" />
+                </f:else>
+            </f:if>
+            <div class="form__section-delete">
+                <f:form.button
+                    additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_DELETE_GROUP','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"
+                    type="submit" class="button button--linkstyle button--linkstyle-reduced"
+                    name="removeGroup"
+                    value="{f:format.json(value: {L1GroupUid: '{L1_Uid}', L0GroupUid: '{L0_Uid}', L0GroupIndex: '{L0_Index}', L1GroupIndex: '{L1_Index}'})}"
+                >
+                    <f:render partial="ButtonIcon" arguments="{type:'subtract'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.remove_group', arguments: {0: itemGroup.title} )} #{counter.cycle}</f:format.raw>
+                </f:form.button>
+            </div>
+        </f:if>
+        <div class="formpage-group__intro">
+            <f:if condition="{itemGroup.introText}">
+                <div class="form__text form__text--intro">
+                    {itemGroup.introText -> f:format.html()}
+                </div>
+            </f:if>
+            <f:if condition="{itemGroup.helpText}">
+                <div class="form__helptext">
+                    <button type="button" class="form__helptext-control" aria-controls="oap-help-{propertyKeyIndex}" aria-expanded="false" data-disclosure-control>{f:translate(key:'tx_openoap_form.helptext.header')}</button>
+                    <div class="form__helptext-text" id="oap-help-itemgroup-{propertyKeyIndex}">{itemGroup.helpText -> f:format.html()}</div>
+                </div>
+            </f:if>
+        </div>
+
+        <f:comment><!--                      ITEMS                                --></f:comment>
+        <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
+            <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}" />
+            <v:variable.set name="propertyKeyIndexAddValue" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}--a" />
+            <v:variable.set name="propertyKey" value="answers.{itemAnswerMap.{propertyKeyIndex}}.value" />
+            <v:variable.set name="propertyKeyAdditionalValue" value="answers.{itemAnswerMap.{propertyKeyIndex}}.additionalValue" />
+            <v:variable.set name="propertyKeyArray" value="answers.{itemAnswerMap.{propertyKeyIndex}}.arrayValue" />
+            <v:variable.set name="propertyKeyComments" value="answers.{itemAnswerMap.{propertyKeyIndex}}.comments" />
+            <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+
+            <div class="form__group {f:if(condition:itemIt.isFirst, then: '', else: 'form__group--framed')} {f:if(condition:itemIt.isLast, then: 'form__group--lastitem')}" id="oap-input-{propertyKeyIndex}--item">
+                <f:if condition="{item.type}=={itemTypes.TYPE_RADIOBUTTON} OR {item.type}=={itemTypes.TYPE_CHECKBOX} ">
+                    <f:then>
+                        <fieldset>
+                            <legend class="form__label-question" id="legend--{propertyKeyIndex}">{item.question} <f:if condition="{answersMap.{answerId}.item.MSign}"><f:render partial="Required.html" arguments="{MSign:'{answersMap.{answerId}.item.MSign}'}" /></f:if></legend>
+                    </f:then>
+                    <f:else>
+                        <label class="form__label-question" >{item.question} <f:if condition="{answersMap.{answerId}.item.MSign}"><f:render partial="Required.html" arguments="{MSign:'{answersMap.{answerId}.item.MSign}'}" /></f:if></label>
+                    </f:else>
+                </f:if>
+
+                <f:if condition="{item.introText}"><div class="form__text form__text--intro">{item.introText -> f:format.html()}</div></f:if>
+
+                <f:if condition="{item.helpText}">
+                    <div class="form__helptext">
+                        <button type="button" class="form__helptext-control" aria-controls="oap-help-{propertyKeyIndex}" aria-expanded="false" data-disclosure-control>{f:translate(key:'tx_openoap_form.helptext.header')}</button>
+                        <div class="form__helptext-text" id="oap-help-{propertyKeyIndex}">{item.helpText -> f:format.html()}</div>
+                    </div>
+                </f:if>
+
+                <f:render partial="Proposal/Fields" arguments="{_all}" />
+
+                <f:if condition="{item.type}=={itemTypes.TYPE_RADIOBUTTON} OR {item.type}=={itemTypes.TYPE_CHECKBOX} ">
+                    </fieldset>
+                </f:if>
+                <f:comment><!--
+                 <span class="" style="font-size:small;">ID_{item.uid}</span>
+                --></f:comment>
+            </div><!-- 99: type = {item.type} -->
+
+            <f:if condition="{proposal.{propertyKeyComments}}">
+                <f:render
+                    partial="Answer/Comments"
+                    arguments="{mode: 'FE', comments:'{proposal.{propertyKeyComments}}',commentStates:'{commentStates}',answersMap:'{answersMap}',answerId:'{answerId}'}" />
+            </f:if>
+        </f:for>
+    </fieldset>
+</v:iterator.loop>
+
+<f:if condition="{groupCurrentN} < {itemGroup.repeatableMax} AND {editState} == {proposalStates.META_PROPOSAL_EDITABLE_FIELDS_NO_LIMIT}">
+    <f:then>
+        <div class="form__section-add">
+            <f:form.button
+                    additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"
+                    type="submit" class="button button--linkstyle button--linkstyle-reduced"
+                    name="addGroup"
+                    value="{f:format.json(value: {L1GroupUid: '{itemGroup.uid}', L0GroupUid: '{itemGroupL0.uid}', L0GroupIndex: '{groupCounterL0}'})}"
+                >
+                <f:render partial="ButtonIcon" arguments="{type:'add'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.add_group', arguments: {0: itemGroup.title} )}</f:format.raw>
+            </f:form.button>
+        </div>
+    </f:then>
+</f:if>
+
+</html>

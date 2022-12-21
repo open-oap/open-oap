@@ -1,4 +1,20 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+	  xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+	  xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+	  v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+	  data-namespace-typo3-fluid="true">
+<f:comment><!--
+	<f:render partial="Proposal/CommentForm" arguments="{proposal:proposal, id:'comment{pi.cycle}-{ii.cycle}', section:'comments{pi.cycle}{ii.cycle}', answer:'{proposal.{propertyKeyUid}}'}" />
+
+	calledFrom: ShowProposal
+
+	Available variables:
+		{proposal}
+		{id}
+		{section}
+		{answer}
+--></f:comment>
+
 <div class="comment-add-form">
 	<f:form action="showProposal" name="proposal" object="{proposal}" section="{section}">
 		<label for="{id}">

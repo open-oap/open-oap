@@ -1,0 +1,15 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+
+    <f:form.button
+        type="submit" class="button button--linkstyle button--linkstyle-reduced button--linkstyle-plain form__controls-button form__controls-button--line1 form__navigation-button--slot1" name="close"
+        additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVECLOSE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"  >
+        <f:render partial="ButtonIcon" arguments="{type:'save-close'}"/>{f:translate(key:'tx_openoap.general.save_close')}</f:form.button>
+    <f:form.button
+        type="submit" class="button button--linkstyle button--linkstyle-reduced button--linkstyle-plain form__controls-button form__controls-button--line2 form__navigation-button--slot2" name="cancel"
+        additionalAttributes="{'data-oap-showmodal':'1','data-oap-modaltext':'JSMSG_MODAL_CANCELWARNING','data-oap-modalsubmit':'JSMSG_MODAL_CANCEL','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"  >
+        <f:render partial="ButtonIcon" arguments="{type:'cancel'}"/>{f:translate(key:'tx_openoap.general.cancel')}</f:form.button>
+
+</html>

@@ -1,0 +1,509 @@
+/* import ../_settings.scss */
+.form {
+    &__navigation {
+        &--sticky {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: $color-background-body;
+            box-shadow: 0 -3px 5px 0 rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    &__navigation-content {
+        @include page;
+        @include main-content-padding-simple;
+        position: relative;
+        padding-top: rem(16);
+        padding-bottom: rem(16);
+    }
+
+    &__navigation-buttons {
+        display: grid;
+
+        &--second {
+            @include respond-between($screen-medium-4,$screen-large-3-1) {
+                padding-right: rem(45);
+            }
+        }
+    }
+
+    &__navigation-button {
+        margin-right: 0;
+        margin-left: 0;
+
+        &--slot1 {
+            grid-area: 1/1/1/2;
+        }
+
+        &--slot2 {
+            grid-area: 1/3/1/4;
+        }
+
+        &--slot3 {
+            grid-area: 1/5/1/6;
+        }
+
+        &--slot4 {
+            grid-area: 1/7/1/8;
+        }
+
+        &--slot5 {
+            grid-area: 1/9/1/10;
+        }
+
+        &--slot6 {
+            grid-area: 1/11/1/12;
+        }
+    }
+
+    &__jump-to-top {
+        grid-area: 1/11/1/12;
+
+        @include respond-up-from($screen-medium-4) {
+            grid-area: inherit;
+            position: absolute;
+            top: rem(24);
+            right: rem(12);
+        }
+
+        @include respond-up-from($screen-large-3-1) {
+            position: absolute;
+            top: rem(24);
+            right: rem(-48);
+        }
+
+        .form__icon {
+            margin-right: 0;
+        }
+    }
+
+    &__text {
+        &--intro {
+            @include rte-styles;
+            margin-bottom: $margin-bottom-default;
+
+            fieldset & {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &__helptext {
+        width: 100%;
+
+        &-text {
+            @include proposals-legend-list;
+            font-size: rem(16);
+        }
+
+        &-control {
+            @include proposals-legend-control;
+            font-size: rem(16);
+        }
+    }
+
+    &__group {
+        // Flex item if in .row--flex or .row--flex-wrap, so:
+        width: 100%;
+        margin-bottom: rem(24);
+
+        &--checkbox + .form__group--checkbox {
+            margin-top: rem(-30);
+        }
+
+        &--error {
+            // Not ideal, but too many templates..
+            label {
+                color: $color-alert;
+            }
+        }
+
+        &--reduced {
+            margin-bottom: rem(20);
+        }
+
+        &--separated-top {
+            margin-top: rem(40);
+        }
+
+        &--summary {
+            padding: rem(20);
+            margin-bottom: 0;
+            border: 2px solid $color-patch-3;
+            border-bottom: 0;
+        }
+
+        .form__buttons + & {
+            margin-top: $margin-bottom-default;
+        }
+
+        + fieldset {
+            margin-top: rem(48);
+        }
+
+        &--framed {
+            padding-top: rem(30);
+            margin-top: rem(30);
+            border-top: 1px solid $color-dark-alt-4;
+        }
+
+    }
+
+
+    &__group-legend {
+        @include headline-h3(1);
+        display: block;
+        position: relative;
+        width: calc(100% + #{rem(24)});
+        padding: rem(8) rem(12) rem(10);
+        margin-right: rem(-12);
+        margin-left: rem(-12);
+        background: $color-dark-alt-9;
+
+        &--metagroup {
+            background-color: $color-dark-alt-12;
+        }
+
+        &--nested {
+            .form__icon--nested-group {
+                position: absolute;
+                top: rem(17);
+                left: rem(-35);
+                background-color: $color-background-body;
+            }
+        }
+    }
+
+    &__legend {
+        margin-top: rem(30);
+    }
+
+    &__finish {
+        margin-top: rem(16);
+    }
+
+    &__finishcheck {
+        @include proposals-legend-list;
+    }
+
+    &__textarea {
+        &[disabled] {
+            @include disabled-form-element;
+        }
+    }
+
+    &__textfield {
+        &[disabled] {
+            @include disabled-form-element;
+        }
+
+        &--short {
+            width: rem(290);
+        }
+
+        &--number {
+            width: rem(290);
+            text-align: right;
+        }
+
+        &--date {
+            width: 100%;
+            max-width: rem(290);
+        }
+
+        &--additional {
+            margin-left: rem(30);
+        }
+    }
+
+    &__buttons {
+        // Exclusive media-queries to avoid excessive overwrites
+        @include respond-up-to($screen-small-2-5) {
+            &--left {
+                display: block;
+            }
+
+            &--right {
+                display: block;
+
+                .button:not(.button--linkstyle) {
+                    width: 100%;
+                }
+            }
+        }
+
+        @include respond-up-from($screen-small-2-5) {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: 1fr;
+            grid-column-gap: 0;
+            grid-row-gap: 0;
+
+            &--left {
+                grid-area: 1 / 1 / 2 / 2;
+            }
+
+            /* stylelint-disable max-nesting-depth*/
+            &--right {
+                grid-area: 1 / 2 / 2 / 3;
+                text-align: right;
+
+                .button {
+                    display: inline-block;
+                    margin-right: 0;
+
+                    + .button {
+                        margin-left: rem(46);
+                    }
+                }
+            }
+            /* stylelint-enable max-nesting-depth*/
+        }
+
+    }
+
+    &__menu-item {
+        position: relative;
+        padding: rem(14) 0 rem(14) rem(8);
+        margin-right: 0;
+        border-bottom: 1px solid $color-dark-alt-4;
+    }
+
+    &__icon {
+        display: inline-block;
+        width: rem(18);
+        height: rem(18);
+        margin-right: rem(8);
+        vertical-align: middle;
+        color: inherit;
+        transform: translateY(rem(-1));
+
+        &--error {
+            //position: absolute;
+            //top: rem(15);
+            //right: rem(-15);
+            width: rem(20);
+            height: rem(22);
+            transform: translateY(rem(1));
+        }
+
+        &--error-right {
+            position: absolute;
+            //top: rem(15);
+            right: rem(-8);
+            transform: translateY(rem(1));
+
+            .form__menu-button--active & {
+                right: rem(-16);
+            }
+        }
+
+        &--add,
+        &--subtract {
+            width: rem(16);
+            height: rem(16);
+        }
+
+        &--comments-small {
+            width: rem(16);
+            height: rem(15);
+        }
+
+        &--new-comments {
+            color: $color-success;
+        }
+
+        &--saved,
+        &--uploaded {
+            color: $color-dark;
+        }
+
+        &--large {
+            width: rem(32);
+            height: rem(32);
+        }
+
+        &--jump-to-top {
+            width: rem(37);
+            height: rem(37);
+        }
+    }
+
+    &__controls--left {
+        display: none; // this is for duplocate control buttons to sticky toolbar... may be we will use this later again
+        //display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        padding-right: rem(8);
+        padding-left: rem(8);
+        margin-top: rem(36);
+
+        .form__controls-button {
+            padding-left: rem(8);
+            text-align: left;
+
+            &--line1 {
+                grid-area: 1/1/1/3;
+            }
+
+            &--line2 {
+                grid-area: 2/1/2/3;
+            }
+        }
+
+    }
+
+    &__section-delete {
+        .form__group-legend + & {
+            margin-top: rem(-13);
+        }
+    }
+
+    &__section-add {
+        padding-top: rem(6);
+        margin-top: rem(20);
+        margin-bottom: rem(20);
+        border-top: 1px solid $color-dark-alt-4;
+    }
+
+    &__upload-label {
+        margin: rem(11) 0 rem(14) 0;
+        line-height: rem(30);
+
+        &--empty {
+            color: $color-dark-alt-5;
+        }
+    }
+
+    &__upload-message {
+        margin: rem(11) 0 rem(14) 0;
+        line-height: rem(26);
+        font-size: rem(16);
+
+        &--error {
+            color: $color_alert;
+        }
+
+        &--ok {
+            color: $color_success;
+        }
+
+    }
+
+    &__upload-list {
+        margin-bottom: rem(25);
+    }
+
+    &__upload-filesitem {
+        padding: rem(8) rem(16);
+        margin: rem(3) 0;
+        background-color: $color-dark-alt-3;
+
+        &--preview {
+            padding: rem(8) 0;
+            background-color: transparent;
+        }
+    }
+
+    &__upload-btn {
+        &-download-file,
+        &-remove-file {
+            float: right;
+        }
+    }
+
+    //&__upload-msgbox {
+    //    min-height: 2rem;
+    //}
+
+    &__date {
+        position: relative;
+        width: 100%;
+        max-width: 16rem;
+
+        &--inline {
+            display: inline-block;
+            position: relative;
+            max-width: 16rem;
+        }
+
+        &-icon {
+            position: absolute;
+            top: rem(8);
+            right: 0;
+        }
+    }
+
+    &__table {
+        display: grid;
+        grid-column-gap: rem(8);
+        grid-row-gap: rem(8);
+        //grid-template-rows: 1fr repeat(3, 3fr);
+        grid-template-rows: auto;
+        margin-top: rem(16);
+        margin-bottom: $margin-bottom-default;
+
+        &--2cols {
+            grid-template-columns: 2.5fr repeat(2, 1.5fr);
+        }
+
+        &--3cols {
+            grid-template-columns: 2.5fr repeat(3, 1.5fr);
+        }
+
+        &--4cols {
+            grid-template-columns: 2.5fr repeat(4, 1.5fr);
+        }
+    }
+
+    &__table-cell {
+        border-bottom: 1px solid lightgrey;
+
+        .form__textfield {
+            max-width: 100%;
+
+            &--short,
+            &--number {
+                width: 100%;
+            }
+        }
+
+        &--value {
+            padding-right: rem(12);
+            text-align: right;
+        }
+
+        &--head {
+            text-align: center;
+        }
+
+        &--error {
+            color: $color-alert;
+        }
+    }
+
+    //&__table-cell--head {
+    //    border: 1px solid darkgrey;
+    //}
+
+    &__table-cell--label {
+        .form__unit {
+            margin-left: rem(8);
+            font-size: rem(14);
+        }
+    }
+
+    //&__item-list {
+    //
+    //}
+
+    &__item-term {
+        display: block;
+        margin-top: rem(16);
+    }
+
+    &__item-definition {
+        margin-bottom: 0;
+    }
+}

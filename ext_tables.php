@@ -24,7 +24,7 @@ defined('TYPO3') || die();
         'BackendProposals',
         '',
         [
-            \OpenOAP\OpenOap\Controller\BackendProposalsController::class => 'listProposals, showOverviewProposals, showReleaseNotesProposals, showProposal, customizeStatusMail',
+            \OpenOAP\OpenOap\Controller\BackendProposalsController::class => 'showOverviewCalls, listProposals, showReleaseNotesProposals, showProposal, customizeStatusMail',
         ],
         [
             'access' => 'user,group',

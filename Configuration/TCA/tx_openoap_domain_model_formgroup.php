@@ -18,9 +18,11 @@ return [
         ],
         'searchFields' => 'title,intro_text,help_text,model_name',
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
+        'type' => 'type',
     ],
     'types' => [
-        '1' => ['showitem' => 'title, intro_text, help_text, model_name, repeatable_min, repeatable_max, items, group_title, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '0' => ['showitem' => 'title, type, intro_text, help_text, display_type, repeatable_min, repeatable_max, items, group_title, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '1' => ['showitem' => 'title, type, intro_text, help_text, repeatable_min, repeatable_max, item_groups, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -75,6 +77,22 @@ return [
                 'default' => '',
             ],
         ],
+        'type' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.type',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.type_default', 0],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.type_meta', 1],
+                ],
+                'size' => 1,
+                'maxitems' => 1,
+                'eval' => '',
+            ],
+        ],
         'intro_text' => [
             'exclude' => false,
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.intro_text',
@@ -115,6 +133,21 @@ return [
                 'default' => '',
             ],
         ],
+        'display_type' => [
+            'exclude' => true,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.display_type',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.display_type_default', 0],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.display_type_table', 1],
+                ],
+                'size' => 1,
+                'maxitems' => 1,
+            ],
+        ],
         'repeatable_min' => [
             'exclude' => true,
             'l10n_mode' => 'exclude',
@@ -137,8 +170,43 @@ return [
                 'default' => 1,
             ],
         ],
+        'item_groups' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'l10n_display' => 'defaultAsReadonly',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formpage.item_groups',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'tx_openoap_domain_model_formgroup',
+                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formgroup}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formgroup}.hidden = 0 AND {#tx_openoap_domain_model_formgroup}.{#sys_language_uid} IN (-1,0) AND {#tx_openoap_domain_model_formgroup}.{#type} IN (0)',
+                'MM' => 'tx_openoap_formgroup_formgroup_mm',
+                'size' => 10,
+                'autoSizeMax' => 30,
+                'maxitems' => 9999,
+                'multiple' => 0,
+                'fieldControl' => [
+                    'editPopup' => [
+                        'disabled' => false,
+                    ],
+                    'addRecord' => [
+                        'disabled' => false,
+                        'options' => [
+                            'pid' => '###PAGE_TSCONFIG_ID###',
+                        ],
+                    ],
+                    'listModule' => [
+                        'disabled' => true,
+                    ],
+                ],
+            ],
+
+        ],
+
         'items' => [
             'exclude' => false,
+            'l10n_display' => 'defaultAsReadonly',
+            'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.items',
             'config' => [
                 'type' => 'select',
@@ -165,7 +233,6 @@ return [
                     ],
                 ],
             ],
-
         ],
         'group_title' => [
             'exclude' => true,
@@ -174,6 +241,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_openoap_domain_model_grouptitle',
+                'foreign_table_where' => 'AND {#tx_openoap_domain_model_grouptitle}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_grouptitle}.hidden = 0 AND {#tx_openoap_domain_model_grouptitle}.{#sys_language_uid} IN (-1,0)',
                 'MM' => 'tx_openoap_formgroup_grouptitle_mm',
                 'size' => 10,
                 'autoSizeMax' => 30,
@@ -184,14 +252,16 @@ return [
                         'disabled' => false,
                     ],
                     'addRecord' => [
-                        'disabled' => true,
+                        'disabled' => false,
+                        'options' => [
+                            'pid' => '###PAGE_TSCONFIG_ID###',
+                        ],
                     ],
                     'listModule' => [
                         'disabled' => true,
                     ],
                 ],
             ],
-
         ],
         'dependent_on' => [
             'exclude' => false,

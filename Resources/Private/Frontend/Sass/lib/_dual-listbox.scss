@@ -1,0 +1,73 @@
+/* stylelint-disable */
+.dual-listbox__container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    // flex-wrap: wrap;
+    width: 100%;
+
+    > div:not([class]) {
+        flex: 1 1 50%;
+    }
+}
+
+.dual-listbox__available,
+.dual-listbox__selected {
+    height: 300px;
+    overflow-y: auto;
+    padding: 0;
+    width: 100%;
+    margin-top: 0;
+    border: $border-input;
+    border-radius: var(--border-radius-small);
+}
+
+.dual-listbox__buttons {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    margin: 0 10px;
+}
+
+.dual-listbox__button {
+    @include button;
+    padding: rem(7) rem(10) rem(8);
+    margin-bottom: rem(5);
+}
+
+.dual-listbox__title {
+    display: none;
+}
+
+.dual-listbox__item {
+    display: block;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid $color-dark-alt-4;
+    transition: background 0.2s ease;
+
+    &.dual-listbox__item--selected {
+        background-color: $color-primary-patch-light;
+    }
+
+    .js-disabled & {
+        pointer-events: none;
+        opacity: 0.25;
+    }
+}
+
+.dual-listbox__removed {
+    z-index: -1;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.dual-listbox__search {
+    margin-bottom: rem(5);
+    background-color: $color-dark-alt-3;
+
+    &::placeholder {
+        color: $color-dark-alt-5;
+    }
+}

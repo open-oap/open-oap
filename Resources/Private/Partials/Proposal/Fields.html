@@ -107,23 +107,23 @@
     <f:case value="{itemTypes.TYPE_SELECT_SINGLE}">
         <f:form.hidden property="{propertyKey}" value="" />
         <f:form.select
-            property="{propertyKey}"
+            property="{propertyKeyArray}"
             id="oap-input-{propertyKeyIndex}"
             class="dualListBox"
+            multiple="1"
             additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
-        >
-            <f:for each="{answersMap.{answerId}.item.options}" as="selectItem" iteration="i">
-                <f:form.select.option value="{selectItem.key}"><f:format.raw>{selectItem.label}</f:format.raw></f:form.select.option>
-            </f:for>
-        </f:form.select>
+            options="{answersMap.{answerId}.item.options}"
+            optionValueField="key"
+            optionLabelField="label"
+        />
     </f:case>
     <f:case value="{itemTypes.TYPE_SELECT_MULTIPLE}">
         <f:form.hidden property="{propertyKey}" value="" />
         <f:form.select
             property="{propertyKeyArray}"
             id="oap-input-{propertyKeyIndex}"
-            multiple="1"
             class="dualListBox"
+            multiple="1"
             additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
         >
             <f:for each="{answersMap.{answerId}.item.options}" as="selectItem" iteration="i">
@@ -172,38 +172,18 @@
                 <ul class="form__upload-staged"></ul>
             </div>
            <!-- >{countFiles} // {answersMap.{answerId}.item.MaxValue} -->
-
-            <f:if condition="{answersMap.{answerId}.add_button.disabled} == 1">
-                <f:then>
-                    disabled *
-                    <f:form.button disabled="disabled" type="button"
-                                   class="button button--linkstyle button--linkstyle-reduced form__add-file-button form__add-file-button--disabled"  >
-                        <f:render partial="ButtonIcon" arguments="{type:'add'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.add_file')}</f:format.raw>
-                    </f:form.button>
-                    +
-                </f:then>
-                <f:else>
-                    active #
-                    <f:form.button type="button"
-                                   class="button button--linkstyle button--linkstyle-reduced form__add-file-button"  >
-                        <f:render partial="ButtonIcon" arguments="{type:'add'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.add_file')}</f:format.raw>
-                    </f:form.button>
-                    -
-                </f:else>
-            </f:if>
-
-            <f:comment><!--<div class="" <f:if condition="{countFiles} >= {answersMap.{answerId}.item.MaxValue} OR {answersMap.{answerId}.disabled}">style="display:none;"</f:if>>
+            <div class="" <f:if condition="{countFiles} >= {answersMap.{answerId}.item.MaxValue} OR {answersMap.{answerId}.disabled}">style="display:none;"</f:if>>
                 <f:form.button type="button"
                                class="button button--linkstyle button--linkstyle-reduced form__add-file-button"  >
                     <f:render partial="ButtonIcon" arguments="{type:'add'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.add_file')}</f:format.raw>
                 </f:form.button>
-            </div> --></f:comment>
+            </div>
 
             <f:form.hidden
                 property="{propertyKey}"
                 class="form__upload-value"
                 id="oap-input-{propertyKeyIndex}"
-                additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                additionalAttributes='{answersMap.{answerId}.item.additionalAttributesForHiddenField}'
             />
             <f:if condition="{answersMap.{answerId}.item.MaxValue} > 1">
                 <f:then>
@@ -226,11 +206,11 @@
             <div class="form__pre-upload" style="display:none;">
                 <div class="form__upload-label">{f:translate(key:'tx_openoap.general.files_for_upload_label')}</div>
                 <div class="form__upload-list"></div>
-                <f:form.button type="button"
+                <f:form.button type="button" name="button-upload-file"
                                class="button button--alternative form__upload-file-button"  >
                     <f:render partial="ButtonIcon" arguments="{type:'upload'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.upload_files')}</f:format.raw>
                 </f:form.button>
-                <f:form.button type="button"
+                <f:form.button type="button" name="button-clear-file"
                                class="button button--linkstyle button--linkstyle-reduced form__upload-file-clear-button"  >
                     <f:render partial="ButtonIcon" arguments="{type:'cancel'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.upload_files_clear')}</f:format.raw>
                 </f:form.button>
@@ -250,7 +230,7 @@
          --></f:comment>
 
         <f:form.button type="button" value="{fileItem.uid}" title="<f:format.raw>{f:translate(key:'tx_openoap.general.remove_file')}</f:format.raw>"
-                       class="form__upload-btn-remove-file"  >
+                       class="form__upload-btn-remove-file" name="button-remove-file" >
             <f:render partial="ButtonIcon" arguments="{type:'delete'}"/>
         </f:form.button>
         <sd:downloadLink file="{fileItem}" target="_blank" title="<f:format.raw>{f:translate(key:'tx_openoap.general.download_file')}</f:format.raw>" class="form__upload-btn-download-file" >

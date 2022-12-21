@@ -9,68 +9,78 @@
                     </span>
                     {proposal.title}
                 </h3>
+                <f:if condition="{proposal.call.hidden} == 1">
+                    <p><f:format.raw>{f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage')}</f:format.raw></p>
+                </f:if>
+
                 <f:render partial="Proposal/Info" arguments="{proposal:proposal, constants:constants}" />
             </div>
 
             <div class="proposals__item-options">
-                <button class="proposals__options-control" aria-controls="proposal-item-options-{proposalIter.cycle}" aria-expanded="false" data-disclosure-control data-disclosure-has-overlay><span class="aural">{f:translate(key:'tx_openoap_dashboard.proposal.links.show')}</span><span aria-hidden="true">&#11044;&nbsp;&nbsp;&nbsp;&#11044;&nbsp;&nbsp;&nbsp;&#11044;</span></button>
-                <div id="proposal-item-options-{proposalIter.cycle}" class="proposals__item-options-list" data-disclosure-overlay>
-                    <ul>
-                        <f:if condition="{archiveState}">
-                            <f:then>
-                                <li>
-                                    <f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'dashboard', controller:'Applicant' option:'communication', proposal:proposal, commentsCount:commentsCount}" />
-                                </li>
-                            </f:then>
-                            <f:else>
-                                <li>
-                                    <f:if condition="{proposal.state} < {constants.PROPOSAL_SUBMITTED} || {proposal.state} == {constants.PROPOSAL_RE_OPENED}">
-                                        <f:then><f:render section="OptionLink" arguments="{pageId:settings.formPageId, plugin:'form', action:'edit', controller:'Proposal', option:'edit', proposal:proposal}" /></f:then>
-                                        <f:else><f:render section="OptionSpan" arguments="{option:'edit'}" /></f:else>
-                                    </f:if>
-                                </li>
-                                <li>
-                                    <f:comment><!--
-                                    <f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" />
-                                    <f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadWord', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadWord'}" />
-                                    <f:if condition="{proposal.state} != {constants.PROPOSAL_IN_PROGRESS} && {proposal.state} != {constants.PROPOSAL_RE_OPENED} && {proposal.state} != {constants.PROPOSAL_ARCHIVED}">
-                                        <f:then><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" /></f:then>
-                                        <f:else><f:render section="OptionSpan" arguments="{option:'download'}" /></f:else>
-                                    </f:if>
-                                    --></f:comment>
-                                    <button class="proposals__item-pulldown-control proposals__item-option proposals__item-option--download" data-disclosure-control data-disclosure-has-overlay aria-controls="download-format-list--{proposal.uid}" aria-expanded="false">Download</button>
-                                    <ul class="proposals__item-pulldown-options" id="download-format-list--{proposal.uid}"  data-disclosure-overlay="" >
-                                        <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" /></li>
-                                        <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadWord', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadWord'}" /></li>
-                                        <f:if condition="{filesCount.{proposal.uid}} > 0">
-                                            <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadAttachments', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadAttachments'}" /></li>
+                <f:if condition="{proposal.call.hidden} == 0">
+                    <f:then>
+                        <button class="proposals__options-control" aria-controls="proposal-item-options-{proposalIter.cycle}" aria-expanded="false" data-disclosure-control data-disclosure-has-overlay><span class="aural">{f:translate(key:'tx_openoap_dashboard.proposal.links.show')}</span><span aria-hidden="true">&#11044;&nbsp;&nbsp;&nbsp;&#11044;&nbsp;&nbsp;&nbsp;&#11044;</span></button>
+                        <div id="proposal-item-options-{proposalIter.cycle}" class="proposals__item-options-list" data-disclosure-overlay>
+                        <ul>
+                            <f:if condition="{archiveState}">
+                                <f:then>
+                                    <li>
+                                        <f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'dashboard', controller:'Applicant' option:'communication', proposal:proposal, commentsCount:commentsCount}" />
+                                    </li>
+                                </f:then>
+                                <f:else>
+                                    <li>
+                                        <f:if condition="{proposal.state} < {constants.PROPOSAL_SUBMITTED} || {proposal.state} == {constants.PROPOSAL_RE_OPENED}">
+                                            <f:then><f:render section="OptionLink" arguments="{pageId:settings.formPageId, plugin:'form', action:'edit', controller:'Proposal', option:'edit', proposal:proposal}" /></f:then>
+                                            <f:else><f:render section="OptionSpan" arguments="{option:'edit'}" /></f:else>
                                         </f:if>
+                                    </li>
+                                    <li>
+                                        <f:comment><!--
+                                <f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" />
+                                <f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadWord', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadWord'}" />
+                                <f:if condition="{proposal.state} != {constants.PROPOSAL_IN_PROGRESS} && {proposal.state} != {constants.PROPOSAL_RE_OPENED} && {proposal.state} != {constants.PROPOSAL_ARCHIVED}">
+                                    <f:then><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" /></f:then>
+                                    <f:else><f:render section="OptionSpan" arguments="{option:'download'}" /></f:else>
+                                </f:if>
+                                --></f:comment>
+                                        <button class="proposals__item-pulldown-control proposals__item-option proposals__item-option--download" data-disclosure-control data-disclosure-has-overlay aria-controls="download-format-list--{proposal.uid}" aria-expanded="false">Download</button>
+                                        <ul class="proposals__item-pulldown-options" id="download-format-list--{proposal.uid}"  data-disclosure-overlay="" >
+                                            <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" /></li>
+                                            <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadWord', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadWord'}" /></li>
+                                            <f:if condition="{filesCount.{proposal.uid}} > 0">
+                                                <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadAttachments', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadAttachments'}" /></li>
+                                            </f:if>
 
-                                    </ul>
-                                </li>
-                                <li>
-                                    <f:render section="OptionLink" arguments="{pageId:settings.notificationsPageId, plugin:'notifications', action:'notifications', controller:'Proposal', option:'communication', proposal:proposal, commentsCount:commentsCount}" />
-                                    <f:comment><!--
-                                    <f:if condition="{proposal.state} > {constants.PROPOSAL_IN_PROGRESS}">
-                                        <f:then><f:render section="OptionLink" arguments="{pageId:settings.notificationsPageId, plugin:'notifications', action:'notifications', controller:'Proposal', option:'communication', proposal:proposal, commentsCount:commentsCount}" /></f:then>
-                                        <f:else><f:render section="OptionSpan" arguments="{option:'communication', proposal:proposal, commentsCount:commentsCount}" /></f:else>
-                                    </f:if>
-                                    --></f:comment>
-                                </li>
-                                <li>
-                                    <f:if condition="{proposal.state} < {constants.PROPOSAL_SUBMITTED}">
-                                        <f:then>
-                                            <f:render
-                                                section="OptionLink"
-                                                arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'delete', controller:'Proposal', option:'delete', proposal:proposal, data-oap-modaltext:'JSMSG_MODAL_CONTENT_DELETE',data-oap-modalsubmit:'JSMSG_MODAL_DELETE',data-oap-modalcancel:'JSMSG_MODAL_CANCEL'}" /></f:then>
-                                        <f:else><f:render section="OptionSpan" arguments="{option:'delete'}" /></f:else>
-                                    </f:if>
-                                </li>
-                            </f:else>
-                        </f:if>
-                    </ul>
-                    <span class="proposals__pointer-wrapper"><span class="proposals__pointer"></span></span>
-                </div>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <f:render section="OptionLink" arguments="{pageId:settings.notificationsPageId, plugin:'notifications', action:'notifications', controller:'Proposal', option:'communication', proposal:proposal, commentsCount:commentsCount}" />
+                                        <f:comment><!--
+                                <f:if condition="{proposal.state} > {constants.PROPOSAL_IN_PROGRESS}">
+                                    <f:then><f:render section="OptionLink" arguments="{pageId:settings.notificationsPageId, plugin:'notifications', action:'notifications', controller:'Proposal', option:'communication', proposal:proposal, commentsCount:commentsCount}" /></f:then>
+                                    <f:else><f:render section="OptionSpan" arguments="{option:'communication', proposal:proposal, commentsCount:commentsCount}" /></f:else>
+                                </f:if>
+                                --></f:comment>
+                                    </li>
+                                    <li>
+                                        <f:if condition="{proposal.state} < {constants.PROPOSAL_SUBMITTED}">
+                                            <f:then>
+                                                <f:render
+                                                    section="OptionLink"
+                                                    arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'delete', controller:'Proposal', option:'delete', proposal:proposal, data-oap-modaltext:'JSMSG_MODAL_CONTENT_DELETE',data-oap-modalsubmit:'JSMSG_MODAL_DELETE',data-oap-modalcancel:'JSMSG_MODAL_CANCEL'}" /></f:then>
+                                            <f:else><f:render section="OptionSpan" arguments="{option:'delete'}" /></f:else>
+                                        </f:if>
+                                    </li>
+                                </f:else>
+                            </f:if>
+                        </ul>
+                        <span class="proposals__pointer-wrapper"><span class="proposals__pointer"></span></span>
+                    </div>
+                </f:then>
+
+            </f:if>
+
             </div>
         </li>
     </f:for>

@@ -1,0 +1,6 @@
+
+@mixin disabled-form-element() {
+    border-color: $color-dark-alt-5;
+    color: $color-dark-alt-5;
+    background-color: $color-dark-alt-3;
+}

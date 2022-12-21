@@ -243,3 +243,9 @@ module.tx_openoap_web_openoapbackendproposals {
     }
     settings < plugin.tx_openoap_dashboard.settings
 }
+
+page {
+  includeCSS {
+    open_oap = EXT:open_oap/Resources/Public/Css/styles.css
+  }
+}
