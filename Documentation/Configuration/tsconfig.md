@@ -1,4 +1,51 @@
 # TS config
 
-## single root/tree
+# General notes
 
+Pool folders are limited in the TCA via TSconfig entries, so that certain elements can only be used or assigned under defined specifications. 
+
+# Usage
+
+Include oap.tsconfig in root page of the website under "Ressources" > Page TSconfig
+
+For values see [backend-site-management](../configuration/backend-site-management.md).
+
+```typo3_typoscript
+TCEFORM {
+    tx_openoap_domain_model_call {
+        proposal_pid.PAGE_TSCONFIG_ID = 34
+        form_pages.PAGE_TSCONFIG_ID = 23
+        items.PAGE_TSCONFIG_ID = 21
+        items.PAGE_TSCONFIG_STR = 5
+    }
+    tx_openoap_domain_model_formpage {
+        item_groups.PAGE_TSCONFIG_ID = 22
+    }
+    tx_openoap_domain_model_formgroup {
+        items.PAGE_TSCONFIG_ID = 21
+        group_title.PAGE_TSCONFIG_ID = 22
+        item_groups.PAGE_TSCONFIG_ID = 22
+    }
+    tx_openoap_domain_model_formitem {
+        options.PAGE_TSCONFIG_ID = 25
+        options.PAGE_TSCONFIG_IDLIST = 33,25
+        validators.PAGE_TSCONFIG_ID = 26
+        validators.PAGE_TSCONFIG_IDLIST = 32,26
+    }
+    tx_openoap_domain_model_proposal {
+        answers.PAGE_TSCONFIG_ID = 29
+        comments.PAGE_TSCONFIG_ID = 53
+        applicant.PAGE_TSCONFIG_ID = 27
+    }
+    tx_openoap_domain_model_answer {
+        comments.PAGE_TSCONFIG_ID = 53
+    }
+    tx_openoap_domain_model_logicatom {
+        item.PAGE_TSCONFIG_ID = 21
+    }
+    fe_users {
+        country.PAGE_TSCONFIG_ID = 28
+    }
+}
+
+```
