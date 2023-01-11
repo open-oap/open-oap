@@ -1,0 +1,164 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" 
+    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"  
+    data-namespace-typo3-fluid="true">
+<f:spaceless>
+<div class="box login" id="login">
+    <f:render partial="FlashMessages" arguments="{_all}" />
+    
+    <f:if condition="{settings.welcome_header}">
+        <f:then>
+            <h2>{settings.welcome_header}</h2>
+        </f:then>
+        <f:else>
+            <h2>{f:translate(key:'welcome_header')}</h2>
+        </f:else>
+    </f:if>
+    
+    <f:if condition="{cookieWarning}">
+        <f:render partial="CookieWarning" />
+    </f:if>
+
+    <f:if condition="{messageKey} == 'error'">
+        <v:variable.set name="formError" value="1" />
+    </f:if>
+    
+    <f:if condition="{onSubmit}">
+        <f:then>
+            <f:form class="form" target="_top" fieldNamePrefix="" action="login" onsubmit="{onSubmit}">
+                <f:render section="alert" arguments="{_all}"/>
+                <f:render section="content" arguments="{_all}"/>
+            </f:form>
+        </f:then>
+        <f:else>
+            <f:form class="form" target="_top" fieldNamePrefix="" action="login">
+                <f:render section="alert" arguments="{_all}"/>
+                <f:render section="content" arguments="{_all}"/>
+            </f:form>
+        </f:else>
+    </f:if>
+</div>
+</f:spaceless>
+<f:section name="alert"><f:spaceless>
+    <f:if condition="{messageKey}">
+        <f:if condition="{messageKey} != 'welcome'">
+            <div role="alert" data-complete-message="1">
+                <div class="{f:if(condition:formError, then:'form__error-list-box')}">
+                    <f:comment>
+                        <h3>
+                            <f:render partial="RenderLabelOrMessage" arguments="{key: '{messageKey}_header'}"/>
+                        </h3>
+                    </f:comment>
+                    <p class="form__error-list-text">
+                        <f:render partial="RenderLabelOrMessage" arguments="{key: '{messageKey}_message'}"/>
+                    </p>
+                </div>
+            </div>
+        </f:if>
+    </f:if>
+</f:spaceless></f:section>
+<f:section name="content">
+<f:spaceless>
+    <f:render partial="RequiredInfo" arguments="{}" />
+
+        <div class="form__group{f:if(condition:formError, then:' form__group--error')}">
+            <label for="user">
+                <f:translate key="username"/>
+                <f:render partial="Required" arguments="{}" />
+            </label>
+            <f:form.textfield 
+                name="user" 
+                id="user"
+                class="{f:if(condition:formError, then:'form__error')}"
+                placeholder="{f:translate(key:'username')}"
+                required="1"
+                additionalAttributes="{autocomplete: 'email'}"/>
+        </div>
+        <div class="form__group{f:if(condition:formError, then:' form__group--error')}">
+            <label for="pass">
+                <f:translate key="password"/>
+                <f:render partial="Required" arguments="{}" />
+            </label>
+            <f:form.password 
+                name="pass" 
+                id="pass"
+                class="{f:if(condition:formError, then:'form__error')}"
+                placeholder="{f:translate(key:'password')}"
+                additionalAttributes="{autocomplete: 'current-password', required: 'required'}"/>
+        </div>
+
+        <f:if condition="{permaloginStatus} > -1">
+            <div class="form__group form__group--checkbox">
+                <div class="form__checkable-group form__checkable-group--check">
+                    <label class="form__checkable-label" for="permalogin">
+                        <f:if condition="{permaloginStatus} == 1">
+                            <f:then>
+                                <f:form.hidden 
+                                    name="permalogin" 
+                                    value="0" 
+                                    additionalAttributes="{disabled: 'disabled'}"/>
+                                <f:form.checkbox 
+                                    class="form__checkable"
+                                    name="permalogin" 
+                                    id="permalogin" 
+                                    value="1" 
+                                    checked="checked"/>
+                            </f:then>
+                            <f:else>
+                                <f:form.hidden name="permalogin" value="0"/>
+                                <f:form.checkbox 
+                                    class="form__checkable"
+                                    name="permalogin" 
+                                    id="permalogin" 
+                                    value="1"/>
+                            </f:else>
+                        </f:if>
+                        <span class="form__styled-checkbox"></span>
+                        <f:translate id="permalogin"/>
+                    </label>
+                </div>
+            </div>
+        </f:if>
+
+        <div class="form__buttons">
+            <f:form.button 
+                type="submit" 
+                class="button" 
+                value="1" 
+                data="{dialog-next:1}"
+                name="submit">
+                {f:translate(key: 'login')}
+            </f:form.button>
+        </div>
+        
+        <f:if condition="{settings.showForgotPassword} || {settings.showForgotPasswordLink}">
+            <div class="form__group">
+                <f:link.action 
+                    action="recovery" 
+                    section="login"
+                    controller="PasswordRecovery">
+                    <f:render partial="RenderLabelOrMessage" arguments="{key: 'forgot_header'}"/>
+                </f:link.action>
+            </div>
+        </f:if>
+
+        <div class="felogin-hidden">
+            <f:form.hidden name="logintype" value="login"/>
+            <f:form.hidden name="pid" value="{storagePid}"/>
+            <f:if condition="{redirectURL}!=''">
+                <f:form.hidden name="redirect_url" value="{redirectURL}" />
+            </f:if>
+            <f:if condition="{referer}!=''">
+                <f:form.hidden name="referer" value="{referer}" />
+            </f:if>
+            <f:if condition="{redirectReferrer}!=''">
+                <f:form.hidden name="redirectReferrer" value="off" />
+            </f:if>
+            <f:if condition="{noRedirect}!=''">
+                <f:form.hidden name="noredirect" value="1" />
+            </f:if>
+
+            {extraHidden}
+        </div>
+</f:spaceless>
+</f:section>
+</html>

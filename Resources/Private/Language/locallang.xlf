@@ -1253,6 +1253,94 @@
 				<source><![CDATA[Submit section]]></source>
 			</trans-unit>
 
+			<!-- account user -->
+			<trans-unit id="tx_openoapusers_domain_model_user" resname="tx_openoapusers_domain_model_user">
+				<source>User</source>
+			</trans-unit>
+			<trans-unit id="tx_openoapusers_domain_model_user.company_email" resname="tx_openoapusers_domain_model_user.company_email">
+				<source>Company email address</source>
+			</trans-unit>
+			<trans-unit id="tx_openoapusers_domain_model_user.preferred_lang" resname="tx_openoapusers_domain_model_user.preferred_lang">
+				<source>Preferred language</source>
+			</trans-unit>
+			<trans-unit id="tx_openoapusers_domain_model_user.privacypolicy" resname="tx_openoapusers_domain_model_user.privacypolicy" xml:space="preserve">
+				<source>I have read and acknowledge the %s.</source>
+			</trans-unit>
+			<trans-unit id="tx_openoapusers_domain_model_user.privacypolicy.linkText" resname="tx_openoapusers_domain_model_user.privacypolicy.LinkText">
+				<source>Privacy Policy</source>
+			</trans-unit>
+			<trans-unit id="oap_registration.header" resname="oap_registration.header">
+				<source>Registration</source>
+			</trans-unit>
+			<trans-unit id="oap_profile.header" resname="oap_profile.header">
+				<source>Profile</source>
+			</trans-unit>
+			<trans-unit id="oap_registration.intro" resname="oap_registration.intro">
+				<source>Here you can register in 3 steps to create a user account.</source>
+			</trans-unit>
+			<trans-unit id="oap_registrationform_step1.header" resname="oap_registration_step1.header">
+				<source>Create new account (step 1 of 3)</source>
+			</trans-unit>
+			<trans-unit id="oap_registrationform_step1.intro" resname="oap_registrationform_step1.intro">
+				<source><![CDATA[Enter your email address and agree to the <a target="_blank" href="/data_protection">data protection</a>. You will then receive an email with a confirmation link. By clicking the link inside the confirmation email, you complete your registration. In rare cases our registration email may end up in your spam folder. In this case please check your company's internet settings.]]></source>
+			</trans-unit>
+			<trans-unit id="oap_registrationform_step2.header" resname="oap_registrationform_step2.header">
+				<source>Set a new Password (step 2 of 3)</source>
+			</trans-unit>
+			<trans-unit id="oap_registration_password.info" resname="oap_registration_password.info">
+				<source>The password must be at least 8 characters long. It must contain letters, numbers and special characters (e.g. ! ? _ *).</source>
+			</trans-unit>
+			<trans-unit id="oap_validation_stringMustInclude.error" resname="oap_validation_stringMustInclude.error">
+				<source>The password does not meet the requirements. Please check your entries. It must contain letters, numbers and special characters (e.g. ! ? _ *).</source>
+			</trans-unit>
+			<trans-unit id="oap_registrationform_step3.header" resname="oap_registration_step3.header">
+				<source>Master data (step 3 of 3)</source>
+			</trans-unit>
+			<trans-unit id="oap_registrationform_step3.intro" resname="oap_registrationform_step3.intro">
+				<source>Fill out basic information about your company. You can also enter this data later in your profile.</source>
+			</trans-unit>
+			<trans-unit id="oap_registrationform_skipStep.title" resname="oap_registrationform_skipStep.title">
+				<source>Skip this step</source>
+			</trans-unit>
+			<trans-unit id="oap_profileform_masterdata.intro" resname="oap_profileform_masterdata.intro">
+				<source>Fill out basic information about your company.</source>
+			</trans-unit>
+			<trans-unit id="oap_profileform_otherdata.intro" resname="oap_profileform_otherdata.intro">
+				<source>Please indicate the language(s) you prefer for communication.</source>
+			</trans-unit>
+			<trans-unit id="profile.updateEmail.header" resname="profile.updateEmail.header">
+				<source>New email address</source>
+			</trans-unit>
+			<trans-unit id="profile.updatePassword.header" resname="profile.updatePassword.header">
+				<source>Change password</source>
+			</trans-unit>
+			<trans-unit id="field.updateEmail.label" resname="field.updateEmail.label">
+				<source>New email address</source>
+			</trans-unit>
+			<trans-unit id="field.updateEmail_repeat.label" resname="field.updateEmail_repeat.label">
+				<source>Repeat new email address</source>
+			</trans-unit>
+			<trans-unit id="field.updatePassword.label" resname="field.updatePassword.label">
+				<source>New password</source>
+			</trans-unit>
+			<trans-unit id="field.updatePassword_current.label" resname="field.updatePassword_current.label">
+				<source>Current password</source>
+			</trans-unit>
+			<trans-unit id="field.updatePassword_repeat.label" resname="field.updatePassword_repeat.label">
+				<source>Repeat new password</source>
+			</trans-unit>
+			<trans-unit id="oap_masterdata.header" resname="oap_masterdata.header">
+				<source>Master data</source>
+			</trans-unit>
+			<trans-unit id="oap_masterdata.minimal.info" resname="oap_masterdata.minimal.info">
+				<source>Complete information about your company is not yet available.</source>
+			</trans-unit>
+			<trans-unit id="oap_accessdata.header" resname="oap_accessdata.header">
+				<source>Access data</source>
+			</trans-unit>
+			<trans-unit id="oap_dataEdit.title" resname="oap_dataEdit.title">
+				<source>Edit</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

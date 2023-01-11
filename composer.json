@@ -21,7 +21,7 @@
     "bithost-gmbh/pdfviewhelpers": "^2.4",
     "phpoffice/phpspreadsheet": "^1.22",
     "phpoffice/phpword": "^0.18",
-    "php": ">=7.2",
+    "php": ">=7.4",
     "ext-zip": "*",
     "ext-dom": "*",
 	"ext-json": "*"
@@ -29,7 +29,7 @@
   "require-dev": {
     "typo3/testing-framework": "^6.9.0",
     "friendsofphp/php-cs-fixer": "^3.10",
-    "typo3/coding-standards": "^0.5.5"
+    "typo3/coding-standards": "^0.6.1"
   },
   "autoload": {
     "psr-4": {

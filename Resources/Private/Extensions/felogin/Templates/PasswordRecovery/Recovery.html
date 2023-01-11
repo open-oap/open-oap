@@ -1,0 +1,61 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" 
+    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:spaceless>
+<h3>
+    <f:render partial="RenderLabelOrMessage" arguments="{key: 'forgot_header'}"/>
+</h3>
+<p>
+    <f:render partial="RenderLabelOrMessage" arguments="{key: 'forgot_reset_message'}"/>
+</p>
+
+<f:form.validationResults>
+    <f:if condition="{validationResults.flattenedErrors}">
+        <v:variable.set name="errorStyle" value="error" />
+        <div role="alert" data-complete-message="1">
+            <div class="form__error-list-box">
+                <f:for each="{validationResults.flattenedErrors}" as="errors" key="propertyPath">
+                    <f:for each="{errors}" as="error">
+                        <p class="form__error-list-text">
+                           {error}
+                        </p>
+                    </f:for>
+                </f:for>
+            </div>
+        </div>
+    </f:if>
+</f:form.validationResults>
+
+<f:form action="recovery" class="form" method="post">
+    
+    <div class="form__group{f:if(condition:errorStyle, then:' form__group--{errorStyle}')}">
+        <label for="userIdentifier">
+            <f:translate key="enter_your_data"/>
+            <f:render partial="Required" arguments="{}" />
+        </label>
+        <f:form.textfield 
+            name="userIdentifier" 
+            id="userIdentifier"
+            class="{f:if(condition:errorStyle, then:'form__{errorStyle}')}"
+            placeholder="{f:translate(key:'enter_your_data')}"
+            additionalAttributes="{autocomplete:'email'}"
+            required="true" />
+       
+    </div>
+    <div class="form__buttons">
+        <f:form.button 
+            type="submit" 
+            class="button" 
+            value="1" 
+            data="{dialog-next:1}"
+            name="submit">
+            {f:translate(key: 'reset_password')}
+        </f:form.button>
+    </div>
+    <div class="form__group">
+        <f:link.action action="login" controller="Login">
+            <f:translate key="forgot_header_backToLogin"/>
+        </f:link.action>
+    </div>
+</f:form>
+</f:spaceless>
+</html>

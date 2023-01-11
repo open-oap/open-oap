@@ -1,0 +1,29 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:femanager="In2code\Femanager\ViewHelpers"
+  data-namespace-typo3-fluid="true">
+ 
+ <f:comment>
+  Arguments:
+  {field}
+  {options}
+  {default}
+ </f:comment> 
+ 
+<div class="form__group">
+    <label for="femanager_field_{field}}" class="">
+        <f:translate key="tx_femanager_domain_model_user.{field}" />
+        <f:if condition="{femanager:Validation.IsRequiredField(fieldName:field)}">
+            <f:render partial="Misc/Required" arguments="{}" />
+        </f:if>
+    </label>
+
+    <femanager:form.select
+        id="femanager_field_{field}"
+        property="{field}"
+        options="{options}"
+        defaultOption="{default}"
+        class=""
+        additionalAttributes="{femanager:Validation.FormValidationData(settings:settings,fieldName:field)}" />
+</div>
+
+</html>

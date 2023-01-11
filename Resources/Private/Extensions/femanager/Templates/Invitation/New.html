@@ -1,0 +1,71 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+  xmlns:femanager="In2code\Femanager\ViewHelpers"
+  data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+Invitation / New
+	This view is for the invitation feature:
+	Let a third person create a new user account
+
+	Available variables:
+	{user}
+	{allUserGroups}
+
+<f:section name="main">
+<f:spaceless>
+	<f:form.validationResults for="{object}">
+		<f:if condition="{validationResults.flattenedErrors}">
+			<v:variable.set name="errorCodes"><v:variable.convert type="array"/></v:variable.set>
+			<f:for each="{validationResults.flattenedErrors}" key="propertyPath" as="errors">
+				<f:for each="{errors}" as="error" iteration="errorIterator">
+					<v:variable.set name="errorCodes.{errorIterator.index}" value="{error.arguments.field}"/>
+				</f:for>
+			</f:for>
+		</f:if>
+	</f:form.validationResults>
+<f:comment>
+	<h1><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registration.header" /></h1>
+</f:comment>
+	<p><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registration.intro" /></p>
+	<h2><f:format.raw><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registrationform_step1.header" /></f:format.raw></h2>
+	<p><f:format.raw><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registrationform_step1.intro" /></f:format.raw></p>
+
+
+	<f:form
+		name="user"
+		object="{user}"
+		action="create"
+		additionalAttributes="{data-femanager-plugin:data.uid}"
+		class="form form--register {f:if(condition:'{settings.invitation.validation._enable.client}',then:'feManagerValidation',else:'')}">
+
+		<div role="alert">
+			<f:render partial="Misc/FlashMessages" arguments="{_all}" />
+			<f:render partial="Misc/FormErrors" arguments="{_all}" />
+		</div>
+
+		<f:render partial="Misc/RequiredInfo" arguments="{}" />
+		<f:render section="FormContent" arguments="{_all}" />
+
+	</f:form>
+</f:spaceless>
+</f:section>
+
+<f:section name="FormContent"><f:spaceless>
+	<v:variable.set name="privacyPolicyTranslationArgument" value="{f:translate(key:'tx_femanager_domain_model_user.privacypolicy')}" />
+	<v:variable.set name="termsTranslationArgument" value="{f:translate(key:'tx_femanager_domain_model_user.terms')}" />
+
+	<f:if condition="{settings.misc.termsUrl}">
+		<v:variable.set name="termsTranslationArgument" value="<f:link.typolink parameter='{settings.misc.termsUrl}'>{termsTranslationArgument}</f:link.typolink>" />
+	</f:if>
+
+	<f:render partial="Form/Textfield" arguments="{field:'username', autocomplete:'email', errorCodes:errorCodes}" />
+	<f:comment><!--
+	    <f:render partial="Form/Checkbox" arguments="{field:'terms', value:'terms and conditions', tArguments:'{0:termsTranslationArgument}', errorCodes:errorCodes}" />
+	--></f:comment>
+	<f:render partial="Form/Checkbox" arguments="{field:'privacypolicy', value:'privacy policy condtions', tArguments:'{0:privacyPolicyTranslationArgument}', errorCodes:errorCodes}" />
+	<f:render partial="Form/Submit" arguments="{name:'submit', tKey:'submitNew', dataParam: '{dialog-next:1}'}" />
+
+</f:spaceless></f:section>
+
+</html>

@@ -35,6 +35,7 @@ plugin.tx_openoap_dashboard {
         commentsPoolId = {$plugin.tx_openoap_dashboard.settings.commentsPoolId}
         countriesItemOptionId = {$plugin.tx_openoap_dashboard.settings.countriesItemOptionId}
         testerFeGroupsId = {$plugin.tx_openoap_dashboard.settings.testerFeGroupsId}
+        generalFeGroupsId = {$plugin.tx_openoap_dashboard.settings.generalFeGroupsId}
         metaInfoSeparator = {$plugin.tx_openoap_dashboard.settings.metaInfoSeparator}
         defaultMaxCharTextarea = {$plugin.tx_openoap_dashboard.settings.defaultMaxCharTextarea}
         defaultMaxCharTextfield = {$plugin.tx_openoap_dashboard.settings.defaultMaxCharTextfield}
@@ -249,3 +250,7 @@ page {
     open_oap = EXT:open_oap/Resources/Public/Css/styles.css
   }
 }
+
+# Extension configuration
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:open_oap/Configuration/TypoScript/Extensions/felogin/setup.typoscript">
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:open_oap/Configuration/TypoScript/Extensions/femanager/setup.typoscript">

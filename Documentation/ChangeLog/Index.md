@@ -1,5 +1,32 @@
 # Change log
 
+## Version 1.2
+
+- !important  [TASK] include open_oap_users into open_oap to dissolve the dependence on an own extension
+- [BUGFIX] fix missing quote in FormFields partial for Applicant
+- [BUGFIX]  access viewhelper - catch missing call times
+- style changes - php-cs-fixer
+- js: add switch off for cookie edit button
+- composer.json requirement changed to php 7.4 (instead of 7.2), newer version of typo3/coding-standards
+- add dcoumentation (known issues, add change log)
+
+## Version 1.1.1
+
+- [BUGFIX] create new Answer with additional level of nested groups
+- optimize/refactoring BE module for longer proposal lists
+- catch failure in case of missing files (but reference in answer)
+- access control on dashboard w additional rules, new viewhelper
+- correction of namespace (typo) in AjaxUpload
+- [BUGFIX] word output: radio button checked?
+- no htmlspecialchars function-  to avoid html entities
+- refactoring create Word output for selection options
+- common function even without backend user (using in FE context)
+- Backend output count of proposals in draft state
+- remove tab in feUser dialog to avoid access to proposals
+- backend validation max chars - cleaned string like FE
+- few documentation changes
+- few clean ups - remove lines and files
+
 ## Version 1.1.0
 
 - first live state

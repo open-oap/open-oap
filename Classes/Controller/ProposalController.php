@@ -20,14 +20,17 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\EmailAddressValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\FloatValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\IntegerValidator;
@@ -281,7 +284,7 @@ class ProposalController extends OapFrontendController
 
         /** @var FormItem $item */
         foreach ($this->items as $item) {
-            $itemUid = (integer)$item->getUid();
+            $itemUid = (int)$item->getUid();
 
             // build validation and options array
             if (!$itemsMap[$item->getUid()]) {
@@ -296,7 +299,7 @@ class ProposalController extends OapFrontendController
             // check: is this answer is existing - in case of changing the form after creating this proposal
             /** @var Answer $answer */
             if (!$this->answers[$itemUid]) {
-                $answer = new Answer($item, $this->groups[$itemUid], 0, (integer)$this->settings['answersPoolId']);
+                $answer = new Answer($item, $this->groups[$itemUid], 0, (int)$this->settings['answersPoolId']);
                 $this->answerRepository->add($answer);
                 $proposal->addAnswer($answer);
                 $log = $this->createLog(self::LOG_FORM_CHANGED_ADDED_ITEM, $proposal, $answer->getItem()->getQuestion());
@@ -454,7 +457,7 @@ class ProposalController extends OapFrontendController
 
         //DebuggerUtility::var_dump($this->request->getArguments());die();
         if ($this->request->hasArgument('currentPage')) {
-            $currentPage = (integer)$this->request->getArgument('currentPage');
+            $currentPage = (int)$this->request->getArgument('currentPage');
             $nextPage = $currentPage;
         }
 
@@ -916,7 +919,7 @@ class ProposalController extends OapFrontendController
                         break;
                     case self::VALIDATOR_MAXCHAR:
                         $cleanedString = preg_replace('~[\n\r\t]~', '', $answer->getValue());
-                        if (mb_strlen($cleanedString) > (integer)$validator->getParam1()) {
+                        if (mb_strlen($cleanedString) > (int)$validator->getParam1()) {
                             $this->setValidationResult(
                                 $validationResult,
                                 $answer,
@@ -1062,7 +1065,7 @@ class ProposalController extends OapFrontendController
         /** @var FormItem $item */
         foreach ($group->getItems() as $item) {
             // create new answer object
-            $answer = new Answer($item, $group, $groupCounterL0, $groupCounterL1, (integer)$this->settings['answersPoolId']);
+            $answer = new Answer($item, $group, $groupCounterL0, $groupCounterL1, (int)$this->settings['answersPoolId']);
             // set Default  depends on groupCounter (only first group will get the default value
             // only in level 1 are items
             if ($groupCounterL0 == 0 and $groupCounterL1 == 0) {
@@ -1114,11 +1117,11 @@ class ProposalController extends OapFrontendController
                     } elseif ($addGroupData['L1GroupUid'] > 0) {
                         // inside a meta group
                         foreach ($itemGroup->getItemGroups() as $itemGroupL1) {
-                            if ($itemGroupL1->getUid() == (integer)$addGroupData['L1GroupUid']) {
+                            if ($itemGroupL1->getUid() == (int)$addGroupData['L1GroupUid']) {
                                 $this->createAnswersOfGroup(
                                     $proposal,
                                     $itemGroupL1,
-                                    (integer)$addGroupData['L0GroupIndex'],
+                                    (int)$addGroupData['L0GroupIndex'],
                                     $groupsCounter[$itemGroup->getUid()]['instances'][$addGroupData['L0GroupIndex']][$itemGroupL1->getUid()]['current']
                                 );
                                 $groupsCounter[$itemGroup->getUid()]['instances'][$addGroupData['L0GroupIndex']][$itemGroupL1->getUid()]['current']++;

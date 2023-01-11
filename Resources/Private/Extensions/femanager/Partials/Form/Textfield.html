@@ -1,0 +1,28 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:femanager="In2code\Femanager\ViewHelpers"
+  data-namespace-typo3-fluid="true">
+  
+<div class="form__group">
+    <v:condition.iterator.contains needle="{field}" haystack="{errorCodes}">{v:variable.set(name:'inError',value:'1')}</v:condition.iterator.contains>
+    <v:variable.set name="additionalAttrs"><v:variable.convert type="array"/></v:variable.set>
+    <f:if condition="{autocomplete}"><v:variable.set name="additionalAttrs.autocomplete" value="{autocomplete}" /></f:if>
+    <f:if condition="{femanager:Validation.IsRequiredField(fieldName:field)}"><v:variable.set name="additionalAttrs.aria-required" value="true" /></f:if>
+    <f:if condition="{inError}"><v:variable.set name="additionalAttrs.aria-invalid" value="true" /></f:if>
+
+    <label for="femanager_field_{field}}"{f:if(condition:'{inError}',then:' class="form__error"')}>
+        <f:translate key="tx_femanager_domain_model_user.{field}" />
+        <f:if condition="{femanager:Validation.IsRequiredField(fieldName:field)}">
+            <v:variable.set name="additionalAttrs.aria-required" value="true" />
+            <f:render partial="Misc/Required" arguments="{}" />
+        </f:if>
+    </label>
+
+    <femanager:form.textfield
+        id="femanager_field_{field}"
+        property="{field}"
+        class="{f:if(condition:'{inError}',then:'form__error')}"
+        placeholder="{f:translate(key:'tx_femanager_domain_model_user.{field}')}"
+        additionalAttributes="{femanager:Validation.FormValidationData(settings:settings,fieldName:field,additionalAttributes:additionalAttrs)}" />
+</div>
+
+</html>

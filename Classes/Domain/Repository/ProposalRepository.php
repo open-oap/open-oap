@@ -105,6 +105,84 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function findDemanded(int $pid, int $minStatusLevel, array $filter = [], array $sorting = [])
     {
+        if ($filter['state'] and $filter['state'] !== '') {
+            $andState = ' AND Proposal.`state` = '. $filter['state'];
+        } else {
+            $andState = ' AND Proposal.`state` >= '. $minStatusLevel;
+        }
+
+        $stmt  = 'SELECT ';
+        $stmt .= ' Proposal.uid AS uid, Proposal.title, Proposal.edit_tstamp AS editTstamp, Proposal.state, Proposal.signature, Proposal.applicant, Proposal.tx_openoap_call AS `call`, ';
+        $stmt .= ' Applicant.uid, Applicant.username, ';
+        $stmt .= ' `Call`.uid AS Call_uid, `Call`.title AS Call_title, `Call`.shortcut AS Call_shortcut';
+        $stmt .= ' FROM `tx_openoap_domain_model_proposal` AS Proposal';
+        $stmt .= ' JOIN fe_users AS Applicant ON Applicant.uid = Proposal.applicant';
+        $stmt .= ' JOIN tx_openoap_domain_model_call AS `Call` ON `Call`.uid = Proposal.tx_openoap_call';
+        $stmt .= ' WHERE ';
+        $stmt .= ' Proposal.`pid` = '.$pid;
+        $stmt .= $andState;
+        $stmt .= ' AND Proposal.`tx_openoap_call` = '.$filter['call'];
+        $stmt .= ' AND Proposal.`archived` = 0';
+
+//        DebuggerUtility::var_dump($stmt, 'statement');
+
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_openoap_domain_model_proposal');
+        $queryBuilder = $connection->createQueryBuilder();
+        if ($filter['state'] and $filter['state'] !== '') {
+            $stateWhere = $queryBuilder->expr()->eq('tx_openoap_domain_model_proposal.state', $queryBuilder->createNamedParameter($filter['state'], \PDO::PARAM_INT));
+        } else {
+            $stateWhere = $queryBuilder->expr()->gte('tx_openoap_domain_model_proposal.state', $queryBuilder->createNamedParameter($minStatusLevel, \PDO::PARAM_INT));
+        }
+        $query = $queryBuilder
+//            ->select('*')
+            ->select(
+                'tx_openoap_domain_model_proposal.uid',
+                'tx_openoap_domain_model_proposal.title',
+                'tx_openoap_domain_model_proposal.edit_tstamp AS editTstamp',
+                'tx_openoap_domain_model_proposal.state',
+                'tx_openoap_domain_model_proposal.signature',
+                'tx_openoap_domain_model_proposal.applicant',
+                'tx_openoap_domain_model_proposal.tx_openoap_call AS `call`',
+//                'Applicant.uid',
+                'Applicant.company AS applicant_company',
+                'Applicant.username AS applicant_username',
+//                'Call.uid',
+                'Call.title AS call_title'
+            )
+            ->from('tx_openoap_domain_model_proposal')
+            ->join(
+                'tx_openoap_domain_model_proposal',
+                'fe_users',
+                'Applicant',
+                $queryBuilder->expr()->eq('Applicant.uid', $queryBuilder->quoteIdentifier('tx_openoap_domain_model_proposal.applicant'))
+            )
+            ->join(
+                'tx_openoap_domain_model_proposal',
+                'tx_openoap_domain_model_call',
+                'Call',
+                $queryBuilder->expr()->eq('Call.uid', $queryBuilder->quoteIdentifier('tx_openoap_domain_model_proposal.tx_openoap_call'))
+            )
+            ->where(
+                $queryBuilder->expr()->eq('tx_openoap_domain_model_proposal.pid', $queryBuilder->createNamedParameter($pid, \PDO::PARAM_INT)),
+                $stateWhere
+            );
+//            ->executeQuery();
+//        DebuggerUtility::var_dump($query->getSQL(),__LINE__.' ');
+//        DebuggerUtility::var_dump($query->executeQuery()->fetchAllAssociative());
+        //die();
+        return $query->executeQuery()->fetchAllAssociative();
+
+        $query = $this->createQuery();
+        $rows = $query->statement($stmt)->execute()->fetchAll();
+        DebuggerUtility::var_dump($rows);
+        die();
+        $result = $query->statement($stmt)->execute();
+        DebuggerUtility::var_dump($result);
+
+        return $result;
+//        DebuggerUtility::var_dump($result);
+//        die();
+
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(false);
         $query->getQuerySettings()->setRespectStoragePage(true);

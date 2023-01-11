@@ -141,5 +141,9 @@ CREATE TABLE tx_openoap_domain_model_formpage (
 );
 
 CREATE TABLE fe_users (
-	categories int(11) unsigned DEFAULT '0' NOT NULL
+	categories int(11) unsigned DEFAULT '0' NOT NULL,
+    street_num varchar(255) NOT NULL DEFAULT '',
+    company_email varchar(255) NOT NULL DEFAULT '',
+    preferred_lang varchar(255) NOT NULL DEFAULT '',
+    privacypolicy tinyint(3) DEFAULT '0' NOT NULL
 );

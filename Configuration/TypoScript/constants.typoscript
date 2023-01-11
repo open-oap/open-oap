@@ -38,6 +38,8 @@ plugin.tx_openoap_dashboard {
         commentsPoolId = 53
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.masterdata.countries_item_option_id
         countriesItemOptionId = 28
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.general_fe_groups_id
+        generalFeGroupsId = 1
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.tester_fe_groups_id
         testerFeGroupsId = 2
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.dashboard.meta_info_separator
@@ -115,3 +117,7 @@ module.tx_openoap_backendproposals {
         storagePid =
     }
 }
+
+# Extension constants
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:open_oap/Configuration/TypoScript/Extensions/femanager/constants.typoscript">
+

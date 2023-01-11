@@ -25,7 +25,7 @@ use OpenOAP\OpenOap\Domain\Repository\FormItemRepository;
 use OpenOAP\OpenOap\Domain\Repository\ItemOptionRepository;
 use OpenOAP\OpenOap\Domain\Repository\ProposalRepository;
 
-use OpenOAP\OpenOapUsers\Domain\Model\User;
+use OpenOAP\OpenOap\Domain\Model\User;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Shared\Converter;
@@ -503,7 +503,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected function createLog(int $logCode, Proposal $proposal=null, string $parameter = ''): Comment
     {
         $log = new Comment();
-        ObjectAccess::setProperty($log, 'pid', (integer)$this->settings['commentsPoolId']);
+        ObjectAccess::setProperty($log, 'pid', (int)$this->settings['commentsPoolId']);
         $log->setSource(self::COMMENT_SOURCE_AUTO);
         $log->setState(self::COMMENT_STATE_NEW);
         $log->setCreated(time());
@@ -967,7 +967,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public static function convertStrToBytes(string $str): int
     {
         $str = preg_replace(['~ ~', '~,~'], ['', '.'], $str);
-        $num = (double)$str;
+        $num = (float)$str;
         if (strtoupper(substr($str, -1)) == 'B') {
             $str = substr($str, 0, -1);
         }
@@ -988,7 +988,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $num *= 1024;
         }
 
-        return (integer)round($num);
+        return (int)round($num);
     }
 
     /**
@@ -1035,7 +1035,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         if (trim($proposal->getCall()->getShortcut()) !== '') {
             $signature .=  trim($proposal->getCall()->getShortcut());
         }
-        $signature .=  sprintf($this->settings['signatureFormat'], (integer)$proposal->getSignature());
+        $signature .=  sprintf($this->settings['signatureFormat'], (int)$proposal->getSignature());
         return $signature;
     }
 
@@ -1084,8 +1084,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 // todo write log or flash for information that call has changed
                 continue;
             }
-            $itemUid = (integer)$item->getUid();
-            $answerUid = (integer)$answer->getUid();
+            $itemUid = (int)$item->getUid();
+            $answerUid = (int)$answer->getUid();
             if (!$itemsMap[$itemUid]) {
                 $itemsMap[$itemUid] = $this->initializeItemsMap($item);
                 $this->getOptionsToItemsMap($item, $itemsMap);
@@ -1285,7 +1285,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         $this->createWordGroupTitleBlock($itemGroupL0, $groupIndexL0, $currentL1, $section, $format);
 
                         foreach ($itemGroupL0->getItemGroups() as $itemGroupL1) {
-                            $currentL1 = (integer)$groupsCounter[$itemGroupL0->getUid()]['instances'][$groupIndexL0][$itemGroupL1->getUid()]['current'];
+                            $currentL1 = (int)$groupsCounter[$itemGroupL0->getUid()]['instances'][$groupIndexL0][$itemGroupL1->getUid()]['current'];
 
                             if ($itemGroupL1->getDisplayType() == self::GROUPDISPLAY_DEFAULT) {
                                 $this->createWordDefaultGroup(
@@ -1700,18 +1700,33 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             if ($value !== '' and $answer->getItem()->getType() == self::TYPE_UPLOAD) {
                 $files = explode(',', $value);
                 foreach ($files as $fileId) {
-                    $file = $this->resourceFactory->getFileObject($fileId);
+                    try {
+                        $file = $this->resourceFactory->getFileObject($fileId);
+                    } catch(\TYPO3\CMS\Core\Resource\Exception $e) {
+                        //  echo 'Exception abgefangen: ', $e->getMessage();
+                        // die();
+                        $file = null;
+                    }
 
-                    if ($proposalPathName !== '') {
-                        $fileSaveAs = $storage->sanitizeFileName($zipName) . '/' . $storage->sanitizeFileName($userNamePath) . '/' . $storage->sanitizeFileName($proposalPathName) . '/' . basename($file->getIdentifier());
-                    } else {
-                        $fileSaveAs = basename($file->getIdentifier());
+                    if ($file) {
+                        if ($proposalPathName !== '') {
+                            $fileSaveAs = $storage->sanitizeFileName($zipName) .
+                                          '/' .
+                                          $storage->sanitizeFileName($userNamePath) .
+                                          '/' .
+                                          $storage->sanitizeFileName($proposalPathName) .
+                                          '/' .
+                                          basename($file->getIdentifier());
+                        } else {
+                            $fileSaveAs = basename($file->getIdentifier());
+                        }
+                        if (file_exists($absoluteBasePath . $file->getIdentifier())) {
+                            $zip->addFile($absoluteBasePath . $file->getIdentifier(), $fileSaveAs);
+                        } else {
+                            // DebuggerUtility::var_dump($absoluteBasePath . $file->getIdentifier() .  ' not found!',(string)__LINE__);
+                            // flashmassage: there was an error
+                        }
                     }
-                    if (file_exists($absoluteBasePath . $file->getIdentifier())) {
-                        $zip->addFile($absoluteBasePath . $file->getIdentifier(), $fileSaveAs);
-                    }
-                    // DebuggerUtility::var_dump($absoluteBasePath . $file->getIdentifier() .  ' not found!',(string)__LINE__);
-                    // flashmassage: there was an error
                 }
             }
         }
@@ -1893,15 +1908,23 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     $files = explode(',', $answer->getValue());
                     foreach ($files as $fileId) {
                         /** @var File $file */
-                        $file = $this->resourceFactory->getFileObject($fileId);
-                        $size = $this->convertFilesizeToHumanReadableBytes($file->getProperties()['size'], 0);
+                        try {
+                            $file = $this->resourceFactory->getFileObject($fileId);
+                        } catch(\TYPO3\CMS\Core\Resource\Exception $e) {
+                            //  echo 'Exception abgefangen: ', $e->getMessage();
+                            // die();
+                            $file = null;
+                        }
+                        if ($file) {
+                            $size = $this->convertFilesizeToHumanReadableBytes($file->getProperties()['size'], 0);
 
-                        $this->addTextToSection(
-                            $section,
-                            ' ' . $file->getName() . ' (' . $size . ')',
-                            null,
-                            $valueOutputFormat
-                        );
+                            $this->addTextToSection(
+                                $section,
+                                ' ' . $file->getName() . ' (' . $size . ')',
+                                null,
+                                $valueOutputFormat
+                            );
+                        }
                     }
                 } else {
                     $this->addTextToSection($section, ' ', null, $valueOutputFormat);
@@ -2303,7 +2326,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $groupTitle = $groupTitleObject->getTitle();
             }
         } else {
-            $counterOutput = ($current > 1) ? '#' . (integer)($i + 1) : '';
+            $counterOutput = ($current > 1) ? '#' . (int)($i + 1) : '';
             if ($itemGroup->getTitle()) {
                 $groupTitle .= $itemGroup->getTitle() . ' ';
             }
@@ -2349,30 +2372,42 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->getOptionsToItemsMap($item, $itemsMap);
         $checksArray = json_decode($answer->getValue(), true);
         $checks = [];
+        $rawSelectedOptions = [];
         if (is_array($checksArray)) {
             foreach ($checksArray as $check) {
                 $checks[md5($check)] = $check;
+                $rawSelectedOptions[] = $check;
             }
         }
 
         $selectionInline = '';
         $inline = $this->decideInline($itemsMap[$item->getUid()]['options']);
 
+        $selectedOption = [];
         foreach ($itemsMap[$item->getUid()]['options'] as $option) {
             // check if option is set?
             // $option['key'] == $answer->getValue()
             if ($checks[md5($option['key'])] or $option['key'] == $answer->getValue()) {
-                $mark = $checkStart . $checkedChar . $checkEnd;
+                $mark = $checkStart.$checkedChar.$checkEnd;
+                $selectedOption[] = $option['key'];
             } else {
-                $mark = $checkStart . ' ' . $checkEnd;
+                $mark = $checkStart.' '.$checkEnd;
             }
             if ($inline) {
                 $selectionInline .= $mark . ' ' . preg_replace('~\|~', ' ', $option['key']) . '  ';
             } else {
                 $content = $mark . ' ' . preg_replace('~\|~', ' ', $option['key']);
                 $this->addTextToSection($section, $content, null, $valueOutputFormat);
-//                $this->addHtmlToSection($section,$content);
             }
+        }
+        // check if there are none translated options selected
+        // todo betterment... here just a first step... output of all selected options - even if one or more of them are in output before
+        if (count($selectedOption) !== count($checks) and is_array($checksArray)) {
+            $content = '(not translated options selected: '.implode(', ', $rawSelectedOptions).') ';
+            $this->addTextToSection($section, $content, null, $valueOutputFormat);
+        } elseif ($answer->getValue() !== '' and !count($selectedOption)) {
+            $content = '(not translated option selected: '.$answer->getValue().') ';
+            $this->addTextToSection($section, $content, null, $valueOutputFormat);
         }
         if ($inline) {
             $this->addTextToSection($section, $selectionInline, null, $valueOutputFormat);

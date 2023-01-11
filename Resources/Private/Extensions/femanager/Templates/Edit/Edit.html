@@ -1,0 +1,102 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+  xmlns:femanager="In2code\Femanager\ViewHelpers"
+  data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+	User / Edit
+	Available variables:
+	{user}
+	{allUserGroups}
+
+
+		<f:section name="main"><f:spaceless>
+			<f:if condition="{user}">
+				<f:then>
+					<f:if condition="{settings.registerMasterdata}">
+						<f:then>
+							<f:render section="Register-STEP-3" arguments="{_all}" />
+						</f:then>
+						<f:else>
+							<f:render section="CREATED" arguments="{_all}" />
+						</f:else>
+					</f:if>
+				</f:then>
+				<f:else>
+					<p>
+						<f:translate key="notLoggedIn" />
+					</p>
+				</f:else>
+			</f:if>
+		</f:spaceless></f:section>
+
+		<f:comment>REGISTRATION STEP 3</f:comment>
+		<f:section name="Register-STEP-3"><f:spaceless>
+			<f:comment>
+				<h1><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registration.header" /></h1>
+
+				<h2><f:format.raw><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registrationform_step3.header" /></f:format.raw></h2>
+
+				<p><f:format.raw><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registrationform_step3.intro" /></f:format.raw></h3>
+			</f:comment>
+
+			<f:render partial="Misc/FlashMessages" arguments="{_all}" />
+			<f:render partial="Misc/FormErrors" arguments="{object:User}" />
+
+			<f:form
+					name="user"
+					object="{user}"
+					action="update"
+					additionalAttributes="{data-femanager-plugin:data.uid}"
+					class="form form--register {f:if(condition:'{settings.invitation.validation._enable.client}',then:'feManagerValidation',else:'')}">
+
+					<f:form.hidden name="token" value="{token}" />
+
+					<f:render partial="Form/MasterData" arguments="{_all}" />
+
+				<div class="form__buttons">
+					<f:link.typolink class="button button--alternative" parameter="{settings.dashboardPid}">
+						<f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registrationform_skipStep.title" />
+					</f:link.typolink>
+					<f:render partial="Form/Submit" arguments="{name:'submit', tKey:'submitSave', dataParam: '{dialog-next:1}', wrapped: 1}" />
+				</div>
+			</f:form>
+		</f:spaceless></f:section>
+
+
+		<f:comment>MASTER DATA</f:comment>
+		<f:section name="CREATED"><f:spaceless>
+			<v:variable.set name="stateEdit" value="1" />
+
+			<f:comment>
+			<h1><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_masterdata.header" /></h1>
+			</f:comment>
+			<h2><f:translate key="masterdata.edit.label" /></h2>
+			<p><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_profileform_masterdata.intro" /></p>
+
+			<f:render partial="Misc/FlashMessages" arguments="{_all}" />
+			<f:render partial="Misc/FormErrors" arguments="{object:User}" />
+
+			<f:form
+					name="user"
+					object="{user}"
+					action="update"
+					additionalAttributes="{data-femanager-plugin:data.uid}"
+					class="form form--register {f:if(condition:'{settings.invitation.validation._enable.client}',then:'feManagerValidation',else:'')}">
+
+					<f:form.hidden name="token" value="{token}" />
+
+					<div>
+						<f:render partial="Form/MasterData" arguments="{_all}" />
+					</div>
+
+					<div class="form__buttons">
+						<f:link.typolink class="button button--alternative" parameter="{settings.dashboardPid}">
+							<f:translate key="submitClose" />
+						</f:link.typolink>
+						<f:render partial="Form/Submit" arguments="{name:'save', tKey:'submitSave', dataParam: '{dialog-next:1}', wrapped: 1}" />
+					</div>
+			</f:form>
+		</f:spaceless></f:section>
+
+</html>

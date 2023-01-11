@@ -1,0 +1,28 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:femanager="In2code\Femanager\ViewHelpers"
+  data-namespace-typo3-fluid="true">
+<div class="{fieldWrapperClasses} form__group--checkbox">
+    <div class="form__checkable-group form__checkable-group--check">
+
+        <label class="form__checkable-label" for="femanager_field_privacypolicy">
+            <f:form.hidden property="privacypolicy" />
+            <f:form.checkbox
+                    id="femanager_field_privacypolicy"
+                    class="form__checkable"
+                    property="privacypolicy"
+                    value="privacypolicy conditions"
+                    checked="false"
+                    additionalAttributes="{femanager:Validation.FormValidationData(settings:settings,fieldName:'privacypolicy')}" />
+            <span class="form__styled-checkbox"></span>
+            <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoapusers_domain_model_user.privacypolicy" />
+            <f:if condition="{femanager:Validation.IsRequiredField(fieldName:'privacypolicy')}">
+                <f:render partial="Misc/Required" arguments="{}" />
+            </f:if>
+            <f:if condition="{settings.misc.privacypolicyUrl}">
+                <br><span><f:link.page pageUid="{settings.misc.privacypolicyUrl}"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoapusers_domain_model_user.privacypolicy.linktext" /></f:link.page></span>
+            </f:if>
+        </label>
+          
+    </div>
+</div>
+</html>

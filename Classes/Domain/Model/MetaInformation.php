@@ -85,9 +85,9 @@ class MetaInformation implements JsonSerializable
             $this->groupsCounter = $groupsArray;
         }
 
-        $this->lastPage = (isset($jsonArray['lastPage'])) ? (integer)$jsonArray['lastPage'] : 1;
+        $this->lastPage = (isset($jsonArray['lastPage'])) ? (int)$jsonArray['lastPage'] : 1;
 
-        $this->limitEditableFields = (isset($jsonArray['limitEditableFields'])) ? (integer)$jsonArray['limitEditableFields'] : 0;
+        $this->limitEditableFields = (isset($jsonArray['limitEditableFields'])) ? (int)$jsonArray['limitEditableFields'] : 0;
 
         return $this;
     }

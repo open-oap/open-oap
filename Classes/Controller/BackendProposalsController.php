@@ -13,10 +13,13 @@ use OpenOAP\OpenOap\Domain\Model\FormPage;
 use OpenOAP\OpenOap\Domain\Model\GroupTitle;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
+use OpenOAP\OpenOap\Domain\Repository\ProposalRepository;
 
 use PhpOffice\PhpWord\TemplateProcessor;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
@@ -72,7 +75,7 @@ class BackendProposalsController extends OapBackendController
             $grantedToAll = true;
         }
         // get all calls
-        $callPid = (integer)$this->settings['callPid'];
+        $callPid = (int)$this->settings['callPid'];
         $callsQueryResult = $this->callRepository->findAllByPid($callPid);
 
         $calls = [];
@@ -166,7 +169,7 @@ class BackendProposalsController extends OapBackendController
             $filter = [];
         }
 
-        $callPid = (integer)$this->settings['callPid'];
+        $callPid = (int)$this->settings['callPid'];
         $calls = $this->callRepository->findAllByPid($callPid);
 
         $states['filter'] = $this->createStatesArray('selected');
@@ -873,8 +876,18 @@ class BackendProposalsController extends OapBackendController
                             $files = explode(',', $answer->getValue());
                             $values = [];
                             foreach ($files as $file) {
-                                $fileObj = $this->resourceFactory->getFileObject($file);
-                                $values[] = $fileObj->getName();
+                                try {
+                                    $fileObj = $this->resourceFactory->getFileObject($file);
+                                } catch(\TYPO3\CMS\Core\Resource\Exception $e) {
+//                                    echo 'Exception abgefangen: ', $e->getMessage();
+//                                    die();
+                                    $fileObj = null;
+                                }
+                                if ($fileObj) {
+                                    $values[] = $fileObj->getName();
+                                } else {
+                                    $values[] = '****missing FILE? '.$file;
+                                }
                             }
                             $value = implode(', ', $values);
                         }
@@ -933,7 +946,7 @@ class BackendProposalsController extends OapBackendController
                 $groupTitle = $group->getGroupTitle()[$index];
                 $postfix = ' - ' . $groupTitle->getTitle();
             } else {
-                $postfix = ' #' . (integer)($index + 1);
+                $postfix = ' #' . (int)($index + 1);
             }
         }
         return $group->getTitle() . $postfix;
