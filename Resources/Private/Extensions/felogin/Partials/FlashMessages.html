@@ -1,0 +1,13 @@
+<f:for each="{0:'tx_femanager_pi1', 1:'tx_felogin_login'}" as="pluginIdentifier">
+	<v:variable.set name="queueIdentifier" value="extbase.flashmessages.{pluginIdentifier}" />
+
+	<f:flashMessages queueIdentifier="{queueIdentifier}" as="flashMessages">
+		<div role="alert" class="form__status">
+			<f:for each="{flashMessages}" as="flashMessage">
+				<p class="form__message form__message-{flashMessage.severity}">
+					{flashMessage.message}
+				</p>
+			</f:for>
+		</div>
+	</f:flashMessages>
+</f:for>

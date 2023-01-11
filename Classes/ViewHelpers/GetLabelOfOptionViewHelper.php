@@ -59,7 +59,8 @@ class GetLabelOfOptionViewHelper extends AbstractViewHelper
             if ($optionMap[$value]) {
                 $returnItems[] = $optionMap[$value];
             } elseif ($optionMap[$key]) {
-                $returnItems[] = $optionMap[$key] . ' ** old data - may be value is missing or changed';
+                // todo use translatable string or change to translatable items (not implemented yet)
+                $returnItems[] = $value . ' (not translated selection)'; // $optionMap[$key] . ' ** old data - may be value is missing or changed';
             }
         }
 

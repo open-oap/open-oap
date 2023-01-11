@@ -38,7 +38,7 @@ Available variables:
           <div class="profile">
             <f:render partial="Applicant/Properties" section="Summary" arguments="{applicant:applicant, countries:countries, settings:settings}" />
             <div class="profile__edit-link">
-            <f:link.action action="edit" controller="Applicant" pageUid="{settings.masterdataEditPageId}">
+            <f:link.action action="edit" controller="Applicant" pageUid="{settings.masterdataEditPageId}" arguments="{applicant:applicant}">
               {f:translate(key:'tx_openoap_dashboard.masterdata.linkEdit.title')}
             </f:link.action>
             </div>

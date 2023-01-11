@@ -5,6 +5,7 @@ Available variables:
     {countOfItems}
     {filter}
     {states}
+    {states}
     {filterSelects}
     {stateReopenedValue}
     {calls}
@@ -214,7 +215,7 @@ Available variables:
                         </span>
                     </td>
                     <td class="col-title">
-                        <f:link.action action="showProposal" arguments="{proposal:proposal}" class="" title="{f:translate(key:'action.show_proposal')}">
+                        <f:link.action action="showProposal" arguments="{proposal:proposal.uid}" class="" title="{f:translate(key:'action.show_proposal')}">
                             {proposal.title}
                         </f:link.action><br />
                         <v:variable.set name="jsonArray" value="{proposal.metaInformation -> v:format.json.decode()}"/>
@@ -229,7 +230,7 @@ Available variables:
                     </td>
                     <td nowrap="nowrap" class="col-title">
                         <f:if condition="{proposal.signature} > 0">
-                            <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+                            <f:if condition="{call.shortcut} !== ''">{call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
                         </f:if>
 
                     </td>
@@ -240,7 +241,7 @@ Available variables:
                         {proposal.editTstamp -> f:format.date(format:'d.m.Y H:i')}
                     </td>
                     <td nowrap="nowrap">
-                        <f:if condition="{proposal.applicant.company}">{proposal.applicant.company} </f:if><br>{proposal.applicant.username}
+                        <f:if condition="{proposal.applicant_company}">{proposal.applicant_company} </f:if><br>{proposal.applicant_username}
                     </td>
                 </tr>
             </f:for>
@@ -249,7 +250,7 @@ Available variables:
         </table>
         </f:form>
         </div>
-        <f:render partial="Utility/Paginator" arguments="{pagination: pagination, pages: pages, paginator: paginator, actionName: 'listForms'}" />
+        <f:render partial="Utility/Paginator" arguments="{pagination: pagination, pages: pages, paginator: paginator, actionName: 'listProposals', call: call}" />
         <f:comment><!-- <f:debug>{forms}</f:debug> --></f:comment>
 
     </f:section>

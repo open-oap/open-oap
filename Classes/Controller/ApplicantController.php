@@ -111,7 +111,7 @@ class ApplicantController extends OapFrontendController
     public function editAction(Applicant $applicant=null): \Psr\Http\Message\ResponseInterface
     {
         $this->view->assignMultiple([
-            'applicant' => $applicant == $this->applicant ? $applicant : $this->applicant,
+            'applicant' => $applicant === $this->applicant ? $applicant : $this->applicant,
             'countries' => $this->countries,
             'settings' => $this->settings,
         ]);
@@ -166,7 +166,7 @@ class ApplicantController extends OapFrontendController
             $proposalsArchivedCommentsCount = $this->countProposalComments($proposalsArchived, 1);
             $proposalsArchivedAttachmentsCount = $this->countProposalAttachments($proposalsArchived);
 
-            $calls = $this->callRepository->findAllByPid((integer)$this->settings['callPid']);
+            $calls = $this->callRepository->findAllByPid((int)$this->settings['callPid']);
 
             $countAllProposalsActive = $this->proposalRepository->countProposalsByApplicant(
                 $this->applicant,

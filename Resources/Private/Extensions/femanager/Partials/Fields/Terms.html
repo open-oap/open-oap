@@ -1,0 +1,28 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:femanager="In2code\Femanager\ViewHelpers"
+  data-namespace-typo3-fluid="true">
+<div class="{fieldWrapperClasses} form__group--checkbox">
+    <div class="form__checkable-group form__checkable-group--check">
+
+        <label class="form__checkable-label" for="femanager_field_terms">
+            <f:form.hidden property="terms" />
+            <f:form.checkbox
+                    id="femanager_field_terms"
+                    class="form__checkable"
+                    property="terms"
+                    value="Terms and conditions"
+                    checked="false"
+                    additionalAttributes="{femanager:Validation.FormValidationData(settings:settings,fieldName:'terms')}" />
+            <span class="form__styled-checkbox"></span>
+            <f:translate key="tx_femanager_domain_model_user.terms" />
+            <f:if condition="{femanager:Validation.IsRequiredField(fieldName:'terms')}">
+                <f:render partial="Misc/Required" arguments="{}" />
+            </f:if>
+            <f:if condition="{settings.misc.termsUrl}">
+                <br><span><f:link.page pageUid="{settings.misc.termsUrl}"><f:translate key="tx_femanager_domain_model_user.termslinktext" /></f:link.page></span>
+            </f:if>
+        </label> 
+        
+    </div>
+</div>
+</html>

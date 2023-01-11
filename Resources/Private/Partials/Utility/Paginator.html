@@ -4,7 +4,7 @@
 		<f:if condition="{pagination.previousPageNumber} && {pagination.previousPageNumber} >= {pagination.firstPageNumber}">
 			<f:then>
 				<li class="page-item">
-					<a class="page-link" href="{f:uri.action(action:actionName, arguments:{currentPage: 1})}" title="{f:translate(key:'pagination.first')}">
+					<a class="page-link" href="{f:uri.action(action:actionName, arguments:{currentPage: 1, call: call})}" title="{f:translate(key:'pagination.first')}">
 						<span aria-hidden="true">&laquo;</span>
 					</a>
 				</li>
@@ -21,7 +21,7 @@
 		</f:if>
 		<f:for each="{pages}" as="page">
 			<li class="page-item{f:if(condition: '{page} == {paginator.currentPageNumber}', then:' active')}">
-				<a class="page-link" href="{f:uri.action(action:actionName, arguments:{currentPage: page})}">{page}</a>
+				<a class="page-link" href="{f:uri.action(action:actionName, arguments:{currentPage: page, call: call})}">{page}</a>
 			</li>
 		</f:for>
 

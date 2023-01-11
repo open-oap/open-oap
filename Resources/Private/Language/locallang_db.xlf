@@ -330,6 +330,20 @@
 			<trans-unit id="tx_openoap_domain_model_logicatom.value" resname="tx_openoap_domain_model_logicatom.value">
 				<source>Value</source>
 			</trans-unit>
+
+			<!-- account user -->
+			<trans-unit id="tx_openoapusers_domain_model_user" resname="tx_openoapusers_domain_model_user">
+				<source>User</source>
+			</trans-unit>
+			<trans-unit id="tx_openoapusers_domain_model_user.company_email" resname="tx_openoapusers_domain_model_user.company_email">
+				<source>Company email address</source>
+			</trans-unit>
+			<trans-unit id="tx_openoapusers_domain_model_user.preferred_lang" resname="tx_openoapusers_domain_model_user.preferred_lang">
+				<source>Preferred language</source>
+			</trans-unit>
+			<trans-unit id="tx_openoapusers_domain_model_user.privacypolicy" resname="tx_openoapusers_domain_model_user.privacypolicy">
+				<source>I accept the privacy policy conditions</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

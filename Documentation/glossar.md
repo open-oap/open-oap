@@ -4,8 +4,8 @@
 
 - **call**
   <br>Invitation to submit an application or proposal.
-  In der Regel zeitlich limitiert. Der Call-Datensatz ist das oberste Element der Datenstruktur und steht somit synonym für das Formular.
-  Ein Formular besteht auf Seiten, Gruppen (auch wiederholt und in zwei Ebenen verschachtelt).
+  Usually limited in time. The call record is the top element of the data structure and is thus synonymous with the form.
+  A form consists of pages, groups (also repeated and nested in two levels).
 - **proposal**
   <br>Proposal record - person-bound, has various states that regulate access in the frontend and backend.
 - **page** (proposal~)

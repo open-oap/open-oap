@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/femanager/locallang.xlf" date="2022-01-12T16:27:13Z" product-name="open_oap">
+		<header/>
+		<body>
+			<trans-unit id="tx_femanager_domain_model_user.username" resname="tx_femanager_domain_model_user.username">
+				<source>Email address</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.privacypolicy.label" resname="tx_femanager_domain_model_user.privacypolicy.label" xml:space="preserve">
+				<source>I have read and acknowledge the %s.</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.privacypolicy" resname="tx_femanager_domain_model_user.privacypolicy">
+				<source>Privacy Policy</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.terms.label" resname="tx_femanager_domain_model_user.terms.label" xml:space="preserve">
+				<source>I accept the %s.</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.terms" resname="tx_femanager_domain_model_user.terms">
+				<source>terms and conditions</source>
+			</trans-unit>
+			<trans-unit id="submitNew" resname="submitNew">
+				<source>Create new account</source>
+			</trans-unit>
+			<trans-unit id="createAndInvited" resname="createAndInvited">
+				<source>Thank you for your registration. You will shortly receive an email with a link and details to confirm the process.</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.gender" resname="tx_femanager_domain_model_user.gender">
+				<source>Salutation</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.gender.item0" resname="tx_femanager_domain_model_user.gender.item0">
+				<source>Mr</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.gender.item1" resname="tx_femanager_domain_model_user.gender.item1">
+				<source>Ms</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.name" resname="tx_femanager_domain_model_user.name">
+				<source>Contact person</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.firstName" resname="tx_femanager_domain_model_user.firstName">
+				<source>Contact person first name</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.lastName" resname="tx_femanager_domain_model_user.lastName">
+				<source>Contact person last name</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.company" resname="tx_femanager_domain_model_user.company">
+				<source>Company name</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.www" resname="tx_femanager_domain_model_user.www">
+				<source>Website</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.telephone" resname="tx_femanager_domain_model_user.telephone">
+				<source>Telephone</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.address" resname="tx_femanager_domain_model_user.address">
+				<source>Street and house number</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.addressCombined" resname="tx_femanager_domain_model_user.addressCombined">
+				<source>Address</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.zip" resname="tx_femanager_domain_model_user.zip">
+				<source>Zip</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.city" resname="tx_femanager_domain_model_user.city">
+				<source>City</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.companyEmail" resname="tx_femanager_domain_model_user.companyEmail">
+				<source>Email address</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.preferredLang" resname="tx_femanager_domain_model_user.preferredLang">
+				<source>Preferred language for communication</source>
+			</trans-unit>
+			<trans-unit id="tx_femanager_domain_model_user.2.preferredLang" resname="tx_femanager_domain_model_user.2.preferredLang">
+				<source>My preferred language</source>
+			</trans-unit>
+			<trans-unit id="submitNext" resname="submitNext">
+				<source>Next step</source>
+			</trans-unit>
+			<trans-unit id="submitSave" resname="submitSave">
+				<source>Save</source>
+			</trans-unit>
+			<trans-unit id="submitClose" resname="submitClose">
+				<source>Close</source>
+			</trans-unit>
+			<trans-unit id="skipStep" resname="skipStep">
+				<source>skip this step</source>
+			</trans-unit>
+			<trans-unit id="masterData" resname="masterData">
+				<source>Master data</source>
+			</trans-unit>
+			<trans-unit id="otherData" resname="otherData">
+				<source>Other data</source>
+			</trans-unit>
+			<trans-unit id="accessData" resname="accessData">
+				<source>Access data</source>
+			</trans-unit>
+			<trans-unit id="data.edit.label" resname="data.edit.label">
+				<source>Edit</source>
+			</trans-unit>
+			<trans-unit id="masterdata.edit.label" resname="masterdata.edit.label">
+				<source>Edit master data</source>
+			</trans-unit>
+			<trans-unit id="createAndInvitedFinished">
+				<source>Your account has been successfully created. Please log in.</source>
+			</trans-unit>
+			<trans-unit id="empty">
+				<source>(empty)</source>>
+			</trans-unit>
+			<trans-unit id="notDisplayed">
+				<source>(not displayed)</source>
+			</trans-unit>
+			<trans-unit id="validationErrorUniquePage">
+				<source>This %s is already registered. Please log in or use another.</source>
+			</trans-unit>
+			<trans-unit id="validationErrorUniqueDb">
+				<source>This %s is already registered. Please log in or use another.</source>
+			</trans-unit>
+			<trans-unit id="validationErrorRequired">
+				<source>Field %s is required.</source>
+			</trans-unit>
+			<trans-unit id="validationErrorEmail">
+				<source>Field %s is not a valid email address.</source>
+			</trans-unit>
+			<trans-unit id="validationErrorMustInclude">
+				<source>The %s does not contain the required characters. It must contain letters, numbers and special characters (e.g. ! ? _ *).</source>
+			</trans-unit>
+			<trans-unit id="validationErrorMin">
+				<source>Please add more characters to field %s. It must be at least 8 characters long.</source>
+			</trans-unit>
+			<trans-unit id="validationErrorPasswordRepeat">
+				<source>The two passwords you entered do not match.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

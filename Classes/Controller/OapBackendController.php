@@ -14,6 +14,7 @@ use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 
 /***
@@ -55,7 +56,7 @@ class OapBackendController extends OapBaseController
         // set messageSource
         $this->messageSource = 'LLL:EXT:' . $this->ext . '/Resources/Private/Language/' . $this->messageFile . ':message.';
 
-        $this->pageUid = (integer)$GLOBALS['_GET']['id'];
+        $this->pageUid = (int)$GLOBALS['_GET']['id'];
         $this->siteIdentifier = $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getIdentifier();
 
         $this->backendUriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
@@ -76,7 +77,9 @@ class OapBackendController extends OapBaseController
         if (!count($allitems)) {
             $this->setMessage('no_calls_found', self::WARNING);
         } else {
-            $pagination['array'] = new ArrayPaginator($allitems, $currentPage, 100);
+            // todo use constant instead of magic number - even here
+            // $pagination['array'] = new ArrayPaginator($allitems, $currentPage, self::BACKEND_ITEMS_PER_PAGE);
+            $pagination['array'] = new ArrayPaginator($allitems, $currentPage, 50);
             $pagination['pagination'] = new SimplePagination($pagination['array']);
             $this->view->assign('pages', range(1, $pagination['pagination']->getLastPageNumber()));
         }
@@ -132,7 +135,7 @@ class OapBackendController extends OapBaseController
         if (!$this->pageUid) {
             // $this->setMessage('no_page_selected', self::WARNING);
             // use fall-back
-            $callPid = (integer)$this->settings['settings']['callPid'];
+            $callPid = (int)$this->settings['settings']['callPid'];
         } else {
             $callPid = $this->pageUid;
         }

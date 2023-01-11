@@ -25,7 +25,7 @@ see documentation:
 - [documentation](./Documentation/README.md)
 
 see also generated phpdoc output: 
-- [phpDoc (html)](./Documentation/phpdoc/index.html)
+- [phpDoc (html)](./Documentation/PhpDoc/index.html)
 
 to create this phpDoc see: [createPhpDOC](./Documentation)
 

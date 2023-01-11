@@ -144,4 +144,43 @@ defined('TYPO3') || die();
 
     // RTE Preset
     $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['oap_mailtext'] = 'EXT:open_oap/Configuration/TSconfig/RTE/Mailtext.yaml';
+
+    // open_oap_user
+
+    // Language Overrides
+    // felogin
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['locallangXMLOverride']['EXT:felogin/Resources/Private/Language/locallang.xlf'][]
+        = 'EXT:open_oap/Resources/Private/Language/felogin/locallang.xlf';
+    // felogin de
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['locallangXMLOverride']['de']['EXT:open_oap/Resources/Private/Language/felogin/locallang.xlf'][]
+        = 'EXT:open_oap/Resources/Private/Language/felogin/de.locallang.xlf';
+    // femanager
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['locallangXMLOverride']['EXT:femanager/Resources/Private/Language/locallang.xlf'][]
+        = 'EXT:open_oap/Resources/Private/Language/femanager/locallang.xlf';
+    // femanager de
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['locallangXMLOverride']['de']['EXT:femanager/Resources/Private/Language/locallang.xlf'][]
+        = 'EXT:open_oap/Resources/Private/Language/femanager/de.locallang.xlf';
+
+
+    // Mapping
+    $extbaseObjectContainer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class);
+
+    $extbaseObjectContainer->registerImplementation(
+        \In2code\Femanager\Domain\Model\User::class,
+        \OpenOAP\OpenOap\Domain\Model\User::class
+    );
+    $extbaseObjectContainer->registerImplementation(
+        \In2code\Femanager\Controller\InvitationController::class,
+        \OpenOAP\OpenOap\Controller\UserInvitationController::class
+    );
+    $extbaseObjectContainer->registerImplementation(
+        \In2code\Femanager\Controller\EditController::class,
+        \OpenOAP\OpenOap\Controller\UserEditController::class
+    );
+
+
+    // Add statusAction to nonCacheableAction of femanager invitation plugin
+    if (!in_array('status', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Pi1']['controllers']['In2code\Femanager\Controller\InvitationController']['nonCacheableActions'])) {
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Pi1']['controllers']['In2code\Femanager\Controller\InvitationController']['nonCacheableActions'][] = 'status';
+    }
 })();
