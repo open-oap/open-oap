@@ -797,6 +797,11 @@
 				<source><![CDATA[The form has been changed - removed question:]]></source>
 				<target><![CDATA[Antragsformular verändert - entfernte Frage:]]></target>
 			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_proposal.log.300'
+						resname='tx_openoap_domain_model_proposal.log.300'>
+				<source><![CDATA[Problem with given e-mail: %s]]></source>
+				<target><![CDATA[Problem mit der gegebenen E-Mail-Adresse: %s]]></target>
+			</trans-unit>
 			<!-- Dashboard -->
 			<trans-unit id='tx_openoap_dashboard.proposalsActive.header'
 						resname='tx_openoap_dashboard.proposalsActive.header'>
