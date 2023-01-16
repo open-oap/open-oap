@@ -117,7 +117,7 @@
 			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_formgroup.items' resname='tx_openoap_domain_model_formgroup.items'>
 				<source><![CDATA[Items]]></source>
-				<target><![CDATA[Items ? ]]></target>
+				<target><![CDATA[Frage/Item]]></target>
 			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_formgroup.group_title'
 						resname='tx_openoap_domain_model_formgroup.group_title'>
@@ -481,7 +481,7 @@
 			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_float'
 						resname='tx_cboap_domain_model_itemvalidator.type_float'>
 				<source><![CDATA[Float number/]]></source>
-				<target><![CDATA[Dezimalzahl/Fließkommazahl ? ]]></target>
+				<target><![CDATA[Dezimalzahl/Fließkommazahl]]></target>
 			</trans-unit>
 			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_maxChar'
 						resname='tx_cboap_domain_model_itemvalidator.type_maxChar'>
@@ -536,12 +536,12 @@
 			<trans-unit id='tx_openoap_domain_model_formitem.type_date1'
 						resname='tx_openoap_domain_model_formitem.type_date1'>
 				<source><![CDATA[One date]]></source>
-				<target><![CDATA[Ein Datum ?]]></target>
+				<target><![CDATA[Ein Datum]]></target>
 			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_formitem.type_date2'
 						resname='tx_openoap_domain_model_formitem.type_date2'>
 				<source><![CDATA[Two dates]]></source>
-				<target><![CDATA[Zwei Daten ?]]></target>
+				<target><![CDATA[Zwei Daten]]></target>
 			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_formitem.type_checkbox'
 						resname='tx_openoap_domain_model_formitem.type_checkbox'>
@@ -699,12 +699,12 @@
 			<trans-unit id='tx_openoap_domain_model_proposal.state.1.legend'
 						resname='tx_openoap_domain_model_proposal.state.1.legend'>
 				<source><![CDATA[The proposal has not yet been submitted]]></source>
-				<target><![CDATA[Der Antrag wurde noch nicht eingereicht. ? ]]></target>
+				<target><![CDATA[Der Antrag wurde noch nicht eingereicht.]]></target>
 			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_proposal.state.2.legend'
 						resname='tx_openoap_domain_model_proposal.state.2.legend'>
 				<source><![CDATA[The proposal was successfully submitted]]></source>
-				<target><![CDATA[Der Antrag wurde erfolgreich eingereicht. ?]]></target>
+				<target><![CDATA[Der Antrag wurde erfolgreich eingereicht.]]></target>
 			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_proposal.state.3.legend'
 						resname='tx_openoap_domain_model_proposal.state.3.legend'>
