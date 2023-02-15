@@ -10,12 +10,11 @@ Development project for an open-source TYPO3 extension.
 for this project: open-oap-github@cosmoblonde.de
 
 ## Version
-The current version is 1.1
-Work is in progess.
+The current version is 1.2 
 
 ## Note
-This version of the extension is not in productive use, but contains the current code.
-However, we are currently (still) using another extension to extend fe-users to be able to use this data in the open-oap extension. There is currently no solution without this extension. It is also not freely available. If you are interested, please let us know and we can deliver it.
+Sorry, there was a misleading note in version 1.2.0 (an old one from 1.1)
+With version 1.2 we are completely independent of further own extensions - everything is freely accessible and installable with composer.
 
 see further information:
 - [change log](./Documentation/ChangeLog/Index.md)

@@ -626,6 +626,11 @@
 						resname='tx_openoap_domain_model_proposal.log.202'>
 				<source><![CDATA[The form has been changed - removed question:]]></source>
 			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_proposal.log.300'
+						resname='tx_openoap_domain_model_proposal.log.300'>
+				<source><![CDATA[Problem with given e-mail: %s]]></source>
+			</trans-unit>
+
 			<!-- Dashboard -->
 			<trans-unit id='tx_openoap_dashboard.proposalsActive.header'
 						resname='tx_openoap_dashboard.proposalsActive.header'>

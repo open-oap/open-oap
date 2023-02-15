@@ -203,6 +203,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const LOG_FORM_CHANGED_ADDED_ITEM = 201;
     protected const LOG_FORM_CHANGED_REMOVED_ITEM = 202;
 
+    protected const LOG_ERROR_INCORRECT_EMAIL_ADDRESS = 300;
+
     // see \TYPO3\CMS\Core\Messaging\AbstractMessage - just to shorten the vars
     protected const NOTICE = -2;
     protected const INFO = -1;
@@ -518,6 +520,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $log->setState(self::COMMENT_STATE_AUTO_ACCEPTED);
                 break;
             case self::LOG_PROPOSAL_CHANGE_STATE:
+            case self::LOG_ERROR_INCORRECT_EMAIL_ADDRESS:
                 $log->setText($parameter);
                 break;
             case self::LOG_PROPOSAL_ANNOTATED:
@@ -581,6 +584,22 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         /** @var Applicant $user */
         $user = $proposal->getApplicant();
         $emailTo = $user->getEmail();
+        if (!GeneralUtility::validEmail($emailTo)) {
+            $log = $this->createLog(
+                self::LOG_ERROR_INCORRECT_EMAIL_ADDRESS,
+                $proposal,
+                $emailTo
+            );
+            $proposal->addLog($log);
+            $this->proposalRepository->update($proposal);
+
+            $flashMessageTxt = $this->getTranslationString(
+                self::XLF_BASE_IDENTIFIER_LOG . self::LOG_ERROR_INCORRECT_EMAIL_ADDRESS,
+                [$emailTo]
+            );
+            $this->addFlashMessage($flashMessageTxt, '', AbstractMessage::ERROR);
+            return;
+        }
         $data = ['proposal' => $proposal, 'signature' => $this->buildSignature($proposal), 'mailtext' => $mailtext, 'siteName' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'], 'languageKey' => $langCode];
 
         // do not send to real e-mails on stage or other none productive instances

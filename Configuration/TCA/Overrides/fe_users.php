@@ -137,3 +137,4 @@ $tmp_open_oap_columns = [
 
 $GLOBALS['TCA']['fe_users']['columns']['gender']['exclude'] = 1;
 $GLOBALS['TCA']['fe_users']['columns']['date_of_birth']['exclude'] = 1;
+$GLOBALS['TCA']['fe_users']['columns']['email']['config']['eval'] = 'nospace,email,required';
