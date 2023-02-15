@@ -36,9 +36,9 @@ Available variables:
 
 
 <f:section name="Register-STEP-2"><f:spaceless>
-<f:comment>
+<f:comment><!--
     <h1><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registration.header" /></h1>
-</f:comment>
+--></f:comment>
     <h2><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registrationform_step2.header" /></h2>
 
     <f:form
@@ -47,7 +47,7 @@ Available variables:
         action="update"
         additionalAttributes="{data-femanager-plugin:data.uid}"
         class="form form--register {f:if(condition:'{settings.invitation.validation._enable.client}',then:'feManagerValidation',else:'')}">
-
+        <f:form.hidden name="hash" value="{hash}"/>
         <div role="alert">
             <f:render partial="Misc/FlashMessages" arguments="{_all}" />
             <f:render partial="Misc/FormErrors" arguments="{_all}" />

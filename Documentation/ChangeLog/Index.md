@@ -1,5 +1,13 @@
 # Change log
 
+## Version 1.2.1
+
+- Correction of an outdated, misleading note in the README file.
+- check applicant email on send - add log/flashmsg
+- set Applicant user email as required
+- removed question marks in xlf (de)
+- add hidden field for invitation user form - for alignment with fe manager
+
 ## Version 1.2
 
 - !important  [TASK] include open_oap_users into open_oap to dissolve the dependence on an own extension
@@ -8,7 +16,7 @@
 - style changes - php-cs-fixer
 - js: add switch off for cookie edit button
 - composer.json requirement changed to php 7.4 (instead of 7.2), newer version of typo3/coding-standards
-- add dcoumentation (known issues, add change log)
+- add documentation (known issues, add change log)
 
 ## Version 1.1.1
 
