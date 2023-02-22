@@ -1,5 +1,10 @@
 # Change log
 
+## Version 1.2.2
+
+- add javascript and css files - compiled - for ready-to-use-state (alignment for gitignore for this part)
+- removes symlink added by mistake
+
 ## Version 1.2.1
 
 - Correction of an outdated, misleading note in the README file.
