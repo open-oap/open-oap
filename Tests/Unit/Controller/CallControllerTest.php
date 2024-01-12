@@ -49,7 +49,7 @@ class CallControllerTest extends UnitTestCase
             ->onlyMethods(['findAll'])
             ->disableOriginalConstructor()
             ->getMock();
-        $callRepository->expects(self::once())->method('findAll')->willReturn($allCalls);
+        $callRepository->expects(self::once())->method('findAll')->will(self::returnValue($allCalls));
         $this->subject->_set('callRepository', $callRepository);
 
         $view = $this->getMockBuilder(ViewInterface::class)->getMock();

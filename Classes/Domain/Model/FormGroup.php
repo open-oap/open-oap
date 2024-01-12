@@ -27,6 +27,13 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $title = '';
 
     /**
+     * internal title for TYPO3 backend view (for editors)
+     *
+     * @var string
+     */
+    protected $internalTitle = '';
+
+    /**
      * introText
      *
      * @var string
@@ -99,11 +106,11 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $itemGroups;
 
     /**
-     * dependentOn
+     * modificators
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\LogicAtom>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormModificator>
      */
-    protected $dependentOn;
+    protected $modificators = null;
 
     /**
      * __construct
@@ -124,7 +131,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->items = $this->items ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->groupTitle = $this->groupTitle ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->dependentOn = $this->dependentOn ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->modificators = $this->modificators ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
     /**
@@ -324,46 +331,6 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Adds a LogicAtom
-     *
-     * @param \OpenOAP\OpenOap\Domain\Model\LogicAtom $dependentOn
-     */
-    public function addDependentOn(\OpenOAP\OpenOap\Domain\Model\LogicAtom $dependentOn)
-    {
-        $this->dependentOn->attach($dependentOn);
-    }
-
-    /**
-     * Removes a LogicAtom
-     *
-     * @param \OpenOAP\OpenOap\Domain\Model\LogicAtom $dependentOnToRemove The LogicAtom to be removed
-     */
-    public function removeDependentOn(\OpenOAP\OpenOap\Domain\Model\LogicAtom $dependentOnToRemove)
-    {
-        $this->dependentOn->detach($dependentOnToRemove);
-    }
-
-    /**
-     * Returns the dependentOn
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\LogicAtom> $dependentOn
-     */
-    public function getDependentOn()
-    {
-        return $this->dependentOn;
-    }
-
-    /**
-     * Sets the dependentOn
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\LogicAtom> $dependentOn
-     */
-    public function setDependentOn(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $dependentOn)
-    {
-        $this->dependentOn = $dependentOn;
-    }
-
-    /**
      * @return int
      */
     public function getDisplayType(): int
@@ -409,5 +376,55 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setItemGroups(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $itemGroups): void
     {
         $this->itemGroups = $itemGroups;
+    }
+
+    public function getInternalTitle(): string
+    {
+        return $this->internalTitle;
+    }
+
+    public function setInternalTitle(string $internalTitle): void
+    {
+        $this->internalTitle = $internalTitle;
+    }
+
+    /**
+     * Adds a FormModificator
+     *
+     * @param \OpenOAP\OpenOap\Domain\Model\FormModificator $modificator
+     */
+    public function addModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificator)
+    {
+        $this->modificators->attach($modificator);
+    }
+
+    /**
+     * Removes a FormModificator
+     *
+     * @param \OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove The FormModificator to be removed
+     */
+    public function removeModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove)
+    {
+        $this->modificators->detach($modificatorToRemove);
+    }
+
+    /**
+     * Returns the modificators
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormModificator> modificators
+     */
+    public function getModificators()
+    {
+        return $this->modificators;
+    }
+
+    /**
+     * Sets the modificators
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormModificator> $modificators
+     */
+    public function setModificators(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $modificators)
+    {
+        $this->modificators = $modificators;
     }
 }

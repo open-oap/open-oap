@@ -14,10 +14,10 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  * @author Thorsten Born <thorsten.born@cosmoblonde.de>
  * @author Ingeborg Hess <ingeborg.hess@cosmoblonde.de>
  */
-class LogicAtomTest extends UnitTestCase
+class FormModificatorTest extends UnitTestCase
 {
     /**
-     * @var \OpenOAP\OpenOap\Domain\Model\LogicAtom|MockObject|AccessibleObjectInterface
+     * @var \OpenOAP\OpenOap\Domain\Model\FormModificator|MockObject|AccessibleObjectInterface
      */
     protected $subject;
 
@@ -26,7 +26,7 @@ class LogicAtomTest extends UnitTestCase
         parent::setUp();
 
         $this->subject = $this->getAccessibleMock(
-            \OpenOAP\OpenOap\Domain\Model\LogicAtom::class,
+            \OpenOAP\OpenOap\Domain\Model\FormModificator::class,
             ['dummy']
         );
     }
@@ -118,5 +118,64 @@ class LogicAtomTest extends UnitTestCase
         $this->subject->setValue('Conceived at T3CON10');
 
         self::assertEquals('Conceived at T3CON10', $this->subject->_get('value'));
+    }
+
+    /**
+     * @test
+     */
+    public function getItemsReturnsInitialValueForFormItem(): void
+    {
+        $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        self::assertEquals(
+            $newObjectStorage,
+            $this->subject->getItems()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setItemsForObjectStorageContainingFormItemSetsItems(): void
+    {
+        $item = new \OpenOAP\OpenOap\Domain\Model\FormItem();
+        $objectStorageHoldingExactlyOneItems = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $objectStorageHoldingExactlyOneItems->attach($item);
+        $this->subject->setItems($objectStorageHoldingExactlyOneItems);
+
+        self::assertEquals($objectStorageHoldingExactlyOneItems, $this->subject->_get('items'));
+    }
+
+    /**
+     * @test
+     */
+    public function addItemToObjectStorageHoldingItems(): void
+    {
+        $item = new \OpenOAP\OpenOap\Domain\Model\FormItem();
+        $itemsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->onlyMethods(['attach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $itemsObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($item));
+        $this->subject->_set('items', $itemsObjectStorageMock);
+
+        $this->subject->addItem($item);
+    }
+
+    /**
+     * @test
+     */
+    public function removeItemFromObjectStorageHoldingItems(): void
+    {
+        $item = new \OpenOAP\OpenOap\Domain\Model\FormItem();
+        $itemsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->onlyMethods(['detach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $itemsObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($item));
+        $this->subject->_set('items', $itemsObjectStorageMock);
+
+        $this->subject->removeItem($item);
     }
 }

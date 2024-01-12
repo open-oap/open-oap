@@ -98,9 +98,9 @@
 						resname='tx_openoap_domain_model_formgroup.group_title'>
 				<source><![CDATA[Group Title]]></source>
 			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.dependent_on'
-						resname='tx_openoap_domain_model_formgroup.dependent_on'>
-				<source><![CDATA[Dependent On]]></source>
+			<trans-unit id='tx_openoap_domain_model_formgroup.modificators'
+						resname='tx_openoap_domain_model_formgroup.modificators'>
+				<source><![CDATA[Modificators]]></source>
 			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_formitem' resname='tx_openoap_domain_model_formitem'>
 				<source><![CDATA[Form Item]]></source>
@@ -195,6 +195,10 @@
 			<trans-unit id='tx_openoap_domain_model_itemvalidator.param2'
 						resname='tx_openoap_domain_model_itemvalidator.param2'>
 				<source><![CDATA[Parameter 2]]></source>
+			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_itemvalidator.item'
+						resname='tx_openoap_domain_model_itemvalidator.item'>
+				<source><![CDATA[Question/Item]]></source>
 			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_proposal' resname='tx_openoap_domain_model_proposal'>
 				<source><![CDATA[Proposal]]></source>
@@ -412,6 +416,14 @@
 						resname='tx_cboap_domain_model_itemvalidator.file_size'>
 				<source><![CDATA[File size for Uploads (in Bytes, kB, MB)]]></source>
 			</trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_greaterThan'
+                        resname='tx_cboap_domain_model_itemvalidator.type_greaterThan'>
+                <source><![CDATA[Greater than Question/Item]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_lessThan'
+                        resname='tx_cboap_domain_model_itemvalidator.type_lessThan'>
+                <source><![CDATA[Less than Question/Item]]></source>
+            </trans-unit>
 			<trans-unit id='tx_openoap_domain_model_formitem.type_string'
 						resname='tx_openoap_domain_model_formitem.type_string'>
 				<source><![CDATA[Text - single line]]></source>
@@ -699,6 +711,22 @@
 						resname='tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage'>
 				<source><![CDATA[The form is not available in the current language. Please change the language.]]></source>
 			</trans-unit>
+			<trans-unit id='tx_openoap_dashboard.callgroup.nocall'
+						resname='tx_openoap_dashboard.callgroup.nocall'>
+				<source>There is currently no call</source>
+			</trans-unit>
+			<trans-unit id='tx_openoap_dashboard.call.hint.language'
+						resname='tx_openoap_dashboard.call.hint.language'>
+				<source>Available in English only</source>
+			</trans-unit>
+			<trans-unit id='tx_openoap_dashboard.giz'
+						resname='tx_openoap_dashboard.giz'>
+				<source>Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH</source>
+			</trans-unit>
+			<trans-unit id='tx_openoap_dashboard.deg'
+						resname='tx_openoap_dashboard.deg'>
+				<source>DEG Impulse gGmbH</source>
+			</trans-unit>
 			<trans-unit id='tx_openoap_dashboard.masterdata.header' resname='tx_openoap_dashboard.masterdata.header'>
 				<source><![CDATA[Master data]]></source>
 			</trans-unit>
@@ -888,7 +916,7 @@
 				<source><![CDATA[this field is required]]></source>
 			</trans-unit>
 			<trans-unit id='tx_openoap_applicant.infoRequired' resname='tx_openoap_applicant.infoRequired'>
-				<source><![CDATA[Fields marked with a star (*) are mandatory.]]></source>
+				<source><![CDATA[Fields marked with a * are mandatory.]]></source>
 			</trans-unit>
 			<trans-unit id='tx_openoap_applicant.masterdataEdit.header'
 						resname='tx_openoap_applicant.masterdataEdit.header'>
@@ -969,7 +997,7 @@
 			<trans-unit id='tx_openoap_applicant.messages.noChanges' resname='tx_openoap_applicant.messages.noChanges'>
 				<source><![CDATA[No changes detected, nothing to update.]]></source>
 			</trans-unit>
-			!-- itemoption -->
+			<!-- itemoption -->
 			<trans-unit id='tx_openoap_domain_model_itemoption.type_single'
 						resname='tx_openoap_domain_model_itemoption.type_single'>
 				<source><![CDATA[single option]]></source>
@@ -983,38 +1011,22 @@
 				<source><![CDATA[callable function - not yet implemented]]></source>
 			</trans-unit>
 
-			<!-- logic Atom -->
-			<trans-unit id='tx_openoap_logicatom.title' resname='tx_openoap_logicatom.title'>
+			<!-- Modificators -->
+			<trans-unit id='tx_openoap_domain_model_formmodificator.title' resname='tx_openoap_domain_model_formmodificator.title'>
 				<source><![CDATA[Title]]></source>
 			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.title' resname='tx_openoap_logicatom.title'>
-				<source><![CDATA[Question/Item]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.value' resname='tx_openoap_logicatom.value'>
+			<trans-unit id='tx_openoap_domain_model_formmodificator.value' resname='tx_openoap_domain_model_formmodificator.value'>
 				<source><![CDATA[Value]]></source>
 			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.logic' resname='tx_openoap_logicatom.logic'>
-				<source><![CDATA[Comparision]]></source>
+			<trans-unit id='tx_openoap_domain_model_formmodificator.logic' resname='tx_openoap_domain_model_formmodificator.logic'>
+				<source><![CDATA[Logic]]></source>
 			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.equal' resname='tx_openoap_logicatom.compare.equal'>
-				<source><![CDATA[equal (==)]]></source>
+			<trans-unit id='tx_openoap_domain_model_formmodificator.logic_total' resname='tx_openoap_domain_model_formmodificator.logic_total'>
+				<source><![CDATA[Grand total]]></source>
 			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.greater_equal'
-						resname='tx_openoap_logicatom.compare.greater_equal'>
-				<source><![CDATA[greater or equal (>=)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.greater' resname='tx_openoap_logicatom.compare.greater'>
-				<source><![CDATA[greater (>)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.less' resname='tx_openoap_logicatom.compare.less'>
-				<source><![CDATA[less (<)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.less_equal' resname='tx_openoap_logicatom.compare.less_equal'>
-				<source><![CDATA[less or equal (<=)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.unequal' resname='tx_openoap_logicatom.compare.unequal'>
-				<source><![CDATA[unequal (<> / !==)]]></source>
-			</trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formmodificator.items' resname='tx_openoap_domain_model_formmodificator.items'>
+                <source><![CDATA[Questions/items]]></source>
+            </trans-unit>
 			<!-- Global / Markup -->
 			<trans-unit id='tx_openoap.empty' resname='tx_openoap.empty'>
 				<source><![CDATA[(empty)]]></source>
@@ -1234,6 +1246,10 @@
 			<trans-unit id='tx_openoap.default.default_title' resname='tx_openoap.default.default_title'>
 				<source><![CDATA[no title set for this proposal]]></source>
 			</trans-unit>
+            <trans-unit id='tx_openoap.default.default_title_survey' resname='tx_openoap.default.default_title_survey'>
+                <source>anonymous survey</source>
+            </trans-unit>
+
 			<!-- E-Mail text -->
 			<trans-unit id='tx_openoap.email.submit_subject' resname='tx_openoap.email.submit_subject'>
 				<source><![CDATA[%s - Confirmation of submit: %s]]></source>
@@ -1272,7 +1288,7 @@
 				<source>I have read and acknowledge the %s.</source>
 			</trans-unit>
 			<trans-unit id="tx_openoapusers_domain_model_user.privacypolicy.linkText" resname="tx_openoapusers_domain_model_user.privacypolicy.LinkText">
-				<source>Privacy Policy</source>
+				<source>privacy policy</source>
 			</trans-unit>
 			<trans-unit id="oap_registration.header" resname="oap_registration.header">
 				<source>Registration</source>
@@ -1287,7 +1303,7 @@
 				<source>Create new account (step 1 of 3)</source>
 			</trans-unit>
 			<trans-unit id="oap_registrationform_step1.intro" resname="oap_registrationform_step1.intro">
-				<source><![CDATA[Enter your email address and agree to the <a target="_blank" href="/data_protection">data protection</a>. You will then receive an email with a confirmation link. By clicking the link inside the confirmation email, you complete your registration. In rare cases our registration email may end up in your spam folder. In this case please check your company's internet settings.]]></source>
+				<source><![CDATA[Enter your email address and agree to the <a target="_blank" href="/privacy_policy">privacy policy</a>. You will then receive an email with a confirmation link. By clicking the link inside the confirmation email, you complete your registration. In rare cases our registration email may end up in your spam folder. In this case please check your company's internet settings.]]></source>
 			</trans-unit>
 			<trans-unit id="oap_registrationform_step2.header" resname="oap_registrationform_step2.header">
 				<source>Set a new Password (step 2 of 3)</source>

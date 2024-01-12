@@ -147,8 +147,42 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_openoap_domain_model_formgroup',
-                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formgroup}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formgroup}.hidden = 0 AND {#tx_openoap_domain_model_formgroup}.{#sys_language_uid} IN (-1,0)',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class .'->getAllElementsOfFormGroups',
                 'MM' => 'tx_openoap_formpage_formgroup_mm',
+                'itemsProcConfig' => [
+                    'model' => 'formgroup',
+                    'pidRoot' => 'pidFormGroups'
+                ],
+//                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formgroup}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formgroup}.hidden = 0 AND {#tx_openoap_domain_model_formgroup}.{#sys_language_uid} IN (-1,0)',
+                'size' => 10,
+                'autoSizeMax' => 30,
+                'maxitems' => 9999,
+                'multiple' => 0,
+                'fieldControl' => [
+                    'editPopup' => [
+                        'disabled' => false,
+                    ],
+                    'addRecord' => [
+                        'disabled' => false,
+                        'options' => [
+                            'pid' => '###PAGE_TSCONFIG_ID###',
+                        ],
+                    ],
+                    'listModule' => [
+                        'disabled' => true,
+                    ],
+                ],
+            ],
+
+        ],
+        'modificators' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formpage.modificators',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'tx_openoap_domain_model_formmodificator',
+                'MM' => 'tx_openoap_formpage_formmodificator_mm',
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,

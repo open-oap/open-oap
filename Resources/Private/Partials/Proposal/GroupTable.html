@@ -149,7 +149,7 @@
             <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
             <v:variable.set name="item" value="{item}" />
 
-            <f:if condition="{proposal.{propertyKeyComments}}">
+            <v:try><f:if condition="{proposal.{propertyKeyComments}}">
                 <f:render
                         partial="Answer/Comments"
                         arguments="{
@@ -162,7 +162,7 @@
                         colTitle:'{colTitle}'
                         }"
                 />
-            </f:if>
+            </f:if></v:try>
         </v:iterator.loop>
     </f:for>
 

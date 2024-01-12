@@ -119,4 +119,63 @@ class ItemValidatorTest extends UnitTestCase
 
         self::assertEquals('Conceived at T3CON10', $this->subject->_get('param2'));
     }
+
+    /**
+     * @test
+     */
+    public function getItemsReturnsInitialValueForFormItem(): void
+    {
+        $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        self::assertEquals(
+            $newObjectStorage,
+            $this->subject->getItems()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setItemsForObjectStorageContainingFormItemSetsItems(): void
+    {
+        $item = new \OpenOAP\OpenOap\Domain\Model\FormItem();
+        $objectStorageHoldingExactlyOneItems = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $objectStorageHoldingExactlyOneItems->attach($item);
+        $this->subject->setItems($objectStorageHoldingExactlyOneItems);
+
+        self::assertEquals($objectStorageHoldingExactlyOneItems, $this->subject->_get('items'));
+    }
+
+    /**
+     * @test
+     */
+    public function addItemToObjectStorageHoldingItems(): void
+    {
+        $item = new \OpenOAP\OpenOap\Domain\Model\FormItem();
+        $itemsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->onlyMethods(['attach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $itemsObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($item));
+        $this->subject->_set('items', $itemsObjectStorageMock);
+
+        $this->subject->addItem($item);
+    }
+
+    /**
+     * @test
+     */
+    public function removeItemFromObjectStorageHoldingItems(): void
+    {
+        $item = new \OpenOAP\OpenOap\Domain\Model\FormItem();
+        $itemsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->onlyMethods(['detach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $itemsObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($item));
+        $this->subject->_set('items', $itemsObjectStorageMock);
+
+        $this->subject->removeItem($item);
+    }
 }

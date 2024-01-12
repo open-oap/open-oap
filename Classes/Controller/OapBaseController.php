@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OpenOAP\OpenOap\Controller;
 
-use DOMNode;
+use OpenOAP\OpenOap\Configuration\Word\WordDefaultStyles;
 use OpenOAP\OpenOap\Domain\Model\Answer;
 use OpenOAP\OpenOap\Domain\Model\Applicant;
 use OpenOAP\OpenOap\Domain\Model\Call;
@@ -17,22 +17,21 @@ use OpenOAP\OpenOap\Domain\Model\ItemOption;
 use OpenOAP\OpenOap\Domain\Model\ItemValidator;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
+use OpenOAP\OpenOap\Domain\Model\User;
 use OpenOAP\OpenOap\Domain\Repository\AnswerRepository;
 use OpenOAP\OpenOap\Domain\Repository\ApplicantRepository;
+use OpenOAP\OpenOap\Domain\Repository\CallGroupRepository;
 use OpenOAP\OpenOap\Domain\Repository\CallRepository;
 use OpenOAP\OpenOap\Domain\Repository\CommentRepository;
 use OpenOAP\OpenOap\Domain\Repository\FormItemRepository;
 use OpenOAP\OpenOap\Domain\Repository\ItemOptionRepository;
 use OpenOAP\OpenOap\Domain\Repository\ProposalRepository;
-
-use OpenOAP\OpenOap\Domain\Model\User;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\SimpleType\DocProtect;
 use PhpOffice\PhpWord\TemplateProcessor;
 use ReflectionClass;
-use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
@@ -97,7 +96,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected const PROPOSAL_IN_PROGRESS = 1;
     protected const PROPOSAL_SUBMITTED = 2;
-//    protected const PROPOSAL_PROCESSING = 3;
+    //    protected const PROPOSAL_PROCESSING = 3;
     protected const PROPOSAL_RE_OPENED = 4;
     protected const PROPOSAL_ACCEPTED = 5;
     protected const PROPOSAL_DECLINED = 6;
@@ -159,17 +158,24 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * see TCA: - tx_openoap_domain_model_itemvalidator.php
      */
-    protected const VALIDATOR_MANDATORY = 1;
-    protected const VALIDATOR_INTEGER = 2;
-    protected const VALIDATOR_FLOAT = 3;
-    protected const VALIDATOR_MAXCHAR = 4;
-    protected const VALIDATOR_MINVALUE = 5;
-    protected const VALIDATOR_MAXVALUE = 6;
-    protected const VALIDATOR_EMAIL = 7;
-    protected const VALIDATOR_WEBSITE = 8;
-    protected const VALIDATOR_PHONE = 9;
-    protected const VALIDATOR_FILE_TYPE = 10;
-    protected const VALIDATOR_FILE_SIZE = 11;
+    public const VALIDATOR_MANDATORY = 1;
+    public const VALIDATOR_INTEGER = 2;
+    public const VALIDATOR_FLOAT = 3;
+    public const VALIDATOR_MAXCHAR = 4;
+    public const VALIDATOR_MINVALUE = 5;
+    public const VALIDATOR_MAXVALUE = 6;
+    public const VALIDATOR_EMAIL = 7;
+    public const VALIDATOR_WEBSITE = 8;
+    public const VALIDATOR_PHONE = 9;
+    public const VALIDATOR_FILE_TYPE = 10;
+    public const VALIDATOR_FILE_SIZE = 11;
+    public const VALIDATOR_GREATERTHAN = 12;
+    public const VALIDATOR_LESSTHAN = 13;
+
+    /**
+     * see TCA: - tx_openoap_domain_model_formmodificator.php
+     */
+    public const MODIFICATOR_TOTAL = 1;
 
     /**
      * EMAIL TEMPLATES
@@ -182,6 +188,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * EXPORT TEMPLATES
      */
     protected const EXPORT_TEMPLATE_PATH_PDF = 'EXT:open_oap/Resources/Private/Templates/Pdf/Proposal/Download.html';
+
+    protected const WORD_EXPORT_COMPACT = 'compact';
+    protected const WORD_EXPORT_DEFAULT = 'default';
 
     protected const MAX_FOR_LINE_BY_LINE_OUTPUT = 10;
 
@@ -274,6 +283,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     protected const XLF_BASE_IDENTIFIER_DEFAULTS = 'tx_openoap.default';
     protected const DEFAULT_TITLE = 'default_title';
+    protected const DEFAULT_TITLE_SURVEY = 'default_title_survey';
     protected const SIGNATURE_DIVIDER = '_';
     protected const KEY_VALUE_DIVIDER = ';';
     protected const DATE_FORMAT_JS = 'dd.mm.yyyy';
@@ -293,6 +303,11 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const FLASH_MSG_PROPOSAL_ACCESS_DENIED = 'proposal_access_denied';
     protected const FLASH_MSG_PROPOSAL_NOT_FOUND = 'proposal_not_found';
     protected const FLASH_MSG_CALL_MISSING = 'proposal_access_denied';
+
+    protected const PAGINATOR_ITEMS_PER_PAGE = 50;
+
+    protected const SURVEY_URL_PARAMETER_CALLID = 'survey';
+    protected const SURVEY_URL_PARAMETER_HASH = 'hash';
 
     /**
      * @var Applicant
@@ -365,9 +380,39 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected $resourceFactory;
 
     /**
-     * @var array
+     * @var array<int, Answer>
+     * @see flattenAnswers()
      */
     protected array $answers = [];
+
+    /**
+     * @var array<int, FormItem>
+     * @see flattenItems()
+     */
+    protected array $items = [];
+
+    /**
+     * @var array<int, FormPage>
+     * @see flattenItems()
+     */
+    protected array $pages = [];
+
+    /**
+     * @var array<int, int>
+     * @see flattenItems()
+     */
+    protected array $pageNumber = [];
+
+    /**
+     * @var array<int, FormGroup>
+     * @see flattenItems()
+     */
+    protected array $groups = [];
+
+    /**
+     * @var CallGroupRepository|null
+     */
+    protected ?CallGroupRepository $callGroupRepository = null;
 
     /**
      * @param ApplicantRepository $applicantRepository
@@ -378,6 +423,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param FormItemRepository $formItemRepository
      * @param ItemOptionRepository $itemOptionRepository
      * @param PersistenceManager $persistenceManager
+     * @param CallGroupRepository $callGroupRepository
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public function __construct(
@@ -388,7 +434,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         AnswerRepository $answerRepository,
         FormItemRepository $formItemRepository,
         ItemOptionRepository $itemOptionRepository,
-        PersistenceManager $persistenceManager
+        PersistenceManager $persistenceManager,
+        CallGroupRepository $callGroupRepository
     ) {
         $this->applicantRepository = $applicantRepository;
         $this->callRepository = $callRepository;
@@ -398,6 +445,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->formItemRepository = $formItemRepository;
         $this->itemOptionRepository = $itemOptionRepository;
         $this->persistenceManager = $persistenceManager;
+        $this->callGroupRepository = $callGroupRepository;
 
         $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
     }
@@ -612,10 +660,17 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 return;
             }
         }
+
+        // send no email if the call is set anonym - therefore we have no email in userdate
+        if ($proposal->getCall()->isAnonym()) {
+            $emailTo = $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
+        }
+
         $email = GeneralUtility::makeInstance(FluidEmail::class, $templatePaths);
         $email
                 ->to($emailTo)
-                ->from(new Address($GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'], $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName']))
+                ->subject(LocalizationUtility::translate($this->locallangFile . ':tx_openoap.email.submit_subject', 'openOap', [$data['siteName'], $data['signature']], $langCode))
+                // ->from(new Address($GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'], $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName']))
                 ->setTemplate($template)
                 ->assignMultiple($data)
                 ->format('both'); // send HTML and plaintext mail
@@ -697,7 +752,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     if ($convertLabel) {
                         $itemOption['label'] = str_replace('|', '<br>', $itemOption['label']);
                     }
-                    if ($itemOption['label'] !== '' and $itemOption['value'] !== '') {
+                    if ($itemOption['label'] !== '' and ($itemOption['value'] ?? null) !== '') {
                         $options[] = $itemOption;
                     }
                     break;
@@ -708,7 +763,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         if ($convertLabel) {
                             $itemOption['label'] = str_replace('|', '<br>', $itemOption['label']);
                         }
-                        if ($itemOption['label'] !== '' and $itemOption['value'] !== '') {
+                        if (($itemOption['label'] ?? null) !== '' and ($itemOption['value'] ?? null) !== '') {
                             $options[] = $itemOption;
                         }
                     }
@@ -761,6 +816,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected function getValidatorsToItemsMap($item, array &$itemsMap): void
     {
         $itemUid = $item->getUid();
+        $modificatorCodes = [];
         $validationCodes = [];
 
         // default validations - based upon item type
@@ -804,6 +860,28 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $itemsMap[$itemUid]['additionalAttributesFileTypes']['accept'] = '';
                 $acceptItems = [];
                 break;
+        }
+
+        foreach ($item->getModificators() as $modificator) {
+            if ($modificator->getLogic()) {
+                $modificatorCodes[] = $this->convertConstantsIntoString('MODIFICATOR')[$modificator->getLogic()];
+            }
+
+            switch ($modificator->getLogic()) {
+                case self::MODIFICATOR_TOTAL:
+                    $itemsMap[$itemUid]['classes'][] = self::FORM_CLASS_BASE_TEXTFIELD . 'total';
+
+                    $itemsMap[$itemUid]['additionalAttributes']['tabindex'] = '-1';
+                    $itemsMap[$itemUid]['additionalAttributes']['readonly'] = 'readonly';
+
+                    // all other attributes are set per answer "$answersMap[$answerUid]['item']['additionalAttributes'][...]"
+                    break;
+            }
+        }
+
+        // sum of validations
+        if ($modificatorCodes) {
+            $itemsMap[$itemUid]['additionalAttributes']['data-oap-modificators'] = implode(',', $modificatorCodes);
         }
 
         /** @var ItemValidator $validator */
@@ -861,6 +939,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 case self::VALIDATOR_FILE_SIZE:
                     $itemsMap[$itemUid]['MaxSize'] = self::convertStrToBytes($validator->getParam1());
                     break;
+                case self::VALIDATOR_GREATERTHAN:
+                case self::VALIDATOR_LESSTHAN:
+                    break;
             }
         }
 
@@ -889,20 +970,20 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         if ($item->getType() == self::TYPE_UPLOAD) {
-//            $dropzoneOptions = ['autoProcessQueue' => 0, 'uploadMultiple' => 1, 'parallelUploads' => 100, 'maxFiles' => 100, 'url' => '/file/post'];
-//            $itemsMap[$itemUid]['additionalAttributes']['data-oap-dropzone'] = json_encode($dropzoneOptions, JSON_FORCE_OBJECT);
+            //            $dropzoneOptions = ['autoProcessQueue' => 0, 'uploadMultiple' => 1, 'parallelUploads' => 100, 'maxFiles' => 100, 'url' => '/file/post'];
+            //            $itemsMap[$itemUid]['additionalAttributes']['data-oap-dropzone'] = json_encode($dropzoneOptions, JSON_FORCE_OBJECT);
             $uploadOptions = ['maxSize' => $itemsMap[$itemUid]['MaxSize'], 'maxFiles' => $itemsMap[$itemUid]['MaxValue']];
             // remove redundant validators and overwrite
             $validationTypes = explode(',', $itemsMap[$itemUid]['additionalAttributes']['data-oap-validat']);
             $validationTypes[] = 'VALIDATOR_FILE';
-//            if ($itemsMap[$itemUid]['Mandatory']) {
-//                $validationTypes[] = 'VALIDATOR_MANDATORY';
-//            }
+            //            if ($itemsMap[$itemUid]['Mandatory']) {
+            //                $validationTypes[] = 'VALIDATOR_MANDATORY';
+            //            }
             $itemsMap[$itemUid]['additionalAttributes']['data-oap-validat'] = implode(',', $validationTypes);
-//            $itemsMap[$itemUid]['additionalAttributes']['data-oap-validat'] = explode(;
-//            if ($itemsMap[$itemUid]['Mandatory']) {
-//                $itemsMap[$itemUid]['additionalAttributes']['data-oap-validat'] .=',VALIDATOR_MANDATORY';
-//            }
+            //            $itemsMap[$itemUid]['additionalAttributes']['data-oap-validat'] = explode(;
+            //            if ($itemsMap[$itemUid]['Mandatory']) {
+            //                $itemsMap[$itemUid]['additionalAttributes']['data-oap-validat'] .=',VALIDATOR_MANDATORY';
+            //            }
             $itemsMap[$itemUid]['data-oap-upload'] = json_encode($uploadOptions, JSON_FORCE_OBJECT);
             $itemsMap[$itemUid]['additionalAttributes']['data-oap-uploadValidation'] = '';
             $itemsMap[$itemUid]['additionalAttributes']['accept'] = implode(',', $acceptItems);
@@ -919,13 +1000,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         $uploadFolderId = ($this->settings['uploadFolder'] == '') ? self::$defaultUploadFolder
             : $this->settings['uploadFolder'];
-        DebuggerUtility::var_dump($uploadFolderId);
         $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-        DebuggerUtility::var_dump($resourceFactory);
         [$storageId, $storagePath] = explode(':', $uploadFolderId, 2);
         $storage = $resourceFactory->getStorageObject($storageId);
-        DebuggerUtility::var_dump($storage);
-        DebuggerUtility::var_dump($storagePath);
         $folderNames = GeneralUtility::trimExplode('/', $storagePath, true);
 
         return $folderNames;
@@ -949,6 +1026,22 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $folderNames[] = (string)$proposalUid;
         $uploadFolder = self::provideTargetFolder($storage->getRootLevelFolder(), implode('/', $folderNames));
         self::provideFolderInitialization($uploadFolder);
+        return $uploadFolder;
+    }
+
+    /**
+     * @param Proposal $proposal
+     * @return \TYPO3\CMS\Core\Resource\Folder
+     */
+    protected function getUploadFolder(Proposal $proposal): \TYPO3\CMS\Core\Resource\Folder
+    {
+        $uploadFolderId = ($this->settings['uploadFolder'] == '') ? self::$defaultUploadFolder
+            : $this->settings['uploadFolder'];
+        $uploadFolder = $this->provideUploadFolder(
+            $uploadFolderId,
+            $proposal->getApplicant()->getUid(),
+            $proposal->getUid(),
+        );
         return $uploadFolder;
     }
 
@@ -981,12 +1074,21 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     /**
      * @param string $str
+     * @return float
+     */
+    public static function convertStrToNumber(string $str): float
+    {
+        return (float)strtr($str, ['.' => '', ',' => '.']);
+    }
+
+    /**
+     * @param string $str
      * @return int
      */
     public static function convertStrToBytes(string $str): int
     {
         $str = preg_replace(['~ ~', '~,~'], ['', '.'], $str);
-        $num = (float)$str;
+        $num = (double)$str;
         if (strtoupper(substr($str, -1)) == 'B') {
             $str = substr($str, 0, -1);
         }
@@ -1089,6 +1191,34 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     /**
      * @param Proposal $proposal
+     * @param FormItem $item
+     * @param int $groupCounter0
+     * @param int $groupCounter1
+     * @return Answer|null
+     */
+    protected function getAnswerForItemByGroup(Proposal $proposal, FormItem $item, int $groupCounter0, int $groupCounter1): ?Answer
+    {
+        foreach (clone $proposal->getAnswers() as $answer) {
+            if ($answer->getItem() !== $item) {
+                continue;
+            }
+
+            if ($answer->getGroupCounter0() !== $groupCounter0) {
+                continue;
+            }
+
+            if ($answer->getGroupCounter1() !== $groupCounter1) {
+                continue;
+            }
+
+            return $answer;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Proposal $proposal
      * @return array
      */
     protected function createAnswersMap(Proposal $proposal, int $editStatus = self::META_PROPOSAL_EDITABLE_FIELDS_NO_LIMIT): array
@@ -1105,7 +1235,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
             $itemUid = (int)$item->getUid();
             $answerUid = (int)$answer->getUid();
-            if (!$itemsMap[$itemUid]) {
+            if (empty($itemsMap[$itemUid])) {
                 $itemsMap[$itemUid] = $this->initializeItemsMap($item);
                 $this->getOptionsToItemsMap($item, $itemsMap);
                 $this->getValidatorsToItemsMap($item, $itemsMap);
@@ -1113,14 +1243,63 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $answersMap[$answerUid]['answer']['uid'] = $answer->getUid();
             $answersMap[$answerUid]['answer']['value'] = $answer->getValue();
             $answersMap[$answerUid]['answer']['additionalValue'] = $answer->getAdditionalValue();
-//            $answersMap[$answerUid]['answer']['formGroupUid'] = $answer->getModel()->getUid();
-//            $answersMap[$answerUid]['answer']['counter'] = $answer->getElementCounter();
+            //            $answersMap[$answerUid]['answer']['formGroupUid'] = $answer->getModel()->getUid();
+            //            $answersMap[$answerUid]['answer']['counter'] = $answer->getElementCounter();
             $answersMap[$answerUid]['answer']['type'] = $answer->getType();
             $answersMap[$answerUid]['item'] = $itemsMap[$itemUid];
             $answersMap[$answerUid]['disabled'] = false;
             $answersMap[$answerUid]['commentsCounter'] = count($answer->getComments());
             $answersMap[$answerUid]['groupCounter0'] = $answer->getGroupCounter0();
             $answersMap[$answerUid]['groupCounter1'] = $answer->getGroupCounter1();
+
+            foreach ($item->getModificators() as $modificator) {
+                switch ($modificator->getLogic()) {
+                    case self::MODIFICATOR_TOTAL:
+                        $totalItems = [];
+                        $totalCarryover = 0;
+                        $totalPage = $this->pages[$item->getUid()];
+
+                        foreach ($modificator->getItems() as $modificatorItem) {
+                            $modificatorItemAnswer = $this->getAnswerForItemByGroup($proposal, $modificatorItem, $answer->getGroupCounter0(), $answer->getGroupCounter1())
+                                ?? $this->answers[$modificatorItem->getUid()];
+
+                            if (!$modificatorItemAnswer) {
+                                continue;
+                            }
+
+                            $modificatorItemPage = $this->pages[$modificatorItem->getUid()];
+
+                            if ($modificatorItemPage !== $totalPage) {
+                                // item is on a different page, carryover the value for clientside javascript
+                                $totalCarryover += static::convertStrToNumber($modificatorItemAnswer->getValue());
+                            } else {
+                                $answersMap[$modificatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-modificators'] = join(',', array_unique(array_filter(explode(',', ($answersMap[$modificatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-modificators'] ?? '') . ',MODIFICATOR_TOTAL'))));
+
+                                $answersMap[$modificatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-total-triggers'] = trim(
+                                    ($answersMap[$modificatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-total-triggers'] ?? '') .
+                                    ',#oap-input-' . join('--', [
+                                        $answer->getModel()->getUid(),
+                                        $answer->getGroupCounter0(),
+                                        $answer->getGroupCounter1(),
+                                        $answer->getItem()->getUid(),
+                                    ]),
+                                    ','
+                                );
+
+                                $totalItems[] = '#oap-input-' . join('--', [
+                                        $modificatorItemAnswer->getModel()->getUid(),
+                                        $modificatorItemAnswer->getGroupCounter0(),
+                                        $modificatorItemAnswer->getGroupCounter1(),
+                                        $modificatorItemAnswer->getItem()->getUid(),
+                                    ]);
+                            }
+                        }
+
+                        $answersMap[$answerUid]['item']['additionalAttributes']['data-oap-total-items'] = join(',', $totalItems);
+                        $answersMap[$answerUid]['item']['additionalAttributes']['data-oap-total-carryover'] = $totalCarryover;
+                        break;
+                }
+            }
 
             if ($item->getType() == self::TYPE_UPLOAD) {
                 /** @var ItemValidator $validator */
@@ -1134,6 +1313,75 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 }
             }
 
+            foreach ($item->getValidators() as $validator) {
+                switch ($validator->getType()) {
+                    case self::VALIDATOR_MAXVALUE:
+                        if ($item->getType() == self::TYPE_UPLOAD) {
+                            $currentN = count(explode(',', $answer->getValue()));
+                            if ($currentN >= $validator->getParam1()) {
+                                $answersMap[$answerUid]['add_button']['disabled'] = 1;
+                            }
+                        }
+                        break;
+
+                    case self::VALIDATOR_GREATERTHAN:
+                    case self::VALIDATOR_LESSTHAN:
+                        $validatorItem = $validator->getItem()[0] ?? null;
+
+                        if (!$validatorItem) {
+                            break;
+                        }
+
+                        $validatorItemAnswer = $this->getAnswerForItemByGroup($proposal, $validatorItem, $answer->getGroupCounter0(), $answer->getGroupCounter1())
+                            ?? $this->answers[$validatorItem->getUid()];
+
+                        if (!$validatorItemAnswer) {
+                            break;
+                        }
+
+                        $itemPage = $this->pages[$item->getUid()];
+                        $validatorItemPage = $this->pages[$validatorItem->getUid()];
+
+                        if ($validator->getType() === self::VALIDATOR_GREATERTHAN) {
+                            $type = 'greaterthan';
+                        } else {
+                            $type = 'lessthan';
+                        }
+
+                        if ($item->getType() === self::TYPE_STRING && $validatorItem->getType() === self::TYPE_STRING) {
+                            if ($validatorItemPage !== $itemPage) {
+                                // item is on a different page, carryover the value for clientside javascript
+                                $answersMap[$answerUid]['item']['additionalAttributes']['data-oap-' . $type . '-carryover'] = static::convertStrToNumber($validatorItemAnswer->getValue());
+                            } else {
+                                $answersMap[$validatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-validat'] = join(',', array_unique(array_filter(explode(',', ($answersMap[$validatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-validat'] ?? '') . ',' . $this->convertConstantsIntoString('VALIDATOR')[$validator->getType()]))));
+
+                                $answersMap[$validatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-' . $type . '-triggers'] = trim(
+                                    ($answersMap[$validatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-' . $type . '-triggers'] ?? '') .
+                                    ',#oap-input-' . join('--', [
+                                        $answer->getModel()->getUid(),
+                                        $answer->getGroupCounter0(),
+                                        $answer->getGroupCounter1(),
+                                        $answer->getItem()->getUid(),
+                                    ]),
+                                    ','
+                                );
+
+                                $answersMap[$answerUid]['item']['additionalAttributes']['data-oap-' . $type . '-item'] = '#oap-input-' . join('--', [
+                                        $validatorItemAnswer->getModel()->getUid(),
+                                        $validatorItemAnswer->getGroupCounter0(),
+                                        $validatorItemAnswer->getGroupCounter1(),
+                                        $validatorItemAnswer->getItem()->getUid(),
+                                    ]);;
+                            }
+                        }
+
+                        // else if ($item->getType() === self::TYPE_DATE1 || $item->getType() === self::TYPE_DATE2) {
+                        //     $this->convertIntoDate();
+                        // }
+                        break;
+                }
+            }
+
             if ($proposal->getState() !== self::PROPOSAL_IN_PROGRESS and
                 $editStatus == self::META_PROPOSAL_EDITABLE_FIELDS_LIMIT) {
                 $answersMap[$answerUid]['disabled'] = true;
@@ -1141,49 +1389,6 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
         }
         return $answersMap;
-    }
-
-    /**
-     * @param string $generatedFile
-     * @param string $targetFile
-     */
-    protected function mergeTemplateWithWord(string $generatedFile, string $targetFile)
-    {
-        // open target
-        $targetZip = new ZipArchive();
-        $targetZip->open($targetFile);
-        $targetDocument = $targetZip->getFromName('word/document.xml');
-        $targetDom      = new \DOMDocument();
-        $targetDom->loadXML($targetDocument);
-        $targetXPath = new \DOMXPath($targetDom);
-        $targetXPath->registerNamespace('w', 'http://schemas.openxmlformats.org/wordprocessingml/2006/main');
-
-        // open source
-        $sourceZip = new ZipArchive();
-        $sourceZip->open($generatedFile);
-        $sourceDocument = $sourceZip->getFromName('word/document.xml');
-        $sourceDom      = new \DOMDocument();
-        $sourceDom->loadXML($sourceDocument);
-        $sourceXPath = new \DOMXPath($sourceDom);
-        $sourceXPath->registerNamespace('w', 'http://schemas.openxmlformats.org/wordprocessingml/2006/main');
-
-        /** @var DOMNode $replacementMarkerNode node containing the replacement marker $CONTENT$ */
-        $replacementMarkerNode = $targetXPath->query('//w:p[contains(translate(normalize-space(), " ", ""),"$CONTENT$")]')[0];
-
-        // insert source nodes before the replacement marker
-        $sourceNodes = $sourceXPath->query('//w:document/w:body/*[not(self::w:sectPr)]');
-
-        foreach ($sourceNodes as $sourceNode) {
-            $imported = $replacementMarkerNode->ownerDocument->importNode($sourceNode, true);
-            $inserted = $replacementMarkerNode->parentNode->insertBefore($imported, $replacementMarkerNode);
-        }
-
-        // remove $replacementMarkerNode from the target DOM
-        $replacementMarkerNode->parentNode->removeChild($replacementMarkerNode);
-
-        // save target
-        $targetZip->addFromString('word/document.xml', $targetDom->saveXML());
-        $targetZip->close();
     }
 
     /**
@@ -1224,45 +1429,88 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         return $states;
     }
 
+    public function createWordIntroBlock(Section $section, Proposal $proposal, array $format)
+    {
+        /** @var Call $call */
+        $call = $proposal->getCall();
+        if (!$call) {
+            $call = new Call();
+            $call->setTitle('call: fallback title - propopsal lost the call');
+        }
+
+        $applicant = $proposal->getApplicant();
+        $applicantName = $this->getApplicantName($applicant);
+        if (trim($applicantName) !== '') {
+            $applicantName .= ' (' . $applicant->getEmail() . ')';
+        } else {
+            $applicantName = $applicant->getEmail();
+        }
+
+        // signature-label
+        $proposalId = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_dashboard.proposal.signature.label') . ': ' . $this->buildSignature($proposal);
+        $author = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportAuthor.text') . ': ' . $applicantName;
+        $dateLastEdit = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_dashboard.proposal.lastChange.label') . ': ' . date('d.m.Y', $proposal->getEditTstamp());
+        $dateExport = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportGenerated.text', 'open_oap', [date('d.m.Y'), date('H:i')]);
+
+        $states = $this->createStatesArray('all');
+        $callState = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportStatus.text') . ': ' . $states[$proposal->getState()];
+
+        $draftMode = '';
+        if ($proposal->getState() < self::PROPOSAL_SUBMITTED) {
+            $draftMode = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.draftStatus.text');
+        }
+
+        // <div><span class="footnote">({commentsAtProposalCount} {f:if(condition:'1 == {commentsAtProposalCount}', then:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.singular.label\')}', else:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.plural.label\')}')}) <sup>{footnoteCounter}</sup></span></div>
+        $commonComment = 0;
+        /** @var Comment $comment */
+        foreach ($proposal->getComments() as $comment) {
+            if ($comment->getSource() == self::COMMENT_SOURCE_EDIT) {
+                $commonComment++;
+            }
+        }
+        $commentsCount = '';
+        if ($commonComment > 0) {
+            $commentsCount = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_notifications.pdf.generalComments.label') . ': ' . $commonComment;
+        }
+
+        $this->addTextToSection($section, $call->getTitle(), $format['DocumentTitleFontFormat']);
+        $this->addHtmlToSection($section, $call->getIntroText(), $format['IntroTextFont']);
+        $this->addTextToSection($section, $proposal->getTitle(), $format['PageTitleFontFormat']);
+        $this->addTextToSection($section, $dateExport, $format['DefaultFont']);
+        $this->addTextToSection($section, $callState, $format['DefaultFont']);
+        $this->addTextToSection($section, $author, $format['DefaultFont']);
+        $this->addTextToSection($section, $dateLastEdit, $format['DefaultFont']);
+        $this->addTextToSection($section, $proposalId, $format['DefaultFont']);
+        $this->addTextToSection($section, $commentsCount, $format['DefaultFont']);
+    }
+
     /**
      * @param Proposal $proposal
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
-    protected function createWord($proposal): string
+    protected function createWord(Proposal $proposal, string $fileName, string $type = self::WORD_EXPORT_DEFAULT): string
     {
         $phpWord = new PhpWord();
-
-        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
-
+        /** @var Section $section */
         $section = $phpWord->addSection();
 
-        // disbale protection - not needed and difficult with this kind of word forms
-        if ('protection' == 'no-protection') {
-            $documentProtection = $phpWord->getSettings()->getDocumentProtection();
-            $documentProtection->setEditing(DocProtect::FORMS);
-        }
+        $format = $this->buildFormats($proposal);
+        $this->initializeDocument($section, $proposal, $phpWord, $format);
 
         $itemsMap = [];
-        // setting format of pseudo form field
-        $valueOutputFormat = ['shading' => ['fill' => 'dddddd']];
-        $format['TableCellHeader'] = ['alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::CENTER, 'spaceAfter' => Converter::pointToTwip(4), 'spaceBefore' => Converter::pointToTwip(4)];
-        $format['TableCellValue'] = ['alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::END, 'spaceAfter' => Converter::pointToTwip(4), 'spaceBefore' => Converter::pointToTwip(4)];
-        $format['TableCellLabel'] = ['alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::START, 'spaceAfter' => Converter::pointToTwip(4), 'spaceBefore' => Converter::pointToTwip(4)];
-        $wordSetting['TableCellWidthLabel'] = Converter::cmToTwip(5);
-        $wordSetting['TableCellWidthValue'] = Converter::cmToTwip(2.5);
 
-        $format['IntroTextFont'] = ['bold' => false, 'size' => 11];
-        $format['HelpTextFont'] = ['bold' => false, 'size' => 11, 'italic' => true];
-        $format['PageTitleFontFormat'] = ['bold' => true, 'size' => 12];
-        $format['PageTitleFontFormat2'] = ['bold' => true, 'size' => 11];
-        $format['GroupTitleFontFormat'] = ['bold' => true, 'size' => 12];
-        $format['MetaGroupTitleFontFormat'] = ['bold' => true, 'size' => 14];
-        $format['QuestionFont'] = ['bold' => true, 'size' => 11];
-        $format['LineStyle'] = ['weight' => 1, 'width' => 100, 'height' => 0, 'color' => 333333];
-        $format['LineStyleEndMetaGroup'] = ['weight' => 2, 'width' => 100, 'height' => 0, 'color' => 333333];
+        // setting format of pseudo form field
+        if ($type == self::WORD_EXPORT_COMPACT) {
+            $valueOutputFormat = [];
+        } else {
+            $valueOutputFormat = ['shading' => ['fill' => $format['OutputFormat']['Shading']]];
+        }
 
         $this->flattenAnswers($proposal);
         $this->flattenItems($proposal);
+
+        // build call-/proposal-intro
+        $this->createWordIntroBlock($section, $proposal, $format);
 
         /** @var MetaInformation $metaInfo */
         $metaInfo = new MetaInformation($proposal->getMetaInformation());
@@ -1294,14 +1542,16 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
 
             $this->addTextToSection($section, $formPage->getTitle(), $format['PageTitleFontFormat']);
-            $this->addHtmlToSection($section, $formPage->getIntroText());
+            if (trim($formPage->getIntroText())) {
+                $this->addHtmlToSection($section, $formPage->getIntroText());
+            }
 
             /** @var FormGroup $itemGroupL0 */
             foreach ($formPage->getItemGroups() as $itemGroupL0) {
                 if ($itemGroupL0->getType() == self::GROUPTYPE_META) {
                     $currentL1 = $groupsCounter[$itemGroupL0->getUid()]['current'];
                     for ($groupIndexL0 = 0; $groupIndexL0 < $groupsCounter[$itemGroupL0->getUid()]['current']; $groupIndexL0++) {
-                        $this->createWordGroupTitleBlock($itemGroupL0, $groupIndexL0, $currentL1, $section, $format);
+                        $this->createWordGroupTitleBlock($itemGroupL0, $groupIndexL0, $currentL1, $section, $format, $type);
 
                         foreach ($itemGroupL0->getItemGroups() as $itemGroupL1) {
                             $currentL1 = (int)$groupsCounter[$itemGroupL0->getUid()]['instances'][$groupIndexL0][$itemGroupL1->getUid()]['current'];
@@ -1318,6 +1568,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                                     $itemsMap,
                                     $commentCounter,
                                     $comments,
+                                    $type
                                 );
                             } else {
                                 $this->createWordTableGroup(
@@ -1326,9 +1577,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                                     $format,
                                     $currentL1,
                                     $groupIndexL0,
-                                    $wordSetting,
                                     $answers,
-                                    $commentCounter
+                                    $commentCounter,
+                                    $type
                                 );
                             }
                         }
@@ -1350,6 +1601,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                             $itemsMap,
                             $commentCounter,
                             $comments,
+                            $type
                         );
                     } else {
                         $this->createWordTableGroup(
@@ -1358,9 +1610,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                             $format,
                             $groupsCounter[$itemGroupL0->getUid()]['current'],
                             $groupIndexL1,
-                            $wordSetting,
                             $answers,
-                            $commentCounter
+                            $commentCounter,
+                            $type
                         );
                     }
                 }
@@ -1382,27 +1634,34 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 null,
                 $format['QuestionFont']
             );
-            $this->addHtmlToSection($section, $item->getIntroText());
-            $this->addHtmlToSection($section, '<i>' . $item->getHelpText() . '</i>');
+            if (trim($item->getIntroText())) {
+                $this->addHtmlToSection($section, $item->getIntroText());
+            }
+            if ($type == self::WORD_EXPORT_DEFAULT and trim($item->getHelpText())) {
+                $this->addHtmlToSection($section, '<i>' . $item->getHelpText() . '</i>');
+            }
+
             $answer = new Answer();
             $answer->setValue('');
             if ($proposal->getState() > self::PROPOSAL_IN_PROGRESS) {
                 $answer->setValue('Yes'); // todo - take from option
             }
 
-            $itemsMap = $this->createWordValueOutput($item, $answer, $section, $valueOutputFormat, $itemsMap);
+            $itemsMap = $this->createWordValueOutput($item, $answer, $section, $valueOutputFormat, $itemsMap, $type);
 
             // todo formatting automatic created text/hints
-            $this->addHtmlToSection(
-                $section,
-                '<span style="text-align:right;"><i>' .
-                implode('; ', $validatorTexts) .
-                '</i></span>'
-            );
+            if ($type == self::WORD_EXPORT_DEFAULT) {
+                $this->addHtmlToSection(
+                    $section,
+                    '<span style="text-align:right;"><i>' .
+                    implode('; ', $validatorTexts) .
+                    '</i></span>'
+                );
+            }
 
             $section->addLine($format['LineStyle']);
         }
-//        die();
+        //        die();
 
         // general comments
         $generalComments = [];
@@ -1440,16 +1699,19 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
         }
 
-        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        //        DebuggerUtility::var_dump($phpWord);
+        //        die();
+        //        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord);
 
-        $tmpFolder = $this->getTransientFolder();
-        $tmpFileName = $this->getWordFileName($proposal->getUid(), 'tmp');
-        $tmpFile = $tmpFolder . '/' . $tmpFileName;
-        $objWriter->save($tmpFile);
-        if (!file_exists($tmpFile)) {
+        //        $tmpFolder = $this->getTransientFolder();
+        //        $tmpFileName = $this->getWordFileName($proposal->getUid(), 'tmp');
+        //        $tmpFile = $tmpFolder . '/' . $tmpFileName;
+        $objWriter->save($fileName);
+        if (!file_exists($fileName)) {
             return '';
         }
-        return $tmpFile;
+        return $fileName;
     }
 
     /**
@@ -1471,38 +1733,6 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected function getTransientFolder(): string
     {
         return Environment::getVarPath() . '/transient';
-    }
-
-    /**
-     * @param Proposal $proposal
-     * @param string $contentWordFileName
-     * @param string $templateWordFileName
-     */
-    protected function mergeWordFiles(Proposal $proposal, string $contentWord, string $templateWord): string
-    {
-        $this->mergeTemplateWithWord($templateWord, $contentWord, 'MergeResult.docx');
-
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('MergeResult.docx');
-//
-//        $templateProcessor->setValue('date', date("d-m-Y"));
-        $templateProcessor->setValue('date', LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportGenerated.text', 'open_oap', [date('d.m.Y'), date('H:i')]));
-        $templateProcessor->setValue('call', $proposal->getCall()->getTitle());
-        $templateProcessor->setValue(
-            ['proposalTitle', 'state'],
- //           [$proposal->getTitle(), $states[$proposal->getState()]]
-            [$proposal->getTitle(), LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportStatus.text') . ': ' . $states[$proposal->getState()]]
-        );
-
-        $templateProcessor->saveAs('MergeResult.docx');
-
-//        $objReader = \PhpOffice\PhpWord\IOFactory::createReader('Word2007');
-//        $phpWordFinal = $objReader->load('MergeResult.docx');
-//
-//        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWordFinal, 'Word2007');
-//        $objWriter->save('MergeResult-1.docx');
-
-        echo 'created word';
-        die();
     }
 
     protected function determineProposalPid(Call $call): int
@@ -1554,9 +1784,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected function addHtmlToSection(Section $section, $htmlText): void
     {
-        if (trim($htmlText) == '') {
-            return;
-        }
+        //        if (trim($htmlText) == '') {
+        //            return;
+        //        }
         $urlReplacePattern = '~<a *href *= *[\"|\'](.*)[\"|\'].*>(.*)<\/a *>~miU';
         $urlReplaceReplacestring = '$2 ($1)';
         $htmlText = preg_replace($urlReplacePattern, $urlReplaceReplacestring, $htmlText);
@@ -1574,7 +1804,18 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $urlReplaceReplacestring = '><';
         $htmlText = preg_replace($urlReplacePattern, $urlReplaceReplacestring, $htmlText);
 
-        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $htmlText, false);
+        //        $urlReplacePattern = '~@~mU';
+        //        $urlReplaceReplacestring = '(at)';
+        //        $htmlText = preg_replace($urlReplacePattern, $urlReplaceReplacestring, $htmlText);
+
+        $urlReplacePattern = '~&nbsp;~mU';
+        $urlReplaceReplacestring = ' ';
+        $htmlText = preg_replace($urlReplacePattern, $urlReplaceReplacestring, $htmlText);
+
+        if (trim($htmlText) == '') {
+            $htmlText = ' ';
+        }
+        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $htmlText);
     }
 
     /**
@@ -1611,7 +1852,10 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     private function addTextToSection(Section $section, $string, array $fStyle = null, array $pStyle = null): void
     {
-//        $text = htmlspecialchars($string);
+        //        $text = htmlspecialchars($string);
+        if ($string == '') {
+            $string = ' ';
+        }
         $section->addText($string, $fStyle, $pStyle);
     }
 
@@ -1677,20 +1921,23 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         $proposalPathName = '';
+        $userNamePath = '';
         if ($createFolder) {
             // replace ids in path
             /** @var User $applicant */
             $applicant = $proposal->getApplicant();
 
-            $applicantName = $applicant->getUsername();
-            if ($applicant->getLastname() !== '') {
-                $applicantName = $applicant->getLastName();
-                if ($applicant->getFirstName() !== '') {
-                    $applicantName .= '-' . $applicant->getFirstName();
+            if ($this->settings['zipStructureApplicantFormat'] !== '') {
+                $applicantName = $applicant->getUsername();
+                if ($applicant->getLastname() !== '') {
+                    $applicantName = $applicant->getLastName();
+                    if ($applicant->getFirstName() !== '') {
+                        $applicantName .= '-' . $applicant->getFirstName();
+                    }
                 }
+                $userNamePath = sprintf($this->settings['zipStructureApplicantFormat'], $applicantName, $applicant->getUid());
             }
-            $userUidFormatted = sprintf('%05d', $applicant->getUid());
-            $userNamePath = $applicantName . '--' . $userUidFormatted;
+
             // $signature = $proposal->getSignature();
             $proposalTitle = $proposal->getTitle();
 
@@ -1700,19 +1947,20 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
             if ($proposalTitle <> '') {
                 $proposalTitle = $storage->sanitizeFileName($proposalTitle);
-            // $proposalTitle = preg_replace(['~ ~','~/~','~\.~','~;~'],['-','-','-','-'],$proposalTitle);
+                // $proposalTitle = preg_replace(['~ ~','~/~','~\.~','~;~'],['-','-','-','-'],$proposalTitle);
             } else {
                 $proposalTitle .= $this->getTranslationString(
                     self::XLF_BASE_IDENTIFIER_DEFAULTS . '.' . self::DEFAULT_TITLE
                 );
             }
-            $proposalUidFormatted = sprintf('%05d', $proposal->getUid());
-            $proposalPathName .= substr($proposalTitle, 0, 30) . '--' . $proposalUidFormatted;
+            $proposalTitleShorted = substr($proposalTitle, 0, (integer) $this->settings['zipStructureProppsalFormatTitleLength']);
+            $proposalPathName .= sprintf($this->settings['zipStructureProppsalFormat'], $proposalTitleShorted, $proposal->getUid());
+
         }
 
         foreach ($proposal->getAnswers() as $answer) {
             if (!$answer->getItem()) {
-//                DebuggerUtility::var_dump($answer,'answer without item '.__LINE__);
+                //                DebuggerUtility::var_dump($answer,'answer without item '.__LINE__);
                 continue;
             }
             $value = $answer->getValue();
@@ -1729,56 +1977,87 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
                     if ($file) {
                         if ($proposalPathName !== '') {
-                            $fileSaveAs = $storage->sanitizeFileName($zipName) .
-                                          '/' .
-                                          $storage->sanitizeFileName($userNamePath) .
-                                          '/' .
-                                          $storage->sanitizeFileName($proposalPathName) .
-                                          '/' .
-                                          basename($file->getIdentifier());
+                            $fileName = $file->getIdentifier();
+                            $fileSaveAs = $this->buildFilePathForZip($storage,$zipName,$userNamePath,$proposalPathName,$fileName);
                         } else {
                             $fileSaveAs = basename($file->getIdentifier());
                         }
                         if (file_exists($absoluteBasePath . $file->getIdentifier())) {
                             $zip->addFile($absoluteBasePath . $file->getIdentifier(), $fileSaveAs);
-                        } else {
-                            // DebuggerUtility::var_dump($absoluteBasePath . $file->getIdentifier() .  ' not found!',(string)__LINE__);
-                            // flashmassage: there was an error
                         }
+                        // else {
+                        // DebuggerUtility::var_dump($absoluteBasePath . $file->getIdentifier() .  ' not found!',(string)__LINE__);
+                        // flashmassage: there was an error
+                        // }
                     }
                 }
             }
         }
         if ($folder) {
             // add created pdf into zip
-            $pdfFileSaveAs = '';
-            if ($proposalPathName !== '') {
-                $pdfFileSaveAs = $storage->sanitizeFileName($zipName) . '/' . $storage->sanitizeFileName($userNamePath) . '/' . $storage->sanitizeFileName($proposalPathName) . '/';
+            $pdfFile = $this->createFileName($proposal, '.pdf');
+            // todo flash message if there is no pdf
+            if (file_exists($pdfFile)) {
+                $fileSaveAs = $this->buildFilePathForZip(
+                    $storage, $zipName, $userNamePath, $proposalPathName, $pdfFile
+                );
+                $zip->addFile($pdfFile, $fileSaveAs);
             }
-            $signature = $this->buildSignature($proposal);
-            if ($signature == '') {
-                $signature = $proposal->getUid();
+            // todo flash message if there is no word (simple)
+            $wordFileSimple = $this->createFileName($proposal, '.docx', self::WORD_EXPORT_COMPACT);
+            if (file_exists($wordFileSimple)) {
+                $fileSaveAs = $this->buildFilePathForZip(
+                    $storage, $zipName, $userNamePath, $proposalPathName, $wordFileSimple
+                );
+                $zip->addFile($wordFileSimple, $fileSaveAs);
             }
-            $pdfFileSaveAs .= $storage->sanitizeFileName($signature . '.pdf');
+            // todo flash message if there is no word (extended)
+            $wordFileExtended = $this->createFileName($proposal, '.docx', self::WORD_EXPORT_DEFAULT);
+            if (file_exists($wordFileExtended)) {
+                $fileSaveAs = $this->buildFilePathForZip(
+                    $storage, $zipName, $userNamePath, $proposalPathName, $wordFileSimple
+                );
+                $zip->addFile($wordFileSimple, $fileSaveAs);
+            }
 
-            $createdPdf = $absoluteBasePath . $folder->getIdentifier() . $proposal->getUid() . '.pdf';
-            if (file_exists($createdPdf)) {
-                $zip->addFile($createdPdf, $pdfFileSaveAs);
-            }
-            // todo: flashMessage that there is something missing
-
-            // add created word into zip
-            $wordFileSaveAs = '';
-            if ($proposalPathName !== '') {
-                $wordFileSaveAs = $storage->sanitizeFileName($zipName) . '/' . $storage->sanitizeFileName($userNamePath) . '/' . $storage->sanitizeFileName($proposalPathName) . '/';
-            }
-            $wordFileSaveAs .= $storage->sanitizeFileName($signature . '.docx');
-
-            $createdWord = $absoluteBasePath . $folder->getIdentifier() . $proposal->getUid() . '.docx';
-            if (file_exists($createdWord)) {
-                $zip->addFile($createdWord, $wordFileSaveAs);
-            }
-            // todo: flashMessage that there is something missing
+            //if (1 == 0) {
+            //    $pdfFileSaveAs = '';
+            //    if ($proposalPathName !== '') {
+            //        $pdfFileSaveAs = $storage->sanitizeFileName($zipName) .
+            //                         '/' .
+            //                         $storage->sanitizeFileName($userNamePath) .
+            //                         '/' .
+            //                         $storage->sanitizeFileName($proposalPathName) .
+            //                         '/';
+            //    }
+            //    $signature = $this->buildSignature($proposal);
+            //    if ($signature == '') {
+            //        $signature = $proposal->getUid();
+            //    }
+            //    $pdfFileSaveAs .= $storage->sanitizeFileName($signature . '.pdf');
+            //
+            //    $createdPdf = $absoluteBasePath . $folder->getIdentifier() . $proposal->getUid() . '.pdf';
+            //    if (file_exists($createdPdf)) {
+            //        $zip->addFile($createdPdf, $pdfFileSaveAs);
+            //    }
+            //
+            //    // add created word into zip
+            //    $wordFileSaveAs = '';
+            //    if ($proposalPathName !== '') {
+            //        $wordFileSaveAs = $storage->sanitizeFileName($zipName) .
+            //                          '/' .
+            //                          $storage->sanitizeFileName($userNamePath) .
+            //                          '/' .
+            //                          $storage->sanitizeFileName($proposalPathName) .
+            //                          '/';
+            //    }
+            //    $wordFileSaveAs .= $storage->sanitizeFileName($signature . '.docx');
+            //
+            //    $createdWord = $absoluteBasePath . $folder->getIdentifier() . $proposal->getUid() . '.docx';
+            //    if (file_exists($createdWord)) {
+            //        $zip->addFile($createdWord, $wordFileSaveAs);
+            //    }
+            //}
         }
 
         return $zip;
@@ -1800,6 +2079,18 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected function initializeUploadFolder(ResourceStorage $storage): array
     {
+        $absoluteBasePath = $this->getAbsolutePath($storage);
+        $uploadFolder = self::provideTargetFolder($storage->getRootLevelFolder(), '_temp_');
+        self::provideFolderInitialization($uploadFolder);
+        return [$absoluteBasePath, $uploadFolder];
+    }
+
+    /**
+     * @param ResourceStorage $storage
+     * @return string
+     */
+    protected function getBasePath(ResourceStorage $storage): string
+    {
         $configuration = $storage->getConfiguration();
         if (!empty($configuration['pathType']) && $configuration['pathType'] === 'relative') {
             $relativeBasePath = $configuration['basePath'];
@@ -1807,9 +2098,34 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         } else {
             $absoluteBasePath = rtrim($configuration['basePath'], '/');
         }
-        $uploadFolder = self::provideTargetFolder($storage->getRootLevelFolder(), '_temp_');
-        self::provideFolderInitialization($uploadFolder);
-        return [$absoluteBasePath, $uploadFolder];
+        return $absoluteBasePath;
+    }
+
+    /**
+     * @param Proposal $proposal
+     * @param string $ext
+     * @param string $postfix
+     * @return string
+     */
+    protected function createFileName(Proposal $proposal, string $ext, string $postfix = ''): string
+    {
+        $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($this->settings['uploadFolder']);
+        $absoluteBasePath = $this->getBasePath($storage);
+
+        $proposalUploadFolder = $this->getUploadFolder($proposal);
+        $basePath = $absoluteBasePath . $proposalUploadFolder->getIdentifier();
+        $signature = $this->buildSignature($proposal);
+
+        if ($postfix !== '') {
+            $postfix = '_' . $postfix;
+        }
+        if ($ext[0] !== '.') {
+            $ext = '.' . $ext;
+        }
+        $fileName = $signature . $postfix . $ext;
+        $filePathAndName = $basePath . $fileName;
+
+        return $filePathAndName;
     }
 
     /**
@@ -1862,11 +2178,17 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         Answer $answer,
         Section $section,
         array $valueOutputFormat,
-        array $itemsMap
+        array $itemsMap,
+        string $type
     ): array {
         switch ($item->getType()) {
             case self::TYPE_STRING:
                 $outputString = $answer->getValue();
+                if ($type == self::WORD_EXPORT_COMPACT and $outputString == '') {
+                    $outputString = '--';
+                }
+                //                $outputString = str_replace('@','(at)',$outputString);
+                //                DebuggerUtility::var_dump($outputString);
                 if ($item->getUnit() !== '') {
                     $this->addTextToSection($section, 'in ' . $item->getUnit());
                     if (is_numeric($answer->getValue())) {
@@ -1879,20 +2201,24 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     }
                 }
                 $this->addTextToSection($section, $outputString, null, $valueOutputFormat);
-
                 break;
             case self::TYPE_TEXT:
                 // todo Output of the max. number of characters
-                if ($answer->getValue()) {
+                if ($answer->getValue() !== '') {
                     $this->addTextToSection($section, $answer->getValue(), null, $valueOutputFormat);
                 } else {
                     // output several empty lines to show that a larger text is expected here.
-                    $this->addTextToSection($section, ' ', null, $valueOutputFormat);
+                    if ($type == self::WORD_EXPORT_DEFAULT) {
+                        $this->addTextToSection($section, ' ', null, $valueOutputFormat);
+                        $this->addTextToSection($section, ' ', null, $valueOutputFormat);
+                    } else {
+                        $this->addTextToSection($section, ' ', null, $valueOutputFormat);
+                    }
+                }
+                if ($type == self::WORD_EXPORT_DEFAULT) {
+                    // an additional empty line - even if contents have already been entered
                     $this->addTextToSection($section, ' ', null, $valueOutputFormat);
                 }
-                // an additional empty line - even if contents have already been entered
-                $this->addTextToSection($section, ' ', null, $valueOutputFormat);
-
                 break;
             case self::TYPE_DATE1:
                 $this->addTextToSection($section, $answer->getValue(), null, $valueOutputFormat);
@@ -1913,7 +2239,16 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             case self::TYPE_CHECKBOX:
             case self::TYPE_SELECT_SINGLE:
             case self::TYPE_RADIOBUTTON:
-                $itemsMap = $this->createSelectionForWord($section, $item, $itemsMap, $answer, $valueOutputFormat);
+                if ($type == self::WORD_EXPORT_DEFAULT) {
+                    $itemsMap = $this->createSelectionForWord($section, $item, $itemsMap, $answer, $valueOutputFormat);
+                } else {
+                    if ($answer->getValue()) {
+                        $itemsMap = $this->createSelectionForWordSimpleMode($section, $item, $itemsMap, $answer, $valueOutputFormat);
+                    } else {
+                        // output several empty lines to show that a larger text is expected here.
+                        $this->addTextToSection($section, '-- ', null, $valueOutputFormat);
+                    }
+                }
                 break;
 
             case self::TYPE_UPLOAD:
@@ -1946,10 +2281,16 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         }
                     }
                 } else {
-                    $this->addTextToSection($section, ' ', null, $valueOutputFormat);
+                    if ($type == self::WORD_EXPORT_DEFAULT) {
+                        $this->addTextToSection($section, ' ', null, $valueOutputFormat);
+                        $this->addTextToSection($section, ' ', null, $valueOutputFormat);
+                    } else {
+                        $this->addTextToSection($section, '--', null, $valueOutputFormat);
+                    }
+                }
+                if ($type == self::WORD_EXPORT_DEFAULT) {
                     $this->addTextToSection($section, ' ', null, $valueOutputFormat);
                 }
-                $this->addTextToSection($section, ' ', null, $valueOutputFormat);
 
                 break;
         }
@@ -2053,9 +2394,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                              ': ' .
                              $commonComment;
         }
-//        DebuggerUtility::var_dump($proposal->getComments());
-//        DebuggerUtility::var_dump($proposal);
-//        die();
+        //        DebuggerUtility::var_dump($proposal->getComments());
+        //        DebuggerUtility::var_dump($proposal);
+        //        die();
 
         $templateProcessor->setValue(
             ['proposalId', 'author', 'dateExport', 'dateLastEdit', 'callTitle', 'proposalTitle', 'callState', 'commentsCount', 'draftMode'],
@@ -2091,10 +2432,15 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Proposal $proposal
      * @return \TYPO3\CMS\Core\Resource\FileReference|null
      */
-    protected function getCallLogo(Proposal $proposal): ?\TYPO3\CMS\Core\Resource\FileReference
+    protected function getCallLogo(Proposal $proposal, $target = 'pdf'): ?\TYPO3\CMS\Core\Resource\FileReference
     {
         /** @var \TYPO3\CMS\Extbase\Domain\Model\FileReference|null $logo */
-        $logo = $proposal->getCall()->getLogo();
+        if ($target == 'word') {
+            $logo = $proposal->getCall()->getWordHeaderLogo();
+        } else {
+            $logo = $proposal->getCall()->getLogo();
+        }
+
         if (!$logo) {
             $callLogo = null;
         } else {
@@ -2154,7 +2500,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         array $valueOutputFormat,
         $itemsMap,
         int &$commentCounter,
-        array $comments
+        array $comments,
+        string $type
     ): void {
         if ($itemGroup->getRepeatableMax() > $itemGroup->getRepeatableMin()) {
             $label = LocalizationUtility::translate($this->locallangFile . ':tx_openoap.word.group_repeatable');
@@ -2163,7 +2510,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         for ($i = 0; $i < $current; $i++) {
-            $this->createWordGroupTitleBlock($itemGroup, $i, $current, $section, $format);
+            $this->createWordGroupTitleBlock($itemGroup, $i, $current, $section, $format, $type);
 
             /** @var FormItem $item */
             foreach ($itemGroup->getItems() as $item) {
@@ -2185,18 +2532,25 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     null,
                     $format['QuestionFont']
                 );
-                $this->addHtmlToSection($section, $item->getIntroText());
-                $this->addHtmlToSection($section, '<i>' . $item->getHelpText() . '</i>');
+                if (trim($item->getHelpText())) {
+                    $this->addHtmlToSection($section, $item->getIntroText());
+                }
 
-                $itemsMap = $this->createWordValueOutput($item, $answer, $section, $valueOutputFormat, $itemsMap);
+                if ($type == self::WORD_EXPORT_DEFAULT and trim($item->getHelpText())) {
+                    $this->addHtmlToSection($section, '<i>' . $item->getHelpText() . '</i>');
+                }
+
+                $itemsMap = $this->createWordValueOutput($item, $answer, $section, $valueOutputFormat, $itemsMap, $type);
 
                 // todo formatting automatic created text/hints
-                $this->addHtmlToSection(
-                    $section,
-                    '<span style="text-align:right;"><i>' .
-                    implode('; ', $validatorTexts) .
-                    '</i></span>'
-                );
+                if ($type == self::WORD_EXPORT_DEFAULT) {
+                    $this->addHtmlToSection(
+                        $section,
+                        '<span style="text-align:right;"><i>' .
+                        implode('; ', $validatorTexts) .
+                        '</i></span>'
+                    );
+                }
 
                 $commentsOfAnswer = $answer->getComments();
                 if (count($commentsOfAnswer)) {
@@ -2229,7 +2583,6 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param array $format
      * @param int $current
      * @param int $groupIndexL1 ,
-     * @param array $wordSetting
      * @param array $answers
      * @param int $commentCounter
      */
@@ -2239,14 +2592,16 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         array $format,
         int $current,
         int $groupIndexL1,
-        array $wordSetting,
         array $answers,
-        int &$commentCounter
+        int &$commentCounter,
+        string $type
     ): void {
         $this->addTextToSection($section, $itemGroup->getTitle(), $format['GroupTitleFontFormat']);
         // todo repeated groups? more then one output of the IntroText?
         $this->addHtmlToSection($section, $itemGroup->getIntroText());
-        $this->addHtmlToSection($section, '<i>' . $itemGroup->getHelpText() . '</i>');
+        if ($type == self::WORD_EXPORT_DEFAULT) {
+            $this->addHtmlToSection($section, '<i>' . $itemGroup->getHelpText() . '</i>');
+        }
 
         foreach ($itemGroup->getItems() as $key => $item) {
             /** @var ItemValidator $validator */
@@ -2260,15 +2615,21 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 null,
                 $format['QuestionFont']
             );
-            $this->addHtmlToSection($section, $item->getIntroText());
-            $this->addHtmlToSection($section, '<i>' . $item->getHelpText() . '</i>');
-            // todo formatting automatic created text/hints
-            $this->addHtmlToSection(
-                $section,
-                '<span style="text-align:right;"><i>' .
-                implode('; ', $validatorTexts) .
-                '</i></span>'
-            );
+            if (trim($item->getIntroText())) {
+                $this->addHtmlToSection($section, $item->getIntroText());
+            }
+            if ($type == self::WORD_EXPORT_DEFAULT) {
+                if (trim($item->getHelpText())) {
+                    $this->addHtmlToSection($section, '<i>' . $item->getHelpText() . '</i>');
+                }
+                // todo formatting automatic created text/hints
+                $this->addHtmlToSection(
+                    $section,
+                    '<span style="text-align:right;"><i>' .
+                    implode('; ', $validatorTexts) .
+                    '</i></span>'
+                );
+            }
         }
 
         $table = $section->addTable();
@@ -2279,7 +2640,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $table->addRow();
         for ($col = 0; $col <= $current; ++$col) {
             if ($col == 0) {
-                $table->addCell($wordSetting['TableCellWidthLabel'])->addText('');
+                $table->addCell($format['TableCellWidthLabel'])->addText(' ');
             } else {
                 if (count($itemGroup->getGroupTitle())) {
                     /** @var GroupTitle $groupTitleObject */
@@ -2291,11 +2652,11 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         $groupTitle = '#' . $col;
                     }
 
-                    $table->addCell($wordSetting['TableCellWidthValue'])
+                    $table->addCell($format['TableCellWidthValue'])
                           ->addText($groupTitle)
                           ->setParagraphStyle($format['TableCellHeader']);
                 } else {
-                    $table->addCell($wordSetting['TableCellWidthValue'])
+                    $table->addCell($format['TableCellWidthValue'])
                           ->addText('#' . $col)
                           ->setParagraphStyle($format['TableCellHeader']);
                 }
@@ -2312,14 +2673,14 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         $unit = ' [' . $item->getUnit() . ']';
                     }
                     $table
-                        ->addCell($wordSetting['TableCellWidthLabel'])
+                        ->addCell($format['TableCellWidthLabel'])
                         ->addText($item->getQuestion() . $unit)
                         ->setParagraphStyle($format['TableCellLabel']);
                 }
                 $answerIndex = $itemGroup->getUid() . '--' . $groupIndexL1 . '--' . $col . '--' . $item->getUid();
                 if ($answers[$answerIndex]) {
                     $table
-                        ->addCell($wordSetting['TableCellWidthValue'], ['borderSize' => 6])
+                        ->addCell($format['TableCellWidthValue'], ['borderSize' => $format['TableBorderSize']])
                         ->addText($answers[$answerIndex]->getValue())
                         ->setParagraphStyle($format['TableCellValue']);
                 }
@@ -2335,7 +2696,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param Section $section
      * @param array $format
      */
-    protected function createWordGroupTitleBlock(FormGroup $itemGroup, int $i, int $current, Section $section, $format): void
+    protected function createWordGroupTitleBlock(FormGroup $itemGroup, int $i, int $current, Section $section, $format, $type = self::WORD_EXPORT_DEFAULT): void
     {
         $groupTitle = '';
         if (count($itemGroup->getGroupTitle())) {
@@ -2358,8 +2719,12 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         // todo repeated groups? more then one output of the IntroText?
-        $this->addHtmlToSection($section, $itemGroup->getIntroText());
-        $this->addHtmlToSection($section, '<i>' . $itemGroup->getHelpText() . '</i>');
+        if (trim($itemGroup->getIntroText())) {
+            $this->addHtmlToSection($section, $itemGroup->getIntroText());
+        }
+        if (trim($itemGroup->getHelpText()) and $type == self::WORD_EXPORT_DEFAULT) {
+            $this->addHtmlToSection($section, '<i>' . $itemGroup->getHelpText() . '</i>');
+        }
     }
 
     /**
@@ -2406,31 +2771,31 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         foreach ($itemsMap[$item->getUid()]['options'] as $option) {
             // check if option is set?
             // $option['key'] == $answer->getValue()
-            if ($checks[md5($option['key'])] or $option['key'] == $answer->getValue()) {
-                $mark = $checkStart.$checkedChar.$checkEnd;
+            if (isset($checks[md5($option['key'])]) || $option['key'] == $answer->getValue()) {
+                $mark = $checkStart . $checkedChar . $checkEnd;
                 $selectedOption[] = $option['key'];
             } else {
-                $mark = $checkStart.' '.$checkEnd;
+                $mark = $checkStart . ' ' . $checkEnd;
             }
             if ($inline) {
-                $selectionInline .= $mark . ' ' . preg_replace('~\|~', ' ', $option['key']) . '  ';
+                $selectionInline .= $mark . ' ' . preg_replace('~\|~', ' ', $option['label']) . '  ';
             } else {
-                $content = $mark . ' ' . preg_replace('~\|~', ' ', $option['key']);
+                $content = $mark . ' ' . preg_replace('~\|~', ' ', $option['label']);
                 $this->addTextToSection($section, $content, null, $valueOutputFormat);
             }
         }
         // check if there are none translated options selected
         // todo betterment... here just a first step... output of all selected options - even if one or more of them are in output before
         if (count($selectedOption) !== count($checks) and is_array($checksArray)) {
-            $content = '(not translated options selected: '.implode(', ', $rawSelectedOptions).') ';
+            $content = '(not translated options selected: ' . implode(', ', $rawSelectedOptions) . ') ';
             $this->addTextToSection($section, $content, null, $valueOutputFormat);
         } elseif ($answer->getValue() !== '' and !count($selectedOption)) {
-            $content = '(not translated option selected: '.$answer->getValue().') ';
+            $content = '(not translated option selected: ' . $answer->getValue() . ') ';
             $this->addTextToSection($section, $content, null, $valueOutputFormat);
         }
         if ($inline) {
             $this->addTextToSection($section, $selectionInline, null, $valueOutputFormat);
-//            $this->addHtmlToSection($section,$selectionInline);
+            //            $this->addHtmlToSection($section,$selectionInline);
         }
         if ($item->isAdditionalValue()) {
             $this->addTextToSection(
@@ -2441,5 +2806,224 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             );
         }
         return $itemsMap;
+    }
+
+    /**
+     * @param Section $section
+     * @param FormItem|null $item
+     * @param array $itemsMap
+     * @param Answer $answer
+     * @param array $valueOutputFormat
+     * @return array
+     */
+    protected function createSelectionForWordSimpleMode(
+        Section $section,
+        ?FormItem $item,
+        array $itemsMap,
+        Answer $answer,
+        array $valueOutputFormat
+    ): array {
+        //        DebuggerUtility::var_dump($answer->getValue(),(string)__LINE__);
+
+        $this->getOptionsToItemsMap($item, $itemsMap);
+        $checksArray = json_decode($answer->getValue(), true);
+        $checks = [];
+        $rawSelectedOptions = [];
+        if (is_array($checksArray)) {
+            foreach ($checksArray as $check) {
+                $checks[md5($check)] = $check;
+                $rawSelectedOptions[] = $check;
+            }
+        }
+        //        DebuggerUtility::var_dump($checks,(string)__LINE__);
+        //        DebuggerUtility::var_dump($rawSelectedOptions,(string)__LINE__);
+
+        $selectionInline = '';
+
+        $selectedOption = [];
+        foreach ($itemsMap[$item->getUid()]['options'] as $option) {
+            // check if option is set?
+            // $option['key'] == $answer->getValue()
+            if (isset($checks[md5($option['key'])]) or $option['key'] == $answer->getValue()) {
+                $selectedOption[] = $option['label'];
+                //                DebuggerUtility::var_dump($option,(string)__LINE__);
+            }
+        }
+        //        DebuggerUtility::var_dump($selectedOption,(string)__LINE__);
+        $selectionInline = implode(', ', $selectedOption);
+        //        DebuggerUtility::var_dump($selectionInline,(string)__LINE__);
+
+        // check if there are none translated options selected
+        // todo betterment... here just a first step... output of all selected options - even if one or more of them are in output before
+        if (count($selectedOption) !== count($checks) and is_array($checksArray)) {
+            $content = '(not translated options selected: ' . implode(', ', $rawSelectedOptions) . ') ';
+            $this->addTextToSection($section, $content, null, $valueOutputFormat);
+        } elseif ($answer->getValue() !== '' and !count($selectedOption)) {
+            $content = '(not translated option selected: ' . $answer->getValue() . ') ';
+            $this->addTextToSection($section, $content, null, $valueOutputFormat);
+        }
+        $this->addTextToSection($section, $selectionInline, null, $valueOutputFormat);
+        if ($item->isAdditionalValue()) {
+            $this->addTextToSection(
+                $section,
+                $answer->getAdditionalValue(),
+                null,
+                $valueOutputFormat
+            );
+        }
+        //        die();
+        return $itemsMap;
+    }
+
+    /**
+     * @param ResourceStorage $storage
+     * @return string
+     */
+    protected function getAbsolutePath(ResourceStorage $storage): string
+    {
+        $configuration = $storage->getConfiguration();
+        if (!empty($configuration['pathType']) && $configuration['pathType'] === 'relative') {
+            $relativeBasePath = $configuration['basePath'];
+            $absoluteBasePath = rtrim(Environment::getPublicPath() . '/' . $relativeBasePath, '/');
+        } else {
+            $absoluteBasePath = rtrim($configuration['basePath'], '/');
+        }
+        return $absoluteBasePath;
+    }
+
+    /**
+     * @param Section $section
+     * @param Proposal $proposal
+     * @param PhpWord $phpWord
+     */
+    protected function initializeDocument(Section $section, Proposal $proposal, PhpWord $phpWord, array $format): void
+    {
+        $sectionStyle = $section->getStyle();
+        $sectionStyle->setMarginLeft(\PhpOffice\PhpWord\Shared\Converter::cmToTwip($format['page']['margin']['left']));
+        $sectionStyle->setMarginRight(\PhpOffice\PhpWord\Shared\Converter::cmToTwip($format['page']['margin']['right']));
+        $sectionStyle->setMarginTop(\PhpOffice\PhpWord\Shared\Converter::cmToTwip($format['page']['margin']['top']));
+        $sectionStyle->setMarginBottom(\PhpOffice\PhpWord\Shared\Converter::cmToTwip($format['page']['margin']['bottom']));
+
+        $header = $section->addHeader();
+
+        /** @var ?|\TYPO3\CMS\Core\Resource\FileReference $callLogoFile */
+        $callLogoFile = $this->getCallLogo($proposal, 'word');
+        if ($callLogoFile) {
+            $absoluteBasePath = $this->getAbsolutePath($callLogoFile->getStorage());
+            $callLogo = $absoluteBasePath . $callLogoFile->getIdentifier();
+            $header->addImage(
+                $callLogo,
+                [
+                    'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::START,
+                    'width' => \PhpOffice\PhpWord\Shared\Converter::cmToPoint(16),
+                ]
+            );
+        }
+        $footer = $section->addFooter();
+
+        $footer->addPreserveText(
+            'Page {PAGE} of {NUMPAGES}',
+            null,
+            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::END]
+        );
+
+        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+
+        // disbale protection - not needed and difficult with this kind of word forms
+        if ('protection' == 'no-protection') {
+            $documentProtection = $phpWord->getSettings()->getDocumentProtection();
+            $documentProtection->setEditing(DocProtect::FORMS);
+        }
+
+        $phpWord->setDefaultFontName($format['DefaultFont']['name']);
+        $phpWord->setDefaultFontSize($format['DefaultFont']['size']);
+        $phpWord->setDefaultParagraphStyle(
+            [
+                'spaceBefore' => Converter::pointToTwip($format['DefaultParagraph']['SpaceBefore']),
+                'spaceAfter' => Converter::pointToTwip($format['DefaultParagraph']['SpaceAfter']),
+                'spacingLineRule' => \PhpOffice\PhpWord\SimpleType\LineSpacingRule::AUTO,
+                'lineHeight' => $format['DefaultParagraph']['LineHeight'],
+//                'spacing'    => 1.2 * 240,
+            ]
+        );
+    }
+
+    public function convertAlignFormat(string $alignFormat): string
+    {
+        switch ($alignFormat) {
+            case 'center':
+                return \PhpOffice\PhpWord\SimpleType\JcTable::CENTER;
+            case 'left':
+                return \PhpOffice\PhpWord\SimpleType\JcTable::START;
+            case 'right':
+                return \PhpOffice\PhpWord\SimpleType\JcTable::END;
+            default:
+                return \PhpOffice\PhpWord\SimpleType\JcTable::START;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function buildFormats(Proposal $proposal): array
+    {
+        $format = WordDefaultStyles::WORD_STYLES;
+
+        // merge with settings
+        if ($proposal->getCall()) {
+            $wordStylesJson = $proposal->getCall()->getWordStyles();
+            if (trim($wordStylesJson) !== '') {
+                try {
+                    $wordStyles = json_decode($wordStylesJson, true, 5, JSON_THROW_ON_ERROR);
+                } catch (\JsonException $exception) {
+                    // @todo log or output (flash message) of json message
+                    // echo $exception->getMessage(); // echoes "Syntax error"
+                }
+                if (is_array($wordStyles)) {
+                    $format = array_replace_recursive($format, $wordStyles);
+                }
+            }
+        }
+
+        // convert some values
+        foreach (['TableCellHeader', 'TableCellValue', 'TableCellLabel'] as $tableFormatPart) {
+            $format[$tableFormatPart] = [
+                'alignment' => $this->convertAlignFormat($format[$tableFormatPart]['alignment']),
+                'spaceAfter' => Converter::pointToTwip($format[$tableFormatPart]['spaceAfter']),
+                'spaceBefore' => Converter::pointToTwip($format[$tableFormatPart]['spaceBefore']),
+            ];
+        }
+        $format['TableCellWidthLabel'] = Converter::cmToTwip($format['TableCellWidthLabel']);
+        $format['TableCellWidthValue'] = Converter::cmToTwip($format['TableCellWidthValue']);
+
+        return $format;
+    }
+
+    /**
+     * @param ResourceStorage $storage
+     * @param string $zipName
+     * @param $userNamePath
+     * @param $proposalPathName
+     * @param string $fileName
+     * @return string
+     */
+    protected function buildFilePathForZip(
+        ResourceStorage $storage,
+        string $zipName,
+        $userNamePath,
+        $proposalPathName,
+        string $fileName
+    ): string {
+        $fileSaveAsParts = [];
+        $fileSaveAsParts[] = $storage->sanitizeFileName($zipName);
+        if ($userNamePath !== '') {
+            $fileSaveAsParts[] = $storage->sanitizeFileName($userNamePath);
+        }
+        if ($proposalPathName !== '') {
+            $fileSaveAsParts[] = $storage->sanitizeFileName($proposalPathName);
+        }
+        $fileSaveAsParts[] = basename($fileName);
+        $fileSaveAs = join('/', $fileSaveAsParts);
+        return $fileSaveAs;
     }
 }

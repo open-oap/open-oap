@@ -98,14 +98,14 @@ class MetaInformation implements JsonSerializable
     public function addPage(int $pageNumber, FormPage $page)
     {
         // cause this is a fix - we have changed the schema of this array to pageNo: pageUid for more flexibility
-        if ($this->pages[$pageNumber]) {
+        if (isset($this->pages[$pageNumber])) {
             unset($this->pages[$pageNumber]);
         }
         $this->pages[$pageNumber] = $page->getUid();
         asort($this->pages);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         // TODO: Implement jsonSerialize() method.
         return json_encode([
@@ -236,9 +236,9 @@ class MetaInformation implements JsonSerializable
                 $groupCounter[$groupUidL0]['max'] = $groupDataL0['current'];
             }
 
-//            DebuggerUtility::var_dump($groupDataL0,(string) $groupUidL0);
-//            $this->calculateGroupCounter($groupData, $groupUidL0, $groupDataL0['current']);
-//            DebuggerUtility::var_dump($groupData,(string) $groupUidL0);
+            //            DebuggerUtility::var_dump($groupDataL0,(string) $groupUidL0);
+            //            $this->calculateGroupCounter($groupData, $groupUidL0, $groupDataL0['current']);
+            //            DebuggerUtility::var_dump($groupData,(string) $groupUidL0);
 
             foreach ($groupDataL0['instances'] as $indexL1 => $nestedGroups) {
                 foreach ($nestedGroups as $groupUidL1 => $groupDataL1) {
@@ -252,7 +252,7 @@ class MetaInformation implements JsonSerializable
                     if ($groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]['max'] < $groupDataL1['current']) {
                         $groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]['max'] = $groupDataL1['current'];
                     }
-//                    $this->calculateGroupCounter($groupData, $groupUidL1, $groupDataL1['current']);
+                    //                    $this->calculateGroupCounter($groupData, $groupUidL1, $groupDataL1['current']);
                 }
             }
         }

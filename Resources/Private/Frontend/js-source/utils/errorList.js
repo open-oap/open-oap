@@ -109,7 +109,9 @@
 
                 if (alertBox.id) {
                     // Wanted? Back-button issues?
-                    window.location.hash = '#' + alertBox.id;
+                    if (window.location.hash !== '#jumpmark') {
+                        window.location.hash = '#' + alertBox.id;
+                    }
                 }
 
             }, 150);

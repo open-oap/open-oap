@@ -63,6 +63,13 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $itemGroups;
 
     /**
+     * modificators
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormModificator>
+     */
+    protected $modificators = null;
+
+    /**
      * __construct
      */
     public function __construct()
@@ -80,6 +87,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function initializeObject()
     {
         $this->itemGroups = $this->itemGroups ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->modificators = $this->modificators ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
     /**
@@ -230,5 +238,48 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setItemGroups(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $itemGroups)
     {
         $this->itemGroups = $itemGroups;
+    }
+
+    /**
+     * Adds a FormModificator
+     *
+     * @param \OpenOAP\OpenOap\Domain\Model\FormModificator $modificator
+     * @return void
+     */
+    public function addModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificator)
+    {
+        $this->modificators->attach($modificator);
+    }
+
+    /**
+     * Removes a FormModificator
+     *
+     * @param \OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove The FormModificator to be removed
+     * @return void
+     */
+    public function removeModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove)
+    {
+        $this->modificators->detach($modificatorToRemove);
+    }
+
+    /**
+     * Returns the modificators
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormModificator>
+     */
+    public function getModificators()
+    {
+        return $this->modificators;
+    }
+
+    /**
+     * Sets the modificators
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormModificator> $modificators
+     * @return void
+     */
+    public function setModificators(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $modificators)
+    {
+        $this->modificators = $modificators;
     }
 }

@@ -116,6 +116,16 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $wordTemplate;
 
     /**
+     * @var string
+     */
+    protected string $wordStyles = '';
+
+    /**
+     * @var FileReference|null
+     */
+    protected $wordHeaderLogo;
+
+    /**
      * @var FileReference|null
      */
     protected $logo;
@@ -124,6 +134,28 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $blockedLanguages;
+
+    /**
+     * @var bool $anonym
+     */
+    protected $anonym = false;
+
+    /** @var string */
+    protected string $surveyCodes = '';
+
+    /**
+     * callGroup
+     *
+     * @var int
+     */
+    protected int $callGroup = 0;
+
+    /**
+     * supporter
+     *
+     * @var int
+     */
+    protected $supporter = 0;
 
     /**
      * __construct
@@ -439,6 +471,22 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * @return FileReference|null
+     */
+    public function getWordHeaderLogo(): ?FileReference
+    {
+        return $this->wordHeaderLogo;
+    }
+
+    /**
+     * @param FileReference|null $wordHeaderLogo
+     */
+    public function setWordHeaderLogo(?FileReference $wordHeaderLogo): void
+    {
+        $this->wordHeaderLogo = $wordHeaderLogo;
+    }
+
+    /**
      * @param FileReference|null $logo
      */
     public function setLogo(?FileReference $logo): void
@@ -460,5 +508,73 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setBlockedLanguages(string $blockedLanguages): void
     {
         $this->blockedLanguages = $blockedLanguages;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWordStyles(): string
+    {
+        return $this->wordStyles;
+    }
+
+    /**
+     * @param string $wordStyles
+     */
+    public function setWordStyles(string $wordStyles): void
+    {
+        $this->wordStyles = $wordStyles;
+    }
+
+    public function isAnonym(): bool
+    {
+        return $this->anonym;
+    }
+
+    public function setAnonym(bool $anonym): void
+    {
+        $this->anonym = $anonym;
+    }
+
+    public function getSurveyCodes(): string
+    {
+        return $this->surveyCodes;
+    }
+
+    public function setSurveyCodes(string $surveyCodes): void
+    {
+        $this->surveyCodes = $surveyCodes;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCallGroup(): int
+    {
+        return $this->callGroup;
+    }
+
+    /**
+     * @param int $callGroup
+     */
+    public function setCallGroup(int $callGroup): void
+    {
+        $this->callGroup = $callGroup;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSupporter(): int
+    {
+        return $this->supporter;
+    }
+
+    /**
+     * @param int $supporter
+     */
+    public function setSupporter(int $supporter): void
+    {
+        $this->supporter = $supporter;
     }
 }

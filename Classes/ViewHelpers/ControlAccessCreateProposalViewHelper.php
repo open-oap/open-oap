@@ -40,14 +40,14 @@ class ControlAccessCreateProposalViewHelper extends AbstractViewHelper
         $settings = $this->arguments['settings'];
         $constants = $this->arguments['constants'];
 
-//        DebuggerUtility::var_dump($proposal,(string)__LINE__);
-//        DebuggerUtility::var_dump($call->getUsergroup(),(string)__LINE__);
-//        DebuggerUtility::var_dump($call->getCallStartTime()->getTimestamp(),(string)__LINE__);
-//        DebuggerUtility::var_dump($call->getCallEndTime()->getTimestamp(),(string)__LINE__);
-//        DebuggerUtility::var_dump($applicant->getUsergroup(),(string)__LINE__);
-//        DebuggerUtility::var_dump($settings,(string)__LINE__);
+        //        DebuggerUtility::var_dump($proposal,(string)__LINE__);
+        //        DebuggerUtility::var_dump($call->getUsergroup(),(string)__LINE__);
+        //        DebuggerUtility::var_dump($call->getCallStartTime()->getTimestamp(),(string)__LINE__);
+        //        DebuggerUtility::var_dump($call->getCallEndTime()->getTimestamp(),(string)__LINE__);
+        //        DebuggerUtility::var_dump($applicant->getUsergroup(),(string)__LINE__);
+        //        DebuggerUtility::var_dump($settings,(string)__LINE__);
         $generalUserGroups = explode(',', $settings['generalFeGroupsId']);
-//        DebuggerUtility::var_dump($generalUserGroups,(string)__LINE__);
+        //        DebuggerUtility::var_dump($generalUserGroups,(string)__LINE__);
         $callGroups = [];
         $groupAccess = false;
         foreach ($call->getUsergroup() as $callUserGroup) {
@@ -55,23 +55,23 @@ class ControlAccessCreateProposalViewHelper extends AbstractViewHelper
                 $callGroups[] = $callUserGroup->getUid();
             }
         }
-//        DebuggerUtility::var_dump($callGroups,(string)__LINE__);
-//        DebuggerUtility::var_dump($applicant->getUsergroup(),(string)__LINE__);
+        //        DebuggerUtility::var_dump($callGroups,(string)__LINE__);
+        //        DebuggerUtility::var_dump($applicant->getUsergroup(),(string)__LINE__);
         foreach ($applicant->getUsergroup() as $applicantUserGroup) {
-//            DebuggerUtility::var_dump($applicantUserGroup->getUid(),(string)__LINE__);
+            //            DebuggerUtility::var_dump($applicantUserGroup->getUid(),(string)__LINE__);
             if (in_array($applicantUserGroup->getUid(), $callGroups)) {
                 $groupAccess = true;
             }
         }
-//        DebuggerUtility::var_dump($groupAccess,(string)__LINE__);
-//        $stateAccess = ($proposal->getState() < $constants['PROPOSAL_SUBMITTED'] or $proposal->getState() == $constants['PROPOSAL_RE_OPENED']);
+        //        DebuggerUtility::var_dump($groupAccess,(string)__LINE__);
+        //        $stateAccess = ($proposal->getState() < $constants['PROPOSAL_SUBMITTED'] or $proposal->getState() == $constants['PROPOSAL_RE_OPENED']);
         $timeAccess = (time() > $call->getCallStartTime()->getTimestamp() and time() < $call->getCallEndTime()->getTimestamp());
-//        DebuggerUtility::var_dump(time().' '.$call->getCallStartTime()->getTimestamp().' '.,(string)__LINE__);
-//        DebuggerUtility::var_dump($constants,(string)__LINE__);
-//        DebuggerUtility::var_dump($stateAccess,(string)__LINE__);
-//        DebuggerUtility::var_dump($groupAccess,(string)__LINE__);
-//        DebuggerUtility::var_dump($timeAccess,(string)__LINE__);
-//        DebuggerUtility::var_dump($stateAccess and ($groupAccess or $timeAccess),(string)__LINE__);
+        //        DebuggerUtility::var_dump(time().' '.$call->getCallStartTime()->getTimestamp().' '.,(string)__LINE__);
+        //        DebuggerUtility::var_dump($constants,(string)__LINE__);
+        //        DebuggerUtility::var_dump($stateAccess,(string)__LINE__);
+        //        DebuggerUtility::var_dump($groupAccess,(string)__LINE__);
+        //        DebuggerUtility::var_dump($timeAccess,(string)__LINE__);
+        //        DebuggerUtility::var_dump($stateAccess and ($groupAccess or $timeAccess),(string)__LINE__);
         return ($groupAccess or $timeAccess) ? 1 : 0;
     }
 }

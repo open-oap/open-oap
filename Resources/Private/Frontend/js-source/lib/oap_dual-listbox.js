@@ -86,11 +86,14 @@
          */
         addSelected(listItem) {
             let index = this.available.indexOf(listItem);
+            let errorMessage = this.dualListbox.nextSibling.nextSibling;
+
             if (index > -1) {
                 this.available.splice(index, 1);
                 this.selected.push(listItem);
                 this._selectOption(listItem.dataset.id);
                 this.redraw();
+                errorMessage.style.display = 'none';
 
                 setTimeout(() => {
                     let event = document.createEvent("HTMLEvents");
@@ -116,11 +119,14 @@
          */
         removeSelected(listItem) {
             let index = this.selected.indexOf(listItem);
+            let errorMessage = this.dualListbox.nextSibling.nextSibling;
+
             if (index > -1) {
                 this.selected.splice(index, 1);
                 this.available.push(listItem);
                 this._deselectOption(listItem.dataset.id);
                 this.redraw();
+                errorMessage.style.display = 'block';
 
                 setTimeout(() => {
                     let event = document.createEvent("HTMLEvents");

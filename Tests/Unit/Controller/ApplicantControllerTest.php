@@ -49,7 +49,7 @@ class ApplicantControllerTest extends UnitTestCase
             ->onlyMethods(['findAll'])
             ->disableOriginalConstructor()
             ->getMock();
-        $applicantRepository->expects(self::once())->method('findAll')->willReturn($allApplicants);
+        $applicantRepository->expects(self::once())->method('findAll')->will(self::returnValue($allApplicants));
         $this->subject->_set('applicantRepository', $applicantRepository);
 
         $view = $this->getMockBuilder(ViewInterface::class)->getMock();

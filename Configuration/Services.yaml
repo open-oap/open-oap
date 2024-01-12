@@ -10,3 +10,6 @@ services:
 
   OpenOAP\OpenOap\UserFunctions\FormEngine\TypeSelectItemsProcFunc:
     public: true
+
+  OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc:
+    public: true

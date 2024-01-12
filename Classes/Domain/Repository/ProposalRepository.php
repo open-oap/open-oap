@@ -9,7 +9,10 @@ use OpenOAP\OpenOap\Domain\Model\Applicant;
 use OpenOAP\OpenOap\Domain\Model\Call;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
@@ -105,184 +108,124 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function findDemanded(int $pid, int $minStatusLevel, array $filter = [], array $sorting = [])
     {
-        if ($filter['state'] and $filter['state'] !== '') {
-            $andState = ' AND Proposal.`state` = '. $filter['state'];
-        } else {
-            $andState = ' AND Proposal.`state` >= '. $minStatusLevel;
-        }
-
-        $stmt  = 'SELECT ';
-        $stmt .= ' Proposal.uid AS uid, Proposal.title, Proposal.edit_tstamp AS editTstamp, Proposal.state, Proposal.signature, Proposal.applicant, Proposal.tx_openoap_call AS `call`, ';
-        $stmt .= ' Applicant.uid, Applicant.username, ';
-        $stmt .= ' `Call`.uid AS Call_uid, `Call`.title AS Call_title, `Call`.shortcut AS Call_shortcut';
-        $stmt .= ' FROM `tx_openoap_domain_model_proposal` AS Proposal';
-        $stmt .= ' JOIN fe_users AS Applicant ON Applicant.uid = Proposal.applicant';
-        $stmt .= ' JOIN tx_openoap_domain_model_call AS `Call` ON `Call`.uid = Proposal.tx_openoap_call';
-        $stmt .= ' WHERE ';
-        $stmt .= ' Proposal.`pid` = '.$pid;
-        $stmt .= $andState;
-        $stmt .= ' AND Proposal.`tx_openoap_call` = '.$filter['call'];
-        $stmt .= ' AND Proposal.`archived` = 0';
-
-//        DebuggerUtility::var_dump($stmt, 'statement');
-
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_openoap_domain_model_proposal');
         $queryBuilder = $connection->createQueryBuilder();
-        if ($filter['state'] and $filter['state'] !== '') {
-            $stateWhere = $queryBuilder->expr()->eq('tx_openoap_domain_model_proposal.state', $queryBuilder->createNamedParameter($filter['state'], \PDO::PARAM_INT));
+        if (isset($filter['state']) && $filter['state'] !== '') {
+            $stateWhere = $queryBuilder->expr()->eq('Proposal.state', $queryBuilder->createNamedParameter($filter['state'], \PDO::PARAM_INT));
         } else {
-            $stateWhere = $queryBuilder->expr()->gte('tx_openoap_domain_model_proposal.state', $queryBuilder->createNamedParameter($minStatusLevel, \PDO::PARAM_INT));
+            $stateWhere = $queryBuilder->expr()->gte('Proposal.state', $queryBuilder->createNamedParameter($minStatusLevel, \PDO::PARAM_INT));
         }
         $query = $queryBuilder
-//            ->select('*')
             ->select(
-                'tx_openoap_domain_model_proposal.uid',
-                'tx_openoap_domain_model_proposal.title',
-                'tx_openoap_domain_model_proposal.edit_tstamp AS editTstamp',
-                'tx_openoap_domain_model_proposal.state',
-                'tx_openoap_domain_model_proposal.signature',
-                'tx_openoap_domain_model_proposal.applicant',
-                'tx_openoap_domain_model_proposal.tx_openoap_call AS `call`',
-//                'Applicant.uid',
+                'Proposal.uid',
+                'Proposal.title',
+                'Proposal.edit_tstamp AS editTstamp',
+                'Proposal.state',
+                'Proposal.signature',
+                'Proposal.applicant',
+                'Proposal.tx_openoap_call AS `call`',
                 'Applicant.company AS applicant_company',
                 'Applicant.username AS applicant_username',
-//                'Call.uid',
                 'Call.title AS call_title'
             )
-            ->from('tx_openoap_domain_model_proposal')
+            ->from('tx_openoap_domain_model_proposal', 'Proposal')
             ->join(
-                'tx_openoap_domain_model_proposal',
+                'Proposal',
                 'fe_users',
                 'Applicant',
-                $queryBuilder->expr()->eq('Applicant.uid', $queryBuilder->quoteIdentifier('tx_openoap_domain_model_proposal.applicant'))
+                $queryBuilder->expr()->eq('Applicant.uid', $queryBuilder->quoteIdentifier('Proposal.applicant'))
             )
             ->join(
-                'tx_openoap_domain_model_proposal',
+                'Proposal',
                 'tx_openoap_domain_model_call',
                 'Call',
-                $queryBuilder->expr()->eq('Call.uid', $queryBuilder->quoteIdentifier('tx_openoap_domain_model_proposal.tx_openoap_call'))
+                $queryBuilder->expr()->eq('Call.uid', $queryBuilder->quoteIdentifier('Proposal.tx_openoap_call'))
             )
             ->where(
-                $queryBuilder->expr()->eq('tx_openoap_domain_model_proposal.pid', $queryBuilder->createNamedParameter($pid, \PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('Proposal.pid', $queryBuilder->createNamedParameter($pid, \PDO::PARAM_INT)),
                 $stateWhere
             );
-//            ->executeQuery();
-//        DebuggerUtility::var_dump($query->getSQL(),__LINE__.' ');
-//        DebuggerUtility::var_dump($query->executeQuery()->fetchAllAssociative());
-        //die();
-        return $query->executeQuery()->fetchAllAssociative();
 
-        $query = $this->createQuery();
-        $rows = $query->statement($stmt)->execute()->fetchAll();
-        DebuggerUtility::var_dump($rows);
-        die();
-        $result = $query->statement($stmt)->execute();
-        DebuggerUtility::var_dump($result);
+        if (!empty($filter['searchword'])) {
+            $filter['searchword'] = trim($filter['searchword']);
 
-        return $result;
-//        DebuggerUtility::var_dump($result);
-//        die();
-
-        $query = $this->createQuery();
-        $query->getQuerySettings()->setIgnoreEnableFields(false);
-        $query->getQuerySettings()->setRespectStoragePage(true);
-        $query->getQuerySettings()->setStoragePageIds([$pid]);
-
-        if (count($sorting) == 0) {
-            $sorting = ['edit_tstamp' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING];
-        }
-        $query->setOrderings($sorting);
-
-        // call
-        if ($filter['call'] and $filter['call'] !== '') {
-            $constraints[] = $query->equals('call', $filter['call']);
-        }
-        // state
-        if ($filter['state'] and $filter['state'] !== '') {
-            $constraints[] = $query->equals('state', $filter['state']);
-        } else {
-            $constraints[] = $query->greaterThanOrEqual('state', $minStatusLevel);
-        }
-        // searchword
-        if ($filter['searchword'] and $filter['searchword'] !== '') {
-            $constraints[] = $query->logicalOr(
-                $query->like('title', '%' . $filter['searchword'] . '%'),
-                $query->like('signature', '%' . $filter['searchword'] . '%'),
-                $query->like('applicant.company', '%' . $filter['searchword'] . '%'),
-                $query->like('applicant.username', '%' . $filter['searchword'] . '%')
-            );
-        }
-        $numberOfConstraints = count($constraints);
-        if ($numberOfConstraints === 1) {
-            $query->matching(reset($constraints));
-        } elseif ($numberOfConstraints >= 2) {
-            $query->matching($query->logicalAnd(...$constraints));
+            $orStatements = $queryBuilder->expr()->or();
+            if (strlen($filter['searchword']) > 3) {
+                foreach (['Proposal.title', 'Proposal.signature', 'Applicant.company', 'Applicant.username'] as $field) {
+                    $orStatements->add(
+                        $queryBuilder->expr()->like(
+                            $field,
+                            $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards($filter['searchword']) . '%', \PDO::PARAM_STR)
+                        )
+                    );
+                }
+            } else {
+                // no like search possible
+                foreach (['Proposal.title', 'Proposal.signature', 'Applicant.company', 'Applicant.username'] as $field) {
+                    $orStatements->add(
+                        $queryBuilder->expr()->eq($field, $queryBuilder->createNamedParameter($filter['searchword']))
+                    );
+                }
+            }
+            $queryBuilder->andWhere($orStatements);
         }
 
-//               $queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
-//               DebuggerUtility::var_dump($filter,(string) __LINE__);
-//               DebuggerUtility::var_dump($queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL(),(string) __LINE__);
-//               DebuggerUtility::var_dump($queryParser->convertQueryToDoctrineQueryBuilder($query)->getParameters(),(string) __LINE__);
-//               DebuggerUtility::var_dump($constraints,(string) __LINE__);
+        if (!empty($filter['item'])) {
+            $allFilterItemsConcatenated = implode('', $filter['item']);
+            if ($allFilterItemsConcatenated !== '') {
+                $filterCounter = 0;
+                foreach ($filter['item'] as $filterItem => $filterValue) {
+                    if ($filterValue !== '') {
+                        //                        DebuggerUtility::var_dump($filterValue,__LINE__.' '.$filterItem);
+                        $filterCounter++;
 
-        $result = $query->execute();
-
-//               DebuggerUtility::var_dump($result,(string) __LINE__);
-
-        // dynamic filter
-        // in this case we us a regular sql statement
-        // based on the previous result uids
-        if (is_array($filter['item'])) {
-            $join = '';
-            $andWhere = '';
-            $i = 0;
-//            DebuggerUtility::var_dump($filter['item']);
-            foreach ($filter['item'] as $itemKey => $item) {
-                if ($item != '') {
-                    $i++;
-                    $join.= ' LEFT JOIN `tx_openoap_domain_model_answer` `tx_openoap_domain_model_answer' . $i . '` ON FIND_IN_SET(`tx_openoap_domain_model_answer' . $i . '`.`uid`,`tx_openoap_domain_model_proposal`.`answers`)';
-
-                    if ($i > 1) {
-                        $andWhere.= ' AND ';
+                        $orStatements = $queryBuilder->expr()->or();
+                        $orStatements->add(
+                            $queryBuilder->expr()->andX(
+                                $queryBuilder->expr()->eq(
+                                    'Answer.value',
+                                    $queryBuilder->createNamedParameter($filterValue)
+                                ),
+                                $queryBuilder->expr()->eq(
+                                    'Answer.item',
+                                    $queryBuilder->createNamedParameter($filterItem, \PDO::PARAM_INT)
+                                )
+                            )
+                        );
+                        $orStatements->add(
+                            $queryBuilder->expr()->andX(
+                                $queryBuilder->expr()->like(
+                                    'Answer.value',
+                                    $queryBuilder->createNamedParameter('%\"' . $filterValue . '\"%')
+                                ),
+                                $queryBuilder->expr()->eq(
+                                    'Answer.item',
+                                    $queryBuilder->createNamedParameter($filterItem, \PDO::PARAM_INT)
+                                )
+                            )
+                        );
                     }
-                    $andWhere.= '(`tx_openoap_domain_model_answer' . $i . '`.`item` = ' . (int)$itemKey . ' AND  (`tx_openoap_domain_model_answer' . $i . "`.`value` = '" . htmlspecialchars($item) . "' OR `tx_openoap_domain_model_answer" . $i . "`.`value` LIKE '{%:\"" . htmlspecialchars($item) . "\"%}'))";
                 }
-            }
-            if ($join != '' && count($result) > 0) {
-                foreach ($result as $item) {
-                    $uids[] = $item->getUid();
-                }
-                $uidList = implode(',', $uids);
-                $stmt = 'SELECT `tx_openoap_domain_model_proposal`.* FROM `tx_openoap_domain_model_proposal` `tx_openoap_domain_model_proposal`';
-                $stmt.= $join;
-                $stmt.= 'WHERE `tx_openoap_domain_model_proposal`.`uid` IN(' . $uidList . ')';
-                $stmt.= ' AND(' . $andWhere . ') ORDER BY FIELD(tx_openoap_domain_model_proposal.uid,' . $uidList . ')';
+                $queryBuilder->andWhere($orStatements);
 
-//               DebuggerUtility::var_dump($stmt, 'statement');
-
-                $query2 = $this->createQuery();
-                $result2 = $query2->statement($stmt)->execute();
-
-                //               DebuggerUtility::var_dump($result2);
-
-                return $result2;
+                $queryBuilder
+                ->join(
+                    'Proposal',
+                    'tx_openoap_domain_model_answer',
+                    'Answer',
+                    $queryBuilder->expr()->inSet('Proposal.answers', 'Answer.uid')
+                )
+                ->groupBy('Proposal.uid')
+                ->addSelectLiteral($queryBuilder->expr()->count('*', 'c'))
+                ->add('having', 'c = ' . $filterCounter);
             }
         }
-        return $result;
 
-        //        $connection = GeneralUtility::makeInstance(ConnectionPool::class)
-        //            ->getConnectionForTable('tx_openoap_domain_model_proposal');
-        //
-        //        // Test-Suche in einem JSON-Objekt in der Spalte "title", das so aussieht
-        //        // {"country":"Deutschland"}
-        //        $queryBuilder = $connection->createQueryBuilder();
-        //        $query = $queryBuilder
-        //            ->select('*')
-        //            ->from('tx_openoap_domain_model_proposal')
-        //            ->where('JSON_CONTAINS(title, \'"Deutschland"\', \'$.country\')');
-        //
-        //        $rows = $query->execute()->fetchAllAssociative();
-        //        DebuggerUtility::var_dump($rows);die();
+        if (count($sorting) > 0) {
+            $query->OrderBy($sorting['field'], $sorting['direction']);
+        }
+
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
     /**
@@ -303,7 +246,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->getQuerySettings()->setRespectSysLanguage(false);
         $query->getQuerySettings()->setLanguageOverlayMode(false);
         $query->getQuerySettings()->setRespectStoragePage(false);
-//        $query->getQuerySettings()->setStoragePageIds([$pid]);
+        //        $query->getQuerySettings()->setStoragePageIds([$pid]);
         //$query->setOrderings(['crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
         $query->setOrderings(['edit_tstamp' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
 
@@ -334,7 +277,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->getQuerySettings()->setRespectSysLanguage(false);
         $query->getQuerySettings()->setLanguageOverlayMode(false);
         $query->getQuerySettings()->setRespectStoragePage(false);
-//        $query->getQuerySettings()->setStoragePageIds([$pid]);
+        //        $query->getQuerySettings()->setStoragePageIds([$pid]);
         $constraints = [];
         $constraints[] = $query->equals('applicant', $applicant);
         $constraints[] = $query->equals('archived', $archived);
@@ -363,10 +306,10 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                $queryBuilder->expr()->in('t.uid', $queryBuilder->createNamedParameter($proposalIds, Connection::PARAM_INT_ARRAY))
            )
            ->set('t.state', (int)$newState);
-//           DebuggerUtility::var_dump($queryBuilder->getParameters(), (string) __LINE__);
-//           DebuggerUtility::var_dump($queryBuilder->getSQL(), 'SQL');
+        //           DebuggerUtility::var_dump($queryBuilder->getParameters(), (string) __LINE__);
+        //           DebuggerUtility::var_dump($queryBuilder->getSQL(), 'SQL');
         $updated = $updateQuery->execute();
-//        DebuggerUtility::var_dump($updated, (string) __LINE__);
+        //        DebuggerUtility::var_dump($updated, (string) __LINE__);
     }
 
     /**
@@ -390,5 +333,38 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             ->executeQuery();
 
         return $result->fetchAssociative()['pi_flexform'];
+    }
+
+    public function findContent($search)
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setIgnoreEnableFields(true);
+        $query->getQuerySettings()->setRespectSysLanguage(false);
+        $query->getQuerySettings()->setLanguageOverlayMode(false);
+        $query->getQuerySettings()->setRespectStoragePage(false);
+
+        //        $query->matching($query->like('title', '%' . $search . '%'));
+        $query->matching($query->like('title', '%' . $search . '%'));
+
+        //        $constraints = [];
+        //        $constraints[] = $query->like('title', '%' . $search . '%');
+        //        $constraints[] = $query->equals('archived', $archived);
+        //        $query->matching($query->logicalAnd(...$constraints));
+        //        if ($limit > 0) {
+        //            $query->setLimit($limit);
+        //        }
+        //        return $query->execute();
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $queryParser = $objectManager->get(Typo3DbQueryParser::class);
+        /** @var QueryBuilder $doctrineQuery */
+        $doctrineQuery = $queryParser->convertQueryToDoctrineQueryBuilder($query);
+        echo $doctrineQuery->getSQL();
+        print_r($doctrineQuery->getParameters());
+        DebuggerUtility::var_dump(
+            $doctrineQuery->execute()
+        );
+        DebuggerUtility::var_dump(
+            $query->execute()
+        );
     }
 }

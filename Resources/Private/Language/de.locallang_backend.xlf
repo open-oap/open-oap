@@ -370,6 +370,10 @@
                 <source>Page with dashboard plugin</source>
                 <target>Seite mit Dashboard-Plugin</target>
             </trans-unit>
+            <trans-unit id="constants.survey_page_id">
+                <source>Page with proposal form (plugin) for survey</source>
+                <target>Seite mit Formular Plugin für Umfrage</target>
+            </trans-unit>
             <trans-unit id="constants.form_page_id">
                 <source>Page with proposal form</source>
                 <target>Seite mit Antragsformular</target>
@@ -451,6 +455,44 @@
                 <source>word base file for export</source>
                 <target>Word-Basisdatei für den Export</target>
             </trans-unit>
+            <trans-unit id="constants.survey_oap_user">
+                <source>Id of oap survey user</source>
+                <target>Id des OAP-Umfrage-Users (anonym)</target>
+            </trans-unit>
+                <trans-unit id="constants.survey_thanks_page_id">
+                    <source>Survey- page for saying Thank you after submitting survey</source>
+                    <target>Survey-Seite für ein Danke nach dem Einreichen</target>
+                </trans-unit>
+                <trans-unit id="constants.survey_abort_page_id">
+                    <source>Survey page reaction of aborting survey</source>
+                    <target>Survey-Seite für den Fall, dass die Befragung abgebrochen wurde</target>
+                </trans-unit>
+                <trans-unit id="constants.survey_error_page_id">
+                    <source>Survey page response error - missing or invalid code</source>
+                    <target>Survey-Seite für den Fall, dass ein Fehler auftritt - fehlender oder nicht gültiger Code</target>
+                </trans-unit>
+
+
+            <trans-unit id="constants.zip_file.prefix">
+                    <source>Prefix of the ZIP file name</source>
+                    <target>Prefix des ZIP-Dateienamens</target>
+                </trans-unit>
+                <trans-unit id="constants.zip_file.dateformat">
+                    <source>Date format in ZIP file name</source>
+                    <target>Datumsformat im ZIP-Dateiname</target>
+                </trans-unit>
+                <trans-unit id="constants.zip_structure.applicant">
+                    <source><![CDATA[Name format of the submitting account (first parameter: username, second parameter User-Id)]]></source>
+                    <target><![CDATA[Namensformat des einreichenden Accounts (erster Parameter: username, zweiter Parameter User-Id)]]></target>
+                </trans-unit>
+                <trans-unit id="constants.zip_structure.proposal">
+                    <source><![CDATA[Name format of the proposal, preceded by the signature, first parameter: Title of the proposal, second parameter Proposal-Id]]></source>
+                    <target><![CDATA[Namensformat des Antrags, vorangestellt die Signatur, erster Parameter: Titel des Antrags, zweiter Parameter Proposal-Id]]></target>
+                </trans-unit>
+                <trans-unit id="constants.zip_structure.proposal.titlelength">
+                    <source>Length of the title in the file name</source>
+                    <target>Länger des Titels im Dateinamen</target>
+                </trans-unit>
         </body>
     </file>
 </xliff>

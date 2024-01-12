@@ -49,7 +49,7 @@ class ProposalControllerTest extends UnitTestCase
             ->onlyMethods(['findAll'])
             ->disableOriginalConstructor()
             ->getMock();
-        $proposalRepository->expects(self::once())->method('findAll')->willReturn($allProposals);
+        $proposalRepository->expects(self::once())->method('findAll')->will(self::returnValue($allProposals));
         $this->subject->_set('proposalRepository', $proposalRepository);
 
         $view = $this->getMockBuilder(ViewInterface::class)->getMock();

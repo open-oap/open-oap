@@ -1,16 +1,11 @@
-# open-oap - open application plattform 
+# open-oap - open application plattform
 
-Development project for an open-source TYPO3 extension. 
+Development project for an open-source TYPO3 extension.
 
-## Partners 
+## Partners
 - GIZ funding programmes develoPPP and BACKUP Health (www.giz.de, www.develoPPP.de, www.giz.de/en/worldwide/39036.html)
 - cosmoblonde GmbH - we are a Berlin based TYPO3 agency (www.cosmoblonde.de)
-
-## Contact the maintainer
-for this project: open-oap-github@cosmoblonde.de
-
-## Version
-The current version is 1.2 
+- EDELWEISS72 GmbH - a Munich based full-service agency (www.edelweiss72.de)
 
 ## Note
 Sorry, there was a misleading note in version 1.2.0 (an old one from 1.1)
@@ -23,7 +18,7 @@ see further information:
 see documentation:
 - [documentation](./Documentation/README.md)
 
-see also generated phpdoc output: 
+see also generated phpdoc output:
 - [phpDoc (html)](./Documentation/PhpDoc/index.html)
 
 to create this phpDoc see: [createPhpDOC](./Documentation)

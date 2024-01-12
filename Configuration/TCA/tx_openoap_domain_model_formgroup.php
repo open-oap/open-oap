@@ -1,9 +1,9 @@
 <?php
-
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup',
-        'label' => 'title',
+        'label' => 'internal_title',
+        'label_alt' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
@@ -16,13 +16,13 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'title,intro_text,help_text,model_name',
+        'searchFields' => 'title,internal_title,intro_text,help_text,model_name',
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
         'type' => 'type',
     ],
     'types' => [
-        '0' => ['showitem' => 'title, type, intro_text, help_text, display_type, repeatable_min, repeatable_max, items, group_title, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        '1' => ['showitem' => 'title, type, intro_text, help_text, repeatable_min, repeatable_max, item_groups, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '0' => ['showitem' => 'title, internal_title, type, intro_text, help_text, display_type, repeatable_min, repeatable_max, items, group_title, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '1' => ['showitem' => 'title, internal_title, type, intro_text, help_text, repeatable_min, repeatable_max, item_groups, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -74,6 +74,17 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim,required',
+                'default' => '',
+            ],
+        ],
+        'internal_title' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.internal_title',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
                 'default' => '',
             ],
         ],
@@ -179,8 +190,15 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_openoap_domain_model_formgroup',
-                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formgroup}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formgroup}.hidden = 0 AND {#tx_openoap_domain_model_formgroup}.{#sys_language_uid} IN (-1,0) AND {#tx_openoap_domain_model_formgroup}.{#type} IN (0)',
                 'MM' => 'tx_openoap_formgroup_formgroup_mm',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class .'->getAllElementsOfFormGroups',
+                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formgroup}.{#type} IN (0)',
+//                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formgroup}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formgroup}.hidden = 0 AND {#tx_openoap_domain_model_formgroup}.{#sys_language_uid} IN (-1,0) AND {#tx_openoap_domain_model_formgroup}.{#type} IN (0)',
+                'itemsProcConfig' => [
+                    'model' => 'formgroup',
+                    'pidRoot' => 'pidFormGroups',
+                    'type' => '0'
+                ],
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
@@ -212,8 +230,13 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_openoap_domain_model_formitem',
-                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formitem}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formitem}.hidden = 0 AND {#tx_openoap_domain_model_formitem}.{#sys_language_uid} IN (-1,0)',
+                // 'foreign_table_where' => 'AND {#tx_openoap_domain_model_formitem}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formitem}.hidden = 0 AND {#tx_openoap_domain_model_formitem}.{#sys_language_uid} IN (-1,0)',
                 'MM' => 'tx_openoap_formgroup_formitem_mm',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class .'->getAllElementsOfFormItems',
+                'itemsProcConfig' => [
+                    'model' => 'formitem',
+                    'pidRoot' => 'pidFormItems'
+                ],
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
@@ -263,14 +286,15 @@ return [
                 ],
             ],
         ],
-        'dependent_on' => [
+        'modificators' => [
             'exclude' => false,
-            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.dependent_on',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.modificators',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
-                'foreign_table' => 'tx_openoap_domain_model_logicatom',
-                'MM' => 'tx_openoap_formgroup_logicatom_mm',
+                'foreign_table' => 'tx_openoap_domain_model_formmodificator',
+                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formmodificator}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formmodificator}.hidden = 0 AND {#tx_openoap_domain_model_formmodificator}.{#sys_language_uid} IN (-1,0)',
+                'MM' => 'tx_openoap_formgroup_formmodificator_mm',
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
@@ -280,7 +304,10 @@ return [
                         'disabled' => false,
                     ],
                     'addRecord' => [
-                        'disabled' => true,
+                        'disabled' => false,
+                        'options' => [
+                            'pid' => '###PAGE_TSCONFIG_ID###',
+                        ],
                     ],
                     'listModule' => [
                         'disabled' => true,

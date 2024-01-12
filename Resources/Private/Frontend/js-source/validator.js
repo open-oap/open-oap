@@ -23,6 +23,12 @@
         maxlength: 'oapMaxlength',
         minvalue: 'oapMinvalue',
         maxvalue: 'oapMaxvalue',
+        greaterthanItem: 'oapGreaterthanItem',
+        greaterthanTriggers: 'oapGreaterthanTriggers',
+        greaterthanCarryover: 'oapGreaterthanCarryover',
+        lessthanItem: 'oapLessthanItem',
+        lessthanTriggers: 'oapLessthanTriggers',
+        lessthanCarryover: 'oapLessthanCarryover',
         warningAccepted: 'warningAccepted',
         showAlwaysModal: 'oapShowmodal',
         modalText: 'oapModaltext',
@@ -30,6 +36,12 @@
         modalCancel: 'oapModalcancel',
         serverError: 'oapServererror',
         uploadresult: 'oapUploadvalidation',
+    };
+    const id = {
+        loader: 'oap-loader',
+    };
+    const styles = {
+        loaderVisible: 'flex'
     };
     const labels = OAP.labels || {};
     const idRoot = 'oap-proposal-';
@@ -41,6 +53,7 @@
     let validatableFormFields = [];
     let activeFormIds = [];
     let selectValues = {};
+    let loaderWrapper;
 
     const addValidation = function (formField) {
         const type = formField.dataset[dataSet.type];
@@ -374,6 +387,115 @@
                         passedValidation.critical = false;
                     }
                 }
+                break;
+            }
+            case 'VALIDATOR_GREATERTHAN': {
+                /**
+                 * Only run if field has a value
+                 * Value could be a string - need to convert with Number()
+                 * Fails validation if not a number, or if less than minvalue
+                 */
+                if (typeof formField.dataset[dataSet.greaterthanTriggers] !== 'undefined') {
+                    const fieldTriggers = document.querySelectorAll(formField.dataset[dataSet.greaterthanTriggers]);
+
+                    // trigger validators/formatNumber
+                    for (const fieldTrigger of fieldTriggers) {
+                        fieldTrigger.dispatchEvent(new Event('blur'));
+                    }
+                    break;
+                }
+
+                let minValue;
+                let passed = true;
+
+                if (typeof formField.dataset[dataSet.greaterthanItem] !== 'undefined') {
+                    const fieldItem = document.querySelector(formField.dataset[dataSet.greaterthanItem]);
+
+                    minValue = Number(fieldItem.value.toString().replace(/\./g, '').replace(/,/g, '.'));
+                } else if (typeof formField.dataset[dataSet.greaterthanCarryover] !== 'undefined') {
+                    minValue = Number(formField.dataset[dataSet.greaterthanCarryover]);
+                }
+
+                switch (type) {
+                case 'TYPE_DATE1':
+                case 'TYPE_DATE2': {
+                    break;
+                }
+                default: {
+                    let unformattedValue = Number(formField.value.toString().replace(/\./g, '').replace(/,/g, '.'));
+
+                    if (fieldHasValue && (!fieldValueIsNumber || unformattedValue < minValue)) {
+                        passed = false;
+                    }
+                }
+                }
+
+                if (!passed) {
+                    let minValueFormatted = minValue;
+
+                    if (OAP.utils && OAP.utils.formatNumber) {
+                        minValueFormatted = OAP.utils.formatNumber.format(minValueFormatted);
+                    }
+                    showErrorMessage(messageBox, labels.JSMSG_MIN_VALUE, formField, {
+                        '%d': minValueFormatted
+                    });
+                }
+
+                break;
+            }
+            case 'VALIDATOR_LESSTHAN': {
+                /**
+                 * Only run if field has a value
+                 * Value could be a string - need to convert with Number()
+                 * Fails validation if not a number, or if greater than maxvalue
+                 */
+                if (typeof formField.dataset[dataSet.lessthanTriggers] !== 'undefined') {
+                    const fieldTriggers = document.querySelectorAll(formField.dataset[dataSet.lessthanTriggers]);
+
+                    // trigger validators/formatNumber
+                    for (const fieldTrigger of fieldTriggers) {
+                        fieldTrigger.dispatchEvent(new Event('blur'));
+                    }
+                    break;
+                }
+
+                let maxValue;
+                let passed = true;
+
+                if (typeof formField.dataset[dataSet.lessthanItem] !== 'undefined') {
+                    const fieldItem = document.querySelector(formField.dataset[dataSet.lessthanItem]);
+
+                    maxValue = Number(fieldItem.value.toString().replace(/\./g, '').replace(/,/g, '.'));
+                } else if (typeof formField.dataset[dataSet.lessthanCarryover] !== 'undefined') {
+                    maxValue = Number(formField.dataset[dataSet.lessthanCarryover]);
+                }
+
+                switch (type) {
+                case 'TYPE_DATE1':
+                case 'TYPE_DATE2': {
+                    break;
+                }
+                default: {
+                    let unformattedValue = Number(formField.value.toString().replace(/\./g, '').replace(/,/g, '.'));
+
+                    if (fieldHasValue && (!fieldValueIsNumber || unformattedValue > maxValue)) {
+                        passed = false;
+                    }
+                }
+                }
+
+                if (!passed) {
+                    let maxValueFormatted = maxValue;
+
+                    if (OAP.utils && OAP.utils.formatNumber) {
+                        maxValueFormatted = OAP.utils.formatNumber.format(maxValueFormatted);
+                    }
+                    showErrorMessage(messageBox, labels.JSMSG_MAX_VALUE, formField, {
+                        '%d': maxValueFormatted
+                    });
+                }
+
+                break;
             }
             }
         });
@@ -443,6 +565,7 @@
             });
 
             if (!passedValidation.critical) {
+                // stay on page and show errors
                 e.preventDefault();
 
                 if (OAP.utils && OAP.utils.errorList) {
@@ -459,6 +582,13 @@
 
                     OAP.utils.modal.show(modalContent, modalSubmit, modalCancel, activeForm);
                 }
+            } else {
+                // no error and no reason for a hint - but to prevent competing actions, show the loading circle
+                if (!loaderWrapper) {
+                    return;
+                }
+                loaderWrapper.style.display = styles.loaderVisible;
+
             }
             document.querySelectorAll(selector.enableDisabledElements).forEach(function (element) {
                 element.disabled = 0;
@@ -503,6 +633,7 @@
             });
         }
 
+        loaderWrapper = document.getElementById(id.loader);
     };
 
     initialize();

@@ -125,7 +125,8 @@ class CallTest extends UnitTestCase
      */
     public function getCallStartTimeReturnsInitialValueForDateTime(): void
     {
-        self::assertNull(
+        self::assertEquals(
+            null,
             $this->subject->getCallStartTime()
         );
     }
@@ -146,7 +147,8 @@ class CallTest extends UnitTestCase
      */
     public function getCallEndTimeReturnsInitialValueForDateTime(): void
     {
-        self::assertNull(
+        self::assertEquals(
+            null,
             $this->subject->getCallEndTime()
         );
     }
@@ -181,6 +183,92 @@ class CallTest extends UnitTestCase
         $this->subject->setFeUserExceptions('Conceived at T3CON10');
 
         self::assertEquals('Conceived at T3CON10', $this->subject->_get('feUserExceptions'));
+    }
+
+    /**
+     * @test
+     */
+    public function getProjectStartTimeReturnsInitialValueForDateTime(): void
+    {
+        self::assertEquals(
+            null,
+            $this->subject->getProjectStartTime()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setProjectStartTimeForDateTimeSetsProjectStartTime(): void
+    {
+        $dateTimeFixture = new \DateTime();
+        $this->subject->setProjectStartTime($dateTimeFixture);
+
+        self::assertEquals($dateTimeFixture, $this->subject->_get('projectStartTime'));
+    }
+
+    /**
+     * @test
+     */
+    public function getProjectEndTimeReturnsInitialValueForDateTime(): void
+    {
+        self::assertEquals(
+            null,
+            $this->subject->getProjectEndTime()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setProjectEndTimeForDateTimeSetsProjectEndTime(): void
+    {
+        $dateTimeFixture = new \DateTime();
+        $this->subject->setProjectEndTime($dateTimeFixture);
+
+        self::assertEquals($dateTimeFixture, $this->subject->_get('projectEndTime'));
+    }
+
+    /**
+     * @test
+     */
+    public function getProjectDurationMaxReturnsInitialValueForInt(): void
+    {
+        self::assertSame(
+            0,
+            $this->subject->getProjectDurationMax()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setProjectDurationMaxForIntSetsProjectDurationMax(): void
+    {
+        $this->subject->setProjectDurationMax(12);
+
+        self::assertEquals(12, $this->subject->_get('projectDurationMax'));
+    }
+
+    /**
+     * @test
+     */
+    public function getProjectDurationMinReturnsInitialValueForInt(): void
+    {
+        self::assertSame(
+            0,
+            $this->subject->getProjectDurationMin()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setProjectDurationMinForIntSetsProjectDurationMin(): void
+    {
+        $this->subject->setProjectDurationMin(12);
+
+        self::assertEquals(12, $this->subject->_get('projectDurationMin'));
     }
 
     /**

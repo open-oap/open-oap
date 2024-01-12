@@ -9,10 +9,10 @@
 			</trans-unit>
 			<trans-unit id="tx_femanager_domain_model_user.privacypolicy.label" resname="tx_femanager_domain_model_user.privacypolicy.label" xml:space="preserve">
 				<source>I have read and acknowledge the %s.</source>
-				<target>Ich habe die %s gelesen und zur Kenntis genommen.</target>
+				<target>Ich habe die %s gelesen und zur Kenntnis genommen.</target>
 			</trans-unit>
 			<trans-unit id="tx_femanager_domain_model_user.privacypolicy" resname="tx_femanager_domain_model_user.privacypolicy">
-				<source>Privacy Policy</source>
+				<source>privacy policy</source>
 				<target>Datenschutzerklärung</target>
 			</trans-unit>
 			<trans-unit id="tx_femanager_domain_model_user.terms.label" resname="tx_femanager_domain_model_user.terms.label" xml:space="preserve">

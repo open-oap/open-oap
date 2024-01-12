@@ -50,15 +50,20 @@ class GetLabelOfOptionViewHelper extends AbstractViewHelper
         }
         $returnItems = [];
         $optionMap = [];
+
+        // create fallback array
+        foreach ($options as $key => $option) {
+            $optionMap[$key] = $option['label'];
+        }
+        // add the real values
         foreach ($options as $key => $option) {
             $optionMap[$option['key']] = $option['label'];
-            $optionMap[$key] = $option['label'];
         }
 
         foreach ($values as $key => $value) {
-            if ($optionMap[$value]) {
+            if (!empty($optionMap[$value])) {
                 $returnItems[] = $optionMap[$value];
-            } elseif ($optionMap[$key]) {
+            } elseif (!empty($optionMap[$key])) {
                 // todo use translatable string or change to translatable items (not implemented yet)
                 $returnItems[] = $value . ' (not translated selection)'; // $optionMap[$key] . ' ** old data - may be value is missing or changed';
             }

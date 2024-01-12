@@ -65,6 +65,7 @@ class CallRepository extends OapAbstractRepository
 
         // pid
         $constraints[] = $query->equals('pid', $pid);
+        $constraints[] = $query->equals('anonym', 0);
 
         // usergroup / callStartTime/callEndTime
         foreach ($applicant->getUsergroup() as $applicantGroup) {
@@ -118,7 +119,7 @@ class CallRepository extends OapAbstractRepository
         }
 
         $query->matching($query->logicalAnd(...$constraints));
-//        $this->sqlDebug($query);
+        //        $this->sqlDebug($query);
         $result = $query->execute();
         return $result;
     }

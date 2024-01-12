@@ -17,6 +17,25 @@
                 </TCEforms>
                 <type>array</type>
                 <el>
+                    <settings.dashboardTemplate>
+                        <TCEforms>
+                            <label>Template</label>
+                            <config>
+                                <type>select</type>
+                                <renderType>selectSingle</renderType>
+                                <items>
+                                    <numIndex index="0">
+                                        <numIndex index="0">Default</numIndex>
+                                        <numIndex index="1">DashboardDefault</numIndex>
+                                    </numIndex>
+                                    <numIndex index="1">
+                                        <numIndex index="0">Call Groups</numIndex>
+                                        <numIndex index="1">DashboardGroups</numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </settings.dashboardTemplate>
                     <settings.eventProposalSubmittedMailtext>
                         <TCEforms>
                             <label>Proposal submitted - Mailtext</label>

@@ -134,7 +134,7 @@
 <f:section name="OptionSpan">
     <span class="proposals__item-option proposals__item-option--{option} proposals__item-option--disabled">
       {f:translate(key:'tx_openoap_dashboard.proposal.link{option -> f:format.case(mode:\'capital\')}.title')}
-      <f:if condition="{commentsCount} && {commentsCount.{proposal.uid}.edited}">({commentsCount.{proposal.uid}.edited})</f:if>
+      <v:try><f:if condition="{commentsCount} && {commentsCount.{proposal.uid}.edited}">({commentsCount.{proposal.uid}.edited})</f:if></v:try>
     </span>
 </f:section>
 

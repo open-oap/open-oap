@@ -45,8 +45,8 @@
 			<trans-unit id="validators.description" resname="validators.description">
 				<source>validators</source>
 			</trans-unit>
-			<trans-unit id="dependent_on.description" resname="dependent_on.description">
-				<source>dependentOn</source>
+			<trans-unit id="modificators.description" resname="modificators.description">
+				<source>modificators</source>
 			</trans-unit>
 		</body>
 	</file>

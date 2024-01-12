@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenOAP\OpenOap\Domain\Model;
 
+
 /**
  * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
  *
@@ -15,10 +16,11 @@ namespace OpenOAP\OpenOap\Domain\Model;
  */
 
 /**
- * LogicAtom
+ * FormModificator
  */
-class LogicAtom extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class FormModificator extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+
     /**
      * title
      *
@@ -47,6 +49,13 @@ class LogicAtom extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $value = '';
+
+    /**
+     * items
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormItem>
+     */
+    protected $items = null;
 
     /**
      * Returns the title
@@ -126,5 +135,70 @@ class LogicAtom extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setValue(string $value)
     {
         $this->value = $value;
+    }
+
+    /**
+     * __construct
+     */
+    public function __construct()
+    {
+        // Do not remove the next line: It would break the functionality
+        $this->initializeObject();
+    }
+
+    /**
+     * Initializes all ObjectStorage properties when model is reconstructed from DB (where __construct is not called)
+     * Do not modify this method!
+     * It will be rewritten on each save in the extension builder
+     * You may modify the constructor of this class instead
+     *
+     * @return void
+     */
+    public function initializeObject()
+    {
+        $this->items = $this->items ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+    }
+
+    /**
+     * Adds a FormItem
+     *
+     * @param \OpenOAP\OpenOap\Domain\Model\FormItem $item
+     * @return void
+     */
+    public function addItem(\OpenOAP\OpenOap\Domain\Model\FormItem $item)
+    {
+        $this->items->attach($item);
+    }
+
+    /**
+     * Removes a FormItem
+     *
+     * @param \OpenOAP\OpenOap\Domain\Model\FormItem $itemToRemove The FormItem to be removed
+     * @return void
+     */
+    public function removeItem(\OpenOAP\OpenOap\Domain\Model\FormItem $itemToRemove)
+    {
+        $this->items->detach($itemToRemove);
+    }
+
+    /**
+     * Returns the items
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormItem>
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * Sets the items
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormItem> $items
+     * @return void
+     */
+    public function setItems(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $items)
+    {
+        $this->items = $items;
     }
 }

@@ -199,4 +199,63 @@ class FormPageTest extends UnitTestCase
 
         $this->subject->removeItemGroup($itemGroup);
     }
+
+    /**
+     * @test
+     */
+    public function getModificatorsReturnsInitialValueForFormModificator(): void
+    {
+        $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        self::assertEquals(
+            $newObjectStorage,
+            $this->subject->getModificators()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setModificatorsForObjectStorageContainingFormModificatorSetsModificators(): void
+    {
+        $modificator = new \OpenOAP\OpenOap\Domain\Model\FormModificator();
+        $objectStorageHoldingExactlyOneModificators = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $objectStorageHoldingExactlyOneModificators->attach($modificator);
+        $this->subject->setModificators($objectStorageHoldingExactlyOneModificators);
+
+        self::assertEquals($objectStorageHoldingExactlyOneModificators, $this->subject->_get('modificators'));
+    }
+
+    /**
+     * @test
+     */
+    public function addModificatorToObjectStorageHoldingModificators(): void
+    {
+        $modificator = new \OpenOAP\OpenOap\Domain\Model\FormModificator();
+        $modificatorsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->onlyMethods(['attach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $modificatorsObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($modificator));
+        $this->subject->_set('modificators', $modificatorsObjectStorageMock);
+
+        $this->subject->addModificator($modificator);
+    }
+
+    /**
+     * @test
+     */
+    public function removeModificatorFromObjectStorageHoldingModificators(): void
+    {
+        $modificator = new \OpenOAP\OpenOap\Domain\Model\FormModificator();
+        $modificatorsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->onlyMethods(['detach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $modificatorsObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($modificator));
+        $this->subject->_set('modificators', $modificatorsObjectStorageMock);
+
+        $this->subject->removeModificator($modificator);
+    }
 }
