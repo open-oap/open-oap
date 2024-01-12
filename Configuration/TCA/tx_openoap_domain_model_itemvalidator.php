@@ -20,28 +20,19 @@ return [
         'type' => 'type',
     ],
     'types' => [
-        // type_mandatory
-        '1' => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        // type_integer
-        '2' => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        // type_float
-        '3' => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        // type_maxChar
-        '4' => ['showitem' => 'title, type, param1, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        // type_minValue
-        '5' => ['showitem' => 'title, type, param1, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        // type_maxValue
-        '6' => ['showitem' => 'title, type, param1, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        // type_email
-        '7' => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        // type_website
-        '8' => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        // type_phone
-        '9' => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        // file_type
-        '10' => ['showitem' => 'title, type, param1, param2, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
-        // file_size
-        '11' => ['showitem' => 'title, type, param1, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MANDATORY => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_INTEGER => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FLOAT => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MAXCHAR => ['showitem' => 'title, type, param1, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MINVALUE => ['showitem' => 'title, type, param1, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MAXVALUE => ['showitem' => 'title, type, param1, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_EMAIL => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_WEBSITE => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_PHONE => ['showitem' => 'title, type, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FILE_TYPE => ['showitem' => 'title, type, param1, param2, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FILE_SIZE => ['showitem' => 'title, type, param1, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_GREATERTHAN => ['showitem' => 'title, type, item, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_LESSTHAN => ['showitem' => 'title, type, item, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -104,18 +95,20 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['-- Label --', 0],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_mandatory', 1],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_integer', 2],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_float', 3],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_maxChar', 4],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_minValue', 5],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_maxValue', 6],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_email', 7],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_website', 8],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_phone', 9],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.file_type', 10],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.file_size', 11],
+                    ['', 0],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_mandatory', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MANDATORY],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_integer', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_INTEGER],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_float', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FLOAT],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_maxChar', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MAXCHAR],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_minValue', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MINVALUE],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_maxValue', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MAXVALUE],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_greaterThan', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_GREATERTHAN],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_lessThan', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_LESSTHAN],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_email', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_EMAIL],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_website', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_WEBSITE],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_phone', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_PHONE],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.file_type', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FILE_TYPE],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.file_size', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FILE_SIZE],
                 ],
                 'size' => 1,
                 'maxitems' => 1,
@@ -143,6 +136,40 @@ return [
                 'eval' => 'trim',
                 'default' => '',
             ],
+        ],
+        'item' => [
+            'exclude' => false,
+            'l10n_display' => 'defaultAsReadonly',
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_itemvalidator.item',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'tx_openoap_domain_model_formitem',
+                // 'foreign_table_where' => 'AND {#tx_openoap_domain_model_formitem}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formitem}.hidden = 0 AND {#tx_openoap_domain_model_formitem}.{#sys_language_uid} IN (-1,0)',
+                'MM' => 'tx_openoap_itemvalidator_formitem_mm',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class .'->getAllElementsOfFormItems',
+                'itemsProcConfig' => [
+                    'model' => 'formitem',
+                    'pidRoot' => 'pidFormItems'
+                ],
+                'size' => 10,
+                'autoSizeMax' => 30,
+                'maxitems' => 1,
+                'multiple' => 0,
+                'fieldControl' => [
+                    'editPopup' => [
+                        'disabled' => false,
+                    ],
+                    'addRecord' => [
+                        'disabled' => true,
+                    ],
+                    'listModule' => [
+                        'disabled' => true,
+                    ],
+                ],
+            ],
+
         ],
 
     ],

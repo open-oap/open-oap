@@ -108,7 +108,7 @@ class ApplicantController extends OapFrontendController
      * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("applicant")
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function editAction(Applicant $applicant=null): \Psr\Http\Message\ResponseInterface
+    public function editAction(Applicant $applicant = null): \Psr\Http\Message\ResponseInterface
     {
         $this->view->assignMultiple([
             'applicant' => $applicant === $this->applicant ? $applicant : $this->applicant,
@@ -179,15 +179,27 @@ class ApplicantController extends OapFrontendController
             );
 
             $activeCalls = $this->callRepository->findActiveCalls((int)$this->settings['callPid'], $this->applicant, $this->settings['testerFeGroupsId']);
+            $callGroups = $this->callGroupRepository->findAllCallGroups();
 
             /** @var Call $activeCall */
-            foreach ($activeCalls as $i => $activeCall) {
+            foreach ($activeCalls as $activeCall) {
                 if ($activeCall->getBlockedLanguages() !== '') {
                     $blockedLanguages = explode(',', $activeCall->getBlockedLanguages());
 
                     if (in_array($this->language->getLanguageId(), $blockedLanguages)) {
-                        $activeCalls[$i]->setHidden(1);
+                        $activeCall->setHidden(1);
                     }
+                }
+
+                $callGroupId = $activeCall->getCallGroup();
+                if (isset($callGroups[$callGroupId])) {
+                    $blockedGroupLanguages = explode(',', $callGroups[$callGroupId]['blocked_languages']);
+
+                    if (in_array($this->language->getLanguageId(), $blockedGroupLanguages)) {
+                        $activeCall->setHidden(1);
+                    }
+                    $supporter = $activeCall->getSupporter();
+                    $callGroups[$callGroupId]['calls'][$supporter][] = $activeCall;
                 }
             }
         }
@@ -206,9 +218,11 @@ class ApplicantController extends OapFrontendController
             'proposalsArchivedFilesCount' => $proposalsArchivedAttachmentsCount,
             'countAll' => ['active' => $countAllProposalsActive, 'archived' => $countAllProposalsArchived],
             'settings' => $this->settings,
+            'callGroups' => $callGroups,
             'activeCalls' => $activeCalls,
-            'jsMessages'=> $jsMessages,
+            'jsMessages' => $jsMessages,
             'nowTimestamp' => time(),
+            'language' => $this->language->getLanguageId(),
         ]);
         return $this->htmlResponse();
     }
@@ -219,7 +233,7 @@ class ApplicantController extends OapFrontendController
      * @param int|null $archive
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function proposalsAction(int $archive=null): \Psr\Http\Message\ResponseInterface
+    public function proposalsAction(int $archive = null): \Psr\Http\Message\ResponseInterface
     {
         if ($this->applicant != null) {
             $status = $this->status();
@@ -244,12 +258,12 @@ class ApplicantController extends OapFrontendController
     }
 
     /**
-         * action mail
-         *
-         * @param \OpenOAP\OpenOap\Domain\Model\Proposal $proposal
-         * @param string $mailtextSetting
-         * @param string $mailTemplate
-         */
+     * action mail
+     *
+     * @param \OpenOAP\OpenOap\Domain\Model\Proposal $proposal
+     * @param string $mailtextSetting
+     * @param string $mailTemplate
+     */
     public function mailAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal, $mailtextSetting, $mailTemplate)
     {
         $mailTemplatePaths = $this->getMailTemplatePaths();
@@ -258,9 +272,9 @@ class ApplicantController extends OapFrontendController
         $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $mailText);
 
         $uri = $this->uriBuilder
-                ->reset()
-                ->setTargetPageUid((int)$this->settings['dashboardPageId'])
-                ->build();
+            ->reset()
+            ->setTargetPageUid((int)$this->settings['dashboardPageId'])
+            ->build();
         $this->redirectToURI($uri, 0, 200);
     }
 
@@ -279,7 +293,7 @@ class ApplicantController extends OapFrontendController
      * @param int $archive
      * @return array number of edited and new comments
      */
-    protected function countProposalComments(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $proposals, $archive=0): array
+    protected function countProposalComments(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $proposals, $archive = 0): array
     {
         $counted = [];
         foreach ($proposals as $proposal) {

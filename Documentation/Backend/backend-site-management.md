@@ -4,7 +4,7 @@
 Named constants "constant": are set in the template constants.
 See also [constants](../configuration/constants.md).
 
-Names "TSconfig" are set in tsconfig 
+Names "TSconfig" are set in tsconfig
 See also [tsconfig](../configuration/tsconfig.md).
 
 ## Site tree and relevant content
@@ -22,7 +22,7 @@ See also [tsconfig](../configuration/tsconfig.md).
             > Plugin: Login Form
         - Master data (Registration Step 3) **[ACCESS: Frontend Group APPLICANT]**
             > Plugin: oap applicantform
-    
+
     - Dashboard **[ACCESS (extended to subpages): Frontend Group APPLICANT]**
       <br>constant: dashboardPageId
         > Plugin: oap dashboard (Use plugin options to edit text of status mails)
@@ -65,10 +65,10 @@ See also [tsconfig](../configuration/tsconfig.md).
             <br>TSconfig: tx_openoap_domain_model_formitem
         - **SysFolder**: Validators
             <br>(*record type:* Item Validator )
-            <br>TSconfig: tx_openoap_domain_model_formitem
-        - **SysFolder**: LogicAtoms
-            <br>(*record type:* Logic Atom )
-            <br>constant: - not implemented yet
+            <br>TSconfig: tx_openoap_domain_model_itemvalidator
+        - **SysFolder**: Modificators
+            <br>(*record type:* Form Modificator )
+            <br>Tsconfig: tx_openoap_domain_model_formmodificator
 
     - **SysFolder** : OAP-Proposaldata
         - **SysFolder**: Comments

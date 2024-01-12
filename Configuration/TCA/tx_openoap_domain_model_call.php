@@ -21,7 +21,7 @@ return [
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
     ],
     'types' => [
-        '1' => ['showitem' => 'title, intro_text, teaser_text, shortcut, emails, call_start_time, call_end_time, fe_user_exceptions, proposal_pid, form_pages, items, word_template,logo,blocked_languages,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, usergroup, starttime, endtime'],
+        '1' => ['showitem' => 'call_group, supporter, title, intro_text, teaser_text, shortcut, emails, call_start_time, call_end_time, proposal_pid, form_pages, items, word_header_logo, word_styles, logo,blocked_languages,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, usergroup, starttime, endtime, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_tab,anonym, survey_codes'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -206,8 +206,14 @@ return [
                 'type' => 'select',
                 'readOnly' => false,
                 'renderType' => 'selectSingle',
-                'foreign_table' => 'pages',
-                'foreign_table_where' => 'AND {#pages}.pid=###PAGE_TSCONFIG_ID### AND {#pages}.hidden = 0 AND {#pages}.{#sys_language_uid} IN (-1,0)',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class .'->getPoolPages',
+                'minitems' => 0,
+                'maxitems' => 1,
+                'size' => 1,
+//                'foreign_table' => 'pages',
+//                'foreign_table_where' => 'AND {#pages}.pid=###PAGE_TSCONFIG_ID### AND {#pages}.hidden = 0 AND {#pages}.{#sys_language_uid} IN (-1,0)',
+//                'type' => 'user',
+//                'renderType' => 'specialField'
             ],
         ],
         'form_pages' => [
@@ -219,8 +225,14 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_openoap_domain_model_formpage',
-                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formpage}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formpage}.hidden = 0 AND {#tx_openoap_domain_model_formpage}.{#sys_language_uid} IN (-1,0)',
                 'MM' => 'tx_openoap_call_formpage_mm',
+//                'foreign_table_where' ist replaced by itemsProcFunc
+//                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formpage}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formpage}.hidden = 0 AND {#tx_openoap_domain_model_formpage}.{#sys_language_uid} IN (-1,0)',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class .'->getAllElementsOfFormPages',
+                'itemsProcConfig' => [
+                    'model' => 'formpage',
+                    'pidRoot' => 'pidFormPages'
+                ],
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
@@ -251,8 +263,15 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_openoap_domain_model_formitem',
-                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formitem}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formitem}.hidden = 0 AND {#tx_openoap_domain_model_formitem}.{#sys_language_uid} IN (-1,0) AND {#tx_openoap_domain_model_formitem}.{#type} = ###PAGE_TSCONFIG_STR###',
                 'MM' => 'tx_openoap_call_formitem_mm',
+//                'foreign_table_where' ist replaced by itemsProcFunc
+//                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formitem}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formitem}.hidden = 0 AND {#tx_openoap_domain_model_formitem}.{#sys_language_uid} IN (-1,0) AND {#tx_openoap_domain_model_formitem}.{#type} = ###PAGE_TSCONFIG_STR###',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class .'->getAllElementsOfFormItems',
+                'itemsProcConfig' => [
+                    'model' => 'formitem',
+                    'pidRoot' => 'pidFormItems'
+                ],
+
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
@@ -284,6 +303,18 @@ return [
                 'foreign_table' => 'fe_groups',
                 'size' => 6,
                 'minitems' => 1,
+            ],
+        ],
+        'word_styles' => [
+            'exclude' => true,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.word_styles',
+            'config' => [
+                'type' => 'text',
+                'cols' => 50,
+                'rows' => 40,
+                'eval' => 'trim',
+                'default' => '',
             ],
         ],
         'word_template' => [
@@ -342,6 +373,27 @@ return [
                 'gif,jpg,jpeg,png,svg'
             ),
         ],
+        'word_header_logo' =>[
+            'exclude' => true,
+            'l10n_display' => 'defaultAsReadonly',
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.word_header_logo',
+            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                'word_header_logo',
+                [
+                    'maxitems' => 1,
+                    'overrideChildTca' => [
+                        'types' => [
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+                                'showitem' => 'alternative,crop,--palette--;;filePalette',
+                            ],
+                        ],
+                        'columns' => [],
+                    ],
+                ],
+                'gif,jpg,jpeg,png'
+            ),
+        ],
         'blocked_languages' =>[
             'l10n_display' => 'defaultAsReadonly',
             'l10n_mode' => 'exclude',
@@ -362,6 +414,61 @@ return [
                 'size' => 3,
                 'autoSizeMax' => 10,
                 'multiple' => true,
+            ],
+        ],
+        'anonym' => [
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.anonym',
+            'description' => 'renderType=checkboxToggle single',
+            'config' => [
+                'type' => 'check',
+                'renderType' => 'checkboxToggle',
+                'items' => [
+                    [
+                        0 => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.anonym_item_checked',
+                        'labelChecked' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.anonym_item_checked',
+                        'labelUnchecked' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.anonym_item_unchecked',
+                    ],
+                ],
+            ],
+        ],
+        'survey_codes' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_codes',
+            'config' => [
+                'type' => 'text',
+                'cols' => 50,
+                'rows' => 40,
+                'eval' => 'trim',
+                'default' => '',
+            ],
+        ],
+        'call_group' =>[
+            'l10n_display' => 'defaultAsReadonly',
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.call_group',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['', 0],
+                ],
+                'foreign_table' => 'tx_openoap_domain_model_callgroup',
+                'foreign_table_where' => 'AND {#tx_openoap_domain_model_callgroup}.{#sys_language_uid} IN (-1,0)',
+            ],
+        ],
+        'supporter' =>[
+            'l10n_display' => 'defaultAsReadonly',
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.supporter',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['', 0],
+                    ['GIZ', 1],
+                    ['DEG', 2],
+                ],
             ],
         ],
     ],

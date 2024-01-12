@@ -4,10 +4,10 @@
       v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
       data-namespace-typo3-fluid="true">
 
-<v:iterator.loop iteration="counter" count="{groupCurrentN}" >
+<v:iterator.loop iteration="counter" count="{groupCurrentN}">
     <v:variable.set name="groupCounterL1" value="{counter.index}" />
 
-    <fieldset class="form__grouped-fieldset">
+    <fieldset class="form__grouped-fieldset" <f:if condition="{groupsCounter.{itemGroupL0.uid}.current} == {counter.cycle}">id="jumpmark"</f:if>>
 
         <legend class="form__group-legend {f:if(condition: '{nestedGroupClass}', then: 'form__group-legend--nested', else: '')}">
             <f:if condition="{nestedGroupClass}">
@@ -105,11 +105,11 @@
                 --></f:comment>
             </div><!-- 99: type = {item.type} -->
 
-            <f:if condition="{proposal.{propertyKeyComments}}">
+            <v:try><f:if condition="{proposal.{propertyKeyComments}}">
                 <f:render
                     partial="Answer/Comments"
                     arguments="{mode: 'FE', comments:'{proposal.{propertyKeyComments}}',commentStates:'{commentStates}',answersMap:'{answersMap}',answerId:'{answerId}'}" />
-            </f:if>
+            </f:if></v:try>
         </f:for>
     </fieldset>
 </v:iterator.loop>

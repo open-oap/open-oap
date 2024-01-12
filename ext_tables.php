@@ -30,6 +30,8 @@ defined('TYPO3') || die();
             'access' => 'user,group',
             'icon'   => 'EXT:open_oap/Resources/Public/Icons/oap_module_common.svg',
             'labels' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_BackendProposals.xlf',
+            'navigationComponentId' => '',
+            'inheritNavigationComponentFromMainModule' => false,
         ]
     );
 
@@ -63,6 +65,6 @@ defined('TYPO3') || die();
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_openoap_domain_model_comment', 'EXT:open_oap/Resources/Private/Language/locallang_csh_tx_openoap_domain_model_comment.xlf');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_openoap_domain_model_comment');
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_openoap_domain_model_logicatom', 'EXT:open_oap/Resources/Private/Language/locallang_csh_tx_openoap_domain_model_logicatom.xlf');
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_openoap_domain_model_logicatom');
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_openoap_domain_model_formmodificator', 'EXT:open_oap/Resources/Private/Language/locallang_csh_tx_openoap_domain_model_formmodificator.xlf');
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_openoap_domain_model_formmodificator');
 })();

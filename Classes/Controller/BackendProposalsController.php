@@ -13,17 +13,14 @@ use OpenOAP\OpenOap\Domain\Model\FormPage;
 use OpenOAP\OpenOap\Domain\Model\GroupTitle;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
-use OpenOAP\OpenOap\Domain\Repository\ProposalRepository;
 
-use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\Exception\Exception;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
@@ -64,7 +61,7 @@ class BackendProposalsController extends OapBackendController
 
         if (!$isAdmin) {
             $userTsConfig = $GLOBALS['BE_USER']->getTSConfig();
-            $accessGroups = $userTsConfig['oap.']['access.'];
+            $accessGroups = $userTsConfig['oap.']['access.'] ?? null;
             if ($accessGroups) {
                 foreach ($accessGroups as $accessGroup) {
                     $listOfPids = explode(',', $accessGroup);
@@ -81,7 +78,7 @@ class BackendProposalsController extends OapBackendController
         $calls = [];
         $counts = [];
         /**@var \TYPO3\CMS\Core\Domain\Repository\PageRepository $pageRepository */
-//        $pageRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Domain\Repository\PageRepository::class);
+        //        $pageRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Domain\Repository\PageRepository::class);
 
         $counts = [];
         /** @var Call $call */
@@ -90,7 +87,17 @@ class BackendProposalsController extends OapBackendController
                 continue;
             }
 
-            if (in_array($call->getProposalPid(), $accessPids) or $grantedToAll) {
+            try {
+                $rootlineUids = $grantedToAll
+                    ? []
+                    : array_column(
+                        GeneralUtility::makeInstance(RootlineUtility::class, $call->getProposalPid())->get(),
+                        'uid');
+            } catch (\Throwable) {
+                $rootlineUids = [];
+            }
+
+            if ($grantedToAll || array_intersect($rootlineUids, $accessPids)) {
                 $countByState = $this->proposalRepository->countByState($call, self::PROPOSAL_SUBMITTED);
                 $calls[$call->getUid()] = $call;
                 $counts[self::PROPOSAL_SUBMITTED][$call->getUid()] = $countByState;
@@ -110,10 +117,38 @@ class BackendProposalsController extends OapBackendController
     }
 
     /**
+     * @param Call $call
+     * @return array
+     */
+    public function getItemsOfCall(Call $call): array
+    {
+        $allItems = [];
+        /** @var FormPage $formPage */
+        foreach ($call->getFormPages() as $formPage) {
+            /** @var FormGroup $itemGroup */
+            foreach ($formPage->getItemGroups() as $itemGroup) {
+                /** @var formItem $item */
+                foreach ($itemGroup->getItems() as $item) {
+                    $allItems[$item->getUid()] = $item;
+                }
+            }
+        }
+        return $allItems;
+    }
+
+    /**
      * @throws InvalidQueryException
      */
-    public function listProposalsAction(Call $call, array $filter = [], array $selection = [], int $currentPage = 1): ResponseInterface
+    public function listProposalsAction(Call $call, array $filter = [], array $selection = [], int $currentPage = 1, int $itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE): ResponseInterface
     {
+        // clear function call
+        if (($filter['todo'] ?? null) == 'clear') {
+            $filter = [];
+        }
+
+        if (empty($filter['itemsPerPage'])) {
+            $filter['itemsPerPage'] = $itemsPerPage;
+        }
         $filter['call'] = $call->getUid();
 
         // update state of proposal selection
@@ -126,13 +161,13 @@ class BackendProposalsController extends OapBackendController
                     case 'downloadDocuments':
                         /** @var Folder $folder */
                         $folder = $this->createFolder();
-                        $this->createPdfs($selection['records'], $folder);
-                        $this->createWordFiles($selection['records'], $folder);
+                        $this->createPdfs($selection['records']);
+                        $this->createWordFiles($selection['records']);
                         // DebuggerUtility::var_dump($pdfFolder,(string)__LINE__);die();
                         $this->downloadAttachments($selection['records'], $folder);
                         break;
                     case 'pdf':
-//                        $pdfFolder = $this->createPdfs($selection['records']);
+                        //                        $pdfFolder = $this->createPdfs($selection['records']);
                         $this->downloadPdfs($selection['records']);
                         break;
                 }
@@ -165,43 +200,43 @@ class BackendProposalsController extends OapBackendController
                 }
             }
         }
-        if ($filter['todo'] == 'clear') {
-            $filter = [];
-        }
 
-        $callPid = (int)$this->settings['callPid'];
-        $calls = $this->callRepository->findAllByPid($callPid);
-
+        $allItems = $this->getItemsOfCall($call);
         $states['filter'] = $this->createStatesArray('selected');
         $states['task'] = $this->createStatesArray('task');
 
-        $filterItems = $this->formItemRepository->findByEnabledFilter((int)$this->settings['itemsPid']);
         $filterSelects = [];
-        foreach ($filterItems as $filterItem) {
-            $filterSelects[$filterItem->getUid()]['item'] = $filterItem;
-            foreach ($filterItem->getOptions() as $optionItem) {
-                $itemOptionsArray = explode("\r\n", $optionItem->getOptions());
-                foreach ($itemOptionsArray as $itemOption) {
-                    $itemOption = $this->cleanupOptionItem($itemOption);
-                    if ($itemOption !== '') {
-                        $filterSelects[$filterItem->getUid()]['options'][$itemOption['key']] = $itemOption['label'];
+        /** @var FormItem $filterItem */
+        foreach ($allItems as $filterItem) {
+            if ($filterItem->getEnabledFilter()) {
+                $filterSelects[$filterItem->getUid()]['item'] = $filterItem;
+                foreach ($filterItem->getOptions() as $optionItem) {
+                    $itemOptionsArray = explode("\r\n", $optionItem->getOptions());
+                    foreach ($itemOptionsArray as $itemOption) {
+                        $itemOption = $this->cleanupOptionItem($itemOption);
+                        if ($itemOption !== '') {
+                            $filterSelects[$filterItem->getUid()]['options'][$itemOption['key']] = $itemOption['label'];
+                        }
                     }
                 }
             }
         }
 
         $sorting = [];
+        $sortRev = null;
+        $sortField = null;
+
         if ($this->request->hasArgument('sortField')) {
             $sortField = htmlspecialchars($this->request->getArgument('sortField'));
             $sortRev = (int)($this->request->getArgument('sortRev'));
             if ($sortRev == 1) {
-                $sorting = [$sortField => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING];
+                $sorting = ['field' => $sortField, 'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING];
             } else {
-                $sorting = [$sortField => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING];
+                $sorting = ['field' => $sortField, 'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING];
             }
         }
-        $allItems = $this->proposalRepository->findDemanded($call->getProposalPid(), self::STATE_ACCESS_MIN_FILTER, $filter, $sorting)->toArray();
-        $pagination = $this->createPaginator($allItems, $currentPage);
+        $allItems = $this->proposalRepository->findDemanded($call->getProposalPid(), self::STATE_ACCESS_MIN_FILTER, $filter, $sorting);
+        $pagination = $this->createPaginator($allItems, $currentPage, (int)$filter['itemsPerPage']);
 
         $this->view->assignMultiple([
             'countOfItems' => count($allItems),
@@ -210,7 +245,6 @@ class BackendProposalsController extends OapBackendController
             'filterSelects' => $filterSelects,
             'exportFormats' => ['csv' => 'CSV', 'downloadDocuments' => 'Documents', 'pdf' => 'PDF'],
             'stateReopenedValue' => self::PROPOSAL_RE_OPENED,
-            'calls' => $calls,
             'actionName' => $this->actionMethodName,
             'paginator' => $pagination['array'],
             'pagination' => $pagination['pagination'],
@@ -239,7 +273,7 @@ class BackendProposalsController extends OapBackendController
                     $limitEditableFields = self::META_PROPOSAL_EDITABLE_FIELDS_NO_LIMIT;
                 }
                 $selectedState = (int)($selection['state']);
-//                if($selectedState > 0 && $selectedState != $proposal->getState()) {
+                //                if($selectedState > 0 && $selectedState != $proposal->getState()) {
                 if ($selectedState > 0) {
                     $proposal->setState($selectedState);
 
@@ -287,6 +321,7 @@ class BackendProposalsController extends OapBackendController
         $comments = $this->commentRepository->findDemanded($proposal, $filterDemand);
         $commentNewUri = $this->getBackendNewUri('tx_openoap_domain_model_comment', (int)$this->settings['commentsPoolId']);
 
+        $this->flattenItems($proposal);
         $this->flattenAnswers($proposal);
         $itemAnswerMap = $this->buildItemAnswerMap($proposal);
 
@@ -350,6 +385,7 @@ class BackendProposalsController extends OapBackendController
             'groupsCounter' => $groupsCounter,
             'annotationButtonEnabled' => $proposal->getState() != self::PROPOSAL_RE_OPENED,
             'limitEditableFields' => $limitEditableFields,
+            'call' => $proposal->getCall(),
         ]);
 
         return $this->htmlResponse();
@@ -385,6 +421,7 @@ class BackendProposalsController extends OapBackendController
         foreach ($proposals as $key => $proposalId) {
             $proposal = $this->proposalRepository->findByUid((int)$proposalId);
             $proposalList[$key]['proposal'] = $proposal;
+            $selectedMailAction = null;
             if ($submitted) {
                 $selectedMailAction = $selection[$proposalId];
                 $proposalList[$key]['mailaction']['text'] = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.result.mailAction.status.' . $selectedMailAction);
@@ -439,6 +476,7 @@ class BackendProposalsController extends OapBackendController
             'mailtext' => count($proposals) == 1 ? $proposalList[0]['maildata']['mailtext'] : $unparsedDefaultMailtext,
             'submitted' => $submitted,
             'settings' => $this->settings,
+            'call' => $proposal->getCall(),
         ]);
 
         return $this->htmlResponse();
@@ -507,7 +545,11 @@ class BackendProposalsController extends OapBackendController
         list($absoluteBasePath, $uploadFolder) = $this->initializeUploadFolder($storage);
 
         // filename and path
-        $zipName = 'documents--' . date('Ymd-Hi') . '.zip';
+        $datePart = '';
+        if ($this->settings['zipFileDateFormat'] !== '') {
+            $datePart = date($this->settings['zipFileDateFormat']);
+        }
+        $zipName = $this->settings['zipFilePrefix'] . $datePart . '.zip';
         $zipFile = $absoluteBasePath . $uploadFolder->getIdentifier() . $zipName;
 
         $createFolder = true; // collection of different users - create folder structure
@@ -539,7 +581,7 @@ class BackendProposalsController extends OapBackendController
         $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($this->settings['uploadFolder']);
         $tempFolder = time() . '-' . rand(10000, 99999);
 
-//        DebuggerUtility::var_dump($tempFolder);die();
+        //        DebuggerUtility::var_dump($tempFolder);die();
         $baseUploadFolder = self::provideTargetFolder($storage->getRootLevelFolder(), '_temp_');
         self::provideFolderInitialization($baseUploadFolder);
         $folder = $baseUploadFolder->createFolder($tempFolder);
@@ -549,13 +591,12 @@ class BackendProposalsController extends OapBackendController
 
     /**
      * @param $records
-     * @param Folder $folder
      * @throws InvalidQueryException
      */
-    protected function createPdfs($records, Folder $folder): void
+    protected function createPdfs($records): void
     {
         $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($this->settings['uploadFolder']);
-        $absoluteBasePath = $this->getBasePath($storage);
+        //        $absoluteBasePath = $this->getBasePath($storage);
 
         $proposals = $this->proposalRepository->findByUids($records);
 
@@ -584,62 +625,44 @@ class BackendProposalsController extends OapBackendController
                 'callLogo' => $callLogo,
             ];
 
-            $fileName = $proposal->getUid();
-            $fileExt = '.pdf';
+            //            $fileName = $proposal->getUid();
+            //            $fileExt = '.pdf';
 
-            $savePath = $absoluteBasePath . $folder->getIdentifier();
-            $pdfFile = $savePath . $storage->sanitizeFileName($fileName . $fileExt);
-            $pdfArguments['destination'] = 'string';
-            $pdfArguments['filePath'] = $storage->sanitizeFileName($fileName . $fileExt);
+            $pdfFile = $this->createFileName($proposal, '.pdf');
+            //            $savePath = $absoluteBasePath . $folder->getIdentifier();
+            //            DebuggerUtility::var_dump($pdfFile,(string)__LINE__);
+            //            die();
+            //            $pdfFile = $savePath . $storage->sanitizeFileName($fileName . $fileExt);
+            if (!file_exists($pdfFile)) {
+                $pdfArguments['destination'] = 'string';
+                $pdfArguments['filePath'] = $pdfFile; // $storage->sanitizeFileName($fileName . $fileExt);
 
-            $pdfStr = $this->renderPdfView(self::EXPORT_TEMPLATE_PATH_PDF, $pdfArguments);
-            file_put_contents($pdfFile, $pdfStr);
+                $pdfStr = $this->renderPdfView(self::EXPORT_TEMPLATE_PATH_PDF, $pdfArguments);
+                file_put_contents($pdfFile, $pdfStr);
+            }
         }
     }
 
     /**
      * @param $records
-     * @param Folder $folder
      * @throws InvalidQueryException
+     * @throws Exception
      */
-    protected function createWordFiles($records, Folder $folder): void
+    protected function createWordFiles($records): void
     {
-        $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($this->settings['uploadFolder']);
-        $absoluteBasePath = $this->getBasePath($storage);
-        $proposalTempFolder = $this->provideTargetFolder($storage->getRootLevelFolder(), '_temp_');
-
         $proposals = $this->proposalRepository->findByUids($records);
 
+        /** @var Proposal $proposal */
         foreach ($proposals as $proposal) {
-            $contentWordFileName = $this->createWord($proposal);
+            // check if file alwarys there
 
-            if ($proposal->getCall()->getWordTemplate()) {
-                $file = $proposal->getCall()->getWordTemplate()->getOriginalResource()->getOriginalFile();
-            } else {
-                $file = $storage->getFile($this->settings['wordExportTemplateFile']);
+            foreach ([self::WORD_EXPORT_COMPACT, self::WORD_EXPORT_DEFAULT] as $typeOfWord) {
+                $wordFileName = $this->createFileName($proposal, '.docx', $typeOfWord);
+                if (!file_exists($wordFileName)) {
+                    // create new word file
+                    $contentWordFileName = $this->createWord($proposal, $wordFileName, $typeOfWord);
+                }
             }
-
-            // $targetFileName = $this->getWordFileName($proposal->getUid(), '');
-            $targetFileName = $proposal->getUid() . '.docx';
-            $targetfileAbsName = $absoluteBasePath . $folder->getIdentifier() . $targetFileName;
-//        $finshedFileName = $this->getWordFileName($proposal->getUid(), 'finished');
-
-            /** @var File $copiedFile */
-            $targetFile = $file->copyTo($folder)->rename($targetFileName);
-
-//        $finishedFileAbsName = $absoluteBasePath . $proposalTempFolder->getIdentifier() . $finshedFileName;
-            $savePath = $absoluteBasePath . $folder->getIdentifier();
-            $this->mergeTemplateWithWord($contentWordFileName, $targetfileAbsName);
-
-            $templateProcessor = new TemplateProcessor($targetfileAbsName);
-
-            $states = $this->createStatesArray('all');
-
-            $this->wordVarReplacement($proposal, $states[$proposal->getState()], $templateProcessor);
-
-            $templateProcessor->saveAs($targetfileAbsName); // As($mergeFile);
-
-            $filename = $this->getWordFileName($proposal->getUid(), 'proposal');
         }
     }
 
@@ -701,15 +724,17 @@ class BackendProposalsController extends OapBackendController
                 $pdfArguments['destination'] = 'download';
                 $pdfArguments['filepath'] = $storage->sanitizeFileName($fileName . '--' . date('Ymd-Hi') . $fileExt);
                 $this->renderPdfView(self::EXPORT_TEMPLATE_PATH_PDF, $pdfArguments);
-            // here is the end my friend - After rendering, the pdfviewhelper takes over the transfer to the browser for downloading
+                // here is the end my friend - After rendering, the pdfviewhelper takes over the transfer to the browser for downloading
             } else {
-                $pdfFile = $zipPath . $storage->sanitizeFileName($fileName . $fileExt);
-                $pdfArguments['destination'] = 'string';
-                $pdfArguments['filePath'] = $storage->sanitizeFileName($fileName . $fileExt);
+                $pdfFile = $this->createFileName($proposal, '.pdf');
 
-                $pdfStr = $this->renderPdfView(self::EXPORT_TEMPLATE_PATH_PDF, $pdfArguments);
-                file_put_contents($pdfFile, $pdfStr);
+                if (!file_exists($pdfFile)) {
+                    $pdfArguments['destination'] = 'string';
+                    $pdfArguments['filePath'] = $storage->sanitizeFileName($pdfFile);
 
+                    $pdfStr = $this->renderPdfView(self::EXPORT_TEMPLATE_PATH_PDF, $pdfArguments);
+                    file_put_contents($pdfFile, $pdfStr);
+                }
                 if (!$zipFlag) {
                     $zip = new \ZipArchive();
                     if (file_exists($zipFile)) {
@@ -736,8 +761,9 @@ class BackendProposalsController extends OapBackendController
                     $zipFlag = true;
                 }
                 if (file_exists($pdfFile)) {
-                    $zip->addFile($pdfFile, $storage->sanitizeFileName($fileName . $fileExt));
-                    $pdfArr[] = $pdfFile;
+                    $zip->addFile($pdfFile, basename($pdfFile));
+                    //                    $zip->addFile($pdfFile, $storage->sanitizeFileName($fileName . $fileExt));
+                    //                    $pdfArr[] = $pdfFile;
                 }
             }
         }
@@ -755,11 +781,11 @@ class BackendProposalsController extends OapBackendController
 
             unlink($zipFile);
 
-            if (is_array($pdfArr)) {
-                foreach ($pdfArr as $pdfFilePath) {
-                    unlink($pdfFilePath);
-                }
-            }
+            //            if (is_array($pdfArr)) {
+            //                foreach ($pdfArr as $pdfFilePath) {
+            //                    unlink($pdfFilePath);
+            //                }
+            //            }
             exit;
         }
     }
@@ -815,6 +841,7 @@ class BackendProposalsController extends OapBackendController
                             for ($indexL1 = 0; $indexL1 < $maxL1; $indexL1++) {
                                 $head[$l1headRow][$columnNo] = $this->createGroupTitle($groupL1, $maxL1, $indexL1);
 
+                                /** @var FormItem $item */
                                 foreach ($groupL1->getItems() as $item) {
                                     $key = $groupL1->getUid() . '--' . $indexL0 . '--' . $indexL1 . '--' . $item->getUid();
                                     $columns[$key] = $columnNo;
@@ -822,6 +849,10 @@ class BackendProposalsController extends OapBackendController
                                     $columnNo++;
                                     if ($item->isAdditionalValue()) {
                                         $head[$itemHeadRow][$columnNo] = 'additionalAnswer';
+                                        $columnNo++;
+                                    }
+                                    if ($item->getType() == self::TYPE_DATE2) {
+                                        $head[$itemHeadRow][$columnNo] = 'Date until';
                                         $columnNo++;
                                     }
                                 }
@@ -836,6 +867,10 @@ class BackendProposalsController extends OapBackendController
                             $columnNo++;
                             if ($item->isAdditionalValue()) {
                                 $head[$itemHeadRow][$columnNo] = 'additionalAnswer';
+                                $columnNo++;
+                            }
+                            if ($item->getType() == self::TYPE_DATE2) {
+                                $head[$itemHeadRow][$columnNo] = 'Date until';
                                 $columnNo++;
                             }
                         }
@@ -879,14 +914,14 @@ class BackendProposalsController extends OapBackendController
                                 try {
                                     $fileObj = $this->resourceFactory->getFileObject($file);
                                 } catch(\TYPO3\CMS\Core\Resource\Exception $e) {
-//                                    echo 'Exception abgefangen: ', $e->getMessage();
-//                                    die();
+                                    //                                    echo 'Exception abgefangen: ', $e->getMessage();
+                                    //                                    die();
                                     $fileObj = null;
                                 }
                                 if ($fileObj) {
                                     $values[] = $fileObj->getName();
                                 } else {
-                                    $values[] = '****missing FILE? '.$file;
+                                    $values[] = '****missing FILE? ' . $file;
                                 }
                             }
                             $value = implode(', ', $values);
@@ -895,6 +930,9 @@ class BackendProposalsController extends OapBackendController
                 $key = $answer->getModel()->getUid() . '--' . $answer->getGroupCounter0() . '--' . $answer->getGroupCounter1() . '--' . $answer->getItem()->getUid();
                 $export[$proposalUid][$columns[$key]] = $value;
                 if ($answer->getItem()->isAdditionalValue()) {
+                    $export[$proposalUid][$columns[$key] + 1] = $answer->getAdditionalValue();
+                }
+                if ($answer->getItem()->getType() == self::TYPE_DATE2) {
                     $export[$proposalUid][$columns[$key] + 1] = $answer->getAdditionalValue();
                 }
             }
@@ -962,21 +1000,5 @@ class BackendProposalsController extends OapBackendController
     {
         $proposalFeLanguage = $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getLanguageById($languageId);
         return $proposalFeLanguage->getTwoLetterIsoCode();
-    }
-
-    /**
-     * @param ResourceStorage $storage
-     * @return string
-     */
-    protected function getBasePath(ResourceStorage $storage): string
-    {
-        $configuration = $storage->getConfiguration();
-        if (!empty($configuration['pathType']) && $configuration['pathType'] === 'relative') {
-            $relativeBasePath = $configuration['basePath'];
-            $absoluteBasePath = rtrim(Environment::getPublicPath() . '/' . $relativeBasePath, '/');
-        } else {
-            $absoluteBasePath = rtrim($configuration['basePath'], '/');
-        }
-        return $absoluteBasePath;
     }
 }

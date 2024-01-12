@@ -13,7 +13,7 @@
 
     <div class="preview">
         <f:for each="{proposal.call.formPages}" as="formPage" key="pageId" iteration="pageIt">
-            <f:if condition="{formPage.type} == 'PAGETYPE_DEFAULT'">
+            <f:if condition="{formPage.type} == {pageTypes.PAGETYPE_DEFAULT}">
                 <div class="preview__section">
                     <h3 class="preview__section-headline">{formPage.title}</h3>
                     <f:render partial="innerErrorList" arguments="{validationResults:validationResults, proposal:proposal, pageIdx:pageIt}" />
@@ -106,7 +106,7 @@
                         </f:if>
 
                         <div class="preview__item">
-                            <dt id="preview__answer--{answerId}" class="preview__term {errorClass}" ><strong>{item.question}{answersMap.{answerId}.item.MSign}: {validationResults.pages.{groupId}.{item.uid}}</strong></dt>
+                            <dt id="preview__answer--{answerId}" class="preview__term {errorClass}" ><strong>{item.question}{answersMap.{answerId}.item.MSign} <v:try>{validationResults.pages.{groupId}.{item.uid}}</v:try></strong></dt>
                             <dd class="preview__definition">
 
                                 <f:render partial="Utility/ValueOutput" arguments="{_all}" />

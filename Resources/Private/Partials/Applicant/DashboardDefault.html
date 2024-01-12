@@ -1,0 +1,168 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+      data-namespace-typo3-fluid="true">
+
+<f:comment><!--
+Dashboard page view
+Available variables:
+  {activeCalls}
+  {applicant}
+  {countries}
+  {constants}
+  {countAll}
+  {proposalsActive}
+  {proposalsArchived}
+  {proposalsActiveCommentsCount}
+  {proposalsArchivedCommentsCount}
+  {proposalsActiveFilesCount}
+  {proposalsArchivedFilesCount}
+  {settings}
+--></f:comment>
+
+<f:section name="content">
+    <script>(function () {window.OAP = window.OAP || {}; window.OAP.labels = <f:format.raw><f:format.json>{jsMessages}</f:format.json></f:format.raw>}());</script>
+  <f:asset.script identifier="open_oap_scripts" src="EXT:open_oap/Resources/Public/JavaScript/scripts.js" defer="1"/>
+
+  <f:render partial="FlashMessages" arguments="{_all}" />
+
+  <f:if condition="{applicant}">
+    <div class="row">
+      <f:comment>NEW PROPOSAL LINK-BOX</f:comment>
+      <f:render section="LinkboxProposalNew" arguments="{_all}" />
+      <f:comment>MASTER DATA BOX</f:comment>
+      <div class="column column--size6 column--order-1">
+        <section class="component component--box component--equal">
+          <div class="profile">
+            <f:render partial="Applicant/Properties" section="Summary" arguments="{applicant:applicant, countries:countries, settings:settings}" />
+            <div class="profile__edit-link">
+            <f:link.action action="edit" controller="Applicant" pageUid="{settings.masterdataEditPageId}" arguments="{applicant:applicant}">
+              {f:translate(key:'tx_openoap_dashboard.masterdata.linkEdit.title')}
+            </f:link.action>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </f:if>
+
+  <div class="accordion" data-preopen="1">
+    <f:comment>ACTIVE PROPOSALS</f:comment>
+    <f:render section="ProposalBlock" arguments="{header:'tx_openoap_dashboard.proposalsActive.header', proposals:proposalsActive, commentsCount:proposalsActiveCommentsCount, filesCount:proposalsActiveFilesCount, constants:constants, mode:'Active', total:countAll.active}" />
+
+    <f:comment>ARCHIVED PROPOSALS</f:comment>
+    <f:render section="ProposalBlock" arguments="{header:'tx_openoap_dashboard.proposalsArchived.header', proposals:proposalsArchived, commentsCount:proposalsArchivedCommentsCount, filesCount:proposalsArchivedFilesCount, mode:'Archived', archived:1, total:countAll.archived}" />
+  </div>
+
+
+  <f:render partial="Modal"
+     arguments='{message:"{f:translate(key:\'tx_openoap_form.modal.hint\')}",cancel:"{f:translate(key:\'tx_openoap_form.modal.edit\')}",submit:"{f:translate(key:\'tx_openoap_form.modal.save\')}"}'
+  />
+  <f:render partial="Loader" />
+</f:section>
+
+
+<f:section name="ProposalBlock">
+    <div class="accordion__item">
+      <h2 class="accordion__item-header" id="active-proposals"><span class="accordion__item-header-text"><span class="hyphenated">{f:translate(key:'{header}')} ({total})</span></span></h2>
+      <div class="accordion__item-content">
+        <div class="proposals">
+
+          <f:comment>LISTING</f:comment>
+          <f:if condition="{proposals}">
+            <f:then>
+              <f:comment>LEGEND</f:comment>
+              <f:if condition="{constants}">
+                  <f:render partial="Applicant/Legend" arguments="{constants:constants}" />
+              </f:if>
+
+              <f:render partial="Applicant/Proposals" arguments="{proposals:proposals, commentsCount:commentsCount, constants:constants, filesCount:filesCount}" />
+
+              <f:if condition="{total} > {proposals -> f:count()}">
+                <div class="proposals__show-all">
+                    <f:link.action pageUid="{settings.proposalsPageId}" action="proposals" arguments="{archive:'{f:if(condition:archived, then:1)}'}" pluginName="Proposals" class="button button--alternative">
+                        {f:translate(key:'tx_openoap_dashboard.button.proposals{mode}All.label')}
+                    </f:link.action>
+                </div>
+              </f:if>
+
+            </f:then>
+
+            <f:else>
+                <p>{f:translate(key:'tx_openoap_dashboard.no{mode}Proposals.text')}</p>
+            </f:else>
+
+          </f:if>
+        </div>
+      </div>
+    </div>
+</f:section>
+
+
+<f:section name="LinkboxProposalNew">
+  <div class="column column--size6 column--order-2">
+    <section class="component component--box-on-wide component--equal ">
+      <div class="component__flex-liner">
+        <f:if condition="{activeCalls}">
+          <f:then>
+            <ul class="call-list">
+              <f:for each="{activeCalls}" as="call">
+
+                  <v:variable.set name="byTester" value="0" />
+                  <f:if condition="{nowTimestamp} < {call.callStartTime.timestamp} || {nowTimestamp} > {call.callEndTime.timestamp} ">
+                      <f:for each="{call.usergroup}" as="callUsergroup">
+                          <f:if condition="{settings.testerFeGroupsId} == {callUsergroup.uid}">
+                              <f:then>
+                                  <f:for each="{applicant.usergroup}" as="applicantUsergroup">
+                                      <f:if condition="{applicantUsergroup.uid} == {callUsergroup.uid}">
+                                          <v:variable.set name="byTester" value="1" />
+                                      </f:if>
+                                  </f:for>
+                              </f:then>
+                              <f:else if="{callUsergroup.subgroup}">
+                                  <f:for each="{callUsergroup.subgroup}" as="subgroup">
+                                      <f:if condition="{settings.testerFeGroupsId} == {subgroup.uid}">
+                                          <v:variable.set name="byTester" value="1" />
+                                      </f:if>
+                                  </f:for>
+                              </f:else>
+                          </f:if>
+                      </f:for>
+                  </f:if>
+
+                  <v:variable.set name="CallDisabled" value="0" />
+                  <f:if condition="({call.hidden} == 1 || {call.anonym} == 1) && {byTester} == 0 ">
+                          <v:variable.set name="CallDisabled" value="1" />
+                  </f:if>
+                  <li class="call-list__item">
+                      <h2 class="call-list__title">{call.title} <f:if condition="{byTester} == 1"><span style="color:orange;">TEST</span></f:if></h2>
+                      <f:if condition="{call.teaserText}"><p class="call-list__text">{call.teaserText}</p></f:if>
+                      <f:if condition="{call.callEndTime}"><p class="call-list__text">{f:translate(key:'tx_openoap_dashboard.call.active_until')}: <f:format.date format="d.m.Y - H:i:s">{call.callEndTime}</f:format.date></p></f:if>
+                      <f:if condition="!{CallDisabled}">
+                          <f:then>
+                          <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form" action="create" controller="Proposal" arguments="{applicant:applicant,call:call}" class="call-list__create-proposal">
+                              {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title')}
+                          </f:link.action>
+                          </f:then>
+                          <f:else>
+                              <p class="call-list__text"><f:format.raw>{f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage')}</f:format.raw></p>
+                          </f:else>
+                      </f:if>
+
+                  </li>
+
+              </f:for>
+            </ul>
+          </f:then>
+          <f:else>
+            <h2 class="h3">{f:translate(key:'tx_openoap_dashboard.call.noActive.header')}</h2>
+            <f:comment><p>Some text</p></f:comment>
+          </f:else>
+        </f:if>
+      </div>
+    </section>
+  </div>
+</f:section>
+
+</html>

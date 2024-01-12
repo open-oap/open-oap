@@ -17,7 +17,7 @@ Available variables:
 
 <f:layout name="ProposalsBELayout" />
     <f:section name="content">
-
+        <v:variable.set name="itemsPerPage" value="{filter.itemsPerPage}" />
         <f:flashMessages />
 
         <h2 style="margin-bottom:3rem;"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.list_of_proposals"/>: {call.title}</h2>
@@ -39,12 +39,24 @@ Available variables:
                 </fieldset>
 
                 <f:render section="DynamicFilter" arguments="{_all}" />
-
+                <br>
                 <fieldset class="form-group">
                     <label>
-                        <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.searchword" />:<br />
+                        <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.searchword" />:<br>
                         <f:form.textfield name="filter[searchword]" class="form-control" value="{filter.searchword}"/>
                     </label>
+
+                    <label>
+                        Items per Page:<br>
+                    <f:form.select
+                            name="filter[itemsPerPage]"
+                            value="{filter.itemsPerPage}"
+                            options='{10:"10", 50: "50",100: "100",250: "250",500: "500",1000: "1000"}'
+                            prependOptionValue="Items per Page"
+                            class="form-select"
+                    />
+                    </label>
+                    <!--                            prependOptionLabel="<f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.state.all' />"-->
                     <f:form.button class="btn btn-primary" name="filter[todo]" value="submit" ><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.search' /> </f:form.button>
                     <f:form.button class="btn btn-secondary" name="filter[todo]" value="clear" ><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.clear' /></f:form.button>
                 </fieldset>
@@ -163,23 +175,23 @@ Available variables:
                 --></f:comment>
                 <!-- title -->
                 <th nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.title\')}', sortField:'title', sorted:sorted}" />
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.title\')}', sortField:'title', sorted:sorted, call:call, filter:filter}" />
                 </th>
                 <!-- signature -->
                 <th nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.signature\')}', sortField:'signature', sorted:sorted}" />
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.signature\')}', sortField:'signature', sorted:sorted, call:call, filter:filter}" />
                 </th>
                 <!-- state -->
                 <th nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.state\')}', sortField:'state', sorted:sorted}" />
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.state\')}', sortField:'state', sorted:sorted, call:call, filter:filter}" />
                 </th>
                 <!-- tstamp -->
                 <th nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.tstamp\')}', sortField:'tstamp', sorted:sorted}" />
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.tstamp\')}', sortField:'editTstamp', sorted:sorted, call:call, filter:filter}" />
                 </th>
                 <!-- user-e-mail / applicant-->
                 <th nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.applicant\')}', sortField:'applicant', sorted:sorted}" />
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.applicant\')}', sortField:'applicant_username', sorted:sorted, call:call, filter:filter}" />
                 </th>
             </tr>
             </thead>
@@ -215,7 +227,7 @@ Available variables:
                         </span>
                     </td>
                     <td class="col-title">
-                        <f:link.action action="showProposal" arguments="{proposal:proposal.uid}" class="" title="{f:translate(key:'action.show_proposal')}">
+                        <f:link.action action="showProposal" arguments="{proposal:proposal.uid,call:proposal.call}" class="" title="{f:translate(key:'action.show_proposal')}">
                             {proposal.title}
                         </f:link.action><br />
                         <v:variable.set name="jsonArray" value="{proposal.metaInformation -> v:format.json.decode()}"/>
@@ -250,7 +262,7 @@ Available variables:
         </table>
         </f:form>
         </div>
-        <f:render partial="Utility/Paginator" arguments="{pagination: pagination, pages: pages, paginator: paginator, actionName: 'listProposals', call: call}" />
+        <f:render partial="Utility/Paginator" arguments="{pagination: pagination, pages: pages, paginator: paginator, actionName: 'listProposals', call: call, itemsPerPage:itemsPerPage}" />
         <f:comment><!-- <f:debug>{forms}</f:debug> --></f:comment>
 
     </f:section>
@@ -264,7 +276,7 @@ Available variables:
                         <v:variable.set name="sortRev" value="1" />
                     </f:if>
                 </f:if>
-                <f:link.action action="listProposals" arguments="{sortField:sortField, sortRev:sortRev}" class="" title="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:sorting.order.{sortRev}')}">
+                <f:link.action action="listProposals" arguments="{sortField:sortField, sortRev:sortRev, call:call, filter:filter}" class="" title="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:sorting.order.{sortRev}')}">
                     {title}
                     <f:if condition="{sortField} == {sorted.sortField} && 0 == {sorted.sortRev}">
                         <f:then>

@@ -1,5 +1,7 @@
 <?php
 
+use OpenOAP\OpenOap\TypeConverter\UserObjectConverter;
+
 defined('TYPO3') || die();
 
 (static function () {
@@ -161,7 +163,6 @@ defined('TYPO3') || die();
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['locallangXMLOverride']['de']['EXT:femanager/Resources/Private/Language/locallang.xlf'][]
         = 'EXT:open_oap/Resources/Private/Language/femanager/de.locallang.xlf';
 
-
     // Mapping
     $extbaseObjectContainer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class);
 
@@ -178,6 +179,23 @@ defined('TYPO3') || die();
         \OpenOAP\OpenOap\Controller\UserEditController::class
     );
 
+    // XCLASS EventController
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\InvitationController::class]
+        = [
+            'className' => \OpenOAP\OpenOap\Controller\UserInvitationController::class,
+        ];
+
+    // XCLASS Pdfviewhelpers ImageViewHelper
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][ \Bithost\Pdfviewhelpers\ViewHelpers\ImageViewHelper::class ] = [
+        'className' => \OpenOAP\OpenOap\Xclass\Pdfviewhelpers\ImageViewHelper::class,
+    ];
+
+    // Starting  with TYPO3 v12 extbase type converters are registered in
+    // Configuration/Services.yaml
+    if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() < 12) {
+        // Register type converters
+        //   \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(UserObjectConverter::class);
+    }
 
     // Add statusAction to nonCacheableAction of femanager invitation plugin
     if (!in_array('status', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Pi1']['controllers']['In2code\Femanager\Controller\InvitationController']['nonCacheableActions'])) {

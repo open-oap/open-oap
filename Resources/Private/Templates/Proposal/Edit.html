@@ -30,6 +30,7 @@
         <div role="alert" id="proposal-form-{proposal.uid}-alert"></div>
         <div>
             <f:form.hidden name="currentPage" value="{pageControl.current}"/>
+            <f:form.hidden name="survey" value="{survey}"/>
             <f:for each="{proposal.answers}" as="answer" iteration="a">
                 <v:variable.set name="aIndex" value="{a.index}"/>
                 <f:form.hidden property="answers.{aIndex}.__identity" value="{answer.uid}"/>
@@ -37,7 +38,7 @@
         </div>
         <f:comment><!--               PAGES                                    --></f:comment>
         <f:for each="{proposal.call.formPages}" as="formPage" key="pageId" iteration="pageIt">
-            <f:if condition="{formPage.type} == 'PAGETYPE_DEFAULT'">
+            <f:if condition="{formPage.type} == {pageTypes.PAGETYPE_DEFAULT}}">
             <f:then>
                 <f:form.hidden name="previewPage" value="0"/>
                 <f:if condition="{pageControl.current} == {pageIt.cycle}">
@@ -59,8 +60,8 @@
                                     </div>
                                     --></f:comment>
 
-                                    <f:if condition="{formPage.itemGroups -> f:count()}">
-                                        <f:comment><!-- show requiredInfo only if there are item groups--></f:comment>
+                                    <f:if condition="{formPage.itemGroups -> f:count()} && !{survey}">
+                                        <f:comment><!-- show requiredInfo only if there are item groups and it is not survey--></f:comment>
                                         <f:render partial="RequiredInfo"/>
                                     </f:if>
 
@@ -85,6 +86,10 @@
 
                                 <f:for each="{proposal.call.items}" as="item">
                                     <fieldset >
+                                        <f:comment><!-- Undefined "answerId" leads to "PHP Runtime Deprecation Notice: str_replace(): Passing null to parameter #2 ($replace) of type array|string is deprecated" --></f:comment>
+                                        <f:if condition="!{answerId}">
+                                            <f:variable name="answerId" value=""/>
+                                        </f:if>
                                         <legend class="form__label-question" id="legend--{propertyKeyIndex}">{item.question} <f:if condition="{answersMap.{answerId}.item.MSign}"><f:render partial="Required.html" arguments="{MSign:'{answersMap.{answerId}.item.MSign}'}" /></f:if></legend>
                                         <f:if condition="{item.introText}"><div class="form__text form__text--intro">{item.introText -> f:format.html()}</div></f:if>
 

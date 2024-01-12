@@ -1,5 +1,20 @@
 # Change log
 
+## Version 1.3
+
+- PHP 8 compatibility
+- Added anonymous [surveys](../Configuration/function_survey.md)
+- Added configuration for ZIP file format
+- Added call groups
+- Added dashboard templates
+- Fixed error message for dual listbox
+- UserTS "oap.access.*" now grants access to nested groups
+- Added new validator "greater than" based on another field
+- Added new validator "less than" based on another field
+- Added new modificator "Grand total" to  calculate the sum of multiple other fields
+- Fixed broken felogin password reset
+- Use separate logo for Word .docx files
+
 ## Version 1.2.2
 
 - add javascript and css files - compiled - for ready-to-use-state (alignment for gitignore for this part)

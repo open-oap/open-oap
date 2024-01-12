@@ -28,6 +28,6 @@ class BasicTest extends FunctionalTestCase
      */
     public function dummy(): void
     {
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }
 }

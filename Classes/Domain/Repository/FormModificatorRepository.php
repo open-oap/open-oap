@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenOAP\OpenOap\Domain\Repository;
 
+
 /**
  * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
  *
@@ -15,8 +16,8 @@ namespace OpenOAP\OpenOap\Domain\Repository;
  */
 
 /**
- * The repository for LogicAtoms
+ * The repository for FormModificators
  */
-class LogicAtomRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class FormModificatorRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 }

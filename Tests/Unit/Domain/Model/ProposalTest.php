@@ -114,7 +114,7 @@ class ProposalTest extends UnitTestCase
     {
         $this->subject->setArchived(true);
 
-        self::assertTrue($this->subject->_get('archived'));
+        self::assertEquals(true, $this->subject->_get('archived'));
     }
 
     /**
@@ -143,7 +143,8 @@ class ProposalTest extends UnitTestCase
      */
     public function getCallReturnsInitialValueForCall(): void
     {
-        self::assertNull(
+        self::assertEquals(
+            null,
             $this->subject->getCall()
         );
     }
@@ -282,7 +283,8 @@ class ProposalTest extends UnitTestCase
      */
     public function getApplicantReturnsInitialValueForApplicant(): void
     {
-        self::assertNull(
+        self::assertEquals(
+            null,
             $this->subject->getApplicant()
         );
     }

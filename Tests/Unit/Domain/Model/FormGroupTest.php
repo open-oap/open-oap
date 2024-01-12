@@ -262,59 +262,59 @@ class FormGroupTest extends UnitTestCase
     /**
      * @test
      */
-    public function getDependentOnReturnsInitialValueForLogicAtom(): void
+    public function getModificatorsReturnsInitialValueForFormModificator(): void
     {
         $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         self::assertEquals(
             $newObjectStorage,
-            $this->subject->getDependentOn()
+            $this->subject->getModificators()
         );
     }
 
     /**
      * @test
      */
-    public function setDependentOnForObjectStorageContainingLogicAtomSetsDependentOn(): void
+    public function setModificatorsForObjectStorageContainingFormModificatorSetsModificators(): void
     {
-        $dependentOn = new \OpenOAP\OpenOap\Domain\Model\LogicAtom();
-        $objectStorageHoldingExactlyOneDependentOn = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $objectStorageHoldingExactlyOneDependentOn->attach($dependentOn);
-        $this->subject->setDependentOn($objectStorageHoldingExactlyOneDependentOn);
+        $modificator = new \OpenOAP\OpenOap\Domain\Model\FormModificator();
+        $objectStorageHoldingExactlyOneModificators = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $objectStorageHoldingExactlyOneModificators->attach($modificator);
+        $this->subject->setModificators($objectStorageHoldingExactlyOneModificators);
 
-        self::assertEquals($objectStorageHoldingExactlyOneDependentOn, $this->subject->_get('dependentOn'));
+        self::assertEquals($objectStorageHoldingExactlyOneModificators, $this->subject->_get('modificators'));
     }
 
     /**
      * @test
      */
-    public function addDependentOnToObjectStorageHoldingDependentOn(): void
+    public function addModificatorToObjectStorageHoldingModificators(): void
     {
-        $dependentOn = new \OpenOAP\OpenOap\Domain\Model\LogicAtom();
-        $dependentOnObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+        $modificator = new \OpenOAP\OpenOap\Domain\Model\FormModificator();
+        $modificatorsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
             ->onlyMethods(['attach'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $dependentOnObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($dependentOn));
-        $this->subject->_set('dependentOn', $dependentOnObjectStorageMock);
+        $modificatorsObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($modificator));
+        $this->subject->_set('modificators', $modificatorsObjectStorageMock);
 
-        $this->subject->addDependentOn($dependentOn);
+        $this->subject->addModificator($modificator);
     }
 
     /**
      * @test
      */
-    public function removeDependentOnFromObjectStorageHoldingDependentOn(): void
+    public function removeModificatorFromObjectStorageHoldingModificators(): void
     {
-        $dependentOn = new \OpenOAP\OpenOap\Domain\Model\LogicAtom();
-        $dependentOnObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+        $modificator = new \OpenOAP\OpenOap\Domain\Model\FormModificator();
+        $modificatorsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
             ->onlyMethods(['detach'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $dependentOnObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($dependentOn));
-        $this->subject->_set('dependentOn', $dependentOnObjectStorageMock);
+        $modificatorsObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($modificator));
+        $this->subject->_set('modificators', $modificatorsObjectStorageMock);
 
-        $this->subject->removeDependentOn($dependentOn);
+        $this->subject->removeModificator($modificator);
     }
 }

@@ -1795,10 +1795,10 @@ feManagerStateSelection {
   }
 }
 
-[page["uid"] == {$plugin.tx_femanager.settings.registrationMasterdataPid}]
+[traverse(page, "uid") == {$plugin.tx_femanager.settings.registrationMasterdataPid}]
     plugin.tx_femanager.settings.registerMasterdata = 1
 [END]
 
-[page["uid"] == {$plugin.tx_femanager.settings.dashboardPid}]
+[traverse(page, "uid") == {$plugin.tx_femanager.settings.dashboardPid}]
   plugin.tx_femanager.settings.dashboardProfile = 1
 [END]

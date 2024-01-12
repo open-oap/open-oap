@@ -53,7 +53,6 @@ class User extends \In2code\Femanager\Domain\Model\User
      * Sets the companyEmail
      *
      * @param string $companyEmail
-     * @return void
      */
     public function setCompanyEmail(string $companyEmail)
     {
@@ -74,7 +73,6 @@ class User extends \In2code\Femanager\Domain\Model\User
      * Sets the preferredLang
      *
      * @param string $preferredLang
-     * @return void
      */
     public function setPreferredLang(string $preferredLang)
     {
@@ -95,7 +93,6 @@ class User extends \In2code\Femanager\Domain\Model\User
      * Set whether the user has accepted privacy policy
      *
      * @param bool $privacypolicy
-     * @return void
      */
     public function setPrivacypolicy(bool $privacypolicy)
     {

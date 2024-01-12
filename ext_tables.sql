@@ -12,8 +12,12 @@ CREATE TABLE tx_openoap_domain_model_call (
 	usergroup text,
 	items int(11) unsigned NOT NULL DEFAULT '0',
 	word_template int(11) unsigned DEFAULT '0',
+    word_header_logo int(11) unsigned DEFAULT '0',
 	logo int(11) unsigned DEFAULT '0',
-	blocked_languages varchar(255) NOT NULL DEFAULT ''
+	blocked_languages varchar(255) NOT NULL DEFAULT '',
+    word_styles text,
+    anonym tinyint(3) DEFAULT '0' NOT NULL,
+    survey_codes text,
 );
 
 CREATE TABLE tx_openoap_domain_model_formpage (
@@ -22,11 +26,13 @@ CREATE TABLE tx_openoap_domain_model_formpage (
 	internal_title varchar(255) NOT NULL DEFAULT '',
 	intro_text text,
 	type int(11) DEFAULT '0' NOT NULL,
-	item_groups int(11) unsigned NOT NULL DEFAULT '0'
+	item_groups int(11) unsigned NOT NULL DEFAULT '0',
+	modificators int(11) unsigned NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE tx_openoap_domain_model_formgroup (
 	title varchar(255) NOT NULL DEFAULT '',
+    internal_title varchar(255) NOT NULL DEFAULT '',
 	intro_text text,
 	help_text text NOT NULL DEFAULT '',
 	model_name varchar(255) NOT NULL DEFAULT '',
@@ -35,13 +41,14 @@ CREATE TABLE tx_openoap_domain_model_formgroup (
 	display_type int(11) NOT NULL DEFAULT 0,
 	items int(11) unsigned NOT NULL DEFAULT '0',
 	group_title int(11) unsigned NOT NULL DEFAULT '0',
-	dependent_on int(11) unsigned NOT NULL DEFAULT '0',
+	modificators int(11) unsigned NOT NULL DEFAULT '0',
 	type int(11) DEFAULT '0' NOT NULL,
 	item_groups int(11) unsigned NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE tx_openoap_domain_model_formitem (
 	question varchar(255) NOT NULL DEFAULT '',
+    internal_title varchar(255) NOT NULL DEFAULT '',
 	intro_text text,
 	help_text text NOT NULL DEFAULT '',
 	type int(11) DEFAULT '0' NOT NULL,
@@ -55,7 +62,7 @@ CREATE TABLE tx_openoap_domain_model_formitem (
 	additional_label varchar(255) NOT NULL DEFAULT '',
 	options int(11) unsigned NOT NULL DEFAULT '0',
 	validators int(11) unsigned NOT NULL DEFAULT '0',
-	dependent_on int(11) unsigned NOT NULL DEFAULT '0'
+	modificators int(11) unsigned NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE tx_openoap_domain_model_itemoption (
@@ -69,7 +76,8 @@ CREATE TABLE tx_openoap_domain_model_itemvalidator (
 	title varchar(255) NOT NULL DEFAULT '',
 	type int(11) DEFAULT '0' NOT NULL,
 	param1 varchar(255) NOT NULL DEFAULT '',
-	param2 varchar(255) NOT NULL DEFAULT ''
+	param2 varchar(255) NOT NULL DEFAULT '',
+	item int(11) unsigned NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE fe_users (
@@ -125,15 +133,18 @@ CREATE TABLE tx_openoap_domain_model_comment (
 	sys_language_uid int(11) DEFAULT '-1' NOT NULL
 );
 
-CREATE TABLE tx_openoap_domain_model_logicatom (
+CREATE TABLE tx_openoap_domain_model_formmodificator (
 	title varchar(255) NOT NULL DEFAULT '',
 	item int(11) DEFAULT '0' NOT NULL,
 	logic int(11) DEFAULT '0' NOT NULL,
-	value varchar(255) NOT NULL DEFAULT ''
+	value varchar(255) NOT NULL DEFAULT '',
+	items int(11) unsigned NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE tx_openoap_domain_model_call (
-	categories int(11) unsigned DEFAULT '0' NOT NULL
+	categories int(11) unsigned DEFAULT '0' NOT NULL,
+	call_group int(11) unsigned DEFAULT '0' NOT NULL,
+    supporter int(11) unsigned DEFAULT '0' NOT NULL,
 );
 
 CREATE TABLE tx_openoap_domain_model_formpage (
@@ -146,4 +157,15 @@ CREATE TABLE fe_users (
     company_email varchar(255) NOT NULL DEFAULT '',
     preferred_lang varchar(255) NOT NULL DEFAULT '',
     privacypolicy tinyint(3) DEFAULT '0' NOT NULL
+);
+
+CREATE TABLE tx_openoap_domain_model_callgroup (
+    title varchar(255) NOT NULL DEFAULT '',
+    description varchar(255) NOT NULL DEFAULT '',
+    default_giz varchar(255) NOT NULL DEFAULT '',
+    default_deg varchar(255) NOT NULL DEFAULT '',
+    country_deg varchar(255) NOT NULL DEFAULT '',
+    country_giz varchar(255) NOT NULL DEFAULT '',
+    blocked_languages varchar(255) NOT NULL DEFAULT '',
+    sorting int(11) NOT NULL DEFAULT '0',
 );

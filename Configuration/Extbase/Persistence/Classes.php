@@ -45,8 +45,8 @@ return [
 
     \In2code\Femanager\Domain\Model\User::class => [
         'subclasses' => [
-            \OpenOAP\OpenOap\Domain\Model\User::class
-        ]
+            \OpenOAP\OpenOap\Domain\Model\User::class,
+        ],
     ],
     \OpenOAP\OpenOap\Domain\Model\User::class => [
         'tableName' => 'fe_users',
@@ -54,14 +54,14 @@ return [
         'recordType' => '0',
         'properties' => [
             'companyEmail' => [
-                'fieldName' => 'tx_openoap_company_email'
+                'fieldName' => 'tx_openoap_company_email',
             ],
             'preferredLang' => [
-                'fieldName' => 'tx_openoap_preferred_lang'
+                'fieldName' => 'tx_openoap_preferred_lang',
             ],
             'privacypolicy' => [
-                'fieldName' => 'tx_openoap_privacypolicy'
+                'fieldName' => 'tx_openoap_privacypolicy',
             ],
-        ]
+        ],
     ],
 ];

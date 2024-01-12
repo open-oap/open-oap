@@ -23,8 +23,8 @@ class AjaxUpload implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $response = $handler->handle($request);
-//        DebuggerUtility::var_dump($response);
-//        DebuggerUtility::var_dump($request);
+        //        DebuggerUtility::var_dump($response);
+        //        DebuggerUtility::var_dump($request);
         if (!isset($request->getQueryParams()['oap-ajax-task'])) {
             return $response;
         }

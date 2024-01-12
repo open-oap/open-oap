@@ -59,7 +59,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         $constraints = [];
         $constraints[] = $query->equals('proposal', $proposal);
-        if ($filter['source']) {
+        if (!empty($filter['source'])) {
             $constraints[] = $query->equals('source', (int)($filter['source']));
         }
 
@@ -149,8 +149,8 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
            ->update($table, 't')
            ->where(...$where)
            ->set('t.state', (int)$newState);
-//          DebuggerUtility::var_dump($queryBuilder->getParameters(), (string) __LINE__);
-//          DebuggerUtility::var_dump($queryBuilder->getSQL(), 'SQL');
+        //          DebuggerUtility::var_dump($queryBuilder->getParameters(), (string) __LINE__);
+        //          DebuggerUtility::var_dump($queryBuilder->getSQL(), 'SQL');
         return $updateQuery->execute();
     }
 }

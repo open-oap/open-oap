@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_csh_tx_openoap_domain_model_logicatom.xlf" date="2022-03-04T17:39:10Z" product-name="open_oap">
+	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang_csh_tx_openoap_domain_model_formmodificator.xlf" date="2022-03-04T17:39:10Z" product-name="open_oap">
 		<header/>
 		<body>
 			<trans-unit id="title.description" resname="title.description">
@@ -14,6 +14,9 @@
 			</trans-unit>
 			<trans-unit id="value.description" resname="value.description">
 				<source>value</source>
+			</trans-unit>
+			<trans-unit id="items.description" resname="items.description">
+				<source>items</source>
 			</trans-unit>
 		</body>
 	</file>

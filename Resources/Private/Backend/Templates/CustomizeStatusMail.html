@@ -20,7 +20,7 @@ Available variables:
     <f:section name="content">
         <f:render partial="Style" />
         <f:flashMessages />
-        
+
         <f:if condition="{submitted}">
             <f:then>
                 <f:render section="MailingResult" arguments="{_all}" />
@@ -73,14 +73,14 @@ Available variables:
 
             </div>
         </div>
-        
+
         <div class="section">
             <span class="section-label">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.previewMailtext.title")}</span>
             <div>
                 <f:format.html>{mailtext}</f:format.html>
             </div>
         </div>
-        
+
         <div class="section">
             <span class="section-label">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.emailReceiver.title")}</span>
             <div><f:format.html>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.actionSelectionIntro.text")}</f:format.html></div>
@@ -175,7 +175,7 @@ Available variables:
                                     <v:variable.set name="mailtoBody" value="{v:format.replace(content:mailtoBody, substring:'</p>', replacement:'%0D%0A')}" />
                                     <v:variable.set name="mailtoBody" value="{v:format.replace(content:mailtoBody, substring:'&nbsp;', replacement:' ')}" />
                                     <v:variable.set name="mailtoBody" value="{mailtoBody -> f:format.stripTags(allowedTags:'')}" />
-                                    
+
                                     <f:link.email email="{item.mailaction.mailto.href}&subject={subject}&body={mailtoBody}" class="button mailto-action-button">
                                         <svg class="icon-color"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-open"></use></svg>
                                         <span>{item.mailaction.text}</span>
@@ -193,7 +193,7 @@ Available variables:
             </table>
 
             <div class="form-group">
-                <f:link.action action="listProposals" class="button">
+                <f:link.action action="listProposals" class="button" arguments="{call : call}">
                     <span class="button-text">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.result.closeButton.label")}</span>
                 </f:link.action>
             </div>

@@ -14,6 +14,8 @@ plugin.tx_openoap_dashboard {
     settings {
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.dashboard_page_id
         dashboardPageId = 38
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_page_id
+        surveyPageId = 116
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.form_page_id
         formPageId = 55
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.proposals_page_id
@@ -25,7 +27,7 @@ plugin.tx_openoap_dashboard {
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.call_pool_id
         callPoolId = 24
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.proposal_pool_id
-        proposalPoolId = 28
+        proposalsPoolId = 34
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.items_pool_id
         itemsPoolId = 21
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.dashboard.proposals_active_limit
@@ -56,9 +58,34 @@ plugin.tx_openoap_dashboard {
         signatureFormat = %04d
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.word_export_template_file
         wordExportTemplateFile = word-vorlage-oap.docx
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_oap_user
+        surveyOapUser = 6349
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_thanks_page_id
+        surveyThanksPageId = 117
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_abort_page_id
+        surveyAbortPageId = 118
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_error_page_id
+        surveyErrorPageId = 119
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.pid.form_pages
+        pidFormPages = 23
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.pid.form_groups
+        pidFormGroups = 22
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.pid.form_items
+        pidFormItems = 21
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.zip_file.prefix
+        zipFilePrefix = documents--
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.zip_file.dateformat
+        zipFileDateFormat = Ymd-Hi
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.zip_structure.applicant
+        zipStructureApplicantFormat = %1$s--%2$05d
+        # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.zip_structure.proposal
+        zipStructureProppsalFormat = %1$s--%2$05d
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.zip_structure.proposal.titlelength
+        zipStructureProppsalFormatTitleLength = 30
 
     }
 }
+
 plugin.tx_openoap_form {
     view {
         # cat=plugin.tx_openoap_form/file; type=string; label=Path to template root (FE)

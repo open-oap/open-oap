@@ -15,6 +15,9 @@
 			<trans-unit id="param2.description" resname="param2.description">
 				<source>param2</source>
 			</trans-unit>
+			<trans-unit id="item.description" resname="item.description">
+				<source>item</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

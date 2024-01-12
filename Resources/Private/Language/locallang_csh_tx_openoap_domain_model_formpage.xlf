@@ -21,6 +21,9 @@
 			<trans-unit id="item_groups.description" resname="item_groups.description">
 				<source>itemGroups</source>
 			</trans-unit>
+			<trans-unit id="modificators.description" resname="modificators.description">
+				<source>modificators</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

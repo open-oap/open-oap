@@ -21,6 +21,7 @@ plugin.tx_openoap_dashboard {
     }
     settings {
         dashboardPageId = {$plugin.tx_openoap_dashboard.settings.dashboardPageId}
+        surveyPageId = {$plugin.tx_openoap_dashboard.settings.surveyPageId}
         formPageId = {$plugin.tx_openoap_dashboard.settings.formPageId}
         proposalsPageId = {$plugin.tx_openoap_dashboard.settings.proposalsPageId}
         notificationsPageId = {$plugin.tx_openoap_dashboard.settings.notificationsPageId}
@@ -43,6 +44,19 @@ plugin.tx_openoap_dashboard {
         uploadFolder = {$plugin.tx_openoap_dashboard.settings.uploadFolder}
         signatureFormat = {$plugin.tx_openoap_dashboard.settings.signatureFormat}
         wordExportTemplateFile = {$plugin.tx_openoap_dashboard.settings.wordExportTemplateFile}
+        surveyOapUser = {$plugin.tx_openoap_dashboard.settings.surveyOapUser}
+        surveyThanksPageId = {$plugin.tx_openoap_dashboard.settings.surveyThanksPageId}
+        surveyAbortPageId = {$plugin.tx_openoap_dashboard.settings.surveyAbortPageId}
+        surveyErrorPageId = {$plugin.tx_openoap_dashboard.settings.surveyErrorPageId}
+        pidFormPages = {$plugin.tx_openoap_dashboard.settings.pidFormPages}
+        pidFormGroups = {$plugin.tx_openoap_dashboard.settings.pidFormGroups}
+        pidFormItems = {$plugin.tx_openoap_dashboard.settings.pidFormItems}
+
+        zipFilePrefix = {$plugin.tx_openoap_dashboard.settings.zipFilePrefix}
+        zipFileDateFormat = {$plugin.tx_openoap_dashboard.settings.zipFileDateFormat}
+        zipStructureApplicantFormat = {$plugin.tx_openoap_dashboard.settings.zipStructureApplicantFormat}
+        zipStructureProppsalFormat = {$plugin.tx_openoap_dashboard.settings.zipStructureProppsalFormat}
+        zipStructureProppsalFormatTitleLength = {$plugin.tx_openoap_dashboard.settings.zipStructureProppsalFormatTitleLength}
     }
 }
 plugin.tx_openoap_proposals {

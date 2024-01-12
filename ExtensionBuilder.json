@@ -305,6 +305,17 @@
                             "relationWire": "[wired]",
                             "renderType": "selectMultipleSideBySide",
                             "uid": "399218850053"
+                        },
+                        {
+                            "foreignRelationClass": "",
+                            "lazyLoading": false,
+                            "propertyIsExcludeField": false,
+                            "relationDescription": "",
+                            "relationName": "modificators",
+                            "relationType": "manyToMany",
+                            "relationWire": "[wired]",
+                            "renderType": "selectMultipleSideBySide",
+                            "uid": "1346056747996"
                         }
                     ]
                 }
@@ -435,7 +446,7 @@
                             "lazyLoading": false,
                             "propertyIsExcludeField": false,
                             "relationDescription": "",
-                            "relationName": "dependentOn",
+                            "relationName": "modificators",
                             "relationType": "manyToMany",
                             "relationWire": "[wired]",
                             "renderType": "selectMultipleSideBySide",
@@ -654,7 +665,7 @@
                             "lazyLoading": false,
                             "propertyIsExcludeField": false,
                             "relationDescription": "",
-                            "relationName": "dependentOn",
+                            "relationName": "modificators",
                             "relationType": "manyToMany",
                             "relationWire": "[wired]",
                             "renderType": "selectMultipleSideBySide",
@@ -838,15 +849,27 @@
                     ]
                 },
                 "relationGroup": {
-                    "relations": []
+                    "relations": [
+                        {
+                            "foreignRelationClass": "",
+                            "lazyLoading": false,
+                            "propertyIsExcludeField": false,
+                            "relationDescription": "",
+                            "relationName": "item",
+                            "relationType": "manyToMany",
+                            "relationWire": "[wired]",
+                            "renderType": "selectMultipleSideBySide",
+                            "uid": "214731743986"
+                        }
+                    ]
                 }
             }
         },
         {
             "config": {
                 "position": [
-                    329,
-                    269
+                    334,
+                    334
                 ]
             },
             "name": "New Model Object",
@@ -1094,8 +1117,8 @@
         {
             "config": {
                 "position": [
-                    541,
-                    510
+                    594,
+                    558
                 ]
             },
             "name": "New Model Object",
@@ -1398,7 +1421,7 @@
                     "_default5_delete": false,
                     "customActions": []
                 },
-                "name": "LogicAtom",
+                "name": "FormModificator",
                 "objectsettings": {
                     "addDeletedField": true,
                     "addHiddenField": true,
@@ -1465,7 +1488,19 @@
                     ]
                 },
                 "relationGroup": {
-                    "relations": []
+                    "relations": [
+                        {
+                            "foreignRelationClass": "",
+                            "lazyLoading": false,
+                            "propertyIsExcludeField": false,
+                            "relationDescription": "",
+                            "relationName": "items",
+                            "relationType": "manyToMany",
+                            "relationWire": "[wired]",
+                            "renderType": "selectMultipleSideBySide",
+                            "uid": "593489521943"
+                        }
+                    ]
                 }
             }
         }
@@ -1776,12 +1811,60 @@
                 "terminal": "SOURCES",
                 "uid": "47194567264"
             }
+        },
+        {
+            "src": {
+                "moduleId": 5,
+                "terminal": "relationWire_0",
+                "uid": "1694416870717"
+            },
+            "tgt": {
+                "moduleId": 3,
+                "terminal": "SOURCES",
+                "uid": "824483976155"
+            }
+        },
+        {
+            "src": {
+                "moduleId": 11,
+                "terminal": "relationWire_0",
+                "uid": "593489521943"
+            },
+            "tgt": {
+                "moduleId": 3,
+                "terminal": "SOURCES",
+                "uid": "824483976155"
+            }
+        },
+        {
+            "src": {
+                "moduleId": 1,
+                "terminal": "relationWire_1",
+                "uid": "1346056747996"
+            },
+            "tgt": {
+                "moduleId": 11,
+                "terminal": "SOURCES",
+                "uid": "47194567264"
+            }
+        },
+        {
+            "src": {
+                "moduleId": 5,
+                "terminal": "relationWire_0",
+                "uid": "214731743986"
+            },
+            "tgt": {
+                "moduleId": 3,
+                "terminal": "SOURCES",
+                "uid": "824483976155"
+            }
         }
     ],
     "storagePath": "\/var\/www\/html\/cb_packages\/",
     "log": {
-        "last_modified": "2022-03-25 09:12",
-        "extension_builder_version": "v11.0.1",
-        "be_user": " (1)"
+        "last_modified": "2023-10-30 09:05",
+        "extension_builder_version": "v11.0.11",
+        "be_user": " (38)"
     }
 }

@@ -17,20 +17,19 @@ use OpenOAP\OpenOap\Domain\Model\ItemValidator;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\EmailAddressValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\FloatValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\IntegerValidator;
@@ -53,26 +52,6 @@ use TYPO3\CMS\Form\Mvc\Property\Exception\TypeConverterException;
 class ProposalController extends OapFrontendController
 {
     /**
-     * @var array
-     */
-    protected array $items = [];
-
-    /**
-     * @var array
-     */
-    protected array $pages = [];
-
-    /**
-     * @var array
-     */
-    protected array $pageNumber = [];
-
-    /**
-     * @var array
-     */
-    protected array $groups = [];
-
-    /**
      * @var IntegerValidator|null
      */
     protected ?IntegerValidator $integerValidator = null;
@@ -92,23 +71,44 @@ class ProposalController extends OapFrontendController
      */
     protected ?UrlValidator $urlValidator = null;
 
+    /** @var string */
+    protected string $survey = '';
+
     /**
      * action initialize
      *
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws StopActionException
      */
     public function initializeAction()
     {
+        $this->checkSurveyCall();
+
         parent::initializeAction();
 
-        $this->frontendAccessControlService = GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\FrontendAccessControlService::class);
-        $frontendUserId = $this->frontendAccessControlService->getFrontendUserId();
-        if ($frontendUserId == null) {
-            // todo resend to login
+        $pageArguments = $this->request->getAttribute('routing');
+        $pageId = $pageArguments->getPageId();
+        // https://oap.ddev.site/surveyform?survey=78&hash=788
+        if ($pageId == $this->settings['surveyPageId']) {
+            if ($this->request->hasArgument('survey')) {
+                $this->survey = $this->request->getArgument('survey');
+            } else {
+                $this->foreardToSurveyErrorPage();
+            }
+
         }
-        $this->applicant = $this->applicantRepository->findByUid($frontendUserId);
+        if ($this->survey == '') {
+            $this->frontendAccessControlService = GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\FrontendAccessControlService::class);
+            $frontendUserId = $this->frontendAccessControlService->getFrontendUserId();
+
+            if ($frontendUserId == null) {
+                // todo resend to login
+            }
+            $this->applicant = $this->applicantRepository->findByUid($frontendUserId);
+        }
 
         $action = $this->request->getArgument('action');
+
         // todo check notification action cause there is proposal null possible - why?
         $actionsWithProposal = ['delete', 'download', 'downloadAttachments', 'downloadWord', 'edit', 'update'];
 
@@ -126,7 +126,7 @@ class ProposalController extends OapFrontendController
             if (isset($proposalArguments['answers'])) {
                 // do this only if the Update-Action is called with Answers (not on the first call)
                 foreach ($proposalArguments['answers'] as $key => $answer) {
-                    if (is_array($answer['arrayValue'])) {
+                    if (isset($answer['arrayValue']) && is_array($answer['arrayValue'])) {
                         $proposalArguments['answers'][$key]['value'] = json_encode($answer['arrayValue'], JSON_FORCE_OBJECT);
                         unset($proposalArguments['answers'][$key]['arrayValue']);
                     } elseif (isset($answer['value'])) {
@@ -141,6 +141,13 @@ class ProposalController extends OapFrontendController
             $this->emailValidator = new EmailAddressValidator();
             $this->urlValidator = new UrlValidator();
         }
+    }
+
+    public function initializeCreateAction() {
+        if ($this->survey !== '') {
+            $this->applicant = $this->applicantRepository->findByUid($this->settings['surveyOapUser']);
+        }
+        $this->request->setArgument('applicant', $this->applicant);
     }
 
     /**
@@ -160,10 +167,16 @@ class ProposalController extends OapFrontendController
         ObjectAccess::setProperty($newProposal, 'pid', $proposalPid);
         $newProposal->setState(self::PROPOSAL_IN_PROGRESS);
         $newProposal->setFeLanguageUid($this->language->getLanguageId());
-        $newProposal->setTitle($this->getTranslationString(self::XLF_BASE_IDENTIFIER_DEFAULTS . '.' . self::DEFAULT_TITLE));
 
-//        $logItem = $this->createLog(self::LOG_PROPOSAL_CREATE);
-//        $newProposal->addComment($logItem);
+        if ($this->survey !== '') {
+            $newProposal->setTitle($this->getTranslationString(self::XLF_BASE_IDENTIFIER_DEFAULTS . '.' . self::DEFAULT_TITLE_SURVEY));
+        } else {
+            $newProposal->setTitle($this->getTranslationString(self::XLF_BASE_IDENTIFIER_DEFAULTS . '.' . self::DEFAULT_TITLE));
+        }
+
+
+        //        $logItem = $this->createLog(self::LOG_PROPOSAL_CREATE);
+        //        $newProposal->addComment($logItem);
         $groupsCounter = [];
         $groupsMap = [];
         /** @var FormPage $page */
@@ -218,8 +231,8 @@ class ProposalController extends OapFrontendController
         //        $newProposal->setPid($this->settings['setting']['proposalPid']);
         $this->proposalRepository->add($newProposal);
         $this->persistenceManager->persistAll();
-//        $this->persistenceManager->persistAll();
-//        die;
+        //        $this->persistenceManager->persistAll();
+        //        die;
 
         // set current call - added by parameter
         // catch call object from Repository
@@ -234,27 +247,33 @@ class ProposalController extends OapFrontendController
         $this->proposalRepository->update($newProposal);
         $this->persistenceManager->persistAll();
 
+        $formPage = (int)$this->settings['formPageId'];
+        if ($this->survey !== '') {
+            $formPage = (int)$this->settings['surveyPageId'];
+        }
+
         $uri = $this->uriBuilder
             ->reset()
-            ->setTargetPageUid((int)$this->settings['formPageId'])
-            ->uriFor('edit', ['proposal' => $newProposal], 'Proposal', $this->ext, 'form');
+            ->setTargetPageUid($formPage)
+            ->uriFor('edit', ['proposal' => $newProposal, 'survey' => $this->survey], 'Proposal', $this->ext, 'form');
         $this->redirectToURI($uri, 0, 200);
     }
 
     /**
      * action edit
      *
+     * @param Proposal $proposal
      * @param int $currentPage
-     * @param \OpenOAP\OpenOap\Domain\Model\Proposal $proposal
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("proposal")
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      * @throws IllegalObjectTypeException
-     * @throws Exception
+     * @throws StopActionException
+     * @throws UnknownObjectException
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("proposal")
      */
-    public function editAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal, int $currentPage = 1): \Psr\Http\Message\ResponseInterface
+    public function editAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal, int $currentPage = 1, string $survey = ''): \Psr\Http\Message\ResponseInterface
     {
         // current user is not able to edit the proposal cause not the right owner:
-        if ($proposal->getApplicant() !== $this->applicant) {
+        if ($proposal->getApplicant() !== $this->applicant AND !$proposal->getCall()->isAnonym()) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_ACCESS_DENIED);
             $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 
@@ -287,7 +306,7 @@ class ProposalController extends OapFrontendController
             $itemUid = (int)$item->getUid();
 
             // build validation and options array
-            if (!$itemsMap[$item->getUid()]) {
+            if (empty($itemsMap[$item->getUid()])) {
                 // initialize item
                 $itemsMap[$item->getUid()] = $this->initializeItemsMap($item);
 
@@ -298,8 +317,9 @@ class ProposalController extends OapFrontendController
 
             // check: is this answer is existing - in case of changing the form after creating this proposal
             /** @var Answer $answer */
-            if (!$this->answers[$itemUid]) {
-                $answer = new Answer($item, $this->groups[$itemUid], 0, (int)$this->settings['answersPoolId']);
+            if (empty($this->answers[$itemUid])) {
+                // TODO: create correct answers for table or repeatable (groupCounter0/1 + x)
+                $answer = new Answer($item, $this->groups[$itemUid], 0, 0, (int)$this->settings['answersPoolId']);
                 $this->answerRepository->add($answer);
                 $proposal->addAnswer($answer);
                 $log = $this->createLog(self::LOG_FORM_CHANGED_ADDED_ITEM, $proposal, $answer->getItem()->getQuestion());
@@ -340,13 +360,13 @@ class ProposalController extends OapFrontendController
         $page = $proposal->getPage($currentPage);
         $validationResults = $this->validateProposal($proposal, $metaInfo, $page->isSubmitPage());
 
-//        $validationResults = new Result();
-//        $value = 'keine email';
-//        if (!is_string($value) || !\TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($value)) {
-//            /** @var Error $error */
-//            $error = new Error($this->getTranslationString('tx_openoap.js_msg.invalid_format',['e-mail']), 1646909921);
-//            $validationResults->forProperty('answers.5.value')->addError($error);
-//        }
+        //        $validationResults = new Result();
+        //        $value = 'keine email';
+        //        if (!is_string($value) || !\TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($value)) {
+        //            /** @var Error $error */
+        //            $error = new Error($this->getTranslationString('tx_openoap.js_msg.invalid_format',['e-mail']), 1646909921);
+        //            $validationResults->forProperty('answers.5.value')->addError($error);
+        //        }
 
         // calculate Comments for menu
         $pageNo = 1;
@@ -362,20 +382,20 @@ class ProposalController extends OapFrontendController
             $pageNo++;
         }
         $pageMap = [];
-//        $answersMap = [];
-//        /** @var Answer $answer */
-//        foreach ($proposal->getAnswers() as $answer) {
-//            // merge itemMap-Data with answers map
-//            $answersMap[$answer->getUid()]['item'] = $itemsMap[$answer->getItem()->getUid()];
-//            // todo check re-opened setting from clerk to set all items/answers open
-//            // see below: depending on comments release of questions
-//            $answersMap[$answer->getUid()]['disabled'] = false;
-//            if ($proposal->getState() !== self::PROPOSAL_IN_PROGRESS and
-//                $metaInfo->getLimitEditableFields() == self::META_PROPOSAL_EDITABLE_FIELDS_LIMIT) {
-//                $answersMap[$answer->getUid()]['disabled'] = true;
-//                $answersMap[$answer->getUid()]['item']['additionalAttributes']['disabled'] = 'disabled';
-//            }
-//        }
+        //        $answersMap = [];
+        //        /** @var Answer $answer */
+        //        foreach ($proposal->getAnswers() as $answer) {
+        //            // merge itemMap-Data with answers map
+        //            $answersMap[$answer->getUid()]['item'] = $itemsMap[$answer->getItem()->getUid()];
+        //            // todo check re-opened setting from clerk to set all items/answers open
+        //            // see below: depending on comments release of questions
+        //            $answersMap[$answer->getUid()]['disabled'] = false;
+        //            if ($proposal->getState() !== self::PROPOSAL_IN_PROGRESS and
+        //                $metaInfo->getLimitEditableFields() == self::META_PROPOSAL_EDITABLE_FIELDS_LIMIT) {
+        //                $answersMap[$answer->getUid()]['disabled'] = true;
+        //                $answersMap[$answer->getUid()]['item']['additionalAttributes']['disabled'] = 'disabled';
+        //            }
+        //        }
         $answersMap = $this->createAnswersMap($proposal, $metaInfo->getLimitEditableFields());
         foreach ($proposal->getAnswers() as $answer) {
             /** @var Comment $answerComment */
@@ -390,7 +410,7 @@ class ProposalController extends OapFrontendController
 
                     // set editMode to answer/item
                     $answersMap[$answer->getUid()]['new_comments'] = 1;
-//                    $answersMap[$answer->getUid()]['disabled'] = false;
+                    //                    $answersMap[$answer->getUid()]['disabled'] = false;
                     unset($answersMap[$answer->getUid()]['item']['additionalAttributes']['disabled']);
                 }
             }
@@ -419,6 +439,7 @@ class ProposalController extends OapFrontendController
             'pageMap' => $pageMap,
             'groupsCounter' => $groupsCounter,
             'submitItemOptions' => $submitItemOptions,
+            'survey' => $this->survey,
         ]);
         return $this->htmlResponse();
     }
@@ -447,7 +468,16 @@ class ProposalController extends OapFrontendController
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_CANCELLED);
             $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
 
-            $this->redirectToDashboard();
+            if ($this->survey !== '') {
+                $targetPage = (int)$this->settings['surveyAbortPageId'];
+                $uri = $this->uriBuilder
+                    ->reset()
+                    ->setTargetPageUid($targetPage)
+                    ->build();
+                $this->redirectToURI($uri, 0, 200);
+            } else {
+                $this->redirectToDashboard();
+            }
         }
 
         if ($this->request->hasArgument('close')) {
@@ -455,7 +485,6 @@ class ProposalController extends OapFrontendController
             $close = true;
         }
 
-        //DebuggerUtility::var_dump($this->request->getArguments());die();
         if ($this->request->hasArgument('currentPage')) {
             $currentPage = (int)$this->request->getArgument('currentPage');
             $nextPage = $currentPage;
@@ -514,21 +543,21 @@ class ProposalController extends OapFrontendController
         /** @var FormItem $item */
         foreach ($this->items as $item) {
             // Title of proposal is a "must not be empty" field and to avoid a validation crush we let the value there if the field is empty
-//            if ($this->answers[$item->getUid()]->getValue() == '') {
-//                continue;
-//            }
+            //            if ($this->answers[$item->getUid()]->getValue() == '') {
+            //                continue;
+            //            }
 
             if ($item->isEnabledInfo()) {
                 // todo: handling of different types, esp. usage of additionalValue and multiple Values
-//                $itemsMap = [];
-//                if ($item->getOptions() !== '') {
-//                    $this->getOptionsToItemsMap($item, $itemsMap);
-//                }
-//                DebuggerUtility::var_dump($itemsMap);
-//                die();
+                //                $itemsMap = [];
+                //                if ($item->getOptions() !== '') {
+                //                    $this->getOptionsToItemsMap($item, $itemsMap);
+                //                }
+                //                DebuggerUtility::var_dump($itemsMap);
+                //                die();
                 $value = $this->answers[$item->getUid()]->getValue();
                 $data = json_decode($value, true);
-                if ($data) {
+                if (is_array($data)) {
                     $value = implode(',', $data);
                 }
                 if ($value !== '') {
@@ -536,7 +565,7 @@ class ProposalController extends OapFrontendController
                 }
             }
             if ($item->isEnabledFilter()) {
-                if (!$filter[$item->getUid()]) {
+                if (empty($filter[$item->getUid()])) {
                     $filter[$item->getUid()] = [];
                 }
                 // todo: handling of different types, esp. usage of additionalValue
@@ -553,11 +582,7 @@ class ProposalController extends OapFrontendController
         // build the info string
         $info = implode(' ' . $this->settings['metaInfoSeparator'] . ' ', $infos);
 
-//        DebuggerUtility::var_dump($info,'info '. __LINE__);
-//        DebuggerUtility::var_dump($filter,'filter '. __LINE__);
-
         $metaInfo = new MetaInformation($proposal->getMetaInformation());
-        // DebuggerUtility::var_dump($metaInfo,'metaInfo '. __LINE__);
         $metaInfo->setFilter($filter);
         $metaInfo->setInfo($info);
         $metaInfo->addPage($currentPage, $allPages[$currentPage]);
@@ -575,7 +600,10 @@ class ProposalController extends OapFrontendController
             // how do you can save without check the items?
 
             $validationResults = $this->validateProposal($proposal, $metaInfo, true);
-            if (!$validationResults) {
+
+            // we have found a case of duplicate submission - so we need to check here that the status is not "submitted".
+            $submitted = $proposal->getState() == self::PROPOSAL_SUBMITTED;
+            if (!$validationResults AND !$submitted) {
                 $proposal->setState(self::PROPOSAL_SUBMITTED);
                 $logItem = $this->createLog(self::LOG_PROPOSAL_SUBMITTED, $proposal);
                 $proposal->addLog($logItem);
@@ -611,21 +639,81 @@ class ProposalController extends OapFrontendController
         if ($submitted) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_SUBMITTED_OKAY);
             $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
-            $this->redirect('mail', 'Applicant', null, ['proposal' => $proposal, 'mailtextSetting' => 'eventProposalSubmittedMailtext', 'mailTemplate' => self::MAIL_TEMPLATE_PROPOSAL_SUBMIT], $this->settings['dashboardPageId']);
+
+            if ($this->survey !== '') {
+//                $mailTemplatePaths = $this->getMailTemplatePaths();
+//                $mailText = $this->parseMailtext($proposal, $this->settings['eventProposalSubmittedMailtext']);
+//
+//                $this->sendEmail($proposal, $mailTemplatePaths, self::MAIL_TEMPLATE_PROPOSAL_SUBMIT, $mailText);
+
+                $codes = explode("\r\n", $proposal->getCall()->getSurveyCodes());
+                foreach ($codes as $i => $code) {
+                    if (trim($code) == $this->survey) {
+                        $codes[$i] = '#'.$code;
+                    }
+                }
+                $proposal->getCall()->setSurveyCodes(implode("\r\n", $codes));
+                $this->callRepository->update($proposal->getCall());
+                $this->persistenceManager->persistAll();
+
+                $targetPage = (int)$this->settings['surveyThanksPageId'];
+                $uri = $this->uriBuilder
+                    ->reset()
+                    ->setTargetPageUid($targetPage)
+                    ->build();
+                $this->redirectToURI($uri, 0, 200);
+            } else {
+                $this->redirect(
+                    'mail',
+                    'Applicant',
+                    null,
+                    [
+                        'proposal' => $proposal,
+                        'mailtextSetting' => 'eventProposalSubmittedMailtext',
+                        'mailTemplate' => self::MAIL_TEMPLATE_PROPOSAL_SUBMIT,
+                    ],
+                    $this->settings['dashboardPageId']
+                );
+            }
+
         } elseif ($close) {
             $this->addFlashMessage($flashMessageSaved, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
 
+            if ($this->survey !== '') {
+                $targetPage = (int)$this->settings['surveyThanksPageId'];
+            } else {
+                $targetPage = (int)$this->settings['dashboardPageId'];
+            }
             $uri = $this->uriBuilder
                 ->reset()
-                ->setTargetPageUid((int)$this->settings['dashboardPageId'])
+                ->setTargetPageUid($targetPage)
                 ->build();
         } else {
             $this->addFlashMessage($flashMessageSaved, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
 
-            $uri = $this->uriBuilder
+            if ($this->survey !== '') {
+                $targetPage = (int)$this->settings['surveyPageId'];
+            } else {
+                $targetPage = (int)$this->settings['formPageId'];
+            }
+//            $uri = $this->uriBuilder
+//                ->reset()
+//                ->setTargetPageUid($targetPage)
+//                ->uriFor('edit', ['proposal' => $proposal, 'currentPage' => $nextPage, 'survey' => $this->survey], 'Proposal', $this->ext, 'form');
+
+            $uriBuilder = $this->uriBuilder
                 ->reset()
-                ->setTargetPageUid((int)$this->settings['formPageId'])
-                ->uriFor('edit', ['proposal' => $proposal, 'currentPage' => $nextPage], 'Proposal', $this->ext, 'form');
+                ->setTargetPageUid($targetPage);
+
+            $metaInfo = new MetaInformation($proposal->getMetaInformation());
+            $groupsCounter = $metaInfo->getGroupsCounter();
+
+            if ($this->request->hasArgument('addGroup')) {
+                // when a new group is created, add a jumpmark to the URL
+                $uriBuilder->setSection('jumpmark');
+            }
+
+            $uri = $uriBuilder->uriFor('edit', ['proposal' => $proposal, 'currentPage' => $nextPage, 'survey' => $this->survey], 'Proposal', $this->ext, 'form');
         }
         $this->redirectToURI($uri, 0, 200);
     }
@@ -650,7 +738,6 @@ class ProposalController extends OapFrontendController
 
         if ($zip) {
             $zip->close();
-            // DebuggerUtility::var_dump($zipFile);die();
             $this->sendZip($zipFile);
         }
         // in case there are no Attachments... stop here
@@ -659,11 +746,7 @@ class ProposalController extends OapFrontendController
 
     public function downloadWordAction(Proposal $proposal)
     {
-        $contentWordFileName = $this->createWord($proposal);
-        if ($contentWordFileName === '') {
-            // todo flashmessage - that there was an error and no document exists
-            die();
-        }
+        $fileExtension = '.docx';
 
         // get storage for uploadFolder
         /** @var ResourceStorage $storage */
@@ -671,40 +754,43 @@ class ProposalController extends OapFrontendController
         list($absoluteBasePath, $uploadFolder) = $this->initializeUploadFolder($storage);
         $proposalTempFolder = $this->provideTargetFolder($storage->getRootLevelFolder(), '_temp_');
 
-        if ($proposal->getCall()->getWordTemplate()) {
-            $file = $proposal->getCall()->getWordTemplate()->getOriginalResource()->getOriginalFile();
+        $targetFileName = $this->getWordFileName($proposal->getUid(), '');
+        $finishedFileAbsName = $absoluteBasePath . $proposalTempFolder->getIdentifier();
+        $fileName = $finishedFileAbsName . $targetFileName;
+
+        $fileName = $this->createFileName($proposal, $fileExtension, '');
+        $contentWordFileName = $this->createWord($proposal, $fileName, self::WORD_EXPORT_DEFAULT);
+
+        // create good name for download:
+        if ($proposal->getSignature()) {
+            $downloadName = basename($fileName);
         } else {
-            $file = $storage->getFile($this->settings['wordExportTemplateFile']);
+            $downloadName = $storage->sanitizeFileName($proposal->getTitle() . '--' . $proposal->getUid() . '--' . date('YmdHi') . $fileExtension);
         }
+        //        DebuggerUtility::var_dump($downloadName);die();
 
-        $targetFileName = $this->getWordFileName($proposal->getUid(), 'merge');
-        /** @var File $copiedFile */
-        $targetFile = $file->copyTo($proposalTempFolder)->rename($targetFileName);
+        //        $this->mergeTemplateWithWord($contentWordFileName, $targetfileAbsName);
 
-        $targetfileAbsName = $absoluteBasePath . $targetFile->getIdentifier();
-//        $finishedFileAbsName = $absoluteBasePath . $proposalTempFolder->getIdentifier() . $finshedFileName;
-        $this->mergeTemplateWithWord($contentWordFileName, $targetfileAbsName);
+        //        $templateProcessor = new TemplateProcessor($targetfileAbsName);
+        //
+        //        $states = $this->createStatesArray('all');
+        //
+        //        $this->wordVarReplacement($proposal, $states[$proposal->getState()], $templateProcessor);
 
-        $templateProcessor = new TemplateProcessor($targetfileAbsName);
-
-        $states = $this->createStatesArray('all');
-
-        $this->wordVarReplacement($proposal, $states[$proposal->getState()], $templateProcessor);
-
-        $templateProcessor->saveAs($targetfileAbsName); // As($mergeFile);
-
-        $filename = $this->getWordFileName($proposal->getUid(), 'proposal');
+        //        $templateProcessor->saveAs($targetfileAbsName); // As($mergeFile);
+        //        $filename = $this->getWordFileName($proposal->getUid(), 'proposal');
+        //DebuggerUtility::var_dump($targetfileAbsName);die();
+        //        DebuggerUtility::var_dump($contentWordFileName);die();
 
         header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+        header('Content-Disposition: attachment; filename="' . $downloadName . '"');
         header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
         header('Content-Transfer-Encoding: binary');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Expires: 0');
+        readfile($contentWordFileName);
 
-        readfile($targetfileAbsName);
-
-        unlink($targetfileAbsName);
+        unlink($contentWordFileName);
         die();
     }
 
@@ -715,6 +801,19 @@ class ProposalController extends OapFrontendController
      */
     public function downloadAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal)
     {
+        $fileExtension = '.pdf';
+        $fileName = $this->createFileName($proposal, $fileExtension, '');
+        // get storage for uploadFolder
+        /** @var ResourceStorage $storage */
+        $storage = $this->getStorage();
+
+        // create good name for download:
+        if ($proposal->getSignature()) {
+            $downloadName = basename($fileName);
+        } else {
+            $downloadName = $storage->sanitizeFileName($proposal->getTitle() . '--' . $proposal->getUid() . '--' . date('YmdHi') . $fileExtension);
+        }
+
         $this->flattenAnswers($proposal);
         $itemAnswerMap = $this->buildItemAnswerMap($proposal);
         /** @var MetaInformation $metaInfo */
@@ -726,11 +825,11 @@ class ProposalController extends OapFrontendController
         foreach ($answersMap as $answer) {
             $commentsAtItemsCounter += $answer['commentsCounter'];
         }
-        $callLogo = $this->getCallLogo($proposal);
+        $callLogo = $this->getCallLogo($proposal, 'pdf');
 
         $arguments = [
             'destination' => 'download',
-            'filepath' => strtr($proposal->getTitle(), ' ', '-') . '--' . date('Ymd-Hi') . '.pdf',
+            'filepath' => $downloadName,
             'generatedDate' => date('d.m.Y'),
             'generatedTime' => date('H:i'),
             'proposal' => $proposal,
@@ -861,12 +960,12 @@ class ProposalController extends OapFrontendController
         }
         $validationOfItem['messsages'][] = $this->getTranslationString($textIdentifier, $parameter);
 
-        if (!$validationResult['pages'][$pageNumber]) {
+        if (empty($validationResult['pages'][$pageNumber])) {
             $validationResult['pages'][$pageNumber] = [];
         }
-//        if (!$validationResult['answers'][$answer->getUid()]) {
-//            $validationResult['answers'][$answer->getUid()] = [];
-//        }
+        //        if (!$validationResult['answers'][$answer->getUid()]) {
+        //            $validationResult['answers'][$answer->getUid()] = [];
+        //        }
         $validationResult['pages'][$pageNumber][] = $answer->getUid();
         $validationResult['answers'][$answer->getUid()] = $validationOfItem;
     }
@@ -883,11 +982,11 @@ class ProposalController extends OapFrontendController
         // test against validations
         $validationResults = new Result();
         // $error = new Error('Dieses Feld ist ein Pflichtfeld',200);
-//        $value = 'keine email';
-//        if (!is_string($value) || !\TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($value)) {
-//            $error = new Error($this->getTranslationString(self::XLF_BASE_IDENTIFIER_JSMSG.'invalid_format', ['e-mail']), 1646909921);
-//            $validationResults->addError($error);
-//        }
+        //        $value = 'keine email';
+        //        if (!is_string($value) || !\TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($value)) {
+        //            $error = new Error($this->getTranslationString(self::XLF_BASE_IDENTIFIER_JSMSG.'invalid_format', ['e-mail']), 1646909921);
+        //            $validationResults->addError($error);
+        //        }
 
         $validationResult = [];
         /** @var Answer $answer */
@@ -907,6 +1006,28 @@ class ProposalController extends OapFrontendController
             if (!isset($pages[$this->pages[$itemUid]->getUid()]) and !$checkAll) {
                 // $validationResult[$this->pages[$itemUid]->getUid()] = [];
                 continue;
+            }
+
+            foreach ($item->getModificators() as $modificator) {
+                switch ($modificator->getLogic()) {
+                    case self::MODIFICATOR_TOTAL:
+                        $totalValue = 0;
+
+                        foreach ($modificator->getItems() as $modificatorItem) {
+                            $modificatorItemAnswer = $this->getAnswerForItemByGroup($proposal, $modificatorItem, $answer->getGroupCounter0(), $answer->getGroupCounter1())
+                                ?? $this->answers[$modificatorItem->getUid()];
+
+                            if (!$modificatorItemAnswer) {
+                                continue;
+                            }
+
+                            $totalValue += static::convertStrToNumber($modificatorItemAnswer->getValue());
+                        }
+
+                        $answer->setValue((string)$totalValue);
+                        $this->answerRepository->update($answer);
+                        break;
+                }
             }
 
             /** @var ItemValidator $validator */
@@ -934,7 +1055,7 @@ class ProposalController extends OapFrontendController
                         if ($item->getType() == self::TYPE_DATE1 or $item->getType() == self::TYPE_DATE2) {
                             $minDate = new DateTime($validator->getParam1());
                             $valueDate = new DateTime($answer->getValue());
-//                            die();
+                            //                            die();
                             if ($minDate > $valueDate) {
                                 $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'min_value', [$validator->getParam1()]);
                             }
@@ -1006,9 +1127,55 @@ class ProposalController extends OapFrontendController
                         }
                         break;
                     case self::VALIDATOR_PHONE:
-//                        if (!is_string($answer->getValue())) {
-//                            $this->setValidationResult($validationResult, $item, 'tx_openoap.js_msg.invalid_email');
-//                        }
+                        //                        if (!is_string($answer->getValue())) {
+                        //                            $this->setValidationResult($validationResult, $item, 'tx_openoap.js_msg.invalid_email');
+                        //                        }
+                        break;
+                    case self::VALIDATOR_GREATERTHAN:
+                        $validatorItem = $validator->getItem()[0] ?? null;
+
+                        if (!$validatorItem) {
+                            break;
+                        }
+
+                        $validatorItemAnswer = $this->getAnswerForItemByGroup($proposal, $validatorItem, $answer->getGroupCounter0(), $answer->getGroupCounter1())
+                            ?? $this->answers[$validatorItem->getUid()];
+
+                        if (!$validatorItemAnswer) {
+                            break;
+                        }
+
+                        if ($item->getType() === self::TYPE_STRING && $validatorItem->getType() === self::TYPE_STRING) {
+                            $answerValue = static::convertStrToNumber($answer->getValue());
+                            $validatorItemAnswerValue = static::convertStrToNumber($validatorItemAnswer->getValue());
+
+                            if ($answer->getValue() !== '' && $answerValue < $validatorItemAnswerValue) {
+                                $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'min_value', [$validatorItemAnswerValue]);
+                            }
+                        }
+                        break;
+                    case self::VALIDATOR_LESSTHAN:
+                        $validatorItem = $validator->getItem()[0] ?? null;
+
+                        if (!$validatorItem) {
+                            break;
+                        }
+
+                        $validatorItemAnswer = $this->getAnswerForItemByGroup($proposal, $validatorItem, $answer->getGroupCounter0(), $answer->getGroupCounter1())
+                            ?? $this->answers[$validatorItem->getUid()];
+
+                        if (!$validatorItemAnswer) {
+                            break;
+                        }
+
+                        if ($item->getType() === self::TYPE_STRING && $validatorItem->getType() === self::TYPE_STRING) {
+                            $answerValue = static::convertStrToNumber($answer->getValue());
+                            $validatorItemAnswerValue = static::convertStrToNumber($validatorItemAnswer->getValue());
+
+                            if ($answer->getValue() !== '' && $answerValue > $validatorItemAnswerValue) {
+                                $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'max_value', [$validatorItemAnswerValue]);
+                            }
+                        }
                         break;
                 }
             }
@@ -1079,7 +1246,7 @@ class ProposalController extends OapFrontendController
                 $answer->setValue($answerValueDefault);
             }
             // todo just for testing
-//             $answer->setValue($group->getUid().'--'.$groupCounterL0.'--'.$groupCounterL1.' '.$item->getUid());
+            //             $answer->setValue($group->getUid().'--'.$groupCounterL0.'--'.$groupCounterL1.' '.$item->getUid());
 
             $this->answerRepository->add($answer);
             $proposal->addAnswer($answer);
@@ -1093,7 +1260,7 @@ class ProposalController extends OapFrontendController
      */
     protected function addGroupToAnswers(Proposal $proposal): void
     {
-//        DebuggerUtility::var_dump($proposal->getAnswers(),(string)__LINE__);
+        //        DebuggerUtility::var_dump($proposal->getAnswers(),(string)__LINE__);
         $addGroupValue = $this->request->getArgument('addGroup');
         $addGroupData = json_decode($addGroupValue, true);
         /** @var MetaInformation $metaInfo */
@@ -1111,7 +1278,7 @@ class ProposalController extends OapFrontendController
                             $proposal,
                             $itemGroup,
                             0,
-                            $groupsCounter[$itemGroup->getUid()]['current']
+                            (int)($groupsCounter[$itemGroup->getUid()]['current'] ?? 0)
                         );
                         $groupsCounter[$itemGroup->getUid()]['current']++;
                     } elseif ($addGroupData['L1GroupUid'] > 0) {
@@ -1122,7 +1289,7 @@ class ProposalController extends OapFrontendController
                                     $proposal,
                                     $itemGroupL1,
                                     (int)$addGroupData['L0GroupIndex'],
-                                    $groupsCounter[$itemGroup->getUid()]['instances'][$addGroupData['L0GroupIndex']][$itemGroupL1->getUid()]['current']
+                                    (int)($groupsCounter[$itemGroup->getUid()]['instances'][$addGroupData['L0GroupIndex']][$itemGroupL1->getUid()]['current'] ?? 0)
                                 );
                                 $groupsCounter[$itemGroup->getUid()]['instances'][$addGroupData['L0GroupIndex']][$itemGroupL1->getUid()]['current']++;
                             }
@@ -1351,22 +1518,6 @@ class ProposalController extends OapFrontendController
 
     /**
      * @param Proposal $proposal
-     * @return \TYPO3\CMS\Core\Resource\Folder
-     */
-    protected function getUploadFolder(Proposal $proposal): \TYPO3\CMS\Core\Resource\Folder
-    {
-        $uploadFolderId = ($this->settings['uploadFolder'] == '') ? self::$defaultUploadFolder
-            : $this->settings['uploadFolder'];
-        $uploadFolder = $this->provideUploadFolder(
-            $uploadFolderId,
-            $proposal->getApplicant()->getUid(),
-            $proposal->getUid(),
-        );
-        return $uploadFolder;
-    }
-
-    /**
-     * @param Proposal $proposal
      */
     protected function checkFiles(Proposal $proposal): void
     {
@@ -1384,7 +1535,7 @@ class ProposalController extends OapFrontendController
         // catch all Files in the current Folder
         $uploadFolder = $this->getUploadFolder($proposal);
         $savedFiles = $uploadFolder->getFiles();
-//        DebuggerUtility::var_dump($savedFiles);die();
+        //        DebuggerUtility::var_dump($savedFiles);die();
         foreach ($savedFiles as $fileName => $savedFile) {
             if (!isset($fileIds[$savedFile->getUid()]) and $fileName !== 'index.html') {
                 // remove file, cause the file isn't stored in the proposal
@@ -1451,4 +1602,99 @@ class ProposalController extends OapFrontendController
         }
         return $answersMap;
     }
+
+    /**
+     * @param int $callId
+     * @param string $surveyHash
+     * @return void
+     * @throws StopActionException
+     */
+    protected function redirectToSurveyForm(int $callId, string $surveyHash): void
+    {
+        // ?tx_openoap_form%5Baction%5D=create&tx_openoap_form%5Bcall%5D=78&tx_openoap_form%5Bcontroller%5D=Proposal
+        $uri = $this->uriBuilder
+            ->reset()
+            ->setTargetPageUid((int)$this->settings['surveyPageId'])
+            ->uriFor(
+                'create',
+                [
+                    'call' => $callId,
+                    'survey' => $surveyHash,
+                ],
+                'Proposal',
+                'openoap'
+            );
+        $this->redirectToURI($uri, 0, 200);
+    }
+
+    /**
+     * @return void
+     * @throws StopActionException
+     */
+    protected function checkSurveyCall(): void
+    {
+        $rawRequest = $this->request->getQueryParams();
+        $surveyCheck = false;
+        $surveyError = false;
+        if (!empty($rawRequest[self::SURVEY_URL_PARAMETER_CALLID]) && !empty($rawRequest[self::SURVEY_URL_PARAMETER_HASH])) {
+
+            // surveyRequest: https://oap.ddev.site/surveyform?survey=123&hash=789
+            $callId = (integer)$rawRequest[self::SURVEY_URL_PARAMETER_CALLID];
+            $hash = (string)$rawRequest[self::SURVEY_URL_PARAMETER_HASH];
+            /** @var Call $surveyCall */
+            $surveyCall = $this->callRepository->findByUid($callId);
+            if ($surveyCall) {
+                // check Hash
+                $codes = explode("\r\n", $surveyCall->getSurveyCodes());
+                foreach ($codes as $code) {
+                    if ($code[0] == '#') {
+                        continue;
+                    }
+                    if (trim($code) == $hash) {
+                        $surveyCheck = true;
+                    }
+                }
+
+                // todo: If there are no codes stored, is the survey call open?
+                if (trim($surveyCall->getSurveyCodes()) == '') {
+                    // $surveyCheck = true;
+                }
+
+                if ($surveyCall->isAnonym() && $surveyCheck) {
+                    // this is a valid survey-request
+                    // build redirect for original request
+                    // https://oap.ddev.site/surveyform?tx_openoap_form%5Baction%5D=create&tx_openoap_form%5Bcall%5D=78&tx_openoap_form%5Bcontroller%5D=Proposal
+                    $this->redirectToSurveyForm(
+                        (integer)$rawRequest[self::SURVEY_URL_PARAMETER_CALLID],
+                        $rawRequest[self::SURVEY_URL_PARAMETER_HASH]
+                    );
+                }
+            }
+
+            $surveyError = true;
+        }
+
+        if (!empty($rawRequest[self::SURVEY_URL_PARAMETER_CALLID]) || !empty($rawRequest[self::SURVEY_URL_PARAMETER_HASH])) {
+            $surveyError = true;
+        }
+
+        if ($surveyError) {
+            $this->foreardToSurveyErrorPage();
+        }
+    }
+
+    /**
+     * @return void
+     * @throws StopActionException
+     */
+    protected function foreardToSurveyErrorPage(): void
+    {
+        $targetPage = (int)$this->settings['surveyErrorPageId'];
+        $uri = $this->uriBuilder
+            ->reset()
+            ->setTargetPageUid($targetPage)
+            ->build();
+        $this->redirectToURI($uri, 0, 200);
+    }
+
 }

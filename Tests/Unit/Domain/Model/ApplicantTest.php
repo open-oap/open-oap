@@ -93,7 +93,7 @@ class ApplicantTest extends UnitTestCase
     {
         $this->subject->setPrivacypolicy(true);
 
-        self::assertTrue($this->subject->_get('privacypolicy'));
+        self::assertEquals(true, $this->subject->_get('privacypolicy'));
     }
 
     /**

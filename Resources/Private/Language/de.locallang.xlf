@@ -124,10 +124,10 @@
 				<source><![CDATA[Group Title]]></source>
 				<target><![CDATA[Gruppentitel]]></target>
 			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.dependent_on'
-						resname='tx_openoap_domain_model_formgroup.dependent_on'>
-				<source><![CDATA[Dependent On]]></source>
-				<target><![CDATA[Abhängig von ]]></target>
+			<trans-unit id='tx_openoap_domain_model_formgroup.modificators'
+						resname='tx_openoap_domain_model_formgroup.modificators'>
+				<source><![CDATA[Modificators]]></source>
+				<target><![CDATA[Modifikatoren]]></target>
 			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_formitem' resname='tx_openoap_domain_model_formitem'>
 				<source><![CDATA[Form Item]]></source>
@@ -247,6 +247,11 @@
 						resname='tx_openoap_domain_model_itemvalidator.param2'>
 				<source><![CDATA[Parameter 2]]></source>
 				<target><![CDATA[Parameter 2]]></target>
+			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_itemvalidator.item'
+						resname='tx_openoap_domain_model_itemvalidator.item'>
+				<source><![CDATA[Question/Item]]></source>
+				<target><![CDATA[Frage/Item]]></target>
 			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_proposal' resname='tx_openoap_domain_model_proposal'>
 				<source><![CDATA[Proposal]]></source>
@@ -523,6 +528,16 @@
 				<source><![CDATA[File size for Uploads (in Bytes, kB, MB)]]></source>
 				<target><![CDATA[Dateigröße für Uploads (in Bytes, kb, MB)]]></target>
 			</trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_greaterThan'
+                        resname='tx_cboap_domain_model_itemvalidator.type_greaterThan'>
+                <source><![CDATA[Greater than Question/Item]]></source>
+                <target><![CDATA[Größer als Frage/Item]]></target>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_lessThan'
+                        resname='tx_cboap_domain_model_itemvalidator.type_lessThan'>
+                <source><![CDATA[Less than Question/Item]]></source>
+                <target><![CDATA[Kleiner als Frage/Item]]></target>
+            </trans-unit>
 			<trans-unit id='tx_openoap_domain_model_formitem.type_string'
 						resname='tx_openoap_domain_model_formitem.type_string'>
 				<source><![CDATA[Text - single line]]></source>
@@ -887,6 +902,16 @@
 				<source><![CDATA[The form is not available in the current language. Please change the language.]]></source>
 				<target><![CDATA[Das Formular ist in der aktuellen Sprache nicht verfügbar. Bitte wechseln Sie die Sprache.]]></target>
 			</trans-unit>
+			<trans-unit id='tx_openoap_dashboard.callgroup.nocall'
+						resname='tx_openoap_dashboard.callgroup.nocall'>
+				<source>There is currently no call</source>
+				<target>Derzeit findet kein Call statt</target>
+			</trans-unit>
+			<trans-unit id='tx_openoap_dashboard.call.hint.language'
+						resname='tx_openoap_dashboard.call.hint.language'>
+				<source>Available in English only</source>
+				<target>Nur auf Englisch verfügbar</target>
+			</trans-unit>
 			<trans-unit id='tx_openoap_dashboard.masterdata.header' resname='tx_openoap_dashboard.masterdata.header'>
 				<source><![CDATA[Master data]]></source>
 				<target><![CDATA[Stammdaten]]></target>
@@ -1129,7 +1154,7 @@
 				<target><![CDATA[Diese Angabe ist verpflichtend.]]></target>
 			</trans-unit>
 			<trans-unit id='tx_openoap_applicant.infoRequired' resname='tx_openoap_applicant.infoRequired'>
-				<source><![CDATA[Fields marked with a star (*) are mandatory.]]></source>
+				<source><![CDATA[Fields marked with a * are mandatory.]]></source>
 				<target><![CDATA[Angaben mit * sind verpflichtend.]]></target>
 			</trans-unit>
 			<trans-unit id='tx_openoap_applicant.masterdataEdit.header'
@@ -1233,7 +1258,7 @@
 				<source><![CDATA[No changes detected, nothing to update.]]></source>
 				<target><![CDATA[Keine Änderungen gefunden. ]]></target>
 			</trans-unit>
-			!-- itemoption -->
+			<!-- itemoption -->
 			<trans-unit id='tx_openoap_domain_model_itemoption.type_single'
 						resname='tx_openoap_domain_model_itemoption.type_single'>
 				<source><![CDATA[single option]]></source>
@@ -1250,48 +1275,27 @@
 				<target><![CDATA[aufrufbare Funktion - noch nicht implementiert]]></target>
 			</trans-unit>
 
-			<!-- logic Atom -->
-			<trans-unit id='tx_openoap_logicatom.title' resname='tx_openoap_logicatom.title'>
+			<!-- Modificators -->
+			<trans-unit id='tx_openoap_domain_model_formmodificator.title' resname='tx_openoap_domain_model_formmodificator.title'>
 				<source><![CDATA[Title]]></source>
 				<target><![CDATA[Titel]]></target>
 			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.title' resname='tx_openoap_logicatom.title'>
-				<source><![CDATA[Question/Item]]></source>
-				<target><![CDATA[Frage/Item]]></target>
-			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.value' resname='tx_openoap_logicatom.value'>
+			<trans-unit id='tx_openoap_domain_model_formmodificator.value' resname='tx_openoap_domain_model_formmodificator.value'>
 				<source><![CDATA[Value]]></source>
 				<target><![CDATA[Wert]]></target>
 			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.logic' resname='tx_openoap_logicatom.logic'>
-				<source><![CDATA[Comparision]]></source>
-				<target><![CDATA[Vergleich]]></target>
+			<trans-unit id='tx_openoap_domain_model_formmodificator.logic' resname='tx_openoap_domain_model_formmodificator.logic'>
+				<source><![CDATA[Logic]]></source>
+				<target><![CDATA[Logik]]></target>
 			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.equal' resname='tx_openoap_logicatom.compare.equal'>
-				<source><![CDATA[equal (==)]]></source>
-				<target><![CDATA[gleich]]></target>
+			<trans-unit id='tx_openoap_domain_model_formmodificator.logic_total' resname='tx_openoap_domain_model_formmodificator.logic_total'>
+				<source><![CDATA[Grand total]]></source>
+				<target><![CDATA[Gesamtsumme]]></target>
 			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.greater_equal'
-						resname='tx_openoap_logicatom.compare.greater_equal'>
-				<source><![CDATA[greater or equal (>=)]]></source>
-				<target><![CDATA[größer oder gleich]]></target>
-			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.greater' resname='tx_openoap_logicatom.compare.greater'>
-				<source><![CDATA[greater (>)]]></source>
-				<target><![CDATA[größer oder gleich]]></target>
-			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.less' resname='tx_openoap_logicatom.compare.less'>
-				<source><![CDATA[less (<)]]></source>
-				<target><![CDATA[kleiner]]></target>
-			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.less_equal' resname='tx_openoap_logicatom.compare.less_equal'>
-				<source><![CDATA[less or equal (<=)]]></source>
-				<target><![CDATA[kleiner oder gleich]]></target>
-			</trans-unit>
-			<trans-unit id='tx_openoap_logicatom.compare.unequal' resname='tx_openoap_logicatom.compare.unequal'>
-				<source><![CDATA[unequal (<> / !==)]]></source>
-				<target><![CDATA[ungleich]]></target>
-			</trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formmodificator.items' resname='tx_openoap_domain_model_formmodificator.items'>
+                <source><![CDATA[Questions/Items]]></source>
+                <target><![CDATA[Fragen/Items]]></target>
+            </trans-unit>
 			<!-- Global / Markup -->
 			<trans-unit id='tx_openoap.empty' resname='tx_openoap.empty'>
 				<source><![CDATA[(empty)]]></source>
@@ -1583,6 +1587,10 @@
 			<trans-unit id='tx_openoap.default.default_title' resname='tx_openoap.default.default_title'>
 				<source><![CDATA[no title set for this proposal]]></source>
 				<target><![CDATA[Kein Antragstitel eingetragen]]></target>
+			</trans-unit>
+			<trans-unit id='tx_openoap.default.default_title_survey' resname='tx_openoap.default.default_title_survey'>
+				<source>anonymous survey</source>
+				<target>anonyme Befragung</target>
 			</trans-unit>
 			<!-- E-Mail text -->
 			<trans-unit id='tx_openoap.email.submit_subject' resname='tx_openoap.email.submit_subject'>

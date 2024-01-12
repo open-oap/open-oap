@@ -33,6 +33,10 @@
 				<target>Fragen für die Abschlussseite</target>
 			</trans-unit>
 
+			<trans-unit id="tx_openoap_domain_model_call.word_styles" resname="tx_openoap_domain_model_call.word_styles">
+				<source>Word styles (json format)</source>
+				<target>Word-Formatierungen (JSON-Format)</target>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.word_template" resname="tx_openoap_domain_model_call.word_template">
 				<source>Word template for exports of proposal</source>
 				<target>Word-Datei für den Export als Word-Datei</target>
@@ -42,9 +46,33 @@
 				<source>Header-Logo for PDF</source>
 				<target>Kopfzeilen-Logo für PDF</target>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.word_header_logo" resname="tx_openoap_domain_model_call.word_header_logo">
+				<source>Header-Logo for Word</source>
+				<target>Kopfzeilen-Logo für Word</target>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.blocked_languages" resname="tx_openoap_domain_model_call.blocked_languages">
 				<source>Not accessible with these languages in the frontend</source>
 				<target>Nicht mit diesen Sprachen im Frontend erreichbar</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.anonym" resname="tx_openoap_domain_model_call.anonym">
+				<source>Anonymous survey</source>
+				<target>Anonyme Befragung</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.anonym_item_checked" resname="tx_openoap_domain_model_call.anonym_item_checked">
+				<source>anonym</source>
+				<target>anonym</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.anonym_item_unchecked" resname="tx_openoap_domain_model_call.anonym_item_unchecked">
+				<source>not anonymous (on dashboard)</source>
+				<source>nicht anonym (auf Dashboard)</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.call_group" resname="tx_openoap_domain_model_call.call_group">
+				<source>Call Group</source>
+				<target>Call Gruppe</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.supporter" resname="tx_openoap_domain_model_call.supporter">
+				<source>Supporter</source>
+				<target>Träger</target>
 			</trans-unit>
 
 			<trans-unit id="tx_openoap_domain_model_proposal.state" resname="tx_openoap_domain_model_proposal.state">
@@ -70,6 +98,38 @@
 				<target>Ich akzeptiere die Bedingungen der Datenschutzrichtlinie</target>
 			</trans-unit>
 
+            <trans-unit id="tx_openoap_domain_model_formgroup.internal_title" resname="tx_openoap_domain_model_formgroup.internal_title">
+                <source>Internal Title</source>
+                <target>Internal Title</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.internal_title" resname="tx_openoap_domain_model_formitem.internal_title">
+                <source>Internal Title</source>
+                <target>Internal Title</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_callgroup.title" resname="tx_openoap_domain_model_callgroup.title">
+                <source>Title</source>
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_callgroup.description" resname="tx_openoap_domain_model_callgroup.description">
+                <source>Description</source>
+                <target>Beschreibung</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_callgroup.country_giz" resname="tx_openoap_domain_model_callgroup.country_giz">
+                <source>GIZ Country Info</source>
+                <target>GIZ Länder Info</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_callgroup.country_deg" resname="tx_openoap_domain_model_callgroup.country_deg">
+                <source>DEG Country Info</source>
+                <target>DEG Länder Info</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_callgroup.default_giz" resname="tx_openoap_domain_model_callgroup.default_giz">
+                <source>GIZ Basis Call Name</source>
+                <target>GIZ Basis Call-Name</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_callgroup.default_deg" resname="tx_openoap_domain_model_callgroup.default_deg">
+                <source>DEG Basis Call Name</source>
+                <target>DEG Basis Call-Name</target>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

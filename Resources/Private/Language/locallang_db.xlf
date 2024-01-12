@@ -39,6 +39,9 @@
 			<trans-unit id="tx_openoap_domain_model_call.form_items" resname="tx_openoap_domain_model_call.form_items">
 				<source>Items for submit page</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.word_styles" resname="tx_openoap_domain_model_call.word_styles">
+				<source>Word styles (json format)</source>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.word_template" resname="tx_openoap_domain_model_call.word_template">
 				<source>Word template for exports of proposal</source>
 			</trans-unit>
@@ -47,6 +50,30 @@
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.logo" resname="tx_openoap_domain_model_call.logo">
 				<source>Header-Logo for PDF</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.word_header_logo" resname="tx_openoap_domain_model_call.word_header_logo">
+				<source>Header-Logo for Word</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.anonym" resname="tx_openoap_domain_model_call.anonym">
+				<source>Anonymous survey</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.anonym_item_checked" resname="tx_openoap_domain_model_call.anonym_item_checked">
+				<source>anonym</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.anonym_item_unchecked" resname="tx_openoap_domain_model_call.anonym_item_unchecked">
+				<source>not anonymous (on dashboard)</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.survey_tab" resname="tx_openoap_domain_model_call.survey_tab">
+				<source>Survey</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.survey_codes" resname="tx_openoap_domain_model_call.survey_codes">
+				<source>codes for survey link</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.call_group" resname="tx_openoap_domain_model_call.call_group">
+				<source>Call Group</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.supporter" resname="tx_openoap_domain_model_call.supporter">
+				<source>Supporter</source>
 			</trans-unit>
 
 			<trans-unit id="tx_openoap_domain_model_formpage" resname="tx_openoap_domain_model_formpage">
@@ -76,6 +103,9 @@
 			<trans-unit id="tx_openoap_domain_model_formgroup.title" resname="tx_openoap_domain_model_formgroup.title">
 				<source>Title</source>
 			</trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formgroup.internal_title" resname="tx_openoap_domain_model_formgroup.internal_title">
+                <source>Internal Title</source>
+            </trans-unit>
 			<trans-unit id='tx_openoap_domain_model_formgroup.type' resname='tx_openoap_domain_model_formgroup.type'>
 				<source><![CDATA[group type]]></source>
 			</trans-unit>
@@ -115,8 +145,8 @@
 			<trans-unit id="tx_openoap_domain_model_formgroup.group_title" resname="tx_openoap_domain_model_formgroup.group_title">
 				<source>Group Title</source>
 			</trans-unit>
-			<trans-unit id="tx_openoap_domain_model_formgroup.dependent_on" resname="tx_openoap_domain_model_formgroup.dependent_on">
-				<source>Dependent On</source>
+			<trans-unit id="tx_openoap_domain_model_formgroup.modificators" resname="tx_openoap_domain_model_formgroup.modificators">
+				<source>Modificators</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_formitem" resname="tx_openoap_domain_model_formitem">
 				<source>Form Item</source>
@@ -124,6 +154,9 @@
 			<trans-unit id="tx_openoap_domain_model_formitem.question" resname="tx_openoap_domain_model_formitem.question">
 				<source>Question</source>
 			</trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.internal_title" resname="tx_openoap_domain_model_formitem.internal_title">
+                <source>Internal Title</source>
+            </trans-unit>
 			<trans-unit id="tx_openoap_domain_model_formitem.intro_text" resname="tx_openoap_domain_model_formitem.intro_text">
 				<source>Intro Text</source>
 			</trans-unit>
@@ -168,8 +201,8 @@
 				<source>Meta-Settings</source>
 			</trans-unit>
 
-			<trans-unit id="tx_openoap_domain_model_formitem.dependent_on" resname="tx_openoap_domain_model_formitem.dependent_on">
-				<source>Dependent On</source>
+			<trans-unit id="tx_openoap_domain_model_formitem.modificators" resname="tx_openoap_domain_model_formitem.modificators">
+				<source>Modificators</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_itemoption" resname="tx_openoap_domain_model_itemoption">
 				<source>Item Option</source>
@@ -200,6 +233,9 @@
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_itemvalidator.param2" resname="tx_openoap_domain_model_itemvalidator.param2">
 				<source>Parameter 2</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_itemvalidator.param2" resname="tx_openoap_domain_model_itemvalidator.item">
+				<source>Question/Item</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_applicant" resname="tx_openoap_domain_model_applicant">
 				<source>Applicant</source>
@@ -315,20 +351,26 @@
 			<trans-unit id="tx_openoap_domain_model_comment.answer" resname="tx_openoap_domain_model_comment.answer">
 				<source>Answer</source>
 			</trans-unit>
-			<trans-unit id="tx_openoap_domain_model_logicatom" resname="tx_openoap_domain_model_logicatom">
-				<source>Logic Atom</source>
+			<trans-unit id="tx_openoap_domain_model_formmodificator" resname="tx_openoap_domain_model_formmodificator">
+				<source>Modificator</source>
 			</trans-unit>
-			<trans-unit id="tx_openoap_domain_model_logicatom.title" resname="tx_openoap_domain_model_logicatom.title">
+			<trans-unit id="tx_openoap_domain_model_formmodificator.title" resname="tx_openoap_domain_model_formmodificator.title">
 				<source>Title</source>
 			</trans-unit>
-			<trans-unit id="tx_openoap_domain_model_logicatom.item" resname="tx_openoap_domain_model_logicatom.item">
+			<trans-unit id="tx_openoap_domain_model_formmodificator.item" resname="tx_openoap_domain_model_formmodificator.item">
 				<source>Item</source>
 			</trans-unit>
-			<trans-unit id="tx_openoap_domain_model_logicatom.logic" resname="tx_openoap_domain_model_logicatom.logic">
+			<trans-unit id="tx_openoap_domain_model_formmodificator.logic" resname="tx_openoap_domain_model_formmodificator.logic">
 				<source>Logic</source>
 			</trans-unit>
-			<trans-unit id="tx_openoap_domain_model_logicatom.value" resname="tx_openoap_domain_model_logicatom.value">
+			<trans-unit id="tx_openoap_domain_model_formmodificator.logic_total" resname="tx_openoap_domain_model_formmodificator.logic_total">
+				<source>Grand total</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formmodificator.value" resname="tx_openoap_domain_model_formmodificator.value">
 				<source>Value</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formmodificator.items" resname="tx_openoap_domain_model_formmodificator.items">
+				<source>Questions/Items</source>
 			</trans-unit>
 
 			<!-- account user -->
@@ -344,6 +386,30 @@
 			<trans-unit id="tx_openoapusers_domain_model_user.privacypolicy" resname="tx_openoapusers_domain_model_user.privacypolicy">
 				<source>I accept the privacy policy conditions</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_callgroup" resname="tx_openoap_domain_model_callgroup">
+				<source>Call Group</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_callgroup.title" resname="tx_openoap_domain_model_callgroup.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_callgroup.description" resname="tx_openoap_domain_model_callgroup.description">
+            	<source>Description</source>
+            </trans-unit>
+			<trans-unit id="tx_openoap_domain_model_callgroup.hint" resname="tx_openoap_domain_model_callgroup.hint">
+            	<source>Hint</source>
+            </trans-unit>
+			<trans-unit id="tx_openoap_domain_model_callgroup.country_giz" resname="tx_openoap_domain_model_callgroup.country_giz">
+            	<source>GIZ Country Info</source>
+            </trans-unit>
+			<trans-unit id="tx_openoap_domain_model_callgroup.country_deg" resname="tx_openoap_domain_model_callgroup.country_deg">
+            	<source>DEG Country Info</source>
+            </trans-unit>
+			<trans-unit id="tx_openoap_domain_model_callgroup.default_giz" resname="tx_openoap_domain_model_callgroup.default_giz">
+            	<source>GIZ Basis Call Name</source>
+            </trans-unit>
+			<trans-unit id="tx_openoap_domain_model_callgroup.default_deg" resname="tx_openoap_domain_model_callgroup.default_deg">
+            	<source>DEG Basis Call Name</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

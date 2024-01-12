@@ -7,12 +7,16 @@
     <f:if condition="{applicant.company}">
         <f:then>
             <dl class="profile__summary">
-                <f:render section="ProfileItem" arguments="{section:'summary',item:applicant.company,tKey:'tx_openoap_domain_model_applicant.company'}" />
-                <f:render section="ProfileItem" arguments="{section:'summary',item:'{applicant.firstName} {applicant.lastName}',tKey:'tx_openoap_domain_model_applicant.name'}" />
-                <f:render section="ProfileItem" arguments="{section:'summary',item:'{f:if(condition:applicant.address, then:\'{applicant.address}, \')} {applicant.zip} {applicant.city}',tKey:'tx_openoap_domain_model_applicant.addressCombined'}" />
-                <f:render section="ProfileItem" arguments="{section:'summary',item:'{countries.{applicant.country}}',tKey:'tx_openoap_domain_model_applicant.country'}" />
-                <f:render section="ProfileItem" arguments="{section:'summary',item:applicant.telephone,tKey:'tx_openoap_domain_model_applicant.telephone'}" />
-                <f:render section="ProfileItem" arguments="{section:'summary',item:applicant.companyEmail,tKey:'tx_openoap_domain_model_applicant.company_email', email:1}" />
+                <div class="profile__summary--group">
+                    <f:render section="ProfileItem" arguments="{section:'summary',item:applicant.company,tKey:'tx_openoap_domain_model_applicant.company'}" />
+                    <f:render section="ProfileItem" arguments="{section:'summary',item:'{applicant.firstName} {applicant.lastName}',tKey:'tx_openoap_domain_model_applicant.name'}" />
+                    <f:render section="ProfileItem" arguments="{section:'summary',item:'{f:if(condition:applicant.address, then:\'{applicant.address}, \')} {applicant.zip} {applicant.city}',tKey:'tx_openoap_domain_model_applicant.addressCombined'}" />
+                </div>
+                <div class="profile__summary--group">
+                    <f:render section="ProfileItem" arguments="{section:'summary',item:'{countries.{applicant.country}}',tKey:'tx_openoap_domain_model_applicant.country'}" />
+                    <f:render section="ProfileItem" arguments="{section:'summary',item:applicant.telephone,tKey:'tx_openoap_domain_model_applicant.telephone'}" />
+                    <f:render section="ProfileItem" arguments="{section:'summary',item:applicant.companyEmail,tKey:'tx_openoap_domain_model_applicant.company_email', email:1}" />
+                </div>
             </dl>
         </f:then>
         <f:else>
@@ -40,7 +44,7 @@
     </dl>
 
     <f:comment><!-- Other Masterdata--></f:comment>
-<f:comment><!--
+    <f:comment><!--
     <h3 class="profile__header profile__header--sub"><f:translate key="tx_openoap_applicant.otherdata.header" /></h3>
     <dl class="profile__detail">
         <f:render section="ProfileItem" arguments="{section:'detail',item:applicant.preferredLang,tKey:'tx_openoap_domain_model_applicant.preferred_lang'}" />
@@ -50,7 +54,7 @@
     <f:comment><!-- ACCESSDATA BLOCK --></f:comment>
     <h2 class="profile__header">
         <span class="profile__header-text"><f:translate key="tx_openoap_applicant.accessdata.header" /></span>
-<f:comment><!--
+        <f:comment><!--
         <f:link.action action="edit" controller="Edit" pageUid="{settings.accessdataEditPid}" class="profile__section-edit">
             <f:translate key="tx_openoap_applicant.linkAccessdataEdit.title" />
         </f:link.action>

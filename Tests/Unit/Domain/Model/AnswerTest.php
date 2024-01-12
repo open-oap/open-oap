@@ -146,7 +146,8 @@ class AnswerTest extends UnitTestCase
      */
     public function getItemReturnsInitialValueForFormItem(): void
     {
-        self::assertNull(
+        self::assertEquals(
+            null,
             $this->subject->getItem()
         );
     }
@@ -167,7 +168,8 @@ class AnswerTest extends UnitTestCase
      */
     public function getModelReturnsInitialValueForFormGroup(): void
     {
-        self::assertNull(
+        self::assertEquals(
+            null,
             $this->subject->getModel()
         );
     }
@@ -188,7 +190,8 @@ class AnswerTest extends UnitTestCase
      */
     public function getCommentsReturnsInitialValueForComment(): void
     {
-        self::assertNull(
+        self::assertEquals(
+            null,
             $this->subject->getComments()
         );
     }

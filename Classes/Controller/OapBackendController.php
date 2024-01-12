@@ -14,7 +14,6 @@ use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 
 /***
@@ -56,7 +55,7 @@ class OapBackendController extends OapBaseController
         // set messageSource
         $this->messageSource = 'LLL:EXT:' . $this->ext . '/Resources/Private/Language/' . $this->messageFile . ':message.';
 
-        $this->pageUid = (int)$GLOBALS['_GET']['id'];
+        $this->pageUid = (int)($GLOBALS['_GET']['id'] ?? 0);
         $this->siteIdentifier = $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getIdentifier();
 
         $this->backendUriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
@@ -67,9 +66,10 @@ class OapBackendController extends OapBaseController
     /**
      * @param array $allitems
      * @param int $currentPage
+     * @param int $itemsPerPage
      * @return array
      */
-    protected function createPaginator(array $allitems, int $currentPage): array
+    protected function createPaginator(array $allitems, int $currentPage, int $itemsPerPage = 50): array
     {
         $pagination['array'] = [];
         $pagination['pagination'] = null;
@@ -78,8 +78,7 @@ class OapBackendController extends OapBaseController
             $this->setMessage('no_calls_found', self::WARNING);
         } else {
             // todo use constant instead of magic number - even here
-            // $pagination['array'] = new ArrayPaginator($allitems, $currentPage, self::BACKEND_ITEMS_PER_PAGE);
-            $pagination['array'] = new ArrayPaginator($allitems, $currentPage, 50);
+            $pagination['array'] = new ArrayPaginator($allitems, $currentPage, $itemsPerPage);
             $pagination['pagination'] = new SimplePagination($pagination['array']);
             $this->view->assign('pages', range(1, $pagination['pagination']->getLastPageNumber()));
         }
@@ -133,9 +132,9 @@ class OapBackendController extends OapBaseController
         $arrayPaginator = null;
         $pagination = null;
         if (!$this->pageUid) {
-            // $this->setMessage('no_page_selected', self::WARNING);
+            $this->setMessage('no_page_selected', self::WARNING);
             // use fall-back
-            $callPid = (int)$this->settings['settings']['callPid'];
+            $callPid = (int)$this->settings['callPid'] ?? 0;
         } else {
             $callPid = $this->pageUid;
         }

@@ -333,6 +333,9 @@
     <trans-unit id="constants.dashboard_page_id">
         <source>Page with dashboard plugin</source>
     </trans-unit>
+    <trans-unit id="constants.survey_page_id">
+        <source>Page with proposal form (plugin) for survey</source>
+    </trans-unit>
     <trans-unit id="constants.form_page_id">
         <source>Page with proposal form</source>
     </trans-unit>
@@ -394,6 +397,44 @@
     <trans-unit id="constants.word_export_template_file">
         <source>word base file for export</source>
     </trans-unit>
+    <trans-unit id="constants.survey_oap_user">
+        <source>Id of oap survey user (anonym)</source>
+    </trans-unit>
+    <trans-unit id="constants.survey_thanks_page_id">
+        <source>Survey page for saying Thank you after submitting survey</source>
+    </trans-unit>
+    <trans-unit id="constants.survey_abort_page_id">
+        <source>Survey page reaction of aborting survey</source>
+    </trans-unit>
+    <trans-unit id="constants.survey_error_page_id">
+        <source>Survey page response error - missing or invalid code</source>
+    </trans-unit>
+    <trans-unit id="constants.pid.form_pages">
+        <source>root pool folder for form pages</source>
+    </trans-unit>
+    <trans-unit id="constants.pid.form_groups">
+        <source>root pool folder for form groups</source>
+    </trans-unit>
+    <trans-unit id="constants.pid.form_items">
+        <source>root pool folder for form items</source>
+    </trans-unit>
+
+    <trans-unit id="constants.zip_file.prefix">
+        <source>Prefix of the ZIP file name</source>
+    </trans-unit>
+    <trans-unit id="constants.zip_file.dateformat">
+        <source>Date format in ZIP file name</source>
+    </trans-unit>
+    <trans-unit id="constants.zip_structure.applicant" xml:space="preserve">
+        <source><![CDATA[Name format of the submitting account (first parameter username, second parameter User-Id)]]></source>
+    </trans-unit>
+    <trans-unit id="constants.zip_structure.proposal" xml:space="preserve">
+        <source><![CDATA[Name format of the proposal, preceded by the signature, first parameter Title of the proposal, second parameter Proposal-Id]]></source>
+    </trans-unit>
+    <trans-unit id="constants.zip_structure.proposal.titlelength">
+        <source>Length of the title in the file name</source>
+    </trans-unit>
+
         </body>
     </file>
 </xliff>

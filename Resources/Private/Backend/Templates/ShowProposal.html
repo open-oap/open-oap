@@ -25,7 +25,7 @@ Available variables:
         <f:flashMessages />
 
         <h1><span class="highlighted">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.proposal_preview")}</span> {proposal.title}</h1>
-        
+
         <p class="download-wrapper">
                 <f:link.action action="showProposal" arguments="{proposal:proposal,download:1}" class="download">
                     <span>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:download.pdf.label")}</span>
@@ -229,14 +229,14 @@ Available variables:
                                                     <f:render partial="Utility/ValueOutput" arguments="{_all}" />
 
 
-                                                    <f:if condition="{proposal.{propertyKeyComments}}">
+                                                    <v:try><f:if condition="{proposal.{propertyKeyComments}}">
                                                         <div id="comments{pi.cycle}{ii.cycle}" class="answer_notifications">
 
                                                             <f:render partial="Answer/Comments"
                                                                       arguments="{mode:'BE',comments:'{proposal.{propertyKeyComments}}',commentStates:'{commentStates}',answersMap:'{answersMap}',answerId:'{answerId}', commentAuthorByUsername:1}"
                                                             />
                                                         </div>
-                                                    </f:if>
+                                                    </f:if></v:try>
                                                 </td>
                                             </tr>
                                         </f:for>
@@ -285,14 +285,14 @@ Available variables:
                             <f:render partial="Utility/ValueOutput" arguments="{_all}" />
 
 
-                            <f:if condition="{proposal.{propertyKeyComments}}">
+                            <v:try><f:if condition="{proposal.{propertyKeyComments}}">
                                 <div id="comments{pi.cycle}{ii.cycle}" class="answer_notifications">
 
                                     <f:render partial="Answer/Comments"
                                               arguments="{mode:'BE',comments:'{proposal.{propertyKeyComments}}',commentStates:'{commentStates}',answersMap:'{answersMap}',answerId:'{answerId}', commentAuthorByUsername:1}"
                                     />
                                 </div>
-                            </f:if>
+                            </f:if></v:try>
                         </td>
                     </tr>
                 </f:for>

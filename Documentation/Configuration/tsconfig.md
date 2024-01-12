@@ -2,7 +2,7 @@
 
 # General notes
 
-Pool folders are limited in the TCA via TSconfig entries, so that certain elements can only be used or assigned under defined specifications. 
+Pool folders are limited in the TCA via TSconfig entries, so that certain elements can only be used or assigned under defined specifications.
 
 # Usage
 
@@ -31,6 +31,11 @@ TCEFORM {
         options.PAGE_TSCONFIG_IDLIST = 33,25
         validators.PAGE_TSCONFIG_ID = 26
         validators.PAGE_TSCONFIG_IDLIST = 32,26
+        modificators.PAGE_TSCONFIG_ID = 61
+        modificators.PAGE_TSCONFIG_IDLIST = 61
+    }
+    tx_openoap_domain_model_formmodificator {
+        items.PAGE_TSCONFIG_ID = 21
     }
     tx_openoap_domain_model_proposal {
         answers.PAGE_TSCONFIG_ID = 29
@@ -39,9 +44,6 @@ TCEFORM {
     }
     tx_openoap_domain_model_answer {
         comments.PAGE_TSCONFIG_ID = 53
-    }
-    tx_openoap_domain_model_logicatom {
-        item.PAGE_TSCONFIG_ID = 21
     }
     fe_users {
         country.PAGE_TSCONFIG_ID = 28
