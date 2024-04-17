@@ -74,7 +74,7 @@ Available variables:
 
         <div id="t3-table-tx_openoap_domain_model_proposal" data-multi-record-selection-identifier="t3-table-tx_openoap_domain_model_proposal">
         <h2><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.results"/></h2>
-        <f:form action="listProposals" name="list-table-form-tx_openoap_domain_model_proposal" id="form-selection-todo">
+        <f:form action="listProposals" arguments="{call: call}" name="list-table-form-tx_openoap_domain_model_proposal" id="form-selection-todo">
             <f:form.hidden value="{call}" name="call" />
             <div id="selection-row"  style="display:none;">
                 <h3><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.header' /></h3>
@@ -175,23 +175,27 @@ Available variables:
                 --></f:comment>
                 <!-- title -->
                 <th nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.title\')}', sortField:'title', sorted:sorted, call:call, filter:filter}" />
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.title\')}', sortField:'title', sorted:sorted, call:call, filter:filter, currentPage: currentPage}" />
                 </th>
                 <!-- signature -->
                 <th nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.signature\')}', sortField:'signature', sorted:sorted, call:call, filter:filter}" />
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.signature\')}', sortField:'signature', sorted:sorted, call:call, filter:filter, currentPage: currentPage}" />
                 </th>
                 <!-- state -->
                 <th nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.state\')}', sortField:'state', sorted:sorted, call:call, filter:filter}" />
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.state\')}', sortField:'state', sorted:sorted, call:call, filter:filter, currentPage: currentPage}" />
                 </th>
                 <!-- tstamp -->
                 <th nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.tstamp\')}', sortField:'editTstamp', sorted:sorted, call:call, filter:filter}" />
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.tstamp\')}', sortField:'editTstamp', sorted:sorted, call:call, filter:filter, currentPage: currentPage}" />
+                </th>
+                <!-- submitTstamp -->
+                <th nowrap="nowrap">
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.submitted\')}', sortField:'submitTstamp', sorted:sorted, call:call, filter:filter, currentPage: currentPage}"/>
                 </th>
                 <!-- user-e-mail / applicant-->
                 <th nowrap="nowrap">
-                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.applicant\')}', sortField:'applicant_username', sorted:sorted, call:call, filter:filter}" />
+                    <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.applicant\')}', sortField:'applicant_username', sorted:sorted, call:call, filter:filter, currentPage: currentPage}" />
                 </th>
             </tr>
             </thead>
@@ -199,20 +203,11 @@ Available variables:
             <f:for each="{paginator.paginatedItems}" as="proposal">
                 <tr data-table="tx_openoap_domain_model_proposal" class="t3js-entity" data-uid="{proposal.uid}" title="id={proposal.uid}">
                     <!-- check -->
-
-                        <f:if condition="{proposal.state} != {stateReopenedValue}">
-                            <f:then>
-                                <td nowrap="nowrap" class="col-selector nowrap">
-                                <span class="form-check form-toggle">
-                                    <f:form.checkbox class="form-check-input t3js-multi-record-selection-check check-toggle-selection" name="selection[records][]" value="{proposal.uid}" />
-                                </span>
-                                </td>
-                            </f:then>
-                            <f:else>
-                            <td nowrap="nowrap"><span class="form-check form-toggle form-check-disabled"><f:form.checkbox disabled="1" value="0" /> </span></td>
-                            </f:else>
-                        </f:if>
-
+                    <td nowrap="nowrap" class="col-selector nowrap">
+                        <span class="form-check form-toggle">
+                            <f:form.checkbox class="form-check-input t3js-multi-record-selection-check check-toggle-selection" name="selection[records][]" value="{proposal.uid}" />
+                        </span>
+                    </td>
                     <!-- icon -->
                     <td nowrap="nowrap" class="col-icon">
                         <span title="id={proposal.uid}"
@@ -248,9 +243,19 @@ Available variables:
                     </td>
                     <td nowrap="nowrap" class="col-title">
                         <f:translate key="tx_openoap_domain_model_proposal.state.{proposal.state}" />
+                        <f:if condition="{proposal.rejectionTstamp} && {proposal.state} == {proposalStates.PROPOSAL_DECLINED}">
+                            <br>
+                            {proposal.rejectionTstamp -> f:format.date(format: 'd.m.Y H:i')}<br>
+                            {proposal.rejectionEmail}
+                        </f:if>
                     </td>
                     <td nowrap="nowrap">
                         {proposal.editTstamp -> f:format.date(format:'d.m.Y H:i')}
+                    </td>
+                    <td nowrap="nowrap">
+                        <f:if condition="{proposal.submitTstamp}">
+                            {proposal.submitTstamp -> f:format.date(format:'d.m.Y H:i')}
+                        </f:if>
                     </td>
                     <td nowrap="nowrap">
                         <f:if condition="{proposal.applicant_company}">{proposal.applicant_company} </f:if><br>{proposal.applicant_username}

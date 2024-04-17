@@ -16,11 +16,9 @@ use OpenOAP\OpenOap\Domain\Model\FormPage;
 use OpenOAP\OpenOap\Domain\Model\ItemValidator;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
-use PhpOffice\PhpWord\TemplateProcessor;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
-use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -29,7 +27,6 @@ use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\EmailAddressValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\FloatValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\IntegerValidator;
@@ -37,7 +34,7 @@ use TYPO3\CMS\Extbase\Validation\Validator\UrlValidator;
 use TYPO3\CMS\Form\Mvc\Property\Exception\TypeConverterException;
 
 /**
- * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
+ * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -143,7 +140,8 @@ class ProposalController extends OapFrontendController
         }
     }
 
-    public function initializeCreateAction() {
+    public function initializeCreateAction()
+    {
         if ($this->survey !== '') {
             $this->applicant = $this->applicantRepository->findByUid($this->settings['surveyOapUser']);
         }
@@ -158,6 +156,9 @@ class ProposalController extends OapFrontendController
      */
     public function createAction(Applicant $applicant, Call $call)
     {
+        // add check for call end time and access groups
+        // needed double check to stop create proposal if creating new from dashboard
+        $this->isResctricted($call);
         $newProposal = new Proposal();
 
         // set current user
@@ -202,8 +203,7 @@ class ProposalController extends OapFrontendController
                             if (!isset(
                                 $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]
                             )) {
-                                $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid(
-                                )] = [];
+                                $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()] = [];
                             }
                             $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]['current'] = $groupL1->getRepeatableMin();
 
@@ -273,12 +273,15 @@ class ProposalController extends OapFrontendController
     public function editAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal, int $currentPage = 1, string $survey = ''): \Psr\Http\Message\ResponseInterface
     {
         // current user is not able to edit the proposal cause not the right owner:
-        if ($proposal->getApplicant() !== $this->applicant AND !$proposal->getCall()->isAnonym()) {
+        if ($proposal->getApplicant() !== $this->applicant and !$proposal->getCall()->isAnonym()) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_ACCESS_DENIED);
             $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 
             $this->redirectToDashboard();
         }
+
+        // add check for call end time and access groups
+        $this->isResctricted($proposal->getCall());
 
         if (!$proposal->getCall()) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_CALL_MISSING);
@@ -355,10 +358,10 @@ class ProposalController extends OapFrontendController
         $pageControl['next'] = ($currentPage < count($proposal->getCall()->getFormPages())) ? $currentPage + 1 : 0;
         $pageControl['previous'] = ($currentPage > 1) ? $currentPage - 1 : 0;
 
-        // todo is this the submit page, we have to check the complete proposal
         /** @var FormPage $page */
         $page = $proposal->getPage($currentPage);
-        $validationResults = $this->validateProposal($proposal, $metaInfo, $page->isSubmitPage());
+        $isSubmitPage = $page->isSubmitPage();
+        $validationResults = $this->validateProposal($proposal, $metaInfo, $isSubmitPage);
 
         //        $validationResults = new Result();
         //        $value = 'keine email';
@@ -372,6 +375,10 @@ class ProposalController extends OapFrontendController
         $pageNo = 1;
         /** @var FormPage $page */
         foreach ($proposal->getCall()->getFormPages() as $page) {
+            if ($isSubmitPage) {
+                // mark all pages as "visited" to display errors
+                $metaInfo->addPage($pageNo, $page);
+            }
             /** @var FormGroup $group */
             foreach ($page->getItemGroups() as $group) {
                 /** @var FormItem $item */
@@ -419,6 +426,14 @@ class ProposalController extends OapFrontendController
         $submitItemOptions = [];
         foreach ($proposal->getCall()->getItems() as $item) {
             $this->getOptionsToItemsMap($item, $submitItemOptions);
+        }
+
+        if ($isSubmitPage) {
+            // persist metaInformation to database
+            $proposal->setMetaInformation($metaInfo->jsonSerialize());
+
+            $this->proposalRepository->update($proposal);
+            $this->persistenceManager->persistAll();
         }
 
         $jsMessages = $this->getJsMessages();
@@ -603,8 +618,9 @@ class ProposalController extends OapFrontendController
 
             // we have found a case of duplicate submission - so we need to check here that the status is not "submitted".
             $submitted = $proposal->getState() == self::PROPOSAL_SUBMITTED;
-            if (!$validationResults AND !$submitted) {
+            if (!$validationResults and !$submitted) {
                 $proposal->setState(self::PROPOSAL_SUBMITTED);
+                $proposal->setSubmitTstamp(time());
                 $logItem = $this->createLog(self::LOG_PROPOSAL_SUBMITTED, $proposal);
                 $proposal->addLog($logItem);
                 $proposal->setEditTstamp(time());
@@ -649,7 +665,7 @@ class ProposalController extends OapFrontendController
                 $codes = explode("\r\n", $proposal->getCall()->getSurveyCodes());
                 foreach ($codes as $i => $code) {
                     if (trim($code) == $this->survey) {
-                        $codes[$i] = '#'.$code;
+                        $codes[$i] = '#' . $code;
                     }
                 }
                 $proposal->getCall()->setSurveyCodes(implode("\r\n", $codes));
@@ -885,14 +901,14 @@ class ProposalController extends OapFrontendController
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("proposal")
      */
-    public function notificationsAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal=null, String $filter='', String $sort='')
+    public function notificationsAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal = null, string $filter = '', string $sort = '')
     {
         $filterDemand = [];
         $sortOrder = '';
         if ($filter == 'auto') {
             $filterDemand['source'] = $this->getConstants()['COMMENT']['COMMENT_SOURCE_EDIT'];
         } else {
-            $filter='';
+            $filter = '';
         }
         if ($sort == 'asc') {
             $sortOrder = $sort;
@@ -913,8 +929,8 @@ class ProposalController extends OapFrontendController
                         }
                         break;
 
-                        // comments AT a proposal are counted as NEW if they own the state COMMENT_STATE_NEW
-                        // therefore in this case we look for state COMMENT_STATE_NEW
+                    // comments AT a proposal are counted as NEW if they own the state COMMENT_STATE_NEW
+                    // therefore in this case we look for state COMMENT_STATE_NEW
                     case self::COMMENT_SOURCE_EDIT:
                         if ($comment->getState() == self::COMMENT_STATE_NEW) {
                             $comment->setState(self::COMMENT_STATE_ACCEPTED);
@@ -1003,7 +1019,8 @@ class ProposalController extends OapFrontendController
                 // there is no page for this answer - so the form has been changed
                 continue;
             }
-            if (!isset($pages[$this->pages[$itemUid]->getUid()]) and !$checkAll) {
+
+            if (!$checkAll && !isset($pages[$this->pages[$itemUid]->getUid()])) {
                 // $validationResult[$this->pages[$itemUid]->getUid()] = [];
                 continue;
             }
@@ -1305,8 +1322,7 @@ class ProposalController extends OapFrontendController
                             if (!isset(
                                 $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]
                             )) {
-                                $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid(
-                                )] = [];
+                                $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()] = [];
                             }
                             $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]['current'] = $groupL1->getRepeatableMin();
 
@@ -1369,13 +1385,13 @@ class ProposalController extends OapFrontendController
             foreach (clone $proposal->getAnswers() as $answer) {
                 if ($answer->getModel()->getUid() == $removeParameter->L1GroupUid
                     and $answer->getGroupCounter1() == $removeParameter->L1GroupIndex
-                        and $answer->getGroupCounter0() == $removeParameter->L0GroupIndex
+                    and $answer->getGroupCounter0() == $removeParameter->L0GroupIndex
                 ) {
                     $proposal->removeAnswer($answer);
                 }
                 if ($answer->getModel()->getUid() == $removeParameter->L1GroupUid
                     and $answer->getGroupCounter1() > $removeParameter->L1GroupIndex
-                        and $answer->getGroupCounter0() == $removeParameter->L0GroupIndex
+                    and $answer->getGroupCounter0() == $removeParameter->L0GroupIndex
                 ) {
                     $newGroupIndex = $answer->getGroupCounter1() - 1;
                     $answer->setGroupCounter1($newGroupIndex);
@@ -1449,8 +1465,8 @@ class ProposalController extends OapFrontendController
                 );
                 $proposal->addLog($log);
                 $flashMessage = $this->getTranslationString(
-                    self::XLF_BASE_IDENTIFIER_LOG . self::LOG_FORM_CHANGED_REMOVED_ITEM
-                ) . ' ' . $log->getText();
+                        self::XLF_BASE_IDENTIFIER_LOG . self::LOG_FORM_CHANGED_REMOVED_ITEM
+                    ) . ' ' . $log->getText();
                 $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
             }
         }
@@ -1577,12 +1593,12 @@ class ProposalController extends OapFrontendController
     }
 
     /**
-     * @deprecated
-     * - just a copy and
      * @param Proposal $proposal
      * @param $itemsMap
      * @param MetaInformation $metaInfo
      * @return array
+     * @deprecated
+     * - just a copy and
      */
     protected function createAnswersMap_temp(Proposal $proposal, $itemsMap, MetaInformation $metaInfo): array
     {
@@ -1697,4 +1713,51 @@ class ProposalController extends OapFrontendController
         $this->redirectToURI($uri, 0, 200);
     }
 
+    /**
+     * @param Call $call
+     * @return void
+     */
+    protected function isResctricted(Call $call): void
+    {
+        $timeRestricted = true;
+        $groupRestricted = true;
+
+        // current proposal call ended
+        if ($call->getCallEndTime() instanceof DateTime) {
+            if ($call->getCallEndTime()->getTimestamp() >= strtotime('-3 hours', time())) {
+                $timeRestricted = false;
+            }
+        }
+        else {
+            // proposals with no end date are unrestricted
+            $timeRestricted = false;
+        }
+
+        // applicant don't have the group
+        $callUserGroups = $call->getUsergroup();
+        $applicantGroups = $this->applicant->getUsergroup()->toArray();
+        foreach ($callUserGroups as $callGroup) {
+            $callGroupId = $callGroup->getUid();
+            $result = array_filter($applicantGroups, function ($applicantGroup) use ($callGroupId) {
+                return $applicantGroup->getUid() === $callGroupId;
+            });
+
+            // test group
+            if ($callGroupId === (int)$this->settings['testerFeGroupsId']) {
+                $groupRestricted = false;
+                $timeRestricted = false;
+            }
+
+            if (count($result) > 0) {
+                $groupRestricted = false;
+            }
+        }
+
+        if ($timeRestricted || $groupRestricted) {
+            $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_NOT_EDITABLE);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+
+            $this->redirectToDashboard();
+        }
+    }
 }

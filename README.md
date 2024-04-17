@@ -1,4 +1,4 @@
-# open-oap - open application plattform
+# open-oap - open application platform
 
 Development project for an open-source TYPO3 extension.
 

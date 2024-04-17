@@ -12,7 +12,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
+ * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -198,7 +198,7 @@ class ApplicantController extends OapFrontendController
                     if (in_array($this->language->getLanguageId(), $blockedGroupLanguages)) {
                         $activeCall->setHidden(1);
                     }
-                    $supporter = $activeCall->getSupporter();
+                    $supporter = $activeCall->getSupporter() ? $activeCall->getSupporter()->getUid() : 0;
                     $callGroups[$callGroupId]['calls'][$supporter][] = $activeCall;
                 }
             }
@@ -266,8 +266,9 @@ class ApplicantController extends OapFrontendController
      */
     public function mailAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal, $mailtextSetting, $mailTemplate)
     {
+        $getMailTextFunc = 'get'.  ucfirst($mailtextSetting);
         $mailTemplatePaths = $this->getMailTemplatePaths();
-        $mailText = $this->parseMailtext($proposal, $this->settings[$mailtextSetting]);
+        $mailText = $this->parseMailtext($proposal, $proposal->getCall()->getSupporter()->$getMailTextFunc());
 
         $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $mailText);
 

@@ -11,16 +11,25 @@
         </div>
     </div>
 
+    <f:if condition="{validationResults}">
+        <div class="form__error-list-box">
+            <p class="form__error-list-text">
+                <strong><f:translate key="tx_openoap.js_msg.error_label" />:</strong> <f:translate key="tx_openoap.js_msg.error_message_preview" />
+            </p>
+            <f:for each="{proposal.call.formPages}" as="formPage" key="pageId" iteration="pageIt">
+                <f:render partial="innerErrorListPreview" arguments="{validationResults:validationResults, proposal:proposal, pageIdx:pageIt, formPage: formPage}" />
+            </f:for>
+        </div>
+    </f:if>
+
     <div class="preview">
         <f:for each="{proposal.call.formPages}" as="formPage" key="pageId" iteration="pageIt">
             <f:if condition="{formPage.type} == {pageTypes.PAGETYPE_DEFAULT}">
                 <div class="preview__section">
                     <h3 class="preview__section-headline">{formPage.title}</h3>
                     <f:render partial="innerErrorList" arguments="{validationResults:validationResults, proposal:proposal, pageIdx:pageIt}" />
-
                     <f:comment><!-- all groups in current page --></f:comment>
                     <f:for each="{formPage.itemGroups}" as="itemGroupL0" key="groupId" iteration="groupIt">
-
                         <f:if condition="{itemGroupL0.type} == 1">
                             <f:then>
 

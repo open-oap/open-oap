@@ -6,8 +6,7 @@
 
 <v:iterator.loop iteration="counter" count="{groupCurrentN}">
     <v:variable.set name="groupCounterL1" value="{counter.index}" />
-
-    <fieldset class="form__grouped-fieldset" <f:if condition="{groupsCounter.{itemGroupL0.uid}.current} == {counter.cycle}">id="jumpmark"</f:if>>
+    <fieldset class="form__grouped-fieldset" <f:if condition="{groupsCounter.{itemGroupL0.uid}.current} == {counter.cycle} && {itemGroup.uid} !== 180">id="jumpmark"</f:if>>
 
         <legend class="form__group-legend {f:if(condition: '{nestedGroupClass}', then: 'form__group-legend--nested', else: '')}">
             <f:if condition="{nestedGroupClass}">

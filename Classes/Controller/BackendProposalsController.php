@@ -14,11 +14,13 @@ use OpenOAP\OpenOap\Domain\Model\GroupTitle;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
 
+use OpenOAP\OpenOap\Domain\Repository\SupporterRepository;
 use PhpOffice\PhpWord\Exception\Exception;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
@@ -139,8 +141,12 @@ class BackendProposalsController extends OapBackendController
     /**
      * @throws InvalidQueryException
      */
-    public function listProposalsAction(Call $call, array $filter = [], array $selection = [], int $currentPage = 1, int $itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE): ResponseInterface
+    public function listProposalsAction(?Call $call = null, array $filter = [], array $selection = [], int $currentPage = 1, int $itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE): ResponseInterface
     {
+        if(is_null($call)) {
+            $this->redirect('showOverviewCalls' , 'BackendProposals');
+        }
+
         // clear function call
         if (($filter['todo'] ?? null) == 'clear') {
             $filter = [];
@@ -174,6 +180,8 @@ class BackendProposalsController extends OapBackendController
             }
 
             if ($selection['todo'] == 'submit-state' && (int)$selection['state'] > 0) {
+                $updateCount = 0;
+
                 foreach ($selection['records'] as $record) {
                     $proposal = $this->proposalRepository->findByUid((int)$record);
                     // to avoid setting a state again check agaist the existing state
@@ -193,9 +201,19 @@ class BackendProposalsController extends OapBackendController
                         $proposal->addLog($log);
                         $this->proposalRepository->update($proposal);
                         $this->persistenceManager->persistAll();
+                        $updateCount++;
                     }
                 }
-                if (is_array($proposalsArr)) {
+
+                if ($updateCount) {
+                    $this->addFlashMessage($updateCount . 'x ' . \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.state_updated'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+                }
+
+                if (isset($proposalsArr) && is_array($proposalsArr)) {
+                    if (count($proposalsArr) > 1) {
+                        $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.multiple_selected'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+                    }
+
                     $this->redirect('customizeStatusMail', 'BackendProposals', null, ['proposals' => $proposalsArr, 'selectedState' => (int)$selection['state']]);
                 }
             }
@@ -235,10 +253,15 @@ class BackendProposalsController extends OapBackendController
                 $sorting = ['field' => $sortField, 'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING];
             }
         }
+        else {
+            $sorting = ['field' => 'signature', 'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING];
+        }
+
         $allItems = $this->proposalRepository->findDemanded($call->getProposalPid(), self::STATE_ACCESS_MIN_FILTER, $filter, $sorting);
         $pagination = $this->createPaginator($allItems, $currentPage, (int)$filter['itemsPerPage']);
 
         $this->view->assignMultiple([
+            'proposalStates' => $this->getConstants()['PROPOSAL'],
             'countOfItems' => count($allItems),
             'filter' => $filter,
             'states' => $states,
@@ -250,6 +273,7 @@ class BackendProposalsController extends OapBackendController
             'pagination' => $pagination['pagination'],
             'sorted' => ['sortField' => $sortField, 'sortRev' => $sortRev],
             'call' => $call,
+            'currentPage' => $currentPage
         ]);
 
         return $this->htmlResponse();
@@ -407,18 +431,8 @@ class BackendProposalsController extends OapBackendController
         $additionalMailData = [];
         $proposalList = [];
 
-        foreach ([0, 1] as $langId) {
-            $flexformData[$langId]['flexFormString'] = $this->proposalRepository->findMailtextFlexformdata((int)$this->settings['dashboardPageId'], $langId);
-            if ($flexformData[$langId]['flexFormString'] != null && $flexformData[$langId]['flexFormString'] != '') {
-                $flexformData[$langId]['flexFormArray'] = GeneralUtility::xml2array($flexformData[$langId]['flexFormString']);
-            }
-        }
-
-        $unparsedDefaultMailtext = $selectedState == self::PROPOSAL_ACCEPTED
-            ? $flexformData[0]['flexFormArray']['data']['mail']['lDEF']['settings.eventProposalAcceptedMailtext']['vDEF']
-            : $flexformData[0]['flexFormArray']['data']['mail']['lDEF']['settings.eventProposalDeclinedMailtext']['vDEF'];
-
         foreach ($proposals as $key => $proposalId) {
+            /** @var Proposal $proposal */
             $proposal = $this->proposalRepository->findByUid((int)$proposalId);
             $proposalList[$key]['proposal'] = $proposal;
             $selectedMailAction = null;
@@ -430,19 +444,29 @@ class BackendProposalsController extends OapBackendController
                 }
             }
 
-            $proposalLangCode = $this->getProposalFrontendLanguageCode($proposal->getFeLanguageUid());
+            $proposalLangCode = $this->getProposalFrontendLanguageCode($proposal);
             $proposalList[$key]['maildata'] = [];
             $proposalList[$key]['maildata']['signature'] = $this->buildSignature($proposal);
             $proposalList[$key]['maildata']['siteName'] = $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
             $proposalList[$key]['maildata']['langCode'] = $proposalLangCode;
-            if (is_array($flexformData[$proposal->getFeLanguageUid()]['flexFormArray'])) {
-                $mailtext = $selectedState == self::PROPOSAL_ACCEPTED
-                    ? $flexformData[$proposal->getFeLanguageUid()]['flexFormArray']['data']['mail']['lDEF']['settings.eventProposalAcceptedMailtext']['vDEF']
-                    : $flexformData[$proposal->getFeLanguageUid()]['flexFormArray']['data']['mail']['lDEF']['settings.eventProposalDeclinedMailtext']['vDEF'];
+            if ($supporter = $proposal->getCall()->getSupporter()) {
+                if ($proposal->getFeLanguageUid() > 0)
+                {
+                    $translatedSupporter = $this->getTranslatedSupporter($proposal->getFeLanguageUid(), $supporter->getUid());
+                    $unparsedDefaultMailtext = $selectedState == self::PROPOSAL_ACCEPTED
+                        ? $translatedSupporter['event_proposal_accepted_mailtext'] ?? ''
+                        : $translatedSupporter['event_proposal_declined_mailtext'] ?? '';
+                }
+                else {
+                    $unparsedDefaultMailtext = $selectedState == self::PROPOSAL_ACCEPTED
+                        ? $supporter->getEventProposalAcceptedMailtext()
+                        : $supporter->getEventProposalDeclinedMailtext();
+                }
+
             } else {
-                $mailtext = $unparsedDefaultMailtext;
+                $unparsedDefaultMailtext = 'Missing Email Text';
             }
-            $proposalList[$key]['maildata']['mailtext'] = $this->parseMailtext($proposal, $mailtext, $additionalMailData, $proposalLangCode);
+            $proposalList[$key]['maildata']['mailtext'] = $this->parseMailtext($proposal, $unparsedDefaultMailtext, $additionalMailData, $proposalLangCode);
 
             if ($selectedMailAction == 1) {
                 $additionalData = [];
@@ -454,6 +478,13 @@ class BackendProposalsController extends OapBackendController
                     $additionalData['replyTo'] = $rto[0];
                 }
                 $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $proposalList[$key]['maildata']['mailtext'], $proposalLangCode, $additionalData);
+
+                if ($selectedState === self::PROPOSAL_DECLINED) {
+                    $proposal->setRejectionTstamp(time());
+                    $proposal->setRejectionEmail($proposal->getApplicant()?->getEmail());
+
+                    $this->proposalRepository->update($proposal);
+                }
             } elseif ($selectedMailAction == 2) {
                 $proposalList[$key]['mailaction']['mailto']['href'] = $proposal->getApplicant()->getUsername() . '?cc=';
                 if ($this->request->hasArgument('cc')) {
@@ -507,11 +538,15 @@ class BackendProposalsController extends OapBackendController
         }
 
         // Send revision mail
-        $flexFormString = $this->proposalRepository->findMailtextFlexformdata((int)$this->settings['dashboardPageId'], $proposal->getFeLanguageUid());
-        if ($flexFormString != null && $flexFormString != '') {
-            $flexFormArray = GeneralUtility::xml2array($flexFormString);
-            $mailtextInRevision = $flexFormArray['data']['mail']['lDEF']['settings.eventProposalInRevisionMailtext']['vDEF'];
-            $proposalLangCode = $this->getProposalFrontendLanguageCode($proposal->getFeLanguageUid());
+        if ($supporter = $proposal->getCall()->getSupporter()) {
+            if ($proposal->getFeLanguageUid() > 0) {
+                $translatedSupporter = $this->getTranslatedSupporter($proposal->getFeLanguageUid(), $supporter->getUid());
+                $mailtextInRevision = $translatedSupporter['event_proposal_in_revision_mailtext'] ?? '';
+            } else {
+                $mailtextInRevision = $supporter->getEventProposalInRevisionMailtext();
+            }
+
+            $proposalLangCode = $this->getProposalFrontendLanguageCode($proposal);
 
             $commentsNote = '';
             if ($updateCount == 1) {
@@ -796,13 +831,14 @@ class BackendProposalsController extends OapBackendController
      */
     protected function exportCsv($records): void
     {
-        $proposals = $this->proposalRepository->findByUids($records);
+        $proposals = $this->proposalRepository->findByUids($records, ['signature' => 'ASC']);
         // how could we handle multiple calls in the export funktion
         $pageNo = 1;
         $l0headRow = 0;
         $l1headRow = 1;
         $itemHeadRow = 2;
         $columnNo = 0;
+        $countryCounter = 1;
 
         $head = [];
         $head[$l0headRow] = [];
@@ -812,6 +848,8 @@ class BackendProposalsController extends OapBackendController
         $head[$itemHeadRow][$columnNo++] = 'ID (intern)';
         $head[$itemHeadRow][$columnNo++] = 'Signature (intern)';
         $head[$itemHeadRow][$columnNo++] = 'State (intern)';
+        $head[$itemHeadRow][$columnNo++] = 'Submitted';
+        $head[$itemHeadRow][$columnNo++] = 'Last Changed';
 
         // calculate group repeats
         $groupsCounter = [];
@@ -873,6 +911,12 @@ class BackendProposalsController extends OapBackendController
                                 $head[$itemHeadRow][$columnNo] = 'Date until';
                                 $columnNo++;
                             }
+
+                            // wished dirty code increment country count for item with the question = Project country
+                            if ($item->getQuestion() === 'Project country') {
+                                $head[$itemHeadRow][$columnNo - 1] .= " #$countryCounter";
+                                $countryCounter++;
+                            }
                         }
                     }
                 }
@@ -891,6 +935,8 @@ class BackendProposalsController extends OapBackendController
             $export[$proposalUid][0] = $proposalUid;
             $export[$proposalUid][1] = $this->buildSignature($proposal);
             $export[$proposalUid][2] = $states[$proposal->getState()];
+            $export[$proposalUid][3] = date("d.m.Y", $proposal->getSubmitTstamp());
+            $export[$proposalUid][4] = date("d.m.Y", $proposal->getEditTstamp());
 
             /** @var Answer $answer */
             foreach ($proposal->getAnswers() as $answer) {
@@ -993,12 +1039,32 @@ class BackendProposalsController extends OapBackendController
     /**
      * Returns the language code of the proposal feLanguageUid
      *
-     * @param int $languageId
+     * @param Proposal $proposal
      * @return string The 2 letter language code
      */
-    protected function getProposalFrontendLanguageCode($languageId): String
+    protected function getProposalFrontendLanguageCode(Proposal $proposal): string
     {
-        $proposalFeLanguage = $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getLanguageById($languageId);
-        return $proposalFeLanguage->getTwoLetterIsoCode();
+        $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+
+        try {
+            $site = $siteFinder->getSiteByPageId($proposal->getPid());
+            $siteLanguage = $site->getLanguageById($proposal->getFeLanguageUid());
+
+            return $siteLanguage->getTwoLetterIsoCode();
+        } catch (\Throwable) {
+            return 'en';
+        }
+    }
+
+    /**
+     * @param int $languageUid
+     * @param int $supporter
+     * @return array
+     */
+    protected function getTranslatedSupporter(int $languageUid, int $supporter): array
+    {
+        $supporterRepository = GeneralUtility::makeInstance(SupporterRepository::class);
+
+        return $supporterRepository->findSupporterByLanguage($languageUid, $supporter);
     }
 }

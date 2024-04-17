@@ -47,6 +47,7 @@ use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use TYPO3\CMS\Core\Utility\CommandUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -60,7 +61,7 @@ use TYPO3\CMS\Fluid\View\TemplatePaths;
 use ZipArchive;
 
 /**
- * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
+ * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -131,6 +132,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const TYPE_SELECT_SINGLE = 7;
     protected const TYPE_SELECT_MULTIPLE = 8;
     protected const TYPE_UPLOAD = 9;
+    protected const TYPE_DROPDOWN = 10;
 
     /**
      * see TCA: tx_openoap_domain_model_comment.php
@@ -188,6 +190,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * EXPORT TEMPLATES
      */
     protected const EXPORT_TEMPLATE_PATH_PDF = 'EXT:open_oap/Resources/Private/Templates/Pdf/Proposal/Download.html';
+    protected const EXPORT_TEMPLATE_LOGO_PATH_PDF = 'EXT:open_oap/Resources/Private/Templates/Pdf/Proposal/Logo.html';
 
     protected const WORD_EXPORT_COMPACT = 'compact';
     protected const WORD_EXPORT_DEFAULT = 'default';
@@ -308,6 +311,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     protected const SURVEY_URL_PARAMETER_CALLID = 'survey';
     protected const SURVEY_URL_PARAMETER_HASH = 'hash';
+
+    protected const FE_GROUP_EDIT_IT = 3;
 
     /**
      * @var Applicant
@@ -1168,8 +1173,37 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected function renderPdfView(string $pdfTemplatePath, array $arguments): string
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $standaloneView = $objectManager->get(StandaloneView::class);
+        $callLogo = $arguments['callLogo'] ?? null;
+        $callLogoPdf = null;
+
+        if ($callLogo && $pdfTemplatePath === self::EXPORT_TEMPLATE_PATH_PDF) {
+            if ($callLogo->getExtension() === 'pdf') {
+                $callLogoPdf = Environment::getPublicPath() . $callLogo->getPublicUrl();
+            } else {
+                $callLogoPdf = GeneralUtility::tempnam('proposal_logo_pdf');
+
+                $logoArguments = [
+                    'callLogo' => $callLogo,
+                    'filepath' => $callLogoPdf,
+                ];
+
+                // creates an empty PDF consisting only of the logo
+                $this->renderPdfView(self::EXPORT_TEMPLATE_LOGO_PATH_PDF, $logoArguments);
+
+                // try to optimize the PDF (requires the "gs" command line program)
+                $callLogoPdfOptimized = $this->optimizePdf($callLogoPdf);
+
+                if ($callLogoPdfOptimized !== false) {
+                    GeneralUtility::unlink_tempfile($callLogoPdf);
+
+                    $callLogoPdf = $callLogoPdfOptimized;
+                }
+            }
+
+            $arguments['callLogoPdf'] = $callLogoPdf;
+        }
+
+        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $templatePath = GeneralUtility::getFileAbsFileName($pdfTemplatePath);
         $partialRootPath = GeneralUtility::getFileAbsFileName('EXT:open_oap/Resources/Private/Partials');
 
@@ -1178,15 +1212,62 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $standaloneView->setPartialRootPaths([$partialRootPath]);
         $standaloneView->assignMultiple($arguments);
 
-        // $arguments['callLogo'] = null;
-        // DebuggerUtility::var_dump($arguments['callLogo'],(string)__LINE__);die();
-        // DebuggerUtility::var_dump($arguments,(string)__LINE__);die();
         $pdf = $standaloneView->render();
-        // echo $pdf;die();
-        if ($arguments['destination'] == 'string') {
+
+        if ($callLogoPdf !== null && $callLogo?->getExtension() !== 'pdf') {
+            // delete temporarily generated logo pdf
+            GeneralUtility::unlink_tempfile($callLogoPdf);
+        }
+
+        if (!empty($arguments['destination']) && $arguments['destination'] === 'string') {
             return $pdf;
         }
+
         return '';
+    }
+
+    /**
+     * Reduces the file size of a PDF and returns the path of the newly optimized PDF.
+     * Requires the Ghostscript command line program to be available on the system.
+     *
+     * @param string $pdfFile
+     * @param array|null $output
+     * @param int $returnValue
+     * @return string|false
+     */
+    public function optimizePdf(string $pdfFile, array|null &$output = null, int &$returnValue = 0): string|false
+    {
+        $ghostscript = CommandUtility::getCommand('gs');
+
+        if (!$ghostscript) {
+            return false;
+        }
+
+        $optimizedPdfFile = GeneralUtility::tempnam('optimized_pdf');
+
+        $cmd = join(' ', [
+            $ghostscript,
+            '-sDEVICE=pdfwrite',
+            '-dCompatibilityLevel=1.4',
+            '-dPDFACompatibilityPolicy=1',
+            '-dPDFA=1',
+            '-dPDFSETTINGS=/ebook',
+            '-dALLOWPSTRANSPARENCY',
+            '-dNOPAUSE',
+            '-dBATCH',
+            '-sOutputFile=' . CommandUtility::escapeShellArgument($optimizedPdfFile),
+            CommandUtility::escapeShellArgument($pdfFile),
+        ]);
+
+        CommandUtility::exec($cmd, $output, $returnValue);
+
+        if ($returnValue === 0) {
+            return $optimizedPdfFile;
+        }
+
+        @GeneralUtility::unlink_tempfile($optimizedPdfFile);
+
+        return false;
     }
 
     /**
@@ -1257,17 +1338,18 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     case self::MODIFICATOR_TOTAL:
                         $totalItems = [];
                         $totalCarryover = 0;
-                        $totalPage = $this->pages[$item->getUid()];
+                        $totalPage = $this->pages[$item->getUid()] ?? null;
 
                         foreach ($modificator->getItems() as $modificatorItem) {
                             $modificatorItemAnswer = $this->getAnswerForItemByGroup($proposal, $modificatorItem, $answer->getGroupCounter0(), $answer->getGroupCounter1())
-                                ?? $this->answers[$modificatorItem->getUid()];
+                                ?? $this->answers[$modificatorItem->getUid()]
+                                ?? null;
 
                             if (!$modificatorItemAnswer) {
                                 continue;
                             }
 
-                            $modificatorItemPage = $this->pages[$modificatorItem->getUid()];
+                            $modificatorItemPage = $this->pages[$modificatorItem->getUid()] ?? null;
 
                             if ($modificatorItemPage !== $totalPage) {
                                 // item is on a different page, carryover the value for clientside javascript
@@ -1339,8 +1421,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                             break;
                         }
 
-                        $itemPage = $this->pages[$item->getUid()];
-                        $validatorItemPage = $this->pages[$validatorItem->getUid()];
+                        $itemPage = $this->pages[$item->getUid()] ?? null;
+                        $validatorItemPage = $this->pages[$validatorItem->getUid()] ?? null;
 
                         if ($validator->getType() === self::VALIDATOR_GREATERTHAN) {
                             $type = 'greaterthan';
@@ -1413,6 +1495,11 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         if ($GLOBALS['BE_USER']) {
             if ($GLOBALS['BE_USER']->isAdmin()) {
+                $min = self::STATE_ACCESS_MIN_ADMINS;
+            }
+
+            if (in_array(self::FE_GROUP_EDIT_IT, $GLOBALS['BE_USER']->userGroupsUID))
+            {
                 $min = self::STATE_ACCESS_MIN_ADMINS;
             }
         }
@@ -2239,6 +2326,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             case self::TYPE_CHECKBOX:
             case self::TYPE_SELECT_SINGLE:
             case self::TYPE_RADIOBUTTON:
+            case self::TYPE_DROPDOWN:
                 if ($type == self::WORD_EXPORT_DEFAULT) {
                     $itemsMap = $this->createSelectionForWord($section, $item, $itemsMap, $answer, $valueOutputFormat);
                 } else {

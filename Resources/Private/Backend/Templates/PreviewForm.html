@@ -74,6 +74,27 @@
                                             </div>
                                         </td></tr>
                                     </f:if>
+                                    <f:if condition="{formItem.modificators}">
+                                        <tr><td>
+                                            <div class="item_label">modificators:</div>
+                                            <div class="item_value">
+                                                <ul>
+                                                <f:for each="{formItem.modificators}" as="modificator">
+                                                    <li>{modificator.title -> f:format.raw()} (#{modificator.logic})
+                                                        <f:if condition="{modificator.items}">
+                                                            Items:
+                                                            <ul>
+                                                            <f:for each="{modificator.items}" as="item">
+                                                                <li>{item.question}</li>
+                                                            </f:for>
+                                                            </ul>
+                                                        </f:if>
+                                                    </li>
+                                                </f:for>
+                                                </ul>
+                                            </div>
+                                        </td></tr>
+                                    </f:if>
                                     <f:if condition="{formItem.validators}">
                                         <tr><td>
                                             <div class="item_label">validators:</div>
@@ -83,6 +104,7 @@
                                                     <li>{validator.title -> f:format.raw()} (#{validator.type})
                                                         <f:if condition="{validator.param1}">Parameter 1: {validator.param1}</f:if>
                                                         <f:if condition="{validator.param2}">Parameter 2: {validator.param2}</f:if>
+                                                        <f:if condition="{validator.item}">Item: {validator.item.0.question}</f:if>
                                                     </li>
                                                 </f:for>
                                                 </ul>

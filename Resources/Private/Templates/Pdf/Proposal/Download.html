@@ -16,25 +16,30 @@ Available variables:
     {callLogo}
 --></f:comment>
 
+<f:if condition="{callLogoPdf}">
+    <f:variable name="importPage" value="1"/>
+    <f:variable name="importFile" value="{callLogoPdf}"/>
+</f:if>
 
-<pdf:document outputDestination="{destination}" outputPath="{filepath}" title="{proposal.title}" pdfa="1">
-    <pdf:header posY="10">
-
-    <f:if condition="{callLogo}">
-        <f:then>
-            <pdf:image src="{callLogo}" alignment="left" />
-        </f:then>
-        <f:else>
-            <pdf:image src="EXT:open_oap/Resources/Public/Images/logo-main.svg" width="20%" alignment="left" />
-        </f:else>
+<pdf:document outputDestination="{destination}" outputPath="{filepath}" title="{proposal.title}" pdfa="1" sourceFile="{importFile}">
+    <f:if condition="!{importPage}">
+        <pdf:header posY="10">
+            <f:if condition="{callLogo}">
+                <f:then>
+                    <pdf:image src="{callLogo}" alignment="left" />
+                </f:then>
+                <f:else>
+                    <pdf:image src="EXT:open_oap/Resources/Public/Images/logo-main.svg" width="20%" alignment="left" />
+                </f:else>
+            </f:if>
+        </pdf:header>
     </f:if>
-    </pdf:header>
 
     <pdf:footer>
         <pdf:text alignment="right" fontFamily="opensans" fontSize="9">{pdf:getPageNumberAlias()} / {pdf:getTotalNumberOfPagesAlias()}</pdf:text>
     </pdf:footer>
 
-    <pdf:page margin="{top:35, bottom:20}">
+    <pdf:page importPage="{importPage}" margin="{top:35, bottom:20}">
         {v:variable.set(name:'footnoteCounter', value:0)}
         <pdf:html styleSheet="EXT:open_oap/Resources/Public/Css/styles.css" autoHyphenation="1" padding="{bottom: 5}">
             {v:variable.set(name:'answerSection', value:1)}
@@ -159,7 +164,7 @@ Available variables:
             <f:for each="{proposal.call.items}" as="item" key="itemId" iteration="itemIt">
                 <div class="pdf_list__item">
                     <div></div>
-                    <p><strong>{item.question}:</strong></p>
+                    <p><strong>{item.question}</strong></p>
 
                     <f:if condition="{item.introText}">
                         <f:comment><!--
@@ -223,7 +228,7 @@ Available variables:
 
                             <div class="pdf_list__item">
                                 <div></div>
-                                <p><strong>{item.question}:</strong></p>
+                                <p><strong>{item.question}</strong></p>
 
                                 <f:if condition="{item.introText}">
                                     <f:comment><!--
@@ -274,7 +279,7 @@ Available variables:
                     <div class="pdf_list__item">
                         <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
                             <f:if condition="{item.introText}">
-                                <p><strong>{item.question}:</strong></p>{item.introText -> f:format.html()}
+                                <p><strong>{item.question}</strong></p>{item.introText -> f:format.html()}
                             </f:if>
                         </f:for>
                         <p>&nbsp;</p>

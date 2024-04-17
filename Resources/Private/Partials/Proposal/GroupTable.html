@@ -120,6 +120,17 @@
                         additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
                     />
                 </f:if>
+                <f:if condition="{item.type} == {itemTypes.TYPE_DROPDOWN}">
+                    <f:variable name="prependLabel" value="{f:if(condition: item.defaultValue, then: item.defaultValue, else: '{f:translate(key:\'tx_openoap.general.select_default_option\')}' )}"/>
+                    <f:form.select
+                        property="{propertyKey}"
+                        id="oap-input-{propertyKeyIndex}"
+                        additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                        options="{answersMap.{answerId}.item.options}"
+                        optionValueField="key"
+                        optionLabelField="label"
+                        prependOptionLabel="{prependLabel}" />
+                </f:if>
             </div>
 
         </v:iterator.loop>

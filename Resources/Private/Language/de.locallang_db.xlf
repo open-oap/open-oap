@@ -130,6 +130,68 @@
                 <source>DEG Basis Call Name</source>
                 <target>DEG Basis Call-Name</target>
             </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_supporter" resname="tx_openoap_domain_model_supporter">
+                <source>Supporter</source>
+                <target>Träger</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_supporter.title" resname="tx_openoap_domain_model_supporter.title">
+            	<source>Supporter Name</source>
+                <target>Träger Name</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_supporter.eventProposalSubmittedMailtext.default" resname="tx_openoap_domain_model_supporter.eventProposalSubmittedMailtext.default">
+            	<source><![CDATA[Dear ##APPLICANT-TITLE## ##APPLICANT-NAME##,
+                thank you for the submission of your application for the call ##CALL-TITLE##. You can download the submitted proposal on your dashboard at any time.
+                Your application ##PROPOSAL-TITLE## has been given the signature ##PROPOSAL-SIGNATURE##. Please always indicate this signature.
+                The selection process will take approximately 5-6 weeks after the submission deadline. We will inform you if we have any questions
+                or as soon as the selection has been completed. Please understand that we cannot provide any information about the review process. Thank you for your understanding.
+                Yours sincerely,
+                develoPPP Team]]></source>
+                <target><![CDATA[Sehr geehrte*r ##APPLICANT-TITLE## ##APPLICANT-NAME##,
+                 Vielen Dank für für die Einreichung Ihres Antrags für den Call##CALL-TITLE##. Sie können Ihren eingereichten Antrag jederzeit über das Dashboard herunterladen.
+                 Ihr Antrag ##PROPOSAL-TITLE## hat die Signatur##PROPOSAL-SIGNATURE##. Bitte geben Sie bei der Kommunikation Ihre Signatur an.
+                 Der Auswahlprozess wird 5 bis 6 Wochen nach Ende der Einreichungsfrist in Anspruch nehmen. Wir informieren Sie falls wir Fragen haben oder nach Beendigung des Auswahlprozesses. Wir bitten um Ihr Verständnis, dass wir in der Zwischenzeit keine Informationen zum Status Ihrer Bewerbung geben können.
+                 Mit freundlichen Grüßen,
+                 Ihr develoPPP-Team]]></target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_supporter.eventProposalInRevisionMailtext.default" resname="tx_openoap_domain_model_supporter.eventProposalInRevisionMailtext.default">
+            	<source><![CDATA[Dear ##APPLICANT-TITLE## ##APPLICANT-NAME##,
+                your application ##PROPOSAL-TITLE## for "##CALL-TITLE##" has been reassigned to you for revision.
+                ##COMMENTS-NOTE##
+                Yours sincerely,
+                develoPPP team]]></source>
+                <target><![CDATA[Sehr geehrte*r ##APPLICANT-TITLE## ##APPLICANT-NAME##,
+                Ihr Antrag ##PROPOSAL-TITLE## für "##CALL-TITLE##" wurde wiedereröffnet und Ihnen zur Überarbeitung freigegeben.
+                ##COMMENTS-NOTE##
+                Mit freundlichen Grüßen,
+                Ihr develoPPP-Team]]></target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_supporter.eventProposalAcceptedMailtext.default" resname="tx_openoap_domain_model_supporter.eventProposalAcceptedMailtext.default">
+            	<source><![CDATA[Dear ##APPLICANT-TITLE## ##APPLICANT-NAME##,
+                You have submitted a project idea with the title "##PROPOSAL-TITLE##" for a development partnership to us. We have carefully screened your submitted documents and we are happy to inform you that we are considering your proposal for funding.
+                Yours sincerely,
+                develoPPP team]]></source>
+                <target><![CDATA[Sehr geehrte*r ##APPLICANT-TITLE## ##APPLICANT-NAME##,
+                Sie haben einen Antrag mit dem Titel "##PROPOSAL-TITLE##" für den Call##CALL-TITLE##" bei uns eingereicht. Ihre Unterlagen haben wir dankend erhalten und zwischenzeitlich ausführlich geprüft.
+                Wir freuen uns sehr Ihnen mitteilen zu können, dass wir Ihren Vorschlag weiterverfolgen möchten.
+                Mit freundlichen Grüßen,
+                Ihr develoPPP-Team]]></target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_supporter.eventProposalDeclinedMailtext.default" resname="tx_openoap_domain_model_supporter.eventProposalDeclinedMailtext.default">
+            	<source><![CDATA[Dear ##APPLICANT-TITLE## ##APPLICANT-NAME##,
+                We thank you for the submission of your application titled "##PROPOSAL-TITLE##" for a Development Partnership. We have meanwhile carefully screened your submitted documents.
+                We regret to inform you that we are not able to consider your proposal at this time, because the high number of good applications surpasses the scope of available funding.
+                Should you have further questions, please do not hesitate to contact your project manager.
+                We wish you success for the further development of your project and send you our best regards.
+                Yours sincerely,
+                develoPPP team]]></source>
+                <target><![CDATA[Sehr geehrte*r ##APPLICANT-TITLE## ##APPLICANT-NAME##,
+                Sie haben einen Antrag mit dem Titel "##PROPOSAL-TITLE##" für den Call##CALL-TITLE##" bei uns eingereicht. Ihre Unterlagen haben wir dankend erhalten und zwischenzeitlich ausführlich geprüft.
+                Wir bedauern, Ihnen mitteilen zu müssen, dass wir Ihren Vorschlag in diesem Fall nicht berücksichtigen können, da die Vielzahl der guten Bewerbungen unsere Fördermöglichkeiten übersteigt.
+                Für Rückfragen können Sie sich gerne an das zuständige Projektmanagement wenden.
+                Wir wünschen Ihnen für die Realisierung und Fortsetzung Ihres Vorhabens viel Erfolg und Ihnen persönlich alles Gute.
+                Mit freundlichen Grüßen,
+                Ihr develoPPP-Team]]></target>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

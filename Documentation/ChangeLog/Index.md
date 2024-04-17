@@ -1,5 +1,19 @@
 # Change log
 
+## Version 1.3.1
+
+- Fixing further PHP warnings
+- Added single select field
+- Maintainable and customizable supporters
+- Allow separate email texts per supporter
+- Preventing the submission of proposals for expired calls with 3 hours cooling-off period
+- Keep error navigation after submit attempt
+- Allow bulk decline of proposals
+- Significant reduction of PDF export file size
+- Allow reset of the revision status
+- Consideration of deleted proposals for the signature counter
+- Various minor fixes
+
 ## Version 1.3
 
 - PHP 8 compatibility

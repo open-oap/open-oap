@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OpenOAP\OpenOap\Domain\Model;
 
 /**
- * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
+ * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -74,6 +74,25 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var int
      */
     protected $editTstamp;
+
+    /**
+     * @var
+     */
+    protected $submitTstamp = 0;
+
+    /**
+     * rejectionTstamp
+     *
+     * @var int
+     */
+    protected int $rejectionTstamp = 0;
+
+    /**
+     * rejectionEmail
+     *
+     * @var string
+     */
+    protected string $rejectionEmail = '';
 
     /**
      * answers
@@ -402,5 +421,61 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setEditTstamp(int $editTstamp): void
     {
         $this->editTstamp = $editTstamp;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSubmitTstamp(): int
+    {
+        return $this->submitTstamp;
+    }
+
+    /**
+     * @param int $submitTstamp
+     */
+    public function setSubmitTstamp(int $submitTstamp): void
+    {
+        $this->submitTstamp = $submitTstamp;
+    }
+
+    /**
+     * Returns the rejectionTstamp
+     *
+     * @return int
+     */
+    public function getRejectionTstamp(): int
+    {
+        return $this->rejectionTstamp;
+    }
+
+    /**
+     * Sets the rejectionTstamp
+     *
+     * @param int $rejectionTstamp
+     */
+    public function setRejectionTstamp(int $rejectionTstamp): void
+    {
+        $this->rejectionTstamp = $rejectionTstamp;
+    }
+
+    /**
+     * Returns the rejectionEmail
+     *
+     * @return string
+     */
+    public function getRejectionEmail(): string
+    {
+        return $this->rejectionEmail;
+    }
+
+    /**
+     * Sets the rejectionEmail
+     *
+     * @param string $rejectionEmail
+     */
+    public function setRejectionEmail(string $rejectionEmail): void
+    {
+        $this->rejectionEmail = $rejectionEmail;
     }
 }

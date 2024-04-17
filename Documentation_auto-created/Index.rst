@@ -9,7 +9,7 @@
 .. _start:
 
 =============================================================
-Open Application Plattform
+Open Application Platform
 =============================================================
 
 :Version:
@@ -36,7 +36,7 @@ a GNU/GPL CMS/Framework available from `typo3.org <https://typo3.org/>`_ .
 
 **Community Documentation**
 
-This documentation is community documentation for the TYPO3 extension Open Application Plattform
+This documentation is community documentation for the TYPO3 extension Open Application Platform
 
 It is maintained as part of this third party extension.
 

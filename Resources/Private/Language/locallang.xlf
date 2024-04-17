@@ -1127,6 +1127,10 @@
 			<trans-unit id='tx_openoap.general.date-to' resname='tx_openoap.general.date-to'>
 				<source><![CDATA[to]]></source>
 			</trans-unit>
+			<trans-unit id='tx_openoap.general.select_default_option'
+						resname='tx_openoap.general.select_default_option'>
+				<source><![CDATA[Please select]]></source>
+			</trans-unit>
 			<!-- Frontend (error) messages -->
 			<trans-unit id='tx_openoap.js_msg.common_mandatory' resname='tx_openoap.js_msg.common_mandatory'>
 				<source><![CDATA[Please fill in all mandatory fields (marked with %s)]]></source>
@@ -1164,6 +1168,9 @@
 			<trans-unit id='tx_openoap.js_msg.error_message' resname='tx_openoap.js_msg.error_message'>
 				<source><![CDATA[Please check the following fields, then re-submit the form.]]></source>
 			</trans-unit>
+            <trans-unit id='tx_openoap.js_msg.error_message_preview' resname='tx_openoap.js_msg.error_message_preview'>
+                <source><![CDATA[Please check the following pages, then re-submit the form.]]></source>
+            </trans-unit>
 			<trans-unit id='tx_openoap.js_msg.characters_remaining' resname='tx_openoap.js_msg.characters_remaining'>
 				<source><![CDATA[%s characters remaining]]></source>
 			</trans-unit>

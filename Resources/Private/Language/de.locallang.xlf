@@ -1428,6 +1428,12 @@
 				<source><![CDATA[to]]></source>
 				<target><![CDATA[bis]]></target>
 			</trans-unit>
+
+			<trans-unit id='tx_openoap.general.select_default_option'
+						resname='tx_openoap.general.select_default_option'>
+				<source><![CDATA[Please select]]></source>
+				<target><![CDATA[Bitte wählen]]></target>
+			</trans-unit>
 			<!-- Frontend (error) messages -->
 			<trans-unit id='tx_openoap.js_msg.common_mandatory' resname='tx_openoap.js_msg.common_mandatory'>
 				<source><![CDATA[Please fill in all mandatory fields (marked with %s)]]></source>
@@ -1478,6 +1484,11 @@
 				<target>
 					<![CDATA[Bitte prüfen Sie die folgenden Felder und reichen Sie den Antrag erneut ein.]]></target>
 			</trans-unit>
+            <trans-unit id='tx_openoap.js_msg.error_message_preview' resname='tx_openoap.js_msg.error_message_preview'>
+                <source><![CDATA[Please check the following pages, then re-submit the form.]]></source>
+                <target>
+                    <![CDATA[Bitte prüfen Sie die folgenden Seiten und reichen Sie den Antrag erneut ein.]]></target>
+            </trans-unit>
 			<trans-unit id='tx_openoap.js_msg.characters_remaining' resname='tx_openoap.js_msg.characters_remaining'>
 				<source><![CDATA[%s characters remaining]]></source>
 				<target><![CDATA[%s Zeichen möglich]]></target>
