@@ -70,6 +70,22 @@ return [
                 'type' => 'passthrough',
             ],
         ],
+        'submit_tstamp' => [
+            'label' => 'edit_tstamp',
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
+        'rejection_tstamp' => [
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
+        'rejection_email' => [
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
         'fe_language_uid' => [
             'label' => 'fe_language_uid',
             'config' => [

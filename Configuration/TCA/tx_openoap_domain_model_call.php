@@ -370,7 +370,7 @@ return [
                         'columns' => [],
                     ],
                 ],
-                'gif,jpg,jpeg,png,svg'
+                'gif,jpg,jpeg,png,svg,pdf'
             ),
         ],
         'word_header_logo' =>[
@@ -466,9 +466,9 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     ['', 0],
-                    ['GIZ', 1],
-                    ['DEG', 2],
                 ],
+                'foreign_table' => 'tx_openoap_domain_model_supporter',
+                'foreign_table_where' => 'AND {#tx_openoap_domain_model_supporter}.{#sys_language_uid} IN (-1,0) ORDER BY uid',
             ],
         ],
     ],

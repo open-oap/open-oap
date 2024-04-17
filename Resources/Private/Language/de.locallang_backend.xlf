@@ -113,6 +113,10 @@
             <trans-unit id="message.state_updated" resname="message.state_updated">
                 <source>Status update done.</source>
             </trans-unit>
+            <trans-unit id="message.multiple_selected" resname="message.multiple_selected">
+                <source>CAUTION: You have selected several applications!</source>
+                <target>VORSICHT: Sie haben mehrere Anträge ausgewählt!</target>
+            </trans-unit>
 
             <!-- MENU -->
             <trans-unit id="menu.overview" resname="menu.overview">
@@ -176,6 +180,10 @@
                 <source>Status</source>
                 <target>Status</target>
             </trans-unit>
+            <trans-unit id="table.submitted" resname="table.submitted">
+                <source>Submitted</source>
+                <target>Eingereicht</target>
+            </trans-unit>
             <trans-unit id="table.applicant" resname="table.applicant">
                 <source>Applicant</source>
                 <target>Bewerber:in</target>
@@ -208,8 +216,8 @@
                 <target>Calls gefunden:</target>
             </trans-unit>
             <trans-unit id="table.call.count_submitted" resname="table.call.count_submitted">
-                <source>submitted or higher</source>
-                <target>Eingereicht oder weiter</target>
+                <source>submitted</source>
+                <target>Eingereicht</target>
             </trans-unit>
             <trans-unit id="table.call.count_in_progress" resname="table.call.count_in_progress">
                 <source>draft versions</source>
@@ -221,11 +229,11 @@
             </trans-unit>
             <trans-unit id="table.call.startTime" resname="table.call.startTime">
                 <source>Start of call</source>
-                <target>Anfang der Einreichung</target>
+                <target>Fristbeginn</target>
             </trans-unit>
             <trans-unit id="table.call.endTime" resname="table.call.endTime">
                 <source>End of call</source>
-                <target>Ende der Einreichung</target>
+                <target>Fristende</target>
             </trans-unit>
 
             <!-- PREVIEW - proposal -->

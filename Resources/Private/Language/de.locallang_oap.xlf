@@ -57,8 +57,12 @@
                 <source>Upload file</source>
                 <target>Datei-Upload</target>
             </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.dropdown" resname="tx_openoap_domain_model_formitem.dropdown">
+                <source>Dropdown-Select</source>
+                <target>Dropdown-Auswahl</target>
+            </trans-unit>
 
-            
+
 <!-- Plugin -->
             <trans-unit id="tx_openoap_applicant.name" resname="tx_open_oap_applicant.name">
                 <source>Applicant-Plugin</source>
@@ -118,7 +122,7 @@
                 <source>Edit</source>
                 <target>Bearbeiten</target>
             </trans-unit>
-            
+
 <!-- Formpage -->
             <trans-unit id="formpage.type_default" resname="formpage.type_default">
                 <source>Default</source>
@@ -128,7 +132,7 @@
                 <source>Preview</source>
                 <target>Vorschau</target>
             </trans-unit>
-            
+
 <!-- Status of proposal -->
             <trans-unit id="tx_openoap_domain_model_proposal.state.0" resname="tx_openoap_domain_model_proposal.state.0">
                 <source>New</source>
@@ -162,7 +166,7 @@
                 <source>Archived</source>
                 <target>Archiviert</target>
             </trans-unit>
-            
+
 <!-- Dashboard -->
             <trans-unit id="tx_openoap_dashboard.proposalsActive.header" resname="tx_openoap_dashboard.proposalsActive.header">
                 <source>Active proposals</source>

@@ -13,7 +13,7 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
- * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
+ * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.

@@ -16,7 +16,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
- * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
+ * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -53,6 +53,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(true);
+        $query->getQuerySettings()->setIncludeDeleted(true);
         $query->getQuerySettings()->setRespectStoragePage(false);
         $query->setOrderings(['signature' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
         $query->matching($query->equals('pid', $pid));
@@ -88,13 +89,19 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * Find
      *
      * @param array $uids
+     * @param array<int, string> $sorting
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function findByUids(array $uids)
+    public function findByUids(array $uids, ?array $sorting = null)
     {
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);
         $query->matching($query->in('uid', $uids));
+
+        if ($sorting) {
+            $query->setOrderings($sorting);
+        }
+
         return $query->execute();
     }
 
@@ -120,6 +127,9 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'Proposal.uid',
                 'Proposal.title',
                 'Proposal.edit_tstamp AS editTstamp',
+                'Proposal.submit_tstamp AS submitTstamp',
+                'Proposal.rejection_tstamp AS rejectionTstamp',
+                'Proposal.rejection_email AS rejectionEmail',
                 'Proposal.state',
                 'Proposal.signature',
                 'Proposal.applicant',

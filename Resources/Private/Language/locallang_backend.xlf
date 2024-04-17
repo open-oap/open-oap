@@ -110,6 +110,9 @@
     <trans-unit id="message.state_updated" resname="message.state_updated">
         <source>Status update done.</source>
     </trans-unit>
+    <trans-unit id="message.multiple_selected" resname="message.multiple_selected">
+        <source>CAUTION: You have selected several applications!</source>
+    </trans-unit>
 
 <!-- MENU -->
     <trans-unit id="menu.overview" resname="menu.overview">
@@ -179,6 +182,9 @@
     <trans-unit id="table.tstamp" resname="table.tstamp">
         <source>Last modified</source>
     </trans-unit>
+    <trans-unit id="table.submitted" resname="table.submitted">
+        <source>Submitted</source>
+    </trans-unit>
     <trans-unit id="table.metaInformation.limitEditableFields.0.label" resname="table.metaInformation.limitEditableFields.0.label">
         <source>All proposal fields should be editable in revision state</source>
     </trans-unit>
@@ -196,7 +202,7 @@
         <source>Calls found: </source>
     </trans-unit>
     <trans-unit id="table.call.count_submitted" resname="table.call.count_submitted">
-        <source>submitted or higher</source>
+        <source>submitted</source>
     </trans-unit>
     <trans-unit id="table.call.count_in_progress" resname="table.call.count_in_progress">
         <source>draft versions</source>

@@ -8,7 +8,7 @@ use JsonSerializable;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
- * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
+ * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -225,7 +225,7 @@ class MetaInformation implements JsonSerializable
     public function countGroups(array $groupCounter): array
     {
         foreach ($this->groupsCounter as $groupUidL0 => $groupDataL0) {
-            if (!$groupCounter[$groupUidL0]) {
+            if (!isset($groupCounter[$groupUidL0])) {
                 $groupCounter[$groupUidL0]['min'] = 1;
                 $groupCounter[$groupUidL0]['max'] = $groupDataL0['current'];
             }
@@ -242,7 +242,7 @@ class MetaInformation implements JsonSerializable
 
             foreach ($groupDataL0['instances'] as $indexL1 => $nestedGroups) {
                 foreach ($nestedGroups as $groupUidL1 => $groupDataL1) {
-                    if (!$groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]) {
+                    if (!isset($groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1])) {
                         $groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]['min'] = 1;
                         $groupCounter[$groupUidL0]['instances'][$indexL1][$groupUidL1]['max'] = $groupDataL1['current'];
                     }

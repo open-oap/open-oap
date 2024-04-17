@@ -39,6 +39,8 @@ return [
         '8' => ['showitem' => 'question, internal_title, intro_text, help_text, type, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_upload 9
         '9' => ['showitem' => 'question, internal_title, intro_text, help_text, type, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        // dropdown-select 10
+        '10' => ['showitem' => 'question, internal_title, intro_text, help_text, type, default_value, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -150,6 +152,7 @@ return [
                     ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_select_single', 7],
                     ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_select_multiple', 8],
                     ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_upload', 9],
+                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.dropdown', 10],
                 ],
                 'default' => 1,
                 'size' => 1,

@@ -7,7 +7,7 @@ namespace OpenOAP\OpenOap\Domain\Model;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
 /**
- * This file is part of the "Open Application Plattform" Extension for TYPO3 CMS.
+ * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -151,11 +151,9 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected int $callGroup = 0;
 
     /**
-     * supporter
-     *
-     * @var int
+     * @var Supporter|null
      */
-    protected $supporter = 0;
+    protected ?Supporter $supporter = null;
 
     /**
      * __construct
@@ -563,17 +561,17 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @return int
+     * @return Supporter|null
      */
-    public function getSupporter(): int
+    public function getSupporter(): ?Supporter
     {
         return $this->supporter;
     }
 
     /**
-     * @param int $supporter
+     * @param Supporter|null $supporter
      */
-    public function setSupporter(int $supporter): void
+    public function setSupporter(?Supporter $supporter): void
     {
         $this->supporter = $supporter;
     }

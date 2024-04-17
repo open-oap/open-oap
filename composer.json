@@ -1,11 +1,11 @@
 {
     "name": "openoap/open-oap",
     "type": "typo3-cms-extension",
-    "description": "Development project for an open-source TYPO3 extension: open application plattform",
+    "description": "Development project for an open-source TYPO3 extension: open application platform",
     "keywords": [
         "TYPO3",
         "extension",
-        "open application plattform"
+        "open application platform"
     ],
     "authors": [
         {

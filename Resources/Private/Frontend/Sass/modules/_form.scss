@@ -216,6 +216,16 @@
         &--additional {
             margin-left: rem(30);
         }
+
+        &--total {
+            border-color: transparent;
+            font-weight: bold;
+            background-color: transparent;
+
+            &:focus {
+                outline: 0;
+            }
+        }
     }
 
     &__buttons {

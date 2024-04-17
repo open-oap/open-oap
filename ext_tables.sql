@@ -101,7 +101,10 @@ CREATE TABLE tx_openoap_domain_model_proposal (
 	applicant int(11) unsigned DEFAULT '0' NOT NULL,
 	sys_language_uid int(11) DEFAULT '-1' NOT NULL,
 	fe_language_uid int(11) DEFAULT '0' NOT NULL,
-	edit_tstamp int(11) DEFAULT '0' NOT NULL
+	edit_tstamp int(11) DEFAULT '0' NOT NULL,
+	submit_tstamp int(11) DEFAULT '0' NOT NULL,
+	rejection_tstamp int(11) DEFAULT '0' NOT NULL,
+	rejection_email varchar(255) NOT NULL DEFAULT ''
 );
 
 CREATE TABLE tx_openoap_domain_model_answer (
@@ -168,4 +171,15 @@ CREATE TABLE tx_openoap_domain_model_callgroup (
     country_giz varchar(255) NOT NULL DEFAULT '',
     blocked_languages varchar(255) NOT NULL DEFAULT '',
     sorting int(11) NOT NULL DEFAULT '0',
+);
+
+#
+# Table structure for table 'tx_openoap_domain_model_supporter'
+#
+CREATE TABLE tx_openoap_domain_model_supporter (
+    title varchar(255) NOT NULL DEFAULT '' ,
+    event_proposal_submitted_mailtext text NOT NULL DEFAULT '' ,
+    event_proposal_in_revision_mailtext text NOT NULL DEFAULT '' ,
+    event_proposal_accepted_mailtext text NOT NULL DEFAULT '' ,
+    event_proposal_declined_mailtext text NOT NULL DEFAULT '' ,
 );
