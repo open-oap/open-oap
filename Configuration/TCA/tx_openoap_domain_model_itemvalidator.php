@@ -6,7 +6,6 @@ return [
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'versioningWS' => true,
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
@@ -16,6 +15,9 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'title,param1,param2',
+        'security' => [
+            'ignorePageTypeRestriction' => true,
+        ],
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
         'type' => 'type',
     ],
@@ -50,7 +52,10 @@ return [
                 'renderType' => 'selectSingle',
                 'default' => 0,
                 'items' => [
-                    ['', 0],
+                    [
+                        'label' => '',
+                        'value' => 0,
+                    ],
                 ],
                 'foreign_table' => 'tx_openoap_domain_model_itemvalidator',
                 'foreign_table_where' => 'AND {#tx_openoap_domain_model_itemvalidator}.{#pid}=###CURRENT_PID### AND {#tx_openoap_domain_model_itemvalidator}.{#sys_language_uid} IN (-1,0)',
@@ -69,8 +74,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -83,8 +88,9 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
                 'default' => '',
+                'required' => true,
             ],
         ],
         'type' => [
@@ -95,24 +101,66 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_mandatory', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MANDATORY],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_integer', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_INTEGER],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_float', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FLOAT],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_maxChar', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MAXCHAR],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_minValue', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MINVALUE],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_maxValue', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MAXVALUE],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_greaterThan', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_GREATERTHAN],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_lessThan', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_LESSTHAN],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_email', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_EMAIL],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_website', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_WEBSITE],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_phone', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_PHONE],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.file_type', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FILE_TYPE],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.file_size', \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FILE_SIZE],
+                    [
+                        'label' => '',
+                        'value' => 0,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_mandatory',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MANDATORY,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_integer',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_INTEGER,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_float',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FLOAT,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_maxChar',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MAXCHAR,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_minValue',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MINVALUE,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_maxValue',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_MAXVALUE,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_greaterThan',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_GREATERTHAN,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_lessThan',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_LESSTHAN,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_email',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_EMAIL,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_website',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_WEBSITE,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.type_phone',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_PHONE,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.file_type',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FILE_TYPE,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_cboap_domain_model_itemvalidator.file_size',
+                        'value' => \OpenOAP\OpenOap\Controller\OapBaseController::VALIDATOR_FILE_SIZE,
+                    ],
                 ],
                 'size' => 1,
                 'maxitems' => 1,
-                'eval' => 'required',
+                'required' => true,
             ],
         ],
         'param1' => [

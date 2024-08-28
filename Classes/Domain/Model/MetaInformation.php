@@ -95,7 +95,7 @@ class MetaInformation implements JsonSerializable
     /**
      * @param int $page
      */
-    public function addPage(int $pageNumber, FormPage $page)
+    public function addPage(int $pageNumber, FormPage $page): void
     {
         // cause this is a fix - we have changed the schema of this array to pageNo: pageUid for more flexibility
         if (isset($this->pages[$pageNumber])) {

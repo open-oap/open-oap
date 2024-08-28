@@ -1,5 +1,15 @@
 # Change log
 
+## Version 2.0.0
+
+- TYPO3 v12 compatibility
+- Fixing further PHP warnings
+- Simplified setup by database initialisation
+- Disallow proposal submission after call has ended
+- Added call hints
+- Added timezone to call dates
+- Added internal/external calls
+
 ## Version 1.3.1
 
 - Fixing further PHP warnings

@@ -5,6 +5,7 @@ declare(strict_types=1);
 return [
     \OpenOAP\OpenOap\Domain\Model\Applicant::class => [
         'tableName' => 'fe_users',
+        'recordType' => 0,
         'properties' => [
             'companyEmail' => [
                 'fieldName' => 'tx_openoap_company_email',
@@ -24,6 +25,10 @@ return [
         ],
     ],
 
+    \OpenOAP\OpenOap\Domain\Model\ApplicantGroup::class => [
+        'tableName' => 'fe_groups',
+    ],
+
     \OpenOAP\OpenOap\Domain\Model\Proposal::class => [
         'properties' => [
            'call' => [
@@ -39,28 +44,6 @@ return [
             ],
             'author' => [
                 'fieldName' => 'cruser_id',
-            ],
-        ],
-    ],
-
-    \In2code\Femanager\Domain\Model\User::class => [
-        'subclasses' => [
-            \OpenOAP\OpenOap\Domain\Model\User::class,
-        ],
-    ],
-    \OpenOAP\OpenOap\Domain\Model\User::class => [
-        'tableName' => 'fe_users',
-        //'recordType' => 'Tx_OpenOapUsers_User',
-        'recordType' => '0',
-        'properties' => [
-            'companyEmail' => [
-                'fieldName' => 'tx_openoap_company_email',
-            ],
-            'preferredLang' => [
-                'fieldName' => 'tx_openoap_preferred_lang',
-            ],
-            'privacypolicy' => [
-                'fieldName' => 'tx_openoap_privacypolicy',
             ],
         ],
     ],

@@ -17,13 +17,13 @@ use OpenOAP\OpenOap\Domain\Model\ItemValidator;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Error\Result;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -31,7 +31,6 @@ use TYPO3\CMS\Extbase\Validation\Validator\EmailAddressValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\FloatValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\IntegerValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\UrlValidator;
-use TYPO3\CMS\Form\Mvc\Property\Exception\TypeConverterException;
 
 /**
  * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
@@ -75,9 +74,8 @@ class ProposalController extends OapFrontendController
      * action initialize
      *
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
-     * @throws StopActionException
      */
-    public function initializeAction()
+    public function initializeAction(): void
     {
         $this->checkSurveyCall();
 
@@ -90,28 +88,28 @@ class ProposalController extends OapFrontendController
             if ($this->request->hasArgument('survey')) {
                 $this->survey = $this->request->getArgument('survey');
             } else {
-                $this->foreardToSurveyErrorPage();
+                $this->forwardToSurveyErrorPage();
             }
 
         }
         if ($this->survey == '') {
-            $this->frontendAccessControlService = GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\FrontendAccessControlService::class);
-            $frontendUserId = $this->frontendAccessControlService->getFrontendUserId();
+            $frontendAccessControlService = GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\FrontendAccessControlService::class);
+            $frontendUserId = $frontendAccessControlService->getFrontendUserId();
 
-            if ($frontendUserId == null) {
-                // todo resend to login
-            }
+            //if ($frontendUserId == null) {
+            //    // todo resend to login
+            //}
             $this->applicant = $this->applicantRepository->findByUid($frontendUserId);
         }
 
-        $action = $this->request->getArgument('action');
+        $action = $this->request->hasArgument('action') ? $this->request->getArgument('action') : null;
 
         // todo check notification action cause there is proposal null possible - why?
         $actionsWithProposal = ['delete', 'download', 'downloadAttachments', 'downloadWord', 'edit', 'update'];
 
         if (isset($actionsWithProposal[$action]) and !$this->request->hasArgument('proposal')) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_NOT_FOUND);
-            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
 
             $this->redirectToDashboard();
         }
@@ -126,11 +124,11 @@ class ProposalController extends OapFrontendController
                     if (isset($answer['arrayValue']) && is_array($answer['arrayValue'])) {
                         $proposalArguments['answers'][$key]['value'] = json_encode($answer['arrayValue'], JSON_FORCE_OBJECT);
                         unset($proposalArguments['answers'][$key]['arrayValue']);
-                    } elseif (isset($answer['value'])) {
+                    } elseif (isset($answer['value']) && is_string($answer['value'])) {
                         $proposalArguments['answers'][$key]['value'] = trim($answer['value']);
                     }
                 }
-                $this->request->setArgument('proposal', $proposalArguments);
+                $this->request = $this->request->withArgument('proposal', $proposalArguments);
             }
 
             $this->integerValidator = new IntegerValidator();
@@ -140,12 +138,12 @@ class ProposalController extends OapFrontendController
         }
     }
 
-    public function initializeCreateAction()
+    public function initializeCreateAction(): void
     {
         if ($this->survey !== '') {
             $this->applicant = $this->applicantRepository->findByUid($this->settings['surveyOapUser']);
         }
-        $this->request->setArgument('applicant', $this->applicant);
+        $this->request = $this->request->withArgument('applicant', $this->applicant);
     }
 
     /**
@@ -154,11 +152,12 @@ class ProposalController extends OapFrontendController
      * @param Applicant $applicant
      * @param Call $call
      */
-    public function createAction(Applicant $applicant, Call $call)
+    public function createAction(Applicant $applicant, Call $call): ResponseInterface
     {
         // add check for call end time and access groups
         // needed double check to stop create proposal if creating new from dashboard
-        $this->isResctricted($call);
+        $this->isRestricted($call);
+
         $newProposal = new Proposal();
 
         // set current user
@@ -200,9 +199,7 @@ class ProposalController extends OapFrontendController
                         $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0] = [];
                         /** @var FormGroup $groupL1 */
                         foreach ($groupL0->getItemGroups() as $groupL1) {
-                            if (!isset(
-                                $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]
-                            )) {
+                            if (!isset($groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()])) {
                                 $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()] = [];
                             }
                             $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]['current'] = $groupL1->getRepeatableMin();
@@ -256,7 +253,7 @@ class ProposalController extends OapFrontendController
             ->reset()
             ->setTargetPageUid($formPage)
             ->uriFor('edit', ['proposal' => $newProposal, 'survey' => $this->survey], 'Proposal', $this->ext, 'form');
-        $this->redirectToURI($uri, 0, 200);
+        return $this->redirectToURI($uri, 0, 200);
     }
 
     /**
@@ -266,26 +263,25 @@ class ProposalController extends OapFrontendController
      * @param int $currentPage
      * @return ResponseInterface
      * @throws IllegalObjectTypeException
-     * @throws StopActionException
      * @throws UnknownObjectException
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("proposal")
      */
-    public function editAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal, int $currentPage = 1, string $survey = ''): \Psr\Http\Message\ResponseInterface
+    #[\TYPO3\CMS\Extbase\Annotation\IgnoreValidation(['value' => 'proposal'])]
+    public function editAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal, int $currentPage = 1, string $survey = ''): ResponseInterface
     {
         // current user is not able to edit the proposal cause not the right owner:
         if ($proposal->getApplicant() !== $this->applicant and !$proposal->getCall()->isAnonym()) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_ACCESS_DENIED);
-            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
 
             $this->redirectToDashboard();
         }
 
         // add check for call end time and access groups
-        $this->isResctricted($proposal->getCall());
+        $this->isRestricted($proposal->getCall());
 
         if (!$proposal->getCall()) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_CALL_MISSING);
-            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
 
             $this->redirectToDashboard();
         }
@@ -293,7 +289,7 @@ class ProposalController extends OapFrontendController
         // todo Check if proposal in mode to edit!
         if ($proposal->getState() !== self::PROPOSAL_IN_PROGRESS and $proposal->getState() !== self::PROPOSAL_RE_OPENED) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_NOT_EDITABLE);
-            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
 
             $this->redirectToDashboard();
         }
@@ -328,7 +324,7 @@ class ProposalController extends OapFrontendController
                 $log = $this->createLog(self::LOG_FORM_CHANGED_ADDED_ITEM, $proposal, $answer->getItem()->getQuestion());
                 $proposal->addLog($log);
                 $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_LOG . self::LOG_FORM_CHANGED_ADDED_ITEM) . ' ' . $log->getText();
-                $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+                $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
                 $updated = true;
             }
         }
@@ -463,13 +459,15 @@ class ProposalController extends OapFrontendController
      * action update
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Proposal $proposal
-     * @throws StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws Exception
      */
-    public function updateAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal)
+    public function updateAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal): ResponseInterface
     {
         // todo check if proposal editable (= in_progress / re-opened)
+
+        // add check for call end time and access groups
+        $this->isRestricted($proposal->getCall());
 
         // initial flow - next page is current page
         $submitted = false;
@@ -481,7 +479,7 @@ class ProposalController extends OapFrontendController
 
         if ($this->request->hasArgument('cancel')) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_CANCELLED);
-            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
 
             if ($this->survey !== '') {
                 $targetPage = (int)$this->settings['surveyAbortPageId'];
@@ -489,7 +487,7 @@ class ProposalController extends OapFrontendController
                     ->reset()
                     ->setTargetPageUid($targetPage)
                     ->build();
-                $this->redirectToURI($uri, 0, 200);
+                return $this->redirectToURI($uri, 0, 200);
             } else {
                 $this->redirectToDashboard();
             }
@@ -523,11 +521,11 @@ class ProposalController extends OapFrontendController
             $previewPage = (bool)$this->request->getArgument('previewPage');
         }
 
-        if ($this->request->getOriginalRequest()) {
-            $request = $this->request->getOriginalRequest();
-        } else {
+        //if ($this->request->getOriginalRequest()) {
+        //    $request = $this->request->getOriginalRequest();
+        //} else {
             $request = $this->request;
-        }
+        //}
 
         if ($this->request->hasArgument('addGroup')) {
             $this->addGroupToAnswers($proposal);
@@ -654,7 +652,7 @@ class ProposalController extends OapFrontendController
 
         if ($submitted) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_SUBMITTED_OKAY);
-            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
 
             if ($this->survey !== '') {
 //                $mailTemplatePaths = $this->getMailTemplatePaths();
@@ -677,9 +675,9 @@ class ProposalController extends OapFrontendController
                     ->reset()
                     ->setTargetPageUid($targetPage)
                     ->build();
-                $this->redirectToURI($uri, 0, 200);
+                return $this->redirectToURI($uri, 0, 200);
             } else {
-                $this->redirect(
+                return $this->redirect(
                     'mail',
                     'Applicant',
                     null,
@@ -693,7 +691,7 @@ class ProposalController extends OapFrontendController
             }
 
         } elseif ($close) {
-            $this->addFlashMessage($flashMessageSaved, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+            $this->addFlashMessage($flashMessageSaved, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
 
             if ($this->survey !== '') {
                 $targetPage = (int)$this->settings['surveyThanksPageId'];
@@ -705,7 +703,7 @@ class ProposalController extends OapFrontendController
                 ->setTargetPageUid($targetPage)
                 ->build();
         } else {
-            $this->addFlashMessage($flashMessageSaved, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+            $this->addFlashMessage($flashMessageSaved, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
 
             if ($this->survey !== '') {
                 $targetPage = (int)$this->settings['surveyPageId'];
@@ -731,13 +729,13 @@ class ProposalController extends OapFrontendController
 
             $uri = $uriBuilder->uriFor('edit', ['proposal' => $proposal, 'currentPage' => $nextPage, 'survey' => $this->survey], 'Proposal', $this->ext, 'form');
         }
-        $this->redirectToURI($uri, 0, 200);
+        return $this->redirectToURI($uri, 0, 200);
     }
 
     /**
      * @throws FileDoesNotExistException
      */
-    public function downloadAttachmentsAction(Proposal $proposal)
+    public function downloadAttachmentsAction(Proposal $proposal): void
     {
         /** @var ResourceStorage $storage */
         $storage = $this->getStorage();
@@ -760,7 +758,7 @@ class ProposalController extends OapFrontendController
         die();
     }
 
-    public function downloadWordAction(Proposal $proposal)
+    public function downloadWordAction(Proposal $proposal): void
     {
         $fileExtension = '.docx';
 
@@ -815,7 +813,7 @@ class ProposalController extends OapFrontendController
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Proposal $proposal
      */
-    public function downloadAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal)
+    public function downloadAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal): ResponseInterface
     {
         $fileExtension = '.pdf';
         $fileName = $this->createFileName($proposal, $fileExtension, '');
@@ -875,7 +873,7 @@ class ProposalController extends OapFrontendController
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Proposal $proposal
      */
-    public function deleteAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal)
+    public function deleteAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal): void
     {
         // One last greeting - log entry
         $log = $this->createLog(self::LOG_PROPOSAL_DELETE, $proposal);
@@ -883,9 +881,10 @@ class ProposalController extends OapFrontendController
         $proposal->setEditTstamp(time());
         $this->proposalRepository->update($proposal);
         $this->proposalRepository->remove($proposal);
+        $this->persistenceManager->persistAll();
 
         $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_DELETED_OKAY);
-        $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+        $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
 
         $this->redirectToDashboard();
     }
@@ -899,9 +898,9 @@ class ProposalController extends OapFrontendController
      * @return \Psr\Http\Message\ResponseInterface
      * @throws IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("proposal")
      */
-    public function notificationsAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal = null, string $filter = '', string $sort = '')
+    #[\TYPO3\CMS\Extbase\Annotation\IgnoreValidation(['value' => 'proposal'])]
+    public function notificationsAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal = null, string $filter = '', string $sort = ''): ResponseInterface
     {
         $filterDemand = [];
         $sortOrder = '';
@@ -1465,16 +1464,16 @@ class ProposalController extends OapFrontendController
                 );
                 $proposal->addLog($log);
                 $flashMessage = $this->getTranslationString(
-                        self::XLF_BASE_IDENTIFIER_LOG . self::LOG_FORM_CHANGED_REMOVED_ITEM
-                    ) . ' ' . $log->getText();
-                $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+                    self::XLF_BASE_IDENTIFIER_LOG . self::LOG_FORM_CHANGED_REMOVED_ITEM
+                ) . ' ' . $log->getText();
+                $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
             }
         }
     }
 
     /**
      * @param Proposal $proposal
-     * @throws TypeConverterException
+     * @throws \TYPO3\CMS\Extbase\Property\Exception\TypeConverterException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      */
     protected function processUploadedFiles(Proposal $proposal): void
@@ -1513,7 +1512,7 @@ class ProposalController extends OapFrontendController
                 foreach ($files as $file) {
                     if (!isset($file['error']) || $file['error'] === 0) {
                         if (!GeneralUtility::makeInstance(FileNameValidator::class)->isValid($file['name'])) {
-                            throw new TypeConverterException(
+                            throw new \TYPO3\CMS\Extbase\Property\Exception\TypeConverterException(
                                 'Uploading files with PHP file extensions is not allowed!',
                                 1471710357
                             );
@@ -1622,8 +1621,6 @@ class ProposalController extends OapFrontendController
     /**
      * @param int $callId
      * @param string $surveyHash
-     * @return void
-     * @throws StopActionException
      */
     protected function redirectToSurveyForm(int $callId, string $surveyHash): void
     {
@@ -1640,12 +1637,11 @@ class ProposalController extends OapFrontendController
                 'Proposal',
                 'openoap'
             );
-        $this->redirectToURI($uri, 0, 200);
+
+        throw new PropagateResponseException($this->redirectToURI($uri, 0, 200));
     }
 
     /**
-     * @return void
-     * @throws StopActionException
      */
     protected function checkSurveyCall(): void
     {
@@ -1654,7 +1650,7 @@ class ProposalController extends OapFrontendController
         $surveyError = false;
         if (!empty($rawRequest[self::SURVEY_URL_PARAMETER_CALLID]) && !empty($rawRequest[self::SURVEY_URL_PARAMETER_HASH])) {
 
-            // surveyRequest: https://oap.ddev.site/surveyform?survey=123&hash=789
+            // surveyRequest: https://oap.ddev.site/survey?survey=78&hash=789
             $callId = (integer)$rawRequest[self::SURVEY_URL_PARAMETER_CALLID];
             $hash = (string)$rawRequest[self::SURVEY_URL_PARAMETER_HASH];
             /** @var Call $surveyCall */
@@ -1672,9 +1668,9 @@ class ProposalController extends OapFrontendController
                 }
 
                 // todo: If there are no codes stored, is the survey call open?
-                if (trim($surveyCall->getSurveyCodes()) == '') {
-                    // $surveyCheck = true;
-                }
+                //if (trim($surveyCall->getSurveyCodes()) == '') {
+                //    // $surveyCheck = true;
+                //}
 
                 if ($surveyCall->isAnonym() && $surveyCheck) {
                     // this is a valid survey-request
@@ -1695,29 +1691,28 @@ class ProposalController extends OapFrontendController
         }
 
         if ($surveyError) {
-            $this->foreardToSurveyErrorPage();
+            $this->forwardToSurveyErrorPage();
         }
     }
 
     /**
-     * @return void
-     * @throws StopActionException
      */
-    protected function foreardToSurveyErrorPage(): void
+    protected function forwardToSurveyErrorPage(): void
     {
         $targetPage = (int)$this->settings['surveyErrorPageId'];
         $uri = $this->uriBuilder
             ->reset()
             ->setTargetPageUid($targetPage)
             ->build();
-        $this->redirectToURI($uri, 0, 200);
+
+        throw new PropagateResponseException($this->redirectToURI($uri, 0, 200));
     }
 
     /**
      * @param Call $call
      * @return void
      */
-    protected function isResctricted(Call $call): void
+    protected function isRestricted(Call $call): void
     {
         $timeRestricted = true;
         $groupRestricted = true;
@@ -1733,29 +1728,35 @@ class ProposalController extends OapFrontendController
             $timeRestricted = false;
         }
 
-        // applicant don't have the group
-        $callUserGroups = $call->getUsergroup();
-        $applicantGroups = $this->applicant->getUsergroup()->toArray();
-        foreach ($callUserGroups as $callGroup) {
-            $callGroupId = $callGroup->getUid();
-            $result = array_filter($applicantGroups, function ($applicantGroup) use ($callGroupId) {
-                return $applicantGroup->getUid() === $callGroupId;
-            });
+        if (!$call->isAnonym()) {
+            // applicant don't have the group
+            $callUserGroups = $call->getUsergroup();
+            $applicantGroups = $this->applicant?->getUsergroup()?->toArray() ?? [];
+            foreach ($callUserGroups as $callGroup) {
+                $callGroupId = $callGroup->getUid();
+                $result = array_filter($applicantGroups, function ($applicantGroup) use ($callGroupId) {
+                    return $applicantGroup->getUid() === $callGroupId;
+                });
 
-            // test group
-            if ($callGroupId === (int)$this->settings['testerFeGroupsId']) {
-                $groupRestricted = false;
-                $timeRestricted = false;
-            }
+                if (count($result) > 0) {
+                    // applicant has a matching group
+                    $groupRestricted = false;
 
-            if (count($result) > 0) {
-                $groupRestricted = false;
+                    if ($callGroupId === (int)$this->settings['testerFeGroupsId']) {
+                        // call and applicant both have the tester group
+                        $timeRestricted = false;
+                    }
+                }
             }
+        }
+        else {
+            // this is most likely an anonymous survey
+            $groupRestricted = false;
         }
 
         if ($timeRestricted || $groupRestricted) {
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_NOT_EDITABLE);
-            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
 
             $this->redirectToDashboard();
         }

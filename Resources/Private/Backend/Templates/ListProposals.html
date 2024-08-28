@@ -1,4 +1,4 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers" data-namespace-typo3-fluid="true">
 
 <f:comment><!--
 Available variables:
@@ -126,41 +126,38 @@ Available variables:
                             <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.countProposals"/> {countOfItems}
                         </span>
                     </th>
-                    <th nowrap="nowrap" class="col-icon">&nbsp;</th>
                 </tr>
 
                 <tr class="c-headLine">
                 <!-- checkboxes -->
-                <th class="col-selector nowrap" colspan="2">
-                    <div class="btn-group dropdown position-static">
-                        <button type="button" id="record-selection-check-actions-toggle" class="btn btn-borderless dropdown-toggle t3js-multi-record-selection-check-actions-toggle" data-bs-toggle="dropdown" data-bs-boundary="window" aria-expanded="false">
-                            <span class="t3js-icon icon icon-size-small icon-state-default icon-content-special-div" data-identifier="content-special-div">
-                                <span class="icon-markup">
-                                    <svg class="icon-color"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/content.svg#content-special-div"></use></svg>
-                                 </span>
-                            </span>
+                <th class="col-checkbox nowrap" colspan="2">
+                    <div class="btn-group dropdown">
+                        <button type="button" class="dropdown-toggle dropdown-toggle-link t3js-multi-record-selection-check-actions-toggle" data-bs-toggle="dropdown" data-bs-boundary="window" aria-expanded="false">
+                            <core:icon identifier="actions-selection" size="small" />
                         </button>
-                        <ul id="multi-check-actions" class="dropdown-menu t3js-multi-record-selection-check-actions">
+                        <ul class="dropdown-menu t3js-multi-record-selection-check-actions">
                             <li>
-                                <button id="action-check-all" type="button" class="btn btn-link dropdown-item" data-multi-record-selection-check-action="check-all" title="Alle auswählen">
-                                    <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-check-square" data-identifier="actions-check-square">
-                                        <span class="icon-markup">
-                                            <svg class="icon-color"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-check-square"></use></svg>
+                                <button id="action-check-all" type="button" class="dropdown-item" data-multi-record-selection-check-action="check-all" title="{f:translate(key: 'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.option.checkAll')}">
+                                    <span class="dropdown-item-columns">
+                                        <span class="dropdown-item-column dropdown-item-column-icon" aria-hidden="true">
+                                            <core:icon identifier="actions-selection-elements-all" size="small" />
                                         </span>
-
+                                        <span class="dropdown-item-column dropdown-item-column-title">
+                                            <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.option.checkAll" />
+                                        </span>
                                     </span>
-                                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.option.checkAll"/>
                                 </button>
                             </li>
                             <li>
-                                <button id="action-check-none" type="button" class="btn btn-link dropdown-item disabled" data-multi-record-selection-check-action="check-none" title="Keine auswählen">
-                                    <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-square" data-identifier="actions-square">
-                                        <span class="icon-markup">
-                                            <svg class="icon-color"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-square"></use></svg>
+                                <button id="action-check-none" type="button" class="dropdown-item disabled" data-multi-record-selection-check-action="check-none" title="{f:translate(key: 'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.option.uncheckAll')}">
+                                    <span class="dropdown-item-columns">
+                                        <span class="dropdown-item-column dropdown-item-column-icon" aria-hidden="true">
+                                            <core:icon identifier="actions-selection-elements-none" size="small" />
                                         </span>
-
+                                        <span class="dropdown-item-column dropdown-item-column-title">
+                                            <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.option.uncheckAll" />
+                                        </span>
                                     </span>
-                                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.option.uncheckAll"/>
                                 </button>
                             </li>
                         </ul>
@@ -204,7 +201,7 @@ Available variables:
                 <tr data-table="tx_openoap_domain_model_proposal" class="t3js-entity" data-uid="{proposal.uid}" title="id={proposal.uid}">
                     <!-- check -->
                     <td nowrap="nowrap" class="col-selector nowrap">
-                        <span class="form-check form-toggle">
+                        <span class="form-check form-check-type-toggle">
                             <f:form.checkbox class="form-check-input t3js-multi-record-selection-check check-toggle-selection" name="selection[records][]" value="{proposal.uid}" />
                         </span>
                     </td>
@@ -258,7 +255,10 @@ Available variables:
                         </f:if>
                     </td>
                     <td nowrap="nowrap">
-                        <f:if condition="{proposal.applicant_company}">{proposal.applicant_company} </f:if><br>{proposal.applicant_username}
+                        <f:if condition="{proposal.applicant_company}">
+                            {proposal.applicant_company}<br>
+                        </f:if>
+                        {proposal.applicant_username}
                     </td>
                 </tr>
             </f:for>

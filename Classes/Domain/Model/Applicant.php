@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace OpenOAP\OpenOap\Domain\Model;
 
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /**
  * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
  *
@@ -16,32 +18,24 @@ namespace OpenOAP\OpenOap\Domain\Model;
 /**
  * Applicant
  */
-class Applicant extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+class Applicant extends \In2code\Femanager\Domain\Model\User
 {
     /**
-     * companyEmail
-     *
      * @var string
      */
     protected $companyEmail = '';
 
     /**
-     * preferredLang
-     *
      * @var string
      */
     protected $preferredLang = '';
 
     /**
-     * privacypolicy
-     *
      * @var bool
      */
     protected $privacypolicy = false;
 
     /**
-     * salutation
-     *
      * @var int
      */
     protected $salutation = 0;
@@ -49,29 +43,22 @@ class Applicant extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     /**
      * Proposals of this applicant
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Proposal>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     * @var ObjectStorage<Proposal>
      */
+    #[\TYPO3\CMS\Extbase\Annotation\ORM\Cascade(['value' => 'remove'])]
     protected $proposals;
 
     /**
-     * __construct
+     * Constructs a new Applicant
+     *
+     * @param string $username
+     * @param string $password
      */
-    public function __construct()
+    public function __construct(protected string $username = '', protected string $password = '')
     {
-        // Do not remove the next line: It would break the functionality
-        $this->initializeObject();
-    }
+        parent::__construct($username, $password);
 
-    /**
-     * Initializes all ObjectStorage properties when model is reconstructed from DB (where __construct is not called)
-     * Do not modify this method!
-     * It will be rewritten on each save in the extension builder
-     * You may modify the constructor of this class instead
-     */
-    public function initializeObject()
-    {
-        $this->proposals = $this->proposals ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->proposals = new ObjectStorage();
     }
 
     /**
@@ -89,7 +76,7 @@ class Applicant extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      *
      * @param string $companyEmail
      */
-    public function setCompanyEmail(string $companyEmail)
+    public function setCompanyEmail(string $companyEmail): void
     {
         $this->companyEmail = $companyEmail;
     }
@@ -109,7 +96,7 @@ class Applicant extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      *
      * @param string $preferredLang
      */
-    public function setPreferredLang(string $preferredLang)
+    public function setPreferredLang(string $preferredLang): void
     {
         $this->preferredLang = $preferredLang;
     }
@@ -129,7 +116,7 @@ class Applicant extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      *
      * @param bool $privacypolicy
      */
-    public function setPrivacypolicy(bool $privacypolicy)
+    public function setPrivacypolicy(bool $privacypolicy): void
     {
         $this->privacypolicy = $privacypolicy;
     }
@@ -149,7 +136,7 @@ class Applicant extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      *
      * @param int $salutation
      */
-    public function setSalutation(int $salutation)
+    public function setSalutation(int $salutation): void
     {
         $this->salutation = $salutation;
     }
@@ -157,9 +144,9 @@ class Applicant extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     /**
      * Adds a Proposal
      *
-     * @param \OpenOAP\OpenOap\Domain\Model\Proposal $proposal
+     * @param Proposal $proposal
      */
-    public function addProposal(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal)
+    public function addProposal(Proposal $proposal): void
     {
         $this->proposals->attach($proposal);
     }
@@ -167,9 +154,9 @@ class Applicant extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     /**
      * Removes a Proposal
      *
-     * @param \OpenOAP\OpenOap\Domain\Model\Proposal $proposalToRemove The Proposal to be removed
+     * @param Proposal $proposalToRemove The Proposal to be removed
      */
-    public function removeProposal(\OpenOAP\OpenOap\Domain\Model\Proposal $proposalToRemove)
+    public function removeProposal(Proposal $proposalToRemove): void
     {
         $this->proposals->detach($proposalToRemove);
     }
@@ -177,7 +164,7 @@ class Applicant extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     /**
      * Returns the proposals
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Proposal> proposals
+     * @return ObjectStorage<Proposal> proposals
      */
     public function getProposals()
     {
@@ -187,9 +174,9 @@ class Applicant extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     /**
      * Sets the proposals
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Proposal> $proposals
+     * @param ObjectStorage<Proposal> $proposals
      */
-    public function setProposals(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $proposals)
+    public function setProposals(ObjectStorage $proposals): void
     {
         $this->proposals = $proposals;
     }

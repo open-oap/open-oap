@@ -44,17 +44,19 @@ class BackendProposalsController extends OapBackendController
     /**
      * overview page
      */
-    public function showOverviewProposalsAction()
+    public function showOverviewProposalsAction(): ResponseInterface
     {
         $this->view->assignMultiple([
             'actionName' => $this->actionMethodName,
         ]);
+
+        return $this->htmlResponse();
     }
 
     /**
      * overview page
      */
-    public function showOverviewCallsAction(array $filter = [], array $selection = [], int $currentPage = 1)
+    public function showOverviewCallsAction(array $filter = [], array $selection = [], int $currentPage = 1): ResponseInterface
     {
         $accessPids = [];
         $grantedToAll = false;
@@ -116,6 +118,8 @@ class BackendProposalsController extends OapBackendController
             'counts' => $counts,
             'states' => $this->getConstants()['PROPOSAL'],
         ]);
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -144,7 +148,7 @@ class BackendProposalsController extends OapBackendController
     public function listProposalsAction(?Call $call = null, array $filter = [], array $selection = [], int $currentPage = 1, int $itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE): ResponseInterface
     {
         if(is_null($call)) {
-            $this->redirect('showOverviewCalls' , 'BackendProposals');
+            return $this->redirect('showOverviewCalls' , 'BackendProposals');
         }
 
         // clear function call
@@ -206,15 +210,15 @@ class BackendProposalsController extends OapBackendController
                 }
 
                 if ($updateCount) {
-                    $this->addFlashMessage($updateCount . 'x ' . \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.state_updated'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+                    $this->addFlashMessage($updateCount . 'x ' . \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.state_updated'), '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
                 }
 
                 if (isset($proposalsArr) && is_array($proposalsArr)) {
                     if (count($proposalsArr) > 1) {
-                        $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.multiple_selected'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+                        $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.multiple_selected'), '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
                     }
 
-                    $this->redirect('customizeStatusMail', 'BackendProposals', null, ['proposals' => $proposalsArr, 'selectedState' => (int)$selection['state']]);
+                    return $this->redirect('customizeStatusMail', 'BackendProposals', null, ['proposals' => $proposalsArr, 'selectedState' => (int)$selection['state']]);
                 }
             }
         }
@@ -310,12 +314,12 @@ class BackendProposalsController extends OapBackendController
                     $this->persistenceManager->persistAll();
                     $proposal->addLog($log);
                     $proposal->setEditTstamp(time());
-                    $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.state_updated'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+                    $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.state_updated'), '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
                     $this->proposalRepository->update($proposal);
 
                     if ($selectedState == self::PROPOSAL_ACCEPTED || $selectedState == self::PROPOSAL_DECLINED) {
                         // Send status mail
-                        $this->redirect('customizeStatusMail', 'BackendProposals', null, ['proposals' => [$proposal], 'selectedState' => $selectedState]);
+                        return $this->redirect('customizeStatusMail', 'BackendProposals', null, ['proposals' => [$proposal], 'selectedState' => $selectedState]);
                     }
                 }
             }
@@ -974,6 +978,10 @@ class BackendProposalsController extends OapBackendController
                         }
                 }
                 $key = $answer->getModel()->getUid() . '--' . $answer->getGroupCounter0() . '--' . $answer->getGroupCounter1() . '--' . $answer->getItem()->getUid();
+                if (!isset($columns[$key])) {
+                    // TODO: investigate
+                    continue;
+                }
                 $export[$proposalUid][$columns[$key]] = $value;
                 if ($answer->getItem()->isAdditionalValue()) {
                     $export[$proposalUid][$columns[$key] + 1] = $answer->getAdditionalValue();
@@ -1003,7 +1011,7 @@ class BackendProposalsController extends OapBackendController
         foreach ($export as $proposalData) {
             $lineData = [];
             foreach ($head[$itemHeadRow] as $columns => $item) {
-                if (!$proposalData[$columns]) {
+                if (empty($proposalData[$columns])) {
                     $lineData[$columns] = '';
                 } else {
                     $lineData[$columns] = $proposalData[$columns];
@@ -1050,7 +1058,7 @@ class BackendProposalsController extends OapBackendController
             $site = $siteFinder->getSiteByPageId($proposal->getPid());
             $siteLanguage = $site->getLanguageById($proposal->getFeLanguageUid());
 
-            return $siteLanguage->getTwoLetterIsoCode();
+            return $siteLanguage->getLocale()->getLanguageCode();
         } catch (\Throwable) {
             return 'en';
         }

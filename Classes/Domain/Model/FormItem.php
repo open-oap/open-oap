@@ -22,8 +22,8 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * question
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected string $question = '';
 
     /**
@@ -51,8 +51,8 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * type
      *
      * @var int
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $type = 0;
 
     /**
@@ -147,7 +147,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * It will be rewritten on each save in the extension builder
      * You may modify the constructor of this class instead
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         $this->options = $this->options ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->validators = $this->validators ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -169,7 +169,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $question
      */
-    public function setQuestion(string $question)
+    public function setQuestion(string $question): void
     {
         $this->question = $question;
     }
@@ -189,7 +189,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $introText
      */
-    public function setIntroText(string $introText)
+    public function setIntroText(string $introText): void
     {
         $this->introText = $introText;
     }
@@ -209,7 +209,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $helpText
      */
-    public function setHelpText(string $helpText)
+    public function setHelpText(string $helpText): void
     {
         $this->helpText = $helpText;
     }
@@ -229,7 +229,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $type
      */
-    public function setType(int $type)
+    public function setType(int $type): void
     {
         $this->type = $type;
     }
@@ -239,7 +239,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\ItemOption $option
      */
-    public function addOption(\OpenOAP\OpenOap\Domain\Model\ItemOption $option)
+    public function addOption(\OpenOAP\OpenOap\Domain\Model\ItemOption $option): void
     {
         $this->options->attach($option);
     }
@@ -249,7 +249,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\ItemOption $optionToRemove The ItemOption to be removed
      */
-    public function removeOption(\OpenOAP\OpenOap\Domain\Model\ItemOption $optionToRemove)
+    public function removeOption(\OpenOAP\OpenOap\Domain\Model\ItemOption $optionToRemove): void
     {
         $this->options->detach($optionToRemove);
     }
@@ -269,7 +269,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\ItemOption> $options
      */
-    public function setOptions(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $options)
+    public function setOptions(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $options): void
     {
         $this->options = $options;
     }
@@ -279,7 +279,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\ItemValidator $validator
      */
-    public function addValidator(\OpenOAP\OpenOap\Domain\Model\ItemValidator $validator)
+    public function addValidator(\OpenOAP\OpenOap\Domain\Model\ItemValidator $validator): void
     {
         $this->validators->attach($validator);
     }
@@ -289,7 +289,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\ItemValidator $validatorToRemove The ItemValidator to be removed
      */
-    public function removeValidator(\OpenOAP\OpenOap\Domain\Model\ItemValidator $validatorToRemove)
+    public function removeValidator(\OpenOAP\OpenOap\Domain\Model\ItemValidator $validatorToRemove): void
     {
         $this->validators->detach($validatorToRemove);
     }
@@ -309,7 +309,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\ItemValidator> $validators
      */
-    public function setValidators(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $validators)
+    public function setValidators(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $validators): void
     {
         $this->validators = $validators;
     }
@@ -329,7 +329,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param bool $enabledFilter
      */
-    public function setEnabledFilter(bool $enabledFilter)
+    public function setEnabledFilter(bool $enabledFilter): void
     {
         $this->enabledFilter = $enabledFilter;
     }
@@ -359,7 +359,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param bool $enabledInfo
      */
-    public function setEnabledInfo(bool $enabledInfo)
+    public function setEnabledInfo(bool $enabledInfo): void
     {
         $this->enabledInfo = $enabledInfo;
     }
@@ -389,7 +389,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param bool $additionalValue
      */
-    public function setAdditionalValue(bool $additionalValue)
+    public function setAdditionalValue(bool $additionalValue): void
     {
         $this->additionalValue = $additionalValue;
     }
@@ -419,7 +419,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $defaultValue
      */
-    public function setDefaultValue(string $defaultValue)
+    public function setDefaultValue(string $defaultValue): void
     {
         $this->defaultValue = $defaultValue;
     }
@@ -439,7 +439,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $unit
      */
-    public function setUnit(string $unit)
+    public function setUnit(string $unit): void
     {
         $this->unit = $unit;
     }
@@ -459,7 +459,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $additionalLabel
      */
-    public function setAdditionalLabel(string $additionalLabel)
+    public function setAdditionalLabel(string $additionalLabel): void
     {
         $this->additionalLabel = $additionalLabel;
     }
@@ -479,7 +479,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $filterLabel
      */
-    public function setFilterLabel(string $filterLabel)
+    public function setFilterLabel(string $filterLabel): void
     {
         $this->filterLabel = $filterLabel;
     }
@@ -499,7 +499,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param bool $enabledTitle
      */
-    public function setEnabledTitle(bool $enabledTitle)
+    public function setEnabledTitle(bool $enabledTitle): void
     {
         $this->enabledTitle = $enabledTitle;
     }
@@ -529,7 +529,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormModificator $modificator
      */
-    public function addModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificator)
+    public function addModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificator): void
     {
         $this->modificators->attach($modificator);
     }
@@ -539,7 +539,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove The FormModificator to be removed
      */
-    public function removeModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove)
+    public function removeModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove): void
     {
         $this->modificators->detach($modificatorToRemove);
     }
@@ -559,7 +559,7 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormModificator> $modificators
      */
-    public function setModificators(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $modificators)
+    public function setModificators(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $modificators): void
     {
         $this->modificators = $modificators;
     }

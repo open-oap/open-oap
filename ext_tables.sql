@@ -133,6 +133,7 @@ CREATE TABLE tx_openoap_domain_model_comment (
 	state int(11) NOT NULL DEFAULT '0',
 	proposal int(11) unsigned NOT NULL DEFAULT '0',
 	answer int(11) unsigned DEFAULT '0',
+    cruser_id int(11) unsigned NOT NULL DEFAULT '0',
 	sys_language_uid int(11) DEFAULT '-1' NOT NULL
 );
 
@@ -148,6 +149,9 @@ CREATE TABLE tx_openoap_domain_model_call (
 	categories int(11) unsigned DEFAULT '0' NOT NULL,
 	call_group int(11) unsigned DEFAULT '0' NOT NULL,
     supporter int(11) unsigned DEFAULT '0' NOT NULL,
+    type int(11) unsigned DEFAULT '0' NOT NULL,
+    extern_link varchar(255) NOT NULL DEFAULT '',
+    hint text NOT NULL DEFAULT '',
 );
 
 CREATE TABLE tx_openoap_domain_model_formpage (

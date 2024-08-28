@@ -22,8 +22,8 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * title
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected string $title = '';
 
     /**
@@ -37,8 +37,8 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * state
      *
      * @var int
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected int $state = 0;
 
     /**
@@ -52,8 +52,8 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * archived
      *
      * @var bool
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $archived = false;
 
     /**
@@ -98,16 +98,16 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * answers
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Answer>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\ORM\Cascade(['value' => 'remove'])]
     protected $answers;
 
     /**
      * comments
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Comment>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\ORM\Cascade(['value' => 'remove'])]
     protected $comments;
 
     /**
@@ -145,7 +145,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * It will be rewritten on each save in the extension builder
      * You may modify the constructor of this class instead
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         $this->answers = $this->answers ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->comments = $this->comments ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -166,7 +166,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -186,7 +186,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $state
      */
-    public function setState(int $state)
+    public function setState(int $state): void
     {
         $this->state = $state;
     }
@@ -206,7 +206,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $feLanguageUid
      */
-    public function setFeLanguageUid(int $feLanguageUid)
+    public function setFeLanguageUid(int $feLanguageUid): void
     {
         $this->feLanguageUid = $feLanguageUid;
     }
@@ -226,7 +226,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Call $call
      */
-    public function setCall(\OpenOAP\OpenOap\Domain\Model\Call $call)
+    public function setCall(\OpenOAP\OpenOap\Domain\Model\Call $call): void
     {
         $this->call = $call;
     }
@@ -236,7 +236,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Answer $answer
      */
-    public function addAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answer)
+    public function addAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answer): void
     {
         $this->answers->attach($answer);
     }
@@ -246,7 +246,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Answer $answerToRemove The Answer to be removed
      */
-    public function removeAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answerToRemove)
+    public function removeAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answerToRemove): void
     {
         $this->answers->detach($answerToRemove);
     }
@@ -266,7 +266,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Answer> $answers
      */
-    public function setAnswers(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $answers)
+    public function setAnswers(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $answers): void
     {
         $this->answers = $answers;
     }
@@ -276,7 +276,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Comment $comment
      */
-    public function addComment(\OpenOAP\OpenOap\Domain\Model\Comment $comment)
+    public function addComment(\OpenOAP\OpenOap\Domain\Model\Comment $comment): void
     {
         $this->comments->attach($comment);
     }
@@ -286,7 +286,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Comment $comment
      */
-    public function addLog(\OpenOAP\OpenOap\Domain\Model\Comment $comment)
+    public function addLog(\OpenOAP\OpenOap\Domain\Model\Comment $comment): void
     {
         $this->addComment($comment);
     }
@@ -296,7 +296,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Comment $commentToRemove The Comment to be removed
      */
-    public function removeComment(\OpenOAP\OpenOap\Domain\Model\Comment $commentToRemove)
+    public function removeComment(\OpenOAP\OpenOap\Domain\Model\Comment $commentToRemove): void
     {
         $this->comments->detach($commentToRemove);
     }
@@ -316,7 +316,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Comment> $comments
      */
-    public function setComments(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $comments)
+    public function setComments(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $comments): void
     {
         $this->comments = $comments;
     }
@@ -336,7 +336,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Applicant $applicant
      */
-    public function setApplicant(\OpenOAP\OpenOap\Domain\Model\Applicant $applicant)
+    public function setApplicant(\OpenOAP\OpenOap\Domain\Model\Applicant $applicant): void
     {
         $this->applicant = $applicant;
     }
@@ -356,7 +356,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param bool $archived
      */
-    public function setArchived(bool $archived)
+    public function setArchived(bool $archived): void
     {
         $this->archived = $archived;
     }
@@ -386,7 +386,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $metaInformation
      */
-    public function setMetaInformation(string $metaInformation)
+    public function setMetaInformation(string $metaInformation): void
     {
         $this->metaInformation = $metaInformation;
     }

@@ -978,8 +978,8 @@
 			</trans-unit>
 			<trans-unit id='tx_openoap.flash.proposal_not_editable'
 						resname='tx_openoap.flash.proposal_not_editable'>
-				<source><![CDATA[Proposal isn't editable yet. State is not "in progress" or "re-opened".]]></source>
-				<target><![CDATA[Die Bewerbung ist gerade nicht im Status "in Bearbeitung" oder "in Überarbeitung" und deshalb nicht bearbeitbar.]]></target>
+				<source><![CDATA[Proposal is not yet editable. State is not "in progress" or "re-opened" or the submission deadline has passed.]]></source>
+				<target><![CDATA[Die Bewerbung hat nicht den Status "in Bearbeitung" oder "in Überarbeitung" oder das Einreichungsdatum ist abgelaufen und kann deshalb nicht bearbeitet werden.]]></target>
 			</trans-unit>
 			<trans-unit id='tx_openoap.flash.proposal_access_denied'
 						resname='tx_openoap.flash.proposal_access_denied'>

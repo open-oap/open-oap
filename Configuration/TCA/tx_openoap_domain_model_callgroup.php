@@ -6,7 +6,6 @@ return [
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'versioningWS' => false,
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
@@ -37,7 +36,10 @@ return [
                 'renderType' => 'selectSingle',
                 'default' => 0,
                 'items' => [
-                    ['', 0],
+                    [
+                        'label' => '',
+                        'value' => 0,
+                    ],
                 ],
                 'foreign_table' => 'tx_openoap_domain_model_callgroup',
                 'foreign_table_where' => 'AND {#tx_openoap_domain_model_callgroup}.{#pid}=###CURRENT_PID### AND {#tx_openoap_domain_model_callgroup}.{#sys_language_uid} IN (-1,0)',
@@ -57,8 +59,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -132,12 +134,12 @@ return [
                 'renderType' => 'selectMultipleSideBySide',
                 'items' => [
                     [
-                        'English',
-                        0,
+                        'label' => 'English',
+                        'value' => 0,
                     ],
                     [
-                        'Deutsch',
-                        1,
+                        'label' => 'Deutsch',
+                        'value' => 1,
                     ],
                 ],
                 'size' => 3,

@@ -13,8 +13,14 @@ if (!isset($GLOBALS['TCA']['fe_users']['ctrl']['type'])) {
             'type' => 'select',
             'renderType' => 'selectSingle',
             'items' => [
-                ['', ''],
-                ['Applicant', 'Tx_OpenOap_Applicant'],
+                [
+                    'label' => '',
+                    'value' => '',
+                ],
+                [
+                    'label' => 'Applicant',
+                    'value' => 'Tx_OpenOap_Applicant',
+                ],
             ],
             'default' => 'Tx_OpenOap_Applicant',
             'size' => 1,
@@ -37,9 +43,9 @@ $tmp_open_oap_columns = [
         'exclude' => true,
         'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_applicant.company_email',
         'config' => [
-            'type' => 'input',
+            'type' => 'email',
             'size' => 30,
-            'eval' => 'nospace,email',
+            'eval' => 'nospace',
             'default' => '',
         ],
     ],
@@ -68,16 +74,16 @@ $tmp_open_oap_columns = [
             'type' => 'radio',
             'items' => [
                 [
-                    'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_applicant.salutation.item0',
-                    '0',
+                    'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_applicant.salutation.item0',
+                    'value' => '0',
                 ],
                 [
-                    'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_applicant.salutation.item1',
-                    '1',
+                    'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_applicant.salutation.item1',
+                    'value' => '1',
                 ],
                 [
-                    'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_applicant.salutation.item2',
-                    '2',
+                    'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_applicant.salutation.item2',
+                    'value' => '2',
                 ],
             ],
         ],
@@ -137,4 +143,5 @@ $tmp_open_oap_columns = [
 
 $GLOBALS['TCA']['fe_users']['columns']['gender']['exclude'] = 1;
 $GLOBALS['TCA']['fe_users']['columns']['date_of_birth']['exclude'] = 1;
-$GLOBALS['TCA']['fe_users']['columns']['email']['config']['eval'] = 'nospace,email,required';
+$GLOBALS['TCA']['fe_users']['columns']['email']['config']['eval'] = 'nospace,email';
+$GLOBALS['TCA']['fe_users']['columns']['email']['config']['required'] = true;

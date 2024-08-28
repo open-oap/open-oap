@@ -8,7 +8,6 @@ return [
         'label_alt_force' => false,
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'versioningWS' => true,
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
@@ -18,6 +17,9 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'title,option_group,options',
+        'security' => [
+            'ignorePageTypeRestriction' => true,
+        ],
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
     ],
     'types' => [
@@ -39,7 +41,10 @@ return [
                 'renderType' => 'selectSingle',
                 'default' => 0,
                 'items' => [
-                    ['', 0],
+                    [
+                        'label' => '',
+                        'value' => 0,
+                    ],
                 ],
                 'foreign_table' => 'tx_openoap_domain_model_itemoption',
                 'foreign_table_where' => 'AND {#tx_openoap_domain_model_itemoption}.{#pid}=###CURRENT_PID### AND {#tx_openoap_domain_model_itemoption}.{#sys_language_uid} IN (-1,0)',
@@ -58,8 +63,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -72,8 +77,9 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
                 'default' => '',
+                'required' => true,
             ],
         ],
         'option_group' => [
@@ -93,8 +99,9 @@ return [
                 'type' => 'text',
                 'cols' => 40,
                 'rows' => 15,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
                 'default' => '',
+                'required' => true,
             ],
         ],
         'type' => [
@@ -104,10 +111,22 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['-- Label --', 0],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_itemoption.type_single', 1],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_itemoption.type_multiple', 2],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_itemoption.type_function', 3],
+                    [
+                        'label' => '-- Label --',
+                        'value' => 0,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_itemoption.type_single',
+                        'value' => 1,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_itemoption.type_multiple',
+                        'value' => 2,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_itemoption.type_function',
+                        'value' => 3,
+                    ],
                 ],
                 'size' => 1,
                 'maxitems' => 1,

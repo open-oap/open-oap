@@ -1,0 +1,26 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+
+<f:if condition="{validationResults.pages.{pageIdx.cycle}}">
+    <div role="alert" id="proposal-form-{proposal.uid}-{pageIdx.cycle}-alert">
+        <ul class="form__error-list">
+            <f:for each="{validationResults.pages}" key="propertyIdx" as="page">
+                <f:if condition="{pageIdx.cycle} == {propertyIdx}">
+                    <li class="form__error-list-item form__error-list-item--icon">
+                        <div class="form__error-list-item-wrapper">
+                            <f:render partial="ButtonIcon" arguments="{type:'error',additionalClass:'form__icon--error-left'}"/>
+                            <button data-oap-modaltext="JSMSG_MODAL_CONTENT" data-oap-modalsubmit="JSMSG_MODAL_SAVE" data-oap-modalcancel="JSMSG_MODAL_KEEPEDITING" class="form__menu-button" type="submit" name="tx_openoap_form[gotoPage]" value="{propertyIdx}">
+                                <q><f:format.raw>{formPage.title}</f:format.raw></q>
+                            </button>
+                        </div>
+                    </li>
+                </f:if>
+            </f:for>
+
+        </ul>
+    </div>
+</f:if>
+
+
+
+</html>

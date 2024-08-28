@@ -85,7 +85,7 @@ class CallRepository extends OapAbstractRepository
 
         $countTestUsergroupConstraints = count($testUsergroupConstraints);
         if ($countTestUsergroupConstraints === 1) {
-            $groupConstraints[] = $testUsergroupConstraints;
+            $groupConstraints[] = reset($testUsergroupConstraints);
         } elseif ($countTestUsergroupConstraints >= 2) {
             $groupConstraints[] = $query->logicalOr(...$testUsergroupConstraints);
         }
@@ -93,7 +93,7 @@ class CallRepository extends OapAbstractRepository
         $countStdUsergroupConstraints = count($stdUsergroupConstraints);
         if ($countStdUsergroupConstraints > 0) {
             if ($countStdUsergroupConstraints === 1) {
-                $usergroupConstraints[] = $stdUsergroupConstraints;
+                $usergroupConstraints[] = reset($stdUsergroupConstraints);
             } elseif ($countStdUsergroupConstraints >= 2) {
                 $usergroupConstraints[] = $query->logicalOr(...$stdUsergroupConstraints);
             }

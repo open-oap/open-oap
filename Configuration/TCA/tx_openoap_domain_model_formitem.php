@@ -7,7 +7,6 @@ return [
         'label_alt' => 'question',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'versioningWS' => true,
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
@@ -17,6 +16,9 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'question,internal_title,intro_text,help_text,filter_label,default_value,unit,additional_label',
+        'security' => [
+            'ignorePageTypeRestriction' => true,
+        ],
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
         'type' => 'type',
     ],
@@ -58,7 +60,10 @@ return [
                 'renderType' => 'selectSingle',
                 'default' => 0,
                 'items' => [
-                    ['', 0],
+                    [
+                        'label' => '',
+                        'value' => 0,
+                    ],
                 ],
                 'foreign_table' => 'tx_openoap_domain_model_formitem',
                 'foreign_table_where' => 'AND {#tx_openoap_domain_model_formitem}.{#pid}=###CURRENT_PID### AND {#tx_openoap_domain_model_formitem}.{#sys_language_uid} IN (-1,0)',
@@ -77,8 +82,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -91,8 +96,9 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
                 'default' => '',
+                'required' => true,
             ],
         ],
         'internal_title' => [
@@ -143,16 +149,46 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_string', 1],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_text', 2],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_date1', 3],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_date2', 4],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_checkbox', 5],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_radiobutton', 6],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_select_single', 7],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_select_multiple', 8],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_upload', 9],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.dropdown', 10],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_string',
+                        'value' => 1,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_text',
+                        'value' => 2,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_date1',
+                        'value' => 3,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_date2',
+                        'value' => 4,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_checkbox',
+                        'value' => 5,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_radiobutton',
+                        'value' => 6,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_select_single',
+                        'value' => 7,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_select_multiple',
+                        'value' => 8,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_upload',
+                        'value' => 9,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.dropdown',
+                        'value' => 10,
+                    ],
                 ],
                 'default' => 1,
                 'size' => 1,
@@ -169,8 +205,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                     ],
                 ],
                 'default' => 0,
@@ -195,8 +231,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                     ],
                 ],
                 'default' => 0,
@@ -211,8 +247,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                     ],
                 ],
                 'default' => 0,
@@ -227,8 +263,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                     ],
                 ],
                 'default' => 0,

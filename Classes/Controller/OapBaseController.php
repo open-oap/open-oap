@@ -17,7 +17,6 @@ use OpenOAP\OpenOap\Domain\Model\ItemOption;
 use OpenOAP\OpenOap\Domain\Model\ItemValidator;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
-use OpenOAP\OpenOap\Domain\Model\User;
 use OpenOAP\OpenOap\Domain\Repository\AnswerRepository;
 use OpenOAP\OpenOap\Domain\Repository\ApplicantRepository;
 use OpenOAP\OpenOap\Domain\Repository\CallGroupRepository;
@@ -31,15 +30,16 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\SimpleType\DocProtect;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Mail\FluidEmail;
-use TYPO3\CMS\Core\Mail\Mailer;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
@@ -49,9 +49,6 @@ use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\CommandUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
-use TYPO3\CMS\Extbase\Object\Exception;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -217,7 +214,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     protected const LOG_ERROR_INCORRECT_EMAIL_ADDRESS = 300;
 
-    // see \TYPO3\CMS\Core\Messaging\AbstractMessage - just to shorten the vars
+    // see \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity - just to shorten the vars
     protected const NOTICE = -2;
     protected const INFO = -1;
     protected const OK = 0;
@@ -391,6 +388,11 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected array $answers = [];
 
     /**
+     * @var CallGroupRepository|null
+     */
+    protected ?CallGroupRepository $callGroupRepository = null;
+
+    /**
      * @var array<int, FormItem>
      * @see flattenItems()
      */
@@ -413,11 +415,6 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @see flattenItems()
      */
     protected array $groups = [];
-
-    /**
-     * @var CallGroupRepository|null
-     */
-    protected ?CallGroupRepository $callGroupRepository = null;
 
     /**
      * @param ApplicantRepository $applicantRepository
@@ -650,7 +647,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 self::XLF_BASE_IDENTIFIER_LOG . self::LOG_ERROR_INCORRECT_EMAIL_ADDRESS,
                 [$emailTo]
             );
-            $this->addFlashMessage($flashMessageTxt, '', AbstractMessage::ERROR);
+            $this->addFlashMessage($flashMessageTxt, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
             return;
         }
         $data = ['proposal' => $proposal, 'signature' => $this->buildSignature($proposal), 'mailtext' => $mailtext, 'siteName' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'], 'languageKey' => $langCode];
@@ -659,9 +656,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $openOAPConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('open_oap');
         if ($openOAPConfiguration['mailStage']) {
             $emailTo = $openOAPConfiguration['fakeUserMail'];
-            $this->addFlashMessage('email sending is in stage mode. toMail is set to ' . $emailTo, '', AbstractMessage::INFO);
+            $this->addFlashMessage('email sending is in stage mode. toMail is set to ' . $emailTo, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO);
             if ($emailTo == '') {
-                $this->addFlashMessage('email sending is in stage mode but no email recipient is set - no email was sent.', '', AbstractMessage::WARNING);
+                $this->addFlashMessage('email sending is in stage mode but no email recipient is set - no email was sent.', '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
                 return;
             }
         }
@@ -673,6 +670,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $email = GeneralUtility::makeInstance(FluidEmail::class, $templatePaths);
         $email
+                ->setRequest($this->request)
                 ->to($emailTo)
                 ->subject(LocalizationUtility::translate($this->locallangFile . ':tx_openoap.email.submit_subject', 'openOap', [$data['siteName'], $data['signature']], $langCode))
                 // ->from(new Address($GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'], $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName']))
@@ -688,7 +686,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $email->replyTo($additionalData['replyTo']);
         }
 
-        $mailer = GeneralUtility::makeInstance(Mailer::class);
+        $mailer = GeneralUtility::makeInstance(MailerInterface::class);
         // @todo: catch if sending failed - add flashMessage
         $mailer->send($email);
     }
@@ -1169,7 +1167,6 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param string $pdfTemplatePath
      * @param array $arguments
      * @return string
-     * @throws Exception
      */
     protected function renderPdfView(string $pdfTemplatePath, array $arguments): string
     {
@@ -1203,10 +1200,11 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $arguments['callLogoPdf'] = $callLogoPdf;
         }
 
-        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $templatePath = GeneralUtility::getFileAbsFileName($pdfTemplatePath);
         $partialRootPath = GeneralUtility::getFileAbsFileName('EXT:open_oap/Resources/Private/Partials');
 
+        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
+        $standaloneView->setRequest($this->request);
         $standaloneView->setFormat('html');
         $standaloneView->setTemplatePathAndFilename($templatePath);
         $standaloneView->setPartialRootPaths([$partialRootPath]);
@@ -1516,7 +1514,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         return $states;
     }
 
-    public function createWordIntroBlock(Section $section, Proposal $proposal, array $format)
+    public function createWordIntroBlock(Section $section, Proposal $proposal, array $format): void
     {
         /** @var Call $call */
         $call = $proposal->getCall();
@@ -1537,7 +1535,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $proposalId = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_dashboard.proposal.signature.label') . ': ' . $this->buildSignature($proposal);
         $author = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportAuthor.text') . ': ' . $applicantName;
         $dateLastEdit = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_dashboard.proposal.lastChange.label') . ': ' . date('d.m.Y', $proposal->getEditTstamp());
-        $dateExport = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportGenerated.text', 'open_oap', [date('d.m.Y'), date('H:i')]);
+        $dateExport = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportGenerated.text', 'OpenOap', [date('d.m.Y'), date('H:i')]);
 
         $states = $this->createStatesArray('all');
         $callState = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportStatus.text') . ': ' . $states[$proposal->getState()];
@@ -2011,7 +2009,6 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $userNamePath = '';
         if ($createFolder) {
             // replace ids in path
-            /** @var User $applicant */
             $applicant = $proposal->getApplicant();
 
             if ($this->settings['zipStructureApplicantFormat'] !== '') {
@@ -2403,7 +2400,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $para1 = $validator->getParam2();
                 // todo - fallback for validator message on word exports?
             }
-            $validatorTexts[] = sprintf($validatorRawText, $para1, $para2);
+            if ($validatorRawText !== null) {
+                $validatorTexts[] = sprintf($validatorRawText, $para1, $para2);
+            }
             if ($validator->getType() == self::VALIDATOR_MANDATORY) {
                 $mandatorySign = self::MANDATORY_SIGN;
             }
@@ -2456,7 +2455,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         ) . ': ' . date('d.m.Y', $proposal->getEditTstamp());
         $dateExport = LocalizationUtility::translate(
             $this->locallangFile . ':tx_openoap_proposals.exportGenerated.text',
-            'open_oap',
+            'OpenOap',
             [date('d.m.Y'), date('H:i')]
         );
         $callState = LocalizationUtility::translate($this->locallangFile . ':tx_openoap_proposals.exportStatus.text') .
@@ -2554,15 +2553,15 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     /**
-     * @throws StopActionException
      */
-    protected function redirectToDashboard()
+    protected function redirectToDashboard(): void
     {
         $uri = $this->uriBuilder
             ->reset()
             ->setTargetPageUid((int)$this->settings['dashboardPageId'])
             ->build();
-        $this->redirectToURI($uri, 0, 200);
+
+        throw new PropagateResponseException($this->redirectToURI($uri, 0, 200));
     }
 
     /**

@@ -49,7 +49,7 @@ class OapBackendController extends OapBaseController
      */
     protected string $siteIdentifier = '';
 
-    public function initializeAction()
+    public function initializeAction(): void
     {
         parent::initializeAction();
         // set messageSource
@@ -90,7 +90,7 @@ class OapBackendController extends OapBaseController
      *
      * @return void
      */
-    public function showOverviewAction()
+    public function showOverviewAction(): void
     {
         echo __FUNCTION__;
         die();
@@ -101,8 +101,9 @@ class OapBackendController extends OapBaseController
      *
      * @return void
      */
-    public function showReleaseNotesAction()
+    public function showReleaseNotesAction(): \Psr\Http\Message\ResponseInterface
     {
+        return $this->htmlResponse();
     }
 
     /**

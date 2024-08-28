@@ -22,16 +22,16 @@ class ItemValidator extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * title
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $title = '';
 
     /**
      * type
      *
      * @var int
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $type = 0;
 
     /**
@@ -70,7 +70,7 @@ class ItemValidator extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -90,7 +90,7 @@ class ItemValidator extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $type
      */
-    public function setType(int $type)
+    public function setType(int $type): void
     {
         $this->type = $type;
     }
@@ -110,7 +110,7 @@ class ItemValidator extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $param1
      */
-    public function setParam1(string $param1)
+    public function setParam1(string $param1): void
     {
         $this->param1 = $param1;
     }
@@ -130,7 +130,7 @@ class ItemValidator extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $param2
      */
-    public function setParam2(string $param2)
+    public function setParam2(string $param2): void
     {
         $this->param2 = $param2;
     }
@@ -153,7 +153,7 @@ class ItemValidator extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         $this->item = $this->item ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
@@ -164,7 +164,7 @@ class ItemValidator extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param \OpenOAP\OpenOap\Domain\Model\FormItem $item
      * @return void
      */
-    public function addItem(\OpenOAP\OpenOap\Domain\Model\FormItem $item)
+    public function addItem(\OpenOAP\OpenOap\Domain\Model\FormItem $item): void
     {
         $this->item->attach($item);
     }
@@ -175,7 +175,7 @@ class ItemValidator extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param \OpenOAP\OpenOap\Domain\Model\FormItem $itemToRemove The FormItem to be removed
      * @return void
      */
-    public function removeItem(\OpenOAP\OpenOap\Domain\Model\FormItem $itemToRemove)
+    public function removeItem(\OpenOAP\OpenOap\Domain\Model\FormItem $itemToRemove): void
     {
         $this->item->detach($itemToRemove);
     }
@@ -196,7 +196,7 @@ class ItemValidator extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormItem> $item
      * @return void
      */
-    public function setItem(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $item)
+    public function setItem(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $item): void
     {
         $this->item = $item;
     }

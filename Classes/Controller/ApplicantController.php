@@ -8,6 +8,7 @@ use OpenOAP\OpenOap\Domain\Model\Answer;
 use OpenOAP\OpenOap\Domain\Model\Applicant;
 use OpenOAP\OpenOap\Domain\Model\Call;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
+use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -39,11 +40,11 @@ class ApplicantController extends OapFrontendController
     /**
      * action initialize
      */
-    public function initializeAction()
+    public function initializeAction(): void
     {
         parent::initializeAction();
-        $this->frontendAccessControlService = GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\FrontendAccessControlService::class);
-        $frontendUserId = $this->frontendAccessControlService->getFrontendUserId();
+        $frontendAccessControlService = GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\FrontendAccessControlService::class);
+        $frontendUserId = $frontendAccessControlService->getFrontendUserId();
         if ($frontendUserId != null) {
             $this->applicant = $this->applicantRepository->findByUid($frontendUserId);
         }
@@ -63,11 +64,11 @@ class ApplicantController extends OapFrontendController
     /**
      * action initializeEdit
      */
-    public function initializeEditAction()
+    public function initializeEditAction(): void
     {
         // Called applicantform action depends on parent page
-        if ($this->settings['masterdataEditPageId'] != $this->configurationManager->getContentObject()->data['pid']) {
-            $this->redirect('extend');
+        if ($this->settings['masterdataEditPageId'] != $this->request->getAttribute('currentContentObject')->data['pid']) {
+            throw new PropagateResponseException($this->redirect('extend'));
         }
     }
 
@@ -105,9 +106,9 @@ class ApplicantController extends OapFrontendController
      * action edit
      *
      * @param Applicant|null $applicant
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("applicant")
      * @return \Psr\Http\Message\ResponseInterface
      */
+    #[\TYPO3\CMS\Extbase\Annotation\IgnoreValidation(['value' => 'applicant'])]
     public function editAction(Applicant $applicant = null): \Psr\Http\Message\ResponseInterface
     {
         $this->view->assignMultiple([
@@ -123,7 +124,7 @@ class ApplicantController extends OapFrontendController
      *
      * @param Applicant $applicant
      */
-    public function updateAction(Applicant $applicant)
+    public function updateAction(Applicant $applicant): \Psr\Http\Message\ResponseInterface
     {
         // check if anything was changed
         foreach (array_keys($applicant->_getProperties()) as $propertyName) {
@@ -133,11 +134,11 @@ class ApplicantController extends OapFrontendController
             }
         }
         if (!$isDirty) {
-            $this->addFlashMessage(LocalizationUtility::translate('tx_openoap_applicant.messages.noChanges', 'open_oap'));
-            $this->redirect('edit', 'Applicant', null, ['applicant' => $applicant]);
+            $this->addFlashMessage(LocalizationUtility::translate('tx_openoap_applicant.messages.noChanges', 'OpenOap'));
+            return $this->redirect('edit', 'Applicant', null, ['applicant' => $applicant]);
         }
         $this->applicantRepository->update($applicant);
-        $this->redirect('dashboard', 'Applicant', null, ['applicant' => $applicant], $this->settings['dashboardPageId']);
+        return $this->redirect('dashboard', 'Applicant', null, ['applicant' => $applicant], $this->settings['dashboardPageId']);
     }
 
     /**
@@ -264,11 +265,12 @@ class ApplicantController extends OapFrontendController
      * @param string $mailtextSetting
      * @param string $mailTemplate
      */
-    public function mailAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal, $mailtextSetting, $mailTemplate)
+    public function mailAction(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal, $mailtextSetting, $mailTemplate): \Psr\Http\Message\ResponseInterface
     {
         $getMailTextFunc = 'get'.  ucfirst($mailtextSetting);
         $mailTemplatePaths = $this->getMailTemplatePaths();
-        $mailText = $this->parseMailtext($proposal, $proposal->getCall()->getSupporter()->$getMailTextFunc());
+        $mailText = $this->parseMailtext($proposal, $proposal->getCall()->getSupporter()?->$getMailTextFunc()
+            ?? $this->settings[$mailtextSetting]);
 
         $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $mailText);
 
@@ -276,7 +278,7 @@ class ApplicantController extends OapFrontendController
             ->reset()
             ->setTargetPageUid((int)$this->settings['dashboardPageId'])
             ->build();
-        $this->redirectToURI($uri, 0, 200);
+        return $this->redirectToURI($uri, 0, 200);
     }
 
     /**

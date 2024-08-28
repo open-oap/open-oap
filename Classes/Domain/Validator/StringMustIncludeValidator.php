@@ -14,10 +14,10 @@ class StringMustIncludeValidator extends AbstractValidator
      *
      * @param mixed $value The value that should be validated
      */
-    public function isValid($value)
+    public function isValid($value): void
     {
-        if (!$this->validateMustInclude($value, 'number,letter,special')) {
-            $this->addError(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('oap_validation_stringMustInclude.error', 'open_oap'), 1221551320);
+        if (!$this->validateString($value, 'number,letter,special')) {
+            $this->addError(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('oap_validation_stringMustInclude.error', 'OpenOap'), 1221551320);
         }
     }
 }

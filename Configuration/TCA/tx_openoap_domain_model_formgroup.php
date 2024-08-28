@@ -6,7 +6,6 @@ return [
         'label_alt' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'sortby' => 'sorting',
         'versioningWS' => true,
         'languageField' => 'sys_language_uid',
@@ -17,6 +16,9 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'title,internal_title,intro_text,help_text,model_name',
+        'security' => [
+            'ignorePageTypeRestriction' => true,
+        ],
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
         'type' => 'type',
     ],
@@ -40,7 +42,10 @@ return [
                 'renderType' => 'selectSingle',
                 'default' => 0,
                 'items' => [
-                    ['', 0],
+                    [
+                        'label' => '',
+                        'value' => 0,
+                    ],
                 ],
                 'foreign_table' => 'tx_openoap_domain_model_formgroup',
                 'foreign_table_where' => 'AND {#tx_openoap_domain_model_formgroup}.{#pid}=###CURRENT_PID### AND {#tx_openoap_domain_model_formgroup}.{#sys_language_uid} IN (-1,0)',
@@ -59,8 +64,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -73,8 +78,9 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
                 'default' => '',
+                'required' => true,
             ],
         ],
         'internal_title' => [
@@ -96,8 +102,14 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.type_default', 0],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.type_meta', 1],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.type_default',
+                        'value' => 0,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.type_meta',
+                        'value' => 1,
+                    ],
                 ],
                 'size' => 1,
                 'maxitems' => 1,
@@ -152,8 +164,14 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.display_type_default', 0],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.display_type_table', 1],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.display_type_default',
+                        'value' => 0,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.display_type_table',
+                        'value' => 1,
+                    ],
                 ],
                 'size' => 1,
                 'maxitems' => 1,
@@ -164,9 +182,8 @@ return [
             'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.repeatable_min',
             'config' => [
-                'type' => 'input',
+                'type' => 'number',
                 'size' => 4,
-                'eval' => 'int',
                 'default' => 1,
             ],
         ],
@@ -175,9 +192,8 @@ return [
             'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.repeatable_max',
             'config' => [
-                'type' => 'input',
+                'type' => 'number',
                 'size' => 4,
-                'eval' => 'int',
                 'default' => 1,
             ],
         ],

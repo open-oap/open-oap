@@ -80,13 +80,13 @@ Available variables:
         <div class="section">
             <span class="section-label">{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.previewMailtext.title')}</span>
             <div>
-                <f:format.html>{mailtext}</f:format.html>
+                <f:transform.html>{mailtext}</f:transform.html>
             </div>
         </div>
 
         <div class="section">
             <span class="section-label">{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.emailReceiver.title')}</span>
-            <div><f:format.html>{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.actionSelectionIntro.text')}</f:format.html></div>
+            <div><f:transform.html>{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:mailing.configuration.actionSelectionIntro.text')}</f:transform.html></div>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -196,7 +196,7 @@ Available variables:
                                     <v:variable.set name="mailtoBody" value="{v:format.replace(content:mailtoBody, substring:'&nbsp;', replacement:' ')}" />
                                     <v:variable.set name="mailtoBody" value="{mailtoBody -> f:format.stripTags(allowedTags:'')}" />
 
-                                    <f:link.email email="{item.mailaction.mailto.href}&subject={subject}&body={mailtoBody}" class="button mailto-action-button">
+                                    <f:link.email email="{item.mailaction.mailto.href}&subject={subject}&body={mailtoBody}" class="button mailto-action-button" target="_blank">
                                         <svg class="icon-color"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-open"></use></svg>
                                         <span>{item.mailaction.text}</span>
                                     </f:link.email>

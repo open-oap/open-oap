@@ -34,6 +34,7 @@
                                     </numIndex>
                                 </items>
                             </config>
+                            <onChange>reload</onChange>
                         </TCEforms>
                     </settings.dashboardTemplate>
                     <settings.eventProposalSubmittedMailtext>
@@ -47,6 +48,7 @@
                                 <cols>40</cols>
                                 <rows>6</rows>
                             </config>
+                            <displayCond>FIELD:settings.dashboardTemplate:=:DashboardDefault</displayCond>
                         </TCEforms>
                     </settings.eventProposalSubmittedMailtext>
                     <settings.eventProposalInRevisionMailtext>
@@ -60,6 +62,7 @@
                                 <cols>40</cols>
                                 <rows>6</rows>
                             </config>
+                            <displayCond>FIELD:settings.dashboardTemplate:=:DashboardDefault</displayCond>
                         </TCEforms>
                     </settings.eventProposalInRevisionMailtext>
                     <settings.eventProposalAcceptedMailtext>
@@ -73,6 +76,7 @@
                                 <cols>40</cols>
                                 <rows>6</rows>
                             </config>
+                            <displayCond>FIELD:settings.dashboardTemplate:=:DashboardDefault</displayCond>
                         </TCEforms>
                     </settings.eventProposalAcceptedMailtext>
                     <settings.eventProposalDeclinedMailtext>
@@ -86,6 +90,7 @@
                                 <cols>40</cols>
                                 <rows>6</rows>
                             </config>
+                            <displayCond>FIELD:settings.dashboardTemplate:=:DashboardDefault</displayCond>
                         </TCEforms>
                     </settings.eventProposalDeclinedMailtext>
                 </el>

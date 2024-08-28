@@ -90,7 +90,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $text
      */
-    public function setText(string $text)
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
@@ -110,7 +110,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $source
      */
-    public function setSource(int $source)
+    public function setSource(int $source): void
     {
         $this->source = $source;
     }
@@ -130,7 +130,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $code
      */
-    public function setCode(int $code)
+    public function setCode(int $code): void
     {
         $this->code = $code;
     }
@@ -150,7 +150,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int state
      */
-    public function setState(int $state)
+    public function setState(int $state): void
     {
         $this->state = $state;
     }
@@ -170,7 +170,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int created
      */
-    public function setCreated(int $created)
+    public function setCreated(int $created): void
     {
         $this->created = $created;
     }
@@ -190,7 +190,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Proposal $proposal
      */
-    public function setProposal(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal)
+    public function setProposal(\OpenOAP\OpenOap\Domain\Model\Proposal $proposal): void
     {
         $this->proposal = $proposal;
     }
@@ -210,7 +210,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Answer $answer
      */
-    public function setAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answer)
+    public function setAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answer): void
     {
         $this->answer = $answer;
     }
@@ -230,7 +230,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param @var \TYPO3\CMS\Beuser\Domain\Model\BackendUser
      */
-    public function setAuthor(\TYPO3\CMS\Beuser\Domain\Model\BackendUser $author)
+    public function setAuthor(\TYPO3\CMS\Beuser\Domain\Model\BackendUser $author): void
     {
         $this->author = $author;
     }

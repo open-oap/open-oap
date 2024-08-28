@@ -11,7 +11,6 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
@@ -77,10 +76,10 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);
         $query->matching(
-            $query->logicalAnd([
+            $query->logicalAnd(
                $query->equals('call', $call),
                $query->greaterThanOrEqual('state', $state),
-           ])
+           )
         );
         return $query->count();
     }
@@ -118,9 +117,9 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_openoap_domain_model_proposal');
         $queryBuilder = $connection->createQueryBuilder();
         if (isset($filter['state']) && $filter['state'] !== '') {
-            $stateWhere = $queryBuilder->expr()->eq('Proposal.state', $queryBuilder->createNamedParameter($filter['state'], \PDO::PARAM_INT));
+            $stateWhere = $queryBuilder->expr()->eq('Proposal.state', $queryBuilder->createNamedParameter($filter['state'], Connection::PARAM_INT));
         } else {
-            $stateWhere = $queryBuilder->expr()->gte('Proposal.state', $queryBuilder->createNamedParameter($minStatusLevel, \PDO::PARAM_INT));
+            $stateWhere = $queryBuilder->expr()->gte('Proposal.state', $queryBuilder->createNamedParameter($minStatusLevel, Connection::PARAM_INT));
         }
         $query = $queryBuilder
             ->select(
@@ -152,7 +151,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $queryBuilder->expr()->eq('Call.uid', $queryBuilder->quoteIdentifier('Proposal.tx_openoap_call'))
             )
             ->where(
-                $queryBuilder->expr()->eq('Proposal.pid', $queryBuilder->createNamedParameter($pid, \PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('Proposal.pid', $queryBuilder->createNamedParameter($pid, Connection::PARAM_INT)),
                 $stateWhere
             );
 
@@ -162,19 +161,15 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $orStatements = $queryBuilder->expr()->or();
             if (strlen($filter['searchword']) > 3) {
                 foreach (['Proposal.title', 'Proposal.signature', 'Applicant.company', 'Applicant.username'] as $field) {
-                    $orStatements->add(
-                        $queryBuilder->expr()->like(
-                            $field,
-                            $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards($filter['searchword']) . '%', \PDO::PARAM_STR)
-                        )
-                    );
+                    $orStatements = $orStatements->with($queryBuilder->expr()->like(
+                        $field,
+                        $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards($filter['searchword']) . '%', Connection::PARAM_STR)
+                    ));
                 }
             } else {
                 // no like search possible
                 foreach (['Proposal.title', 'Proposal.signature', 'Applicant.company', 'Applicant.username'] as $field) {
-                    $orStatements->add(
-                        $queryBuilder->expr()->eq($field, $queryBuilder->createNamedParameter($filter['searchword']))
-                    );
+                    $orStatements = $orStatements->with($queryBuilder->expr()->eq($field, $queryBuilder->createNamedParameter($filter['searchword'])));
                 }
             }
             $queryBuilder->andWhere($orStatements);
@@ -184,33 +179,31 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $allFilterItemsConcatenated = implode('', $filter['item']);
             if ($allFilterItemsConcatenated !== '') {
                 $filterCounter = 0;
+                $orStatements = [];
                 foreach ($filter['item'] as $filterItem => $filterValue) {
                     if ($filterValue !== '') {
                         //                        DebuggerUtility::var_dump($filterValue,__LINE__.' '.$filterItem);
                         $filterCounter++;
 
-                        $orStatements = $queryBuilder->expr()->or();
-                        $orStatements->add(
-                            $queryBuilder->expr()->andX(
+                        $orStatements = $queryBuilder->expr()->or(
+                            $queryBuilder->expr()->and(
                                 $queryBuilder->expr()->eq(
                                     'Answer.value',
                                     $queryBuilder->createNamedParameter($filterValue)
                                 ),
                                 $queryBuilder->expr()->eq(
                                     'Answer.item',
-                                    $queryBuilder->createNamedParameter($filterItem, \PDO::PARAM_INT)
+                                    $queryBuilder->createNamedParameter($filterItem, Connection::PARAM_INT)
                                 )
-                            )
-                        );
-                        $orStatements->add(
-                            $queryBuilder->expr()->andX(
+                            ),
+                            $queryBuilder->expr()->and(
                                 $queryBuilder->expr()->like(
                                     'Answer.value',
                                     $queryBuilder->createNamedParameter('%\"' . $filterValue . '\"%')
                                 ),
                                 $queryBuilder->expr()->eq(
                                     'Answer.item',
-                                    $queryBuilder->createNamedParameter($filterItem, \PDO::PARAM_INT)
+                                    $queryBuilder->createNamedParameter($filterItem, Connection::PARAM_INT)
                                 )
                             )
                         );
@@ -332,8 +325,8 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         $table = 'tt_content';
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
-        $where[] = $queryBuilder->expr()->eq('t.pid', $queryBuilder->createNamedParameter($pid, \PDO::PARAM_INT));
-        $where[] = $queryBuilder->expr()->eq('t.sys_language_uid', $queryBuilder->createNamedParameter($langId, \PDO::PARAM_INT));
+        $where[] = $queryBuilder->expr()->eq('t.pid', $queryBuilder->createNamedParameter($pid, Connection::PARAM_INT));
+        $where[] = $queryBuilder->expr()->eq('t.sys_language_uid', $queryBuilder->createNamedParameter($langId, Connection::PARAM_INT));
         $where[] = $queryBuilder->expr()->isNotNull('t.pi_flexform');
 
         $result = $queryBuilder
@@ -345,7 +338,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $result->fetchAssociative()['pi_flexform'];
     }
 
-    public function findContent($search)
+    public function findContent($search): void
     {
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(true);
@@ -364,8 +357,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         //            $query->setLimit($limit);
         //        }
         //        return $query->execute();
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $queryParser = $objectManager->get(Typo3DbQueryParser::class);
+        $queryParser = GeneralUtility::makeInstance(Typo3DbQueryParser::class);
         /** @var QueryBuilder $doctrineQuery */
         $doctrineQuery = $queryParser->convertQueryToDoctrineQueryBuilder($query);
         echo $doctrineQuery->getSQL();

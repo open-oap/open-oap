@@ -35,7 +35,7 @@ class OapFrontendController extends OapBaseController
      */
     protected $uriBuilder;
 
-    public function initializeAction()
+    public function initializeAction(): void
     {
         parent::initializeAction();
         if (!$this->settings) {
@@ -52,7 +52,7 @@ class OapFrontendController extends OapBaseController
         $langId = $context->getPropertyFromAspect('language', 'id');
 
         $this->language = $this->site->getLanguageById($langId);
-        $this->langCode = $this->language->getTwoLetterIsoCode();
+        $this->langCode = $this->language->getLocale()->getLanguageCode();
     }
 
     /**
