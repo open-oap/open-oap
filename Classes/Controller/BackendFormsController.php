@@ -35,7 +35,7 @@ class BackendFormsController extends OapBackendController
         *
         * @return void
         */
-    public function showOverviewFormsAction()
+    public function showOverviewFormsAction(): ResponseInterface
     {
         $this->view->assignMultiple([
             'actionName' => $this->actionMethodName,
@@ -47,7 +47,7 @@ class BackendFormsController extends OapBackendController
     /**
      * @param Call $call
      */
-    public function previewFormAction(Call $call)
+    public function previewFormAction(Call $call): ResponseInterface
     {
         $this->evaluateForm($call);
         /**
@@ -87,7 +87,7 @@ class BackendFormsController extends OapBackendController
      * @param $text
      * @param string $result
      */
-    private function setEvaluationItem($code, $text, string $result = '')
+    private function setEvaluationItem($code, $text, string $result = ''): void
     {
         $this->evalutionResults[] = ['code' => $code, 'text' => $text, 'result' => $result];
     }

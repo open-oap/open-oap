@@ -1,7 +1,7 @@
 <f:flashMessages as="flashMessages">
 	<div role="alert" class="form__status">
 		<f:for each="{flashMessages}" as="flashMessage">
-			<p class="form__message form__message-{flashMessage.severity}">
+			<p class="form__message form__message-{flashMessage.severity.value}">
 				{flashMessage.message}
 			</p>
 		</f:for>

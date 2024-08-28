@@ -47,7 +47,7 @@ Available variables:
             <f:spaceless>
             <h1 class="page__title"><span class="hyphenated">{proposal.call.title}</span></h1>
             <f:if condition="{proposal.call.introText}">
-                {proposal.call.introText -> f:format.html()}
+                {proposal.call.introText -> f:transform.html()}
             </f:if>
             </f:spaceless>
             <f:spaceless>
@@ -99,7 +99,7 @@ Available variables:
         <f:then>
 
             <f:if condition="1 == {answerSection}">
-                <h3>&nbsp;<br><span class="hyphenated">{formPage.title}</span></h3><f:if condition="{formPage.introText}">{formPage.introText -> f:format.html()}</f:if>
+                <h3>&nbsp;<br><span class="hyphenated">{formPage.title}</span></h3><f:if condition="{formPage.introText}">{formPage.introText -> f:transform.html()}</f:if>
             </f:if>
 
             <f:comment><!-- all groups in current page --></f:comment>
@@ -112,7 +112,7 @@ Available variables:
                             <f:if condition="1 == {answerSection}">
                                 <h4>&nbsp;<br><span class="hyphenated">{itemGroupL0.title}</span> <f:if condition="{groupsCounter.{itemGroupL0.uid}.current} > 1">#{counterWrapper.cycle}</f:if></h4>
                                 <f:if condition="{itemGroupL0.introText}">
-                                    {itemGroupL0.introText -> f:format.html()}
+                                    {itemGroupL0.introText -> f:transform.html()}
                                 </f:if>
                                 <br>
                                 <div class="pdf_list pdf_list--wrapper">
@@ -170,7 +170,7 @@ Available variables:
                         <f:comment><!--
                         <p class="intro_text"><f:format.nl2br><f:format.stripTags allowedTags="<br>">{item.introText}</f:format.stripTags></f:format.nl2br></p>
                         --></f:comment>
-                        <div class="intro_text">{item.introText -> f:format.html()}</div>
+                        <div class="intro_text">{item.introText -> f:transform.html()}</div>
                     </f:if>
                     <p class="pdf_list__answer">
                         <f:format.nl2br>
@@ -207,7 +207,7 @@ Available variables:
                         <f:if condition="{counterWrapper}"><br>({itemGroupL0.title} #{counterWrapper.cycle})</f:if>
                     </h4>
                     <f:if condition="{itemGroup.introText}">
-                        {itemGroup.introText -> f:format.html()}
+                        {itemGroup.introText -> f:transform.html()}
                     </f:if>
                     <br>
                     <div class="pdf_list">
@@ -234,7 +234,7 @@ Available variables:
                                     <f:comment><!--
                                                     <p class="intro_text"><f:format.nl2br><f:format.stripTags allowedTags="<br>">{item.introText}</f:format.stripTags></f:format.nl2br></p>
                                                     --></f:comment>
-                                    <div class="intro_text">{item.introText -> f:format.html()}</div>
+                                    <div class="intro_text">{item.introText -> f:transform.html()}</div>
                                 </f:if>
 
                                 <p class="pdf_list__answer"><f:format.nl2br>
@@ -274,12 +274,12 @@ Available variables:
                 <f:then>
                     <h4><span class="hyphenated">{itemGroup.title}</span></h4>
                     <f:if condition="{itemGroup.introText}">
-                        {itemGroup.introText -> f:format.html()}
+                        {itemGroup.introText -> f:transform.html()}
                     </f:if>
                     <div class="pdf_list__item">
                         <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
                             <f:if condition="{item.introText}">
-                                <p><strong>{item.question}</strong></p>{item.introText -> f:format.html()}
+                                <p><strong>{item.question}</strong></p>{item.introText -> f:transform.html()}
                             </f:if>
                         </f:for>
                         <p>&nbsp;</p>

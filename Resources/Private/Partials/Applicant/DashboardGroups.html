@@ -228,20 +228,36 @@ Available variables:
                         <h2 class="call-list__title">{call.title}
                             <f:if condition="{byTester} == 1"><span style="color:orange;">TEST</span></f:if>
                         </h2>
+                        <f:if condition="{call.hint}">
+                            <a class="call-list__hint" data-fslightbox="call-text-{call.uid}"  data-class="d-block" href="#call-hint-{call.uid}"></a>
+                            <div class="call-hint" id="call-hint-{call.uid}" hidden>
+                                <a class="call-hint--close" onclick="fsLightboxInstances['call-text-{call.uid}'].close()"></a>
+                                {call.hint -> f:format.html()}
+                            </div>
+                        </f:if>
                         <f:if condition="{call.callEndTime}">
                             <p class="call-list__text call-list__text--time">
                                 {f:translate(key:'tx_openoap_dashboard.call.active_until')}:
-                                <f:format.date format="d.m.Y - H:i:s">{call.callEndTime}</f:format.date>
+                                <f:format.date format="d.m.Y - H:i:s (T)">{call.callEndTime}</f:format.date>
                             </p>
                         </f:if>
                         <f:if condition="!{CallDisabled}">
                             <f:then>
-                                <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form"
-                                               action="create" controller="Proposal"
-                                               arguments="{applicant:applicant,call:call}"
-                                               class="call-list__create-proposal">
-                                    {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title')}
-                                </f:link.action>
+                                <f:if condition="{call.type} == 1">
+                                    <f:then>
+                                        <f:link.external target="_blank" class="call-list__create-proposal call-list__create-proposal--extern" uri="{call.externLink}">
+                                            {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title')}
+                                        </f:link.external>
+                                    </f:then>
+                                    <f:else>
+                                        <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form"
+                                                       action="create" controller="Proposal"
+                                                       arguments="{applicant:applicant,call:call}"
+                                                       class="call-list__create-proposal">
+                                            {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title')}
+                                        </f:link.action>
+                                    </f:else>
+                                </f:if>
                             </f:then>
                             <f:else>
                                 <p class="call-list__text">

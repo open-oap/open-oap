@@ -11,7 +11,7 @@ Available variables:
 
 <f:section name="main"><f:spaceless>
     <f:if condition="{user}">
-        <f:form.validationResults for="{user}">
+        <f:form.validationResults for="user">
             <f:if condition="{validationResults.flattenedErrors}">
                 <v:variable.set name="errorCodes"><v:variable.convert type="array"/></v:variable.set>
                 <f:for each="{validationResults.flattenedErrors}" key="propertyPath" as="errors">
@@ -45,7 +45,8 @@ Available variables:
         name="user"
         object="{user}"
         action="update"
-        additionalAttributes="{data-femanager-plugin:data.uid}"
+        arguments="{hash:hash}"
+        additionalAttributes="{data-femanager-plugin:data.uid, data-femanager-plugin-name: data.CType}"
         class="form form--register {f:if(condition:'{settings.invitation.validation._enable.client}',then:'feManagerValidation',else:'')}">
         <f:form.hidden name="hash" value="{hash}"/>
         <div role="alert">
@@ -68,13 +69,14 @@ Available variables:
     <p>**<f:format.raw><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:oap_registrationform_step3.intro" /></f:format.raw></h3>
 
     <f:render partial="Misc/FlashMessages" arguments="{_all}" />
-    <f:render partial="Misc/FormErrors" arguments="{object:User}" />
+    <f:render partial="Misc/FormErrors" arguments="{object: 'user'}" />
 
     <f:form
             name="user"
             object="{user}"
             action="update"
-            additionalAttributes="{data-femanager-plugin:data.uid}"
+            arguments="{hash:hash}"
+            additionalAttributes="{data-femanager-plugin:data.uid, data-femanager-plugin-name: data.CType}"
             class="form form--register {f:if(condition:'{settings.invitation.validation._enable.client}',then:'feManagerValidation',else:'')}">
 
             <f:render partial="Form/MasterData" arguments="{_all}" />

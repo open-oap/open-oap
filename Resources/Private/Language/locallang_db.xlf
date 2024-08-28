@@ -75,7 +75,15 @@
 			<trans-unit id="tx_openoap_domain_model_call.supporter" resname="tx_openoap_domain_model_call.supporter">
 				<source>Supporter</source>
 			</trans-unit>
-
+			<trans-unit id="tx_openoap_domain_model_call.type" resname="tx_openoap_domain_model_call.type">
+				<source>Call Type(intern or extern)</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.extern_link" resname="tx_openoap_domain_model_call.extern_link">
+				<source>URL of extern webpage</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.hint" resname="tx_openoap_domain_model_call.hint">
+				<source>Call hint</source>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_formpage" resname="tx_openoap_domain_model_formpage">
 				<source>Form Page</source>
 			</trans-unit>

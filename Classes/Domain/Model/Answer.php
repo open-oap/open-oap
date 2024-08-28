@@ -92,8 +92,8 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * comments
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Comment>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\ORM\Cascade(['value' => 'remove'])]
     protected $comments;
 
     /**
@@ -138,7 +138,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $value
      */
-    public function setValue(string $value)
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }
@@ -148,7 +148,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param array $arrayValue
      */
-    public function setArrayValue(array $arrayValue)
+    public function setArrayValue(array $arrayValue): void
     {
         $this->arrayValue = $arrayValue;
     }
@@ -179,7 +179,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $type
      */
-    public function setType(int $type)
+    public function setType(int $type): void
     {
         $this->type = $type;
     }
@@ -199,7 +199,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param array $elementCounter
      */
-    public function setElementCounter(array $elementCounter)
+    public function setElementCounter(array $elementCounter): void
     {
         $this->elementCounter = json_encode($elementCounter);
     }
@@ -219,7 +219,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormItem $item
      */
-    public function setItem(\OpenOAP\OpenOap\Domain\Model\FormItem $item)
+    public function setItem(\OpenOAP\OpenOap\Domain\Model\FormItem $item): void
     {
         $this->item = $item;
     }
@@ -239,7 +239,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormGroup $model
      */
-    public function setModel(\OpenOAP\OpenOap\Domain\Model\FormGroup $model)
+    public function setModel(\OpenOAP\OpenOap\Domain\Model\FormGroup $model): void
     {
         $this->model = $model;
     }
@@ -259,7 +259,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $additionalValue
      */
-    public function setAdditionalValue(string $additionalValue)
+    public function setAdditionalValue(string $additionalValue): void
     {
         $this->additionalValue = $additionalValue;
     }
@@ -279,7 +279,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $pastAnswers
      */
-    public function setPastAnswers(string $pastAnswers)
+    public function setPastAnswers(string $pastAnswers): void
     {
         $this->pastAnswers = $pastAnswers;
     }
@@ -289,7 +289,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Comment $comment
      */
-    public function addComment(\OpenOAP\OpenOap\Domain\Model\Comment $comment)
+    public function addComment(\OpenOAP\OpenOap\Domain\Model\Comment $comment): void
     {
         $this->comments->attach($comment);
     }
@@ -299,7 +299,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Comment $commentToRemove The Comment to be removed
      */
-    public function removeComment(\OpenOAP\OpenOap\Domain\Model\Comment $commentToRemove)
+    public function removeComment(\OpenOAP\OpenOap\Domain\Model\Comment $commentToRemove): void
     {
         $this->comments->detach($commentToRemove);
     }
@@ -319,7 +319,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Comment> $comments
      */
-    public function setComments(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $comments)
+    public function setComments(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $comments): void
     {
         $this->comments = $comments;
     }

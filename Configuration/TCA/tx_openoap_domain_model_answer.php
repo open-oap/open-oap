@@ -7,7 +7,6 @@ return [
         'label_alt' => 'uid, value',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'versioningWS' => false,
 //        'languageField' => 'sys_language_uid',
 //        'transOrigPointerField' => 'l10n_parent',
@@ -15,6 +14,9 @@ return [
         'enablecolumns' => [
         ],
         'searchFields' => 'value,additional_value,past_answers',
+        'security' => [
+            'ignorePageTypeRestriction' => true,
+        ],
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
     ],
     'types' => [
@@ -37,7 +39,7 @@ return [
 //                'renderType' => 'selectSingle',
 //                'default' => 0,
 //                'items' => [
-//                    ['', 0],
+//                    ['label' => '', 'value' => 0],
 //                ],
 //                'foreign_table' => 'tx_openoap_domain_model_answer',
 //                'foreign_table_where' => 'AND {#tx_openoap_domain_model_answer}.{#pid}=###CURRENT_PID### AND {#tx_openoap_domain_model_answer}.{#sys_language_uid} IN (-1,0)',
@@ -69,7 +71,10 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['-- Label --', 0],
+                    [
+                        'label' => '-- Label --',
+                        'value' => 0,
+                    ],
                 ],
                 'size' => 1,
                 'maxitems' => 1,
@@ -92,9 +97,8 @@ return [
             'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.group_counter_0',
             'config' => [
-                'type' => 'input',
+                'type' => 'number',
                 'size' => 4,
-                'eval' => 'int',
                 'default' => 0,
             ],
         ],
@@ -103,9 +107,8 @@ return [
             'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formgroup.group_counter_1',
             'config' => [
-                'type' => 'input',
+                'type' => 'number',
                 'size' => 4,
-                'eval' => 'int',
                 'default' => 0,
             ],
         ],

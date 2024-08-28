@@ -7,7 +7,6 @@ return [
         'label_alt' => 'uid,text',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'versioningWS' => false,
 //        'languageField' => 'sys_language_uid',
 //        'transOrigPointerField' => 'l10n_parent',
@@ -17,6 +16,9 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'text',
+        'security' => [
+            'ignorePageTypeRestriction' => true,
+        ],
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
     ],
     'types' => [
@@ -38,7 +40,7 @@ return [
 //                'renderType' => 'selectSingle',
 //                'default' => 0,
 //                'items' => [
-//                    ['', 0],
+//                    ['label' => '', 'value' => 0],
 //                ],
 //                'foreign_table' => 'tx_openoap_domain_model_comment',
 //                'foreign_table_where' => 'AND {#tx_openoap_domain_model_comment}.{#pid}=###CURRENT_PID### AND {#tx_openoap_domain_model_comment}.{#sys_language_uid} IN (-1,0)',
@@ -57,8 +59,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -68,9 +70,8 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.creationDate',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'eval' => 'datetime,int',
+                'type' => 'datetime',
+                'format' => 'datetime',
                 'readOnly' => 1,
             ],
         ],
@@ -78,9 +79,8 @@ return [
             'exclude' => true,
             'label' => 'User ID',
             'config' => [
-                'type' => 'input',
+                'type' => 'number',
                 'size' => 4,
-                'eval' => 'int',
                 'readOnly' => 1,
             ],
         ],
@@ -104,9 +104,18 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['-- Label --', 0],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.source_auto', 1],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.source_edit', 2],
+                    [
+                        'label' => '-- Label --',
+                        'value' => 0,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.source_auto',
+                        'value' => 1,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.source_edit',
+                        'value' => 2,
+                    ],
                 ],
                 'size' => 1,
                 'maxitems' => 1,
@@ -117,9 +126,8 @@ return [
             'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_comment.code',
             'config' => [
-                'type' => 'input',
+                'type' => 'number',
                 'size' => 4,
-                'eval' => 'int',
                 'default' => 0,
             ],
         ],
@@ -131,10 +139,22 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_new', 0],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_accepted', 1],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_auto_accepted', 2],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_archived', 9],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_new',
+                        'value' => 0,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_accepted',
+                        'value' => 1,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_auto_accepted',
+                        'value' => 2,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_archived',
+                        'value' => 9,
+                    ],
                 ],
                 'size' => 1,
                 'maxitems' => 1,

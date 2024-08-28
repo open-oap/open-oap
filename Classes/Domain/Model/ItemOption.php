@@ -22,16 +22,16 @@ class ItemOption extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * name of set of options
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $title = '';
 
     /**
      * options
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $options = '';
 
     /**
@@ -63,7 +63,7 @@ class ItemOption extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -83,7 +83,7 @@ class ItemOption extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $options
      */
-    public function setOptions(string $options)
+    public function setOptions(string $options): void
     {
         $this->options = $options;
     }
@@ -103,7 +103,7 @@ class ItemOption extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $optionGroup
      */
-    public function setOptionGroup(string $optionGroup)
+    public function setOptionGroup(string $optionGroup): void
     {
         $this->optionGroup = $optionGroup;
     }
@@ -123,7 +123,7 @@ class ItemOption extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $type
      */
-    public function setType(int $type)
+    public function setType(int $type): void
     {
         $this->type = $type;
     }

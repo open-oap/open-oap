@@ -15,13 +15,13 @@
     ],
     "license": "GPL-2.0-or-later",
     "require": {
-        "typo3/cms-core": "^11.5",
+        "typo3/cms-core": "^12.4",
         "fluidtypo3/vhs": "^7.0",
-        "beechit/fal-securedownload": "^4.0",
+        "beechit/fal-securedownload": "^5.0",
         "bithost-gmbh/pdfviewhelpers":  "^3.0",
         "phpoffice/phpspreadsheet": "^1.29",
         "phpoffice/phpword": "^1.1",
-        "in2code/femanager": "^7.0",
+        "in2code/femanager": "^7.0 || ^8.0",
 		"ext-zip": "*",
 		"ext-dom": "*",
 		"ext-json": "*"

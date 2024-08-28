@@ -23,8 +23,8 @@ class GroupTitle extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * title
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $title = '';
 
     /**
@@ -49,7 +49,7 @@ class GroupTitle extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -69,7 +69,7 @@ class GroupTitle extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $internalTitle
      */
-    public function setInternalTitle(string $internalTitle)
+    public function setInternalTitle(string $internalTitle): void
     {
         $this->internalTitle = $internalTitle;
     }

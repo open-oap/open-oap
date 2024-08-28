@@ -1,10 +1,10 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" 
-    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"  
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
     data-namespace-typo3-fluid="true">
 <f:spaceless>
 <div class="box login" id="login">
     <f:render partial="FlashMessages" arguments="{_all}" />
-    
+
     <f:if condition="{settings.welcome_header}">
         <f:then>
             <h2>{settings.welcome_header}</h2>
@@ -13,7 +13,7 @@
             <h2>{f:translate(key:'welcome_header')}</h2>
         </f:else>
     </f:if>
-    
+
     <f:if condition="{cookieWarning}">
         <f:render partial="CookieWarning" />
     </f:if>
@@ -21,16 +21,16 @@
     <f:if condition="{messageKey} == 'error'">
         <v:variable.set name="formError" value="1" />
     </f:if>
-    
+
     <f:if condition="{onSubmit}">
         <f:then>
-            <f:form class="form" target="_top" fieldNamePrefix="" action="login" onsubmit="{onSubmit}">
+            <f:form class="form" target="_top" fieldNamePrefix="" action="login" requestToken="{requestToken}" onsubmit="{onSubmit}">
                 <f:render section="alert" arguments="{_all}"/>
                 <f:render section="content" arguments="{_all}"/>
             </f:form>
         </f:then>
         <f:else>
-            <f:form class="form" target="_top" fieldNamePrefix="" action="login">
+            <f:form class="form" target="_top" fieldNamePrefix="" action="login" requestToken="{requestToken}">
                 <f:render section="alert" arguments="{_all}"/>
                 <f:render section="content" arguments="{_all}"/>
             </f:form>
@@ -65,8 +65,8 @@
                 <f:translate key="username"/>
                 <f:render partial="Required" arguments="{}" />
             </label>
-            <f:form.textfield 
-                name="user" 
+            <f:form.textfield
+                name="user"
                 id="user"
                 class="{f:if(condition:formError, then:'form__error')}"
                 placeholder="{f:translate(key:'username')}"
@@ -78,8 +78,8 @@
                 <f:translate key="password"/>
                 <f:render partial="Required" arguments="{}" />
             </label>
-            <f:form.password 
-                name="pass" 
+            <f:form.password
+                name="pass"
                 id="pass"
                 class="{f:if(condition:formError, then:'form__error')}"
                 placeholder="{f:translate(key:'password')}"
@@ -92,23 +92,23 @@
                     <label class="form__checkable-label" for="permalogin">
                         <f:if condition="{permaloginStatus} == 1">
                             <f:then>
-                                <f:form.hidden 
-                                    name="permalogin" 
-                                    value="0" 
+                                <f:form.hidden
+                                    name="permalogin"
+                                    value="0"
                                     additionalAttributes="{disabled: 'disabled'}"/>
-                                <f:form.checkbox 
+                                <f:form.checkbox
                                     class="form__checkable"
-                                    name="permalogin" 
-                                    id="permalogin" 
-                                    value="1" 
+                                    name="permalogin"
+                                    id="permalogin"
+                                    value="1"
                                     checked="checked"/>
                             </f:then>
                             <f:else>
                                 <f:form.hidden name="permalogin" value="0"/>
-                                <f:form.checkbox 
+                                <f:form.checkbox
                                     class="form__checkable"
-                                    name="permalogin" 
-                                    id="permalogin" 
+                                    name="permalogin"
+                                    id="permalogin"
                                     value="1"/>
                             </f:else>
                         </f:if>
@@ -120,20 +120,20 @@
         </f:if>
 
         <div class="form__buttons">
-            <f:form.button 
-                type="submit" 
-                class="button" 
-                value="1" 
+            <f:form.button
+                type="submit"
+                class="button"
+                value="1"
                 data="{dialog-next:1}"
                 name="submit">
                 {f:translate(key: 'login')}
             </f:form.button>
         </div>
-        
+
         <f:if condition="{settings.showForgotPassword} || {settings.showForgotPasswordLink}">
             <div class="form__group">
-                <f:link.action 
-                    action="recovery" 
+               <f:link.action
+                    action="recovery"
                     section="login"
                     controller="PasswordRecovery">
                     <f:render partial="RenderLabelOrMessage" arguments="{key: 'forgot_header'}"/>

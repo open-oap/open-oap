@@ -74,7 +74,18 @@
 				<source>Supporter</source>
 				<target>Träger</target>
 			</trans-unit>
-
+			<trans-unit id="tx_openoap_domain_model_call.type" resname="tx_openoap_domain_model_call.type">
+				<source>Call Type(intern or extern)</source>
+				<target>Call Art(intern or extern)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.extern_link" resname="tx_openoap_domain_model_call.extern_link">
+				<source>URL of extern webpage</source>
+				<target>URL der externen Webseite</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.hint" resname="tx_openoap_domain_model_call.hint">
+				<source>Call hint</source>
+				<target>Call Hinweis</target>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_proposal.state" resname="tx_openoap_domain_model_proposal.state">
 				<source>State</source>
 				<target>Status</target>

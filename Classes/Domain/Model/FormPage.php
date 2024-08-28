@@ -22,8 +22,8 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * title
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $title = '';
 
     /**
@@ -37,8 +37,8 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * internal title for TYPO3 backend view (for editors)
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $internalTitle = '';
 
     /**
@@ -84,7 +84,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * It will be rewritten on each save in the extension builder
      * You may modify the constructor of this class instead
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         $this->itemGroups = $this->itemGroups ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->modificators = $this->modificators ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -105,7 +105,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -125,7 +125,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $menuTitle
      */
-    public function setMenuTitle(string $menuTitle)
+    public function setMenuTitle(string $menuTitle): void
     {
         $this->menuTitle = $menuTitle;
     }
@@ -145,7 +145,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $internalTitle
      */
-    public function setInternalTitle(string $internalTitle)
+    public function setInternalTitle(string $internalTitle): void
     {
         $this->internalTitle = $internalTitle;
     }
@@ -165,7 +165,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $introText
      */
-    public function setIntroText(string $introText)
+    public function setIntroText(string $introText): void
     {
         $this->introText = $introText;
     }
@@ -185,7 +185,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $type
      */
-    public function setType(int $type)
+    public function setType(int $type): void
     {
         $this->type = $type;
     }
@@ -205,7 +205,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormGroup $itemGroup
      */
-    public function addItemGroup(\OpenOAP\OpenOap\Domain\Model\FormGroup $itemGroup)
+    public function addItemGroup(\OpenOAP\OpenOap\Domain\Model\FormGroup $itemGroup): void
     {
         $this->itemGroups->attach($itemGroup);
     }
@@ -215,7 +215,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormGroup $itemGroupToRemove The FormGroup to be removed
      */
-    public function removeItemGroup(\OpenOAP\OpenOap\Domain\Model\FormGroup $itemGroupToRemove)
+    public function removeItemGroup(\OpenOAP\OpenOap\Domain\Model\FormGroup $itemGroupToRemove): void
     {
         $this->itemGroups->detach($itemGroupToRemove);
     }
@@ -235,7 +235,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormGroup> $itemGroups
      */
-    public function setItemGroups(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $itemGroups)
+    public function setItemGroups(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $itemGroups): void
     {
         $this->itemGroups = $itemGroups;
     }
@@ -246,7 +246,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param \OpenOAP\OpenOap\Domain\Model\FormModificator $modificator
      * @return void
      */
-    public function addModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificator)
+    public function addModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificator): void
     {
         $this->modificators->attach($modificator);
     }
@@ -257,7 +257,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param \OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove The FormModificator to be removed
      * @return void
      */
-    public function removeModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove)
+    public function removeModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove): void
     {
         $this->modificators->detach($modificatorToRemove);
     }
@@ -278,7 +278,7 @@ class FormPage extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormModificator> $modificators
      * @return void
      */
-    public function setModificators(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $modificators)
+    public function setModificators(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $modificators): void
     {
         $this->modificators = $modificators;
     }

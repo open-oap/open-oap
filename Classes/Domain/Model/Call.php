@@ -29,8 +29,8 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Name of Call
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $title = '';
 
     /**
@@ -106,7 +106,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * usergroup
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\ApplicantGroup>
      */
     protected $usergroup;
 
@@ -156,6 +156,21 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected ?Supporter $supporter = null;
 
     /**
+     * @var int
+     */
+    protected int $type = 0;
+
+    /**
+     * @var string
+     */
+    protected string $externLink = '';
+
+    /**
+     * @var string
+     */
+    protected string $hint = '';
+
+    /**
      * __construct
      */
     public function __construct()
@@ -170,7 +185,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * It will be rewritten on each save in the extension builder
      * You may modify the constructor of this class instead
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         $this->formPages = $this->formPages ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->usergroup = $this->usergroup ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -191,7 +206,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -211,7 +226,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $introText
      */
-    public function setIntroText(string $introText)
+    public function setIntroText(string $introText): void
     {
         $this->introText = $introText;
     }
@@ -231,7 +246,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $teaserText
      */
-    public function setTeaserText(string $teaserText)
+    public function setTeaserText(string $teaserText): void
     {
         $this->teaserText = $teaserText;
     }
@@ -251,7 +266,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $emails
      */
-    public function setEmails(string $emails)
+    public function setEmails(string $emails): void
     {
         $this->emails = $emails;
     }
@@ -271,7 +286,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \DateTime $callEndTime
      */
-    public function setCallEndTime(\DateTime $callEndTime)
+    public function setCallEndTime(\DateTime $callEndTime): void
     {
         $this->callEndTime = $callEndTime;
     }
@@ -291,7 +306,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $feUserExceptions
      */
-    public function setFeUserExceptions(string $feUserExceptions)
+    public function setFeUserExceptions(string $feUserExceptions): void
     {
         $this->feUserExceptions = $feUserExceptions;
     }
@@ -301,7 +316,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormPage $formPage
      */
-    public function addFormPage(\OpenOAP\OpenOap\Domain\Model\FormPage $formPage)
+    public function addFormPage(\OpenOAP\OpenOap\Domain\Model\FormPage $formPage): void
     {
         $this->formPages->attach($formPage);
     }
@@ -311,7 +326,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormPage $formPageToRemove The FormPage to be removed
      */
-    public function removeFormPage(\OpenOAP\OpenOap\Domain\Model\FormPage $formPageToRemove)
+    public function removeFormPage(\OpenOAP\OpenOap\Domain\Model\FormPage $formPageToRemove): void
     {
         $this->formPages->detach($formPageToRemove);
     }
@@ -331,7 +346,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormPage> $formPages
      */
-    public function setFormPages(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $formPages)
+    public function setFormPages(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $formPages): void
     {
         $this->formPages = $formPages;
     }
@@ -347,7 +362,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @param int $hidden
      */
-    public function setHidden(int $hidden)
+    public function setHidden(int $hidden): void
     {
         $this->hidden = $hidden;
     }
@@ -367,7 +382,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \DateTime $callStartTime
      */
-    public function setCallStartTime(\DateTime $callStartTime)
+    public function setCallStartTime(\DateTime $callStartTime): void
     {
         $this->callStartTime = $callStartTime;
     }
@@ -387,7 +402,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $proposalPid
      */
-    public function setProposalPid(int $proposalPid)
+    public function setProposalPid(int $proposalPid): void
     {
         $this->proposalPid = $proposalPid;
     }
@@ -395,7 +410,7 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the usergroup
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup> usergroup
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\ApplicantGroup> usergroup
      */
     public function getUsergroup()
     {
@@ -405,9 +420,9 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the usergroup
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup> $usergroup
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\ApplicantGroup> $usergroup
      */
-    public function setUsergroup(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $usergroup)
+    public function setUsergroup(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $usergroup): void
     {
         $this->usergroup = $usergroup;
     }
@@ -574,5 +589,53 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setSupporter(?Supporter $supporter): void
     {
         $this->supporter = $supporter;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param int $type
+     */
+    public function setType(int $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExternLink(): string
+    {
+        return $this->externLink;
+    }
+
+    /**
+     * @param string $externLink
+     */
+    public function setExternLink(string $externLink): void
+    {
+        $this->externLink = $externLink;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHint(): string
+    {
+        return $this->hint;
+    }
+
+    /**
+     * @param string $hint
+     */
+    public function setHint(string $hint): void
+    {
+        $this->hint = $hint;
     }
 }

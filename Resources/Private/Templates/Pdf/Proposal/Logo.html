@@ -1,0 +1,24 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:pdf="http://typo3.org/ns/Bithost/Pdfviewhelpers/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:comment><!--
+Available variables:
+    {callLogo}
+--></f:comment>
+
+<pdf:document outputDestination="file" outputPath="{filepath}" pdfa="1">
+    <pdf:page margin="{top:10, bottom:20}">
+        <f:if condition="{callLogo}">
+            <f:then>
+                <pdf:image src="{callLogo}" alignment="left"/>
+            </f:then>
+            <f:else>
+                <pdf:image src="EXT:open_oap/Resources/Public/Images/logo-main.svg" width="20%" alignment="left"/>
+            </f:else>
+        </f:if>
+    </pdf:page>
+</pdf:document>
+
+</html>

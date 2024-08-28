@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenOAP\OpenOap\Domain\Repository;
 
+use Doctrine\DBAL\ArrayParameterType;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
 
 use TYPO3\CMS\Core\Database\Connection;
@@ -139,10 +140,10 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         //DebuggerUtility::var_dump(\OpenOAP\OpenOap\Controller\OapBaseController::COMMENT_SOURCE_EDIT_ANSWER, 'Konstante Edit_Answer');exit;
         $table = 'tx_openoap_domain_model_comment';
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
-        $where[] = $queryBuilder->expr()->in('t.proposal', $queryBuilder->createNamedParameter($proposalIds, Connection::PARAM_INT_ARRAY));
-        $where[] = $queryBuilder->expr()->eq('t.state', $queryBuilder->createNamedParameter($oldState, \PDO::PARAM_INT));
+        $where[] = $queryBuilder->expr()->in('t.proposal', $queryBuilder->createNamedParameter($proposalIds, ArrayParameterType::INTEGER));
+        $where[] = $queryBuilder->expr()->eq('t.state', $queryBuilder->createNamedParameter($oldState, Connection::PARAM_INT));
         if ($source != null) {
-            $where[] = $queryBuilder->expr()->eq('t.source', $queryBuilder->createNamedParameter($source, \PDO::PARAM_INT));
+            $where[] = $queryBuilder->expr()->eq('t.source', $queryBuilder->createNamedParameter($source, Connection::PARAM_INT));
         }
 
         $updateQuery = $queryBuilder

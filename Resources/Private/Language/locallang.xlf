@@ -780,7 +780,7 @@
 			</trans-unit>
 			<trans-unit id='tx_openoap.flash.proposal_not_editable'
 						resname='tx_openoap.flash.proposal_not_editable'>
-				<source><![CDATA[Proposal isn't editable yet. State is not "in progress" or "re-opened".]]></source>
+				<source><![CDATA[Proposal is not yet editable. State is not "in progress" or "re-opened" or the submission deadline has passed.]]></source>
 			</trans-unit>
 			<trans-unit id='tx_openoap.flash.proposal_access_denied'
 						resname='tx_openoap.flash.proposal_access_denied'>

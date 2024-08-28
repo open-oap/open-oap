@@ -9,7 +9,7 @@ class UserObjectConverter extends PersistentObjectConverter
     /**
      * @var string
      */
-    protected $targetType = 'OpenOAP\\OpenOap\\Domain\\Model\\User';
+    protected $targetType = \OpenOAP\OpenOap\Domain\Model\Applicant::class;
 
     /**
      * Fetch an object from persistence layer.

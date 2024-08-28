@@ -22,8 +22,8 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Name of group
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
     protected $title = '';
 
     /**
@@ -127,7 +127,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * It will be rewritten on each save in the extension builder
      * You may modify the constructor of this class instead
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         $this->items = $this->items ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->groupTitle = $this->groupTitle ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -149,7 +149,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -169,7 +169,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $introText
      */
-    public function setIntroText(string $introText)
+    public function setIntroText(string $introText): void
     {
         $this->introText = $introText;
     }
@@ -189,7 +189,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $helpText
      */
-    public function setHelpText(string $helpText)
+    public function setHelpText(string $helpText): void
     {
         $this->helpText = $helpText;
     }
@@ -225,7 +225,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $modelName
      */
-    public function setModelName(string $modelName)
+    public function setModelName(string $modelName): void
     {
         $this->modelName = $modelName;
     }
@@ -245,7 +245,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param int $repeatableMax
      */
-    public function setRepeatableMax(int $repeatableMax)
+    public function setRepeatableMax(int $repeatableMax): void
     {
         $this->repeatableMax = $repeatableMax;
     }
@@ -255,7 +255,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormItem $item
      */
-    public function addItem(\OpenOAP\OpenOap\Domain\Model\FormItem $item)
+    public function addItem(\OpenOAP\OpenOap\Domain\Model\FormItem $item): void
     {
         $this->items->attach($item);
     }
@@ -265,7 +265,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormItem $itemToRemove The FormItem to be removed
      */
-    public function removeItem(\OpenOAP\OpenOap\Domain\Model\FormItem $itemToRemove)
+    public function removeItem(\OpenOAP\OpenOap\Domain\Model\FormItem $itemToRemove): void
     {
         $this->items->detach($itemToRemove);
     }
@@ -285,7 +285,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormItem> $items
      */
-    public function setItems(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $items)
+    public function setItems(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $items): void
     {
         $this->items = $items;
     }
@@ -295,7 +295,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\GroupTitle $groupTitle
      */
-    public function addGroupTitle(\OpenOAP\OpenOap\Domain\Model\GroupTitle $groupTitle)
+    public function addGroupTitle(\OpenOAP\OpenOap\Domain\Model\GroupTitle $groupTitle): void
     {
         $this->groupTitle->attach($groupTitle);
     }
@@ -305,7 +305,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\GroupTitle $groupTitleToRemove The GroupTitle to be removed
      */
-    public function removeGroupTitle(\OpenOAP\OpenOap\Domain\Model\GroupTitle $groupTitleToRemove)
+    public function removeGroupTitle(\OpenOAP\OpenOap\Domain\Model\GroupTitle $groupTitleToRemove): void
     {
         $this->groupTitle->detach($groupTitleToRemove);
     }
@@ -325,7 +325,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\GroupTitle> $groupTitle
      */
-    public function setGroupTitle(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $groupTitle)
+    public function setGroupTitle(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $groupTitle): void
     {
         $this->groupTitle = $groupTitle;
     }
@@ -393,7 +393,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormModificator $modificator
      */
-    public function addModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificator)
+    public function addModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificator): void
     {
         $this->modificators->attach($modificator);
     }
@@ -403,7 +403,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove The FormModificator to be removed
      */
-    public function removeModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove)
+    public function removeModificator(\OpenOAP\OpenOap\Domain\Model\FormModificator $modificatorToRemove): void
     {
         $this->modificators->detach($modificatorToRemove);
     }
@@ -423,7 +423,7 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormModificator> $modificators
      */
-    public function setModificators(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $modificators)
+    public function setModificators(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $modificators): void
     {
         $this->modificators = $modificators;
     }

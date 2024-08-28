@@ -13,7 +13,7 @@
 <f:section name="Mailcontent">
     <f:if condition="{mailtext}">
         <f:then>
-            <f:format.html>{mailtext}</f:format.html>
+            <f:transform.html>{mailtext}</f:transform.html>
         </f:then>
         <f:else>
             <f:format.raw><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.email.submit_html" arguments="{0: proposal.call.title, 1: proposal.title, 2: signature}"/></f:format.raw>

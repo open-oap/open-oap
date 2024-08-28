@@ -6,7 +6,6 @@ return [
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'versioningWS' => false,
 //        'languageField' => 'sys_language_uid',
 //        'transOrigPointerField' => 'l10n_parent',
@@ -16,6 +15,9 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'title,meta_information',
+        'security' => [
+            'ignorePageTypeRestriction' => true,
+        ],
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
     ],
     'types' => [
@@ -38,7 +40,7 @@ return [
 //                'renderType' => 'selectSingle',
 //                'default' => 0,
 //                'items' => [
-//                    ['', 0],
+//                    ['label' => '', 'value' => 0],
 //                ],
 //                'foreign_table' => 'tx_openoap_domain_model_proposal',
 //                'foreign_table_where' => 'AND {#tx_openoap_domain_model_proposal}.{#pid}=###CURRENT_PID### AND {#tx_openoap_domain_model_proposal}.{#sys_language_uid} IN (-1,0)',
@@ -57,8 +59,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -99,8 +101,9 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
                 'default' => '',
+                'required' => true,
             ],
         ],
         'signature' => [
@@ -122,17 +125,38 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['-- Label --', 0],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.1', 1],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.2', 2],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.3', 3],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.4', 4],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.5', 5],
-                    ['LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.6', 6],
+                    [
+                        'label' => '-- Label --',
+                        'value' => 0,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.1',
+                        'value' => 1,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.2',
+                        'value' => 2,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.3',
+                        'value' => 3,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.4',
+                        'value' => 4,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.5',
+                        'value' => 5,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_proposal.state.6',
+                        'value' => 6,
+                    ],
                 ],
                 'size' => 1,
                 'maxitems' => 1,
-                'eval' => 'required',
+                'required' => true,
             ],
         ],
         'archived' => [
@@ -144,8 +168,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                     ],
                 ],
                 'default' => 0,

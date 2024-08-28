@@ -1,9 +1,10 @@
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    xmlns:oap="http://typo3.org/ns/OpenOAP/OpenOap/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<be:moduleLayout>
+<oap:moduleLayout>
     <f:variable name="overviewPage" value="off" />
 
     <f:be.pageRenderer
@@ -11,40 +12,40 @@
         includeRequireJsModules="{0:'TYPO3/CMS/OpenOap/BackendProposals'}"
     />
 
-    <be:moduleLayout.menu identifier="ModuleMenu">
+    <oap:moduleLayout.menu identifier="ModuleMenu">
         <f:switch expression="{actionName}">
             <f:case value="listProposalsAction">
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_proposals')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'listProposals')}" />
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_calls')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewCalls')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_proposals')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'listProposals')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_calls')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewCalls')}" />
                 <f:if condition="{overviewPage} == 'on'">
-                    <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewProposals')}" />
+                    <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewProposals')}" />
                 </f:if>
             </f:case>
             <f:case value="showOverviewProposalsAction">
                 <f:if condition="{overviewPage} == 'on'">
-                    <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewProposals')}" />
+                    <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewProposals')}" />
                 </f:if>
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_proposals')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'listProposals', arguments: '{call: call}')}" />
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_calls')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewCalls')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_proposals')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'listProposals', arguments: '{call: call}')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_calls')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewCalls')}" />
             </f:case>
             <f:case value="showOverviewCallsAction">
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_calls')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewCalls')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_calls')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewCalls')}" />
                 <f:if condition="{overviewPage} == 'on'">
-                    <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewProposals')}" />
+                    <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewProposals')}" />
                 </f:if>
             </f:case>
             <f:case value="showProposalAction">
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.show_proposal')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showProposal')}" />
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_proposals')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'listProposals', arguments: '{call:call}')}" />
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_calls')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewCalls')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.show_proposal')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showProposal')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_proposals')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'listProposals', arguments: '{call:call}')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_calls')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewCalls')}" />
                 <f:if condition="{overviewPage} == 'on'">
-                    <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewProposals')}" />
+                    <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendProposals', action: 'showOverviewProposals')}" />
                 </f:if>
             </f:case>
         </f:switch>
-    </be:moduleLayout.menu>
+    </oap:moduleLayout.menu>
 
     <f:render section="content" />
-</be:moduleLayout>
+</oap:moduleLayout>
 
 </html>

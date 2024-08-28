@@ -12,7 +12,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class ControlAccessViewHelper extends AbstractViewHelper
 {
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument('proposal', 'object', 'Proposal object', true);
         $this->registerArgument('settings', 'array', 'extension settings', true);

@@ -1,38 +1,39 @@
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    xmlns:oap="http://typo3.org/ns/OpenOAP/OpenOap/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<be:moduleLayout>
+<oap:moduleLayout>
     <f:variable name="overviewPage" value="off" />
 
     <f:be.pageRenderer />
 
-    <be:moduleLayout.menu identifier="ModuleMenu">
+    <oap:moduleLayout.menu identifier="ModuleMenu">
         <f:switch expression="{actionName}">
             <f:case value="listFormsAction">
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_forms')}" uri="{f:uri.action(controller: 'BackendForms', action: 'listForms')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_forms')}" uri="{f:uri.action(controller: 'BackendForms', action: 'listForms')}" />
                 <f:if condition="{overviewPage} == 'on'">
-                    <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendForms', action: 'showOverviewForms')}" />
+                    <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendForms', action: 'showOverviewForms')}" />
                 </f:if>
             </f:case>
             <f:case value="showOverviewFormsAction">
                 <f:if condition="{overviewPage} == 'on'">
-                    <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendForms', action: 'showOverviewForms')}" />
+                    <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendForms', action: 'showOverviewForms')}" />
                 </f:if>
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_forms')}" uri="{f:uri.action(controller: 'BackendForms', action: 'listForms')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_forms')}" uri="{f:uri.action(controller: 'BackendForms', action: 'listForms')}" />
             </f:case>
             <f:case value="previewFormAction">
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.show_call_form')}" uri="{f:uri.action(controller: 'BackendForms', action: 'previewForm')}" />
-                <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_forms')}" uri="{f:uri.action(controller: 'BackendForms', action: 'listForms')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.show_call_form')}" uri="{f:uri.action(controller: 'BackendForms', action: 'previewForm')}" />
+                <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_forms')}" uri="{f:uri.action(controller: 'BackendForms', action: 'listForms')}" />
                 <f:if condition="{overviewPage} == 'on'">
-                    <be:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendForms', action: 'showOverviewForms')}" />
+                    <oap:moduleLayout.menuItem label="{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.overview')}" uri="{f:uri.action(controller: 'BackendForms', action: 'showOverviewForms')}" />
                 </f:if>
             </f:case>
         </f:switch>
-    </be:moduleLayout.menu>
+    </oap:moduleLayout.menu>
 
     <f:render section="content" />
-</be:moduleLayout>
+</oap:moduleLayout>
 
 </html>

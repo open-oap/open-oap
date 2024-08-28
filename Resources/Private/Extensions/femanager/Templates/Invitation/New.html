@@ -36,7 +36,8 @@ Invitation / New
 		name="user"
 		object="{user}"
 		action="create"
-		additionalAttributes="{data-femanager-plugin:data.uid}"
+        arguments="{hash:hash}"
+        additionalAttributes="{data-femanager-plugin:data.uid, data-femanager-plugin-name: data.CType}"
 		class="form form--register {f:if(condition:'{settings.invitation.validation._enable.client}',then:'feManagerValidation',else:'')}">
 
 		<div role="alert">

@@ -163,42 +163,25 @@ defined('TYPO3') || die();
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['locallangXMLOverride']['de']['EXT:femanager/Resources/Private/Language/locallang.xlf'][]
         = 'EXT:open_oap/Resources/Private/Language/femanager/de.locallang.xlf';
 
-    // Mapping
-    $extbaseObjectContainer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class);
+    // XCLASS
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Domain\Model\User::class] = [
+        'className' => \OpenOAP\OpenOap\Domain\Model\Applicant::class,
+    ];
 
-    $extbaseObjectContainer->registerImplementation(
-        \In2code\Femanager\Domain\Model\User::class,
-        \OpenOAP\OpenOap\Domain\Model\User::class
-    );
-    $extbaseObjectContainer->registerImplementation(
-        \In2code\Femanager\Controller\InvitationController::class,
-        \OpenOAP\OpenOap\Controller\UserInvitationController::class
-    );
-    $extbaseObjectContainer->registerImplementation(
-        \In2code\Femanager\Controller\EditController::class,
-        \OpenOAP\OpenOap\Controller\UserEditController::class
-    );
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Domain\Model\UserGroup::class] = [
+        'className' => \OpenOAP\OpenOap\Domain\Model\ApplicantGroup::class,
+    ];
 
-    // XCLASS EventController
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\InvitationController::class]
-        = [
-            'className' => \OpenOAP\OpenOap\Controller\UserInvitationController::class,
-        ];
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\InvitationController::class] = [
+        'className' => \OpenOAP\OpenOap\Controller\UserInvitationController::class,
+    ];
 
-    // XCLASS Pdfviewhelpers ImageViewHelper
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][ \Bithost\Pdfviewhelpers\ViewHelpers\ImageViewHelper::class ] = [
         'className' => \OpenOAP\OpenOap\Xclass\Pdfviewhelpers\ImageViewHelper::class,
     ];
 
-    // Starting  with TYPO3 v12 extbase type converters are registered in
-    // Configuration/Services.yaml
-    if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() < 12) {
-        // Register type converters
-        //   \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(UserObjectConverter::class);
-    }
-
     // Add statusAction to nonCacheableAction of femanager invitation plugin
-    if (!in_array('status', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Pi1']['controllers']['In2code\Femanager\Controller\InvitationController']['nonCacheableActions'])) {
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Pi1']['controllers']['In2code\Femanager\Controller\InvitationController']['nonCacheableActions'][] = 'status';
+    if (!in_array('status', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Invitation']['controllers'][\In2code\Femanager\Controller\InvitationController::class]['nonCacheableActions'])) {
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Invitation']['controllers'][\In2code\Femanager\Controller\InvitationController::class]['nonCacheableActions'][] = 'status';
     }
 })();
