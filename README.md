@@ -8,7 +8,7 @@ Development project for an open-source TYPO3 extension.
 - EDELWEISS72 GmbH - a Munich based full-service agency (www.edelweiss72.de)
 
 ## Typo3-Version
-The current supportet version is 11, in July 2024 it will be updated to 12.
+The current supportet version is 12
 
 ## Note
 Sorry, there was a misleading note in version 1.2.0 (an old one from 1.1)
