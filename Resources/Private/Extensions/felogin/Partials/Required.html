@@ -1,3 +1,8 @@
-<v:render.template
-        file="EXT:cb_cosmobase/Resources/Private/Templates/Extensions/Form/Partials/Field/Required.html"
-        variables="{}" />
+<html data-namespace-typo3-fluid="true" xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
+<f:spaceless>
+    <span class="form__required">
+        <span aria-hidden="true">*</span>
+        <span class="aural"> (<f:translate key="tx_openoap_applicant.fieldRequired.label" extensionName="open_oap"/>)</span>
+    </span>
+</f:spaceless>
+</html>
