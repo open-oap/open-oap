@@ -255,6 +255,9 @@ Available variables:
                         </f:if>
                     </td>
                     <td nowrap="nowrap">
+                        <f:if condition="{proposal.applicant_username} == ''">
+                            <del class="text-danger">{proposal.applicant}</del>
+                        </f:if>
                         <f:if condition="{proposal.applicant_company}">
                             {proposal.applicant_company}<br>
                         </f:if>

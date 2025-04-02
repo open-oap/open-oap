@@ -33,23 +33,23 @@ plugin.tx_openoap_dashboard {
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.masterdata_edit_page_id
         masterdataEditPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.call_pool_id
-        callPoolPageId =
+        callPoolId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.proposals_page_id
-        proposalsPoolPageId =
+        proposalsPoolId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.items_pool_id
-        itemsPoolPageId =
+        itemsPoolId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.dashboard.proposals_active_limit
         proposalsActiveLimit = 5
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.dashboard.proposals_archived_limit
         proposalsArchivedLimit = 5
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.answers_pool_id
-        answersPoolPageId =
+        answersPoolId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.comments_pool_id
-        commentsPoolPageId =
+        commentsPoolId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.masterdata.countries_item_option_id
         countriesItemOptionId =
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.general_fe_groups_id
-        generalFeGroupId =
+        generalFeGroupsId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.tester_fe_groups_id
         testerFeGroupsId =
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.dashboard.meta_info_separator

@@ -55,7 +55,7 @@ Available variables:
                     <span>
                         <f:if condition="{proposalList -> f:count()} > 1">
                             <f:then>
-                                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.email.status_{state}.subject', languageKey:0, arguments:{0: siteName, 1: '[@signature]'})}
+                                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.email.status_{state}.subject', languageKey:'en', arguments:{0: siteName, 1: '[@signature]'})}
                             </f:then>
                             <f:else>
                                 {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.email.status_{state}.subject', languageKey:proposalList.0.maildata.langCode, arguments:{0: siteName, 1: proposalList.0.maildata.signature})}

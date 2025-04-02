@@ -266,6 +266,11 @@
 				<source><![CDATA[Signature]]></source>
 				<target><![CDATA[Unterschrift]]></target>
 			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_proposal.survey_hash'
+						resname='tx_openoap_domain_model_proposal.survey_hash'>
+				<source><![CDATA[Survey (Hash)]]></source>
+				<target><![CDATA[Umfrage (Hash)]]></target>
+			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_proposal.state' resname='tx_openoap_domain_model_proposal.state'>
 				<source><![CDATA[State]]></source>
 				<target><![CDATA[Land]]></target>

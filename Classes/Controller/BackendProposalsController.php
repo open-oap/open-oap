@@ -854,6 +854,7 @@ class BackendProposalsController extends OapBackendController
         $head[$itemHeadRow][$columnNo++] = 'State (intern)';
         $head[$itemHeadRow][$columnNo++] = 'Submitted';
         $head[$itemHeadRow][$columnNo++] = 'Last Changed';
+        $head[$itemHeadRow][$columnNo++] = 'Survey (Hash)';
 
         // calculate group repeats
         $groupsCounter = [];
@@ -941,6 +942,7 @@ class BackendProposalsController extends OapBackendController
             $export[$proposalUid][2] = $states[$proposal->getState()];
             $export[$proposalUid][3] = date("d.m.Y", $proposal->getSubmitTstamp());
             $export[$proposalUid][4] = date("d.m.Y", $proposal->getEditTstamp());
+            $export[$proposalUid][5] = $proposal->getSurveyHash();
 
             /** @var Answer $answer */
             foreach ($proposal->getAnswers() as $answer) {

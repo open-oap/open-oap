@@ -623,6 +623,10 @@ class ProposalController extends OapFrontendController
                 $proposal->addLog($logItem);
                 $proposal->setEditTstamp(time());
 
+                if ($this->survey !== '') {
+                    $proposal->setSurveyHash($this->survey);
+                }
+
                 // todo establish with signals (or hooks) the possibility to extend createSignature with own functions and values
                 $proposalPid = $this->determineProposalPid($proposal->getCall());
                 $signatureNumber = $this->proposalRepository->getMaxSignature($proposalPid);
@@ -781,20 +785,6 @@ class ProposalController extends OapFrontendController
         } else {
             $downloadName = $storage->sanitizeFileName($proposal->getTitle() . '--' . $proposal->getUid() . '--' . date('YmdHi') . $fileExtension);
         }
-        //        DebuggerUtility::var_dump($downloadName);die();
-
-        //        $this->mergeTemplateWithWord($contentWordFileName, $targetfileAbsName);
-
-        //        $templateProcessor = new TemplateProcessor($targetfileAbsName);
-        //
-        //        $states = $this->createStatesArray('all');
-        //
-        //        $this->wordVarReplacement($proposal, $states[$proposal->getState()], $templateProcessor);
-
-        //        $templateProcessor->saveAs($targetfileAbsName); // As($mergeFile);
-        //        $filename = $this->getWordFileName($proposal->getUid(), 'proposal');
-        //DebuggerUtility::var_dump($targetfileAbsName);die();
-        //        DebuggerUtility::var_dump($contentWordFileName);die();
 
         header('Content-Description: File Transfer');
         header('Content-Disposition: attachment; filename="' . $downloadName . '"');
@@ -1069,7 +1059,9 @@ class ProposalController extends OapFrontendController
                             break;
                         }
                         if ($item->getType() == self::TYPE_DATE1 or $item->getType() == self::TYPE_DATE2) {
-                            $minDate = new DateTime($validator->getParam1());
+                            $date = $this->convertIntoDate($validator->getParam1());
+
+                            $minDate = new DateTime($date);
                             $valueDate = new DateTime($answer->getValue());
                             //                            die();
                             if ($minDate > $valueDate) {
@@ -1719,7 +1711,7 @@ class ProposalController extends OapFrontendController
 
         // current proposal call ended
         if ($call->getCallEndTime() instanceof DateTime) {
-            if ($call->getCallEndTime()->getTimestamp() >= strtotime('-3 hours', time())) {
+            if ($call->getCallEndTime()->getTimestamp() >= time()) {
                 $timeRestricted = false;
             }
         }

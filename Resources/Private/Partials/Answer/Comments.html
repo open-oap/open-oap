@@ -8,7 +8,7 @@
                 <h2 class="accordion__item-header accordion__item-header--comments">
                     <svg class="form__icon form__icon--{f:if(condition:'{answersMap.{answerId}.new_comments} == 1',then:'new-')}comments"
                          width="21" height="21" focusable="false" aria-hidden="true">
-                        <use xlink:href="/typo3conf/ext/open_oap/Resources/Public/Icons/sprite.svg#icon-{f:if(condition:'{answersMap.{answerId}.new_comments} == 1',then:'new-comments',else:'comments-small')}" x="0" y="0"/>
+                        <use xlink:href="{f:uri.image(src: 'EXT:open_oap/Resources/Public/Icons/sprite.svg')}#icon-{f:if(condition:'{answersMap.{answerId}.new_comments} == 1',then:'new-comments',else:'comments-small')}" x="0" y="0"/>
                     </svg>{f:translate(key:'tx_openoap_domain_model_proposal.comments')}
                 </h2>
                 <div class="accordion__item-content">
@@ -20,7 +20,7 @@
     <f:else>
         <div class="comments">
             <p class="comments__header">
-                <svg class="form__icon form__icon--new-comments" width="21" height="21" focusable="false" aria-hidden="true"> <use xlink:href="/typo3conf/ext/open_oap/Resources/Public/Icons/sprite.svg#icon-new-comments" x="0" y="0"/> </svg>{f:translate(key:'tx_openoap_domain_model_proposal.comments')}
+                <svg class="form__icon form__icon--new-comments" width="21" height="21" focusable="false" aria-hidden="true"> <use xlink:href="{f:uri.image(src: 'EXT:open_oap/Resources/Public/Icons/sprite.svg')}#icon-new-comments" x="0" y="0"/> </svg>{f:translate(key:'tx_openoap_domain_model_proposal.comments')}
             </p>
             <f:render section="listOfComments" arguments="{_all}" />
         </div>
