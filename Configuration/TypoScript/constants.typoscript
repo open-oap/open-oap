@@ -1,3 +1,7 @@
+#########################################
+# Global constants for open_oap Extension
+#########################################
+
 plugin.tx_openoap_dashboard {
     view {
         # cat=plugin.tx_openoap_dashboard/file; type=string; label=Path to template root (FE)
@@ -8,42 +12,46 @@ plugin.tx_openoap_dashboard {
         layoutRootPath = EXT:open_oap/Resources/Private/Layouts/
     }
     persistence {
-        # cat=plugin.tx_openoap_dashboard//a; type=string; label=Default storage PID
+        # cat=plugin.tx_openoap_dashboard//a; type=string; label=Default storage PID (Please set this to your storage folder page ID)
         storagePid =
     }
     settings {
+        # Here we define page and record related constants without actual IDs.
+        # They must be set by the site integrator in the TYPO3 constants editor.
+        # The wording is unified: use ...PageId for page IDs, ...FeGroupId for FE group IDs, etc.
+
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.dashboard_page_id
-        dashboardPageId = 38
+        dashboardPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_page_id
-        surveyPageId = 116
+        surveyPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.form_page_id
-        formPageId = 55
+        formPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.proposals_page_id
-        proposalsPageId = 58
+        proposalsPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.notifications_page_id
-        notificationsPageId = 61
+        notificationsPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.masterdata_edit_page_id
-        masterdataEditPageId = 46
+        masterdataEditPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.call_pool_id
-        callPoolId = 24
-        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.proposal_pool_id
-        proposalsPoolId = 34
+        callPoolPageId =
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.proposals_page_id
+        proposalsPoolPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.items_pool_id
-        itemsPoolId = 21
+        itemsPoolPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.dashboard.proposals_active_limit
         proposalsActiveLimit = 5
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.dashboard.proposals_archived_limit
         proposalsArchivedLimit = 5
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.answers_pool_id
-        answersPoolId = 29
+        answersPoolPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.comments_pool_id
-        commentsPoolId = 53
+        commentsPoolPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.masterdata.countries_item_option_id
-        countriesItemOptionId = 28
+        countriesItemOptionId =
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.general_fe_groups_id
-        generalFeGroupsId = 1
+        generalFeGroupId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.tester_fe_groups_id
-        testerFeGroupsId = 2
+        testerFeGroupsId =
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.dashboard.meta_info_separator
         metaInfoSeparator = |
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.validation.default_max_char_textarea
@@ -53,25 +61,25 @@ plugin.tx_openoap_dashboard {
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.masterdata.default_sources_model
         defaultSourcesModel = applicant.companyEmail, applicant.firstName, applicant.lastName, applicant.address, applicant.country, applicant.telephone, applicant.fax, applicant.email, applicant.zip, applicant.city, applicant.www, applicant.company, applicant.salutation
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.filestorage.upload_folder
-        uploadFolder = 2:/
+        uploadFolder =
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.signature_format
         signatureFormat = %04d
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.word_export_template_file
         wordExportTemplateFile = word-vorlage-oap.docx
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_oap_user
-        surveyOapUser = 6349
+        surveyOapUser =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_thanks_page_id
-        surveyThanksPageId = 117
+        surveyThanksPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_abort_page_id
-        surveyAbortPageId = 118
+        surveyAbortPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_error_page_id
-        surveyErrorPageId = 119
+        surveyErrorPageId =
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.pid.form_pages
-        pidFormPages = 23
+        pidFormPages =
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.pid.form_groups
-        pidFormGroups = 22
+        pidFormGroups =
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.pid.form_items
-        pidFormItems = 21
+        pidFormItems =
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.zip_file.prefix
         zipFilePrefix = documents--
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.zip_file.dateformat
@@ -82,7 +90,6 @@ plugin.tx_openoap_dashboard {
         zipStructureProppsalFormat = %1$s--%2$05d
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.zip_structure.proposal.titlelength
         zipStructureProppsalFormatTitleLength = 30
-
     }
 }
 
@@ -96,7 +103,7 @@ plugin.tx_openoap_form {
         layoutRootPath = EXT:open_oap/Resources/Private/Layouts/
     }
     persistence {
-        # cat=plugin.tx_openoap_form//a; type=string; label=Default storage PID
+        # cat=plugin.tx_openoap_form//a; type=string; label=Default storage PID (Set the correct storage page ID for forms)
         storagePid =
     }
 }
@@ -110,7 +117,7 @@ plugin.tx_openoap_notifications {
         layoutRootPath = EXT:open_oap/Resources/Private/Layouts/
     }
     persistence {
-        # cat=plugin.tx_openoap_notifications//a; type=string; label=Default storage PID
+        # cat=plugin.tx_openoap_notifications//a; type=string; label=Default storage PID (Set the correct storage page ID for notifications)
         storagePid =
     }
 }
@@ -125,7 +132,7 @@ module.tx_openoap_backendforms {
         layoutRootPath = EXT:open_oap/Resources/Private/Backend/Layouts/
     }
     persistence {
-        # cat=module.tx_openoap_backendforms//a; type=string; label=Default storage PID
+        # cat=module.tx_openoap_backendforms//a; type=string; label=Default storage PID (Set the correct storage page ID for backend forms)
         storagePid =
     }
 }
@@ -140,11 +147,37 @@ module.tx_openoap_backendproposals {
         layoutRootPath = EXT:open_oap/Resources/Private/Backend/Layouts/
     }
     persistence {
-        # cat=module.tx_openoap_backendproposals//a; type=string; label=Default storage PID
+        # cat=module.tx_openoap_backendproposals//a; type=string; label=Default storage PID (Set the correct storage page ID for backend proposals)
         storagePid =
     }
 }
 
-# Extension constants
-<INCLUDE_TYPOSCRIPT: source="FILE:EXT:open_oap/Configuration/TypoScript/Extensions/femanager/constants.typoscript">
+# Include external constants for femanager if needed
+# This was originally included. Now we merge it below.
 
+#########################################
+# FEMANAGER CONSTANTS
+#########################################
+plugin.tx_femanager {
+    settings {
+        # customsubcategory=ids=Page UIDs
+        # cat=plugin.tx_femanager/ids/registration; type=integer; label=ID of registration page
+        registrationPageId =
+        # cat=plugin.tx_femanager/ids/registrationlogin; type=integer; label=ID of login page within registration process
+        registrationLoginPageId =
+        # cat=plugin.tx_femanager/ids/registrationmasterdata; type=integer; label=ID of master data page within registration process
+        registrationMasterdataPageId =
+        # cat=plugin.tx_femanager/ids/dashboard; type=integer; label=ID of dashboard page
+        dashboardPageId =
+        # cat=plugin.tx_femanager/ids/masterdataedit; type=integer; label=ID of master data edit page
+        masterdataEditPageId =
+
+        # Additional femanager-related configuration can be placed here if needed.
+        # No IDs defined here, integrators should set them in the constants editor.
+
+        # Example placeholders:
+        # adminEmail =
+        # adminName =
+        # You can fill these out as per your project requirements.
+    }
+}

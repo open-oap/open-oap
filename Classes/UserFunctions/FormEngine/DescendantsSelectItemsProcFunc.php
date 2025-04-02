@@ -210,7 +210,7 @@ class DescendantsSelectItemsProcFunc
         $typoScript = $configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT,'sitepackage'
         );
-        $proposalsPoolRoot = (int)$typoScript['plugin.']['tx_openoap_dashboard.']['settings.']['proposalsPoolId'];
+        $proposalsPoolRoot = (int)($typoScript['plugin.']['tx_openoap_dashboard.']['settings.']['proposalsPoolId'] ?? 0);
 
         $table = $params['table'] ?? '';
         // Return early if no table is defined
