@@ -1,5 +1,15 @@
 # Change log
 
+## Version X
+
+- Enhanced compact Word export
+- Show proposals of deleted applicants in proposal list
+- Allow proposal editing in the backend and avoid memory allocation issues
+- Fixed issue with sending individual emails during mass status updates
+- Prevent accidental form submissions while the date-picker popup is active
+- Allow any date restriction that starts with an "@" symbol, not just "@today". Like "@tomorrow" or "@next Thursday"
+- Various minor fixes
+
 ## Version 2.0.0
 
 - TYPO3 v12 compatibility

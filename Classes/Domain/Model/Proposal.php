@@ -95,10 +95,18 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected string $rejectionEmail = '';
 
     /**
+     * surveyHash
+     *
+     * @var string
+     */
+    protected string $surveyHash = '';
+
+    /**
      * answers
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Answer>
      */
+    #[\TYPO3\CMS\Extbase\Annotation\ORM\Lazy]
     #[\TYPO3\CMS\Extbase\Annotation\ORM\Cascade(['value' => 'remove'])]
     protected $answers;
 
@@ -107,6 +115,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Comment>
      */
+    #[\TYPO3\CMS\Extbase\Annotation\ORM\Lazy]
     #[\TYPO3\CMS\Extbase\Annotation\ORM\Cascade(['value' => 'remove'])]
     protected $comments;
 
@@ -477,5 +486,25 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setRejectionEmail(string $rejectionEmail): void
     {
         $this->rejectionEmail = $rejectionEmail;
+    }
+
+    /**
+     * Returns the surveyHash
+     *
+     * @return string
+     */
+    public function getSurveyHash(): string
+    {
+        return $this->surveyHash;
+    }
+
+    /**
+     * Sets the surveyHash
+     *
+     * @param string $surveyHash
+     */
+    public function setSurveyHash(string $surveyHash): void
+    {
+        $this->surveyHash = $surveyHash;
     }
 }

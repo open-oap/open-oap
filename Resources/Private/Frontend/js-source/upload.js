@@ -49,19 +49,19 @@
         messageEnd: '</span>',
         listBtnDelete:
             '<svg class="form__icon form__icon--delete" width="18" height="18" focusable="false" aria-hidden="true">' +
-            '<use xlink:href="/typo3conf/ext/open_oap/Resources/Public/Icons/sprite.svg#icon-delete" x="0" y="0"></use>' +
+            '<use xlink:href="/_assets/d867b284b013b280ddc9dda86ad2fa21/Icons/sprite.svg#icon-delete" x="0" y="0"></use>' +
             '</svg>',
         listBtnDownload:
             '<svg class="form__icon form__icon--download" width="18" height="18" focusable="false" aria-hidden="true">' +
-            '<use xlink:href="/typo3conf/ext/open_oap/Resources/Public/Icons/sprite.svg#icon-download" x="0" y="0"></use>' +
+            '<use xlink:href="/_assets/d867b284b013b280ddc9dda86ad2fa21/Icons/sprite.svg#icon-download" x="0" y="0"></use>' +
             '</svg>',
         errorSVG:
             '<svg class="form__icon form__icon--error" width="18" height="18" focusable="false" aria-hidden="true">' +
-            '<use xlink:href="/typo3conf/ext/open_oap/Resources/Public/Icons/sprite.svg#icon-error" x="0" y="0"></use>' +
+            '<use xlink:href="/_assets/d867b284b013b280ddc9dda86ad2fa21/Icons/sprite.svg#icon-error" x="0" y="0"></use>' +
             '</svg>',
         stagedFile:
             '<svg class="form__icon form__icon--uploaded" width="18" height="18" focusable="false" aria-hidden="true">' +
-            '<use xlink:href="/typo3conf/ext/open_oap/Resources/Public/Icons/sprite.svg#icon-file-uploaded" x="0" y="0"></use>' +
+            '<use xlink:href="/_assets/d867b284b013b280ddc9dda86ad2fa21/Icons/sprite.svg#icon-file-uploaded" x="0" y="0"></use>' +
             '</svg>'
     };
 

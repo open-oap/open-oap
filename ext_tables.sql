@@ -104,7 +104,8 @@ CREATE TABLE tx_openoap_domain_model_proposal (
 	edit_tstamp int(11) DEFAULT '0' NOT NULL,
 	submit_tstamp int(11) DEFAULT '0' NOT NULL,
 	rejection_tstamp int(11) DEFAULT '0' NOT NULL,
-	rejection_email varchar(255) NOT NULL DEFAULT ''
+	rejection_email varchar(255) NOT NULL DEFAULT '',
+    survey_hash varchar(255) NOT NULL DEFAULT ''
 );
 
 CREATE TABLE tx_openoap_domain_model_answer (

@@ -21,7 +21,8 @@ return [
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
     ],
     'types' => [
-        '1' => ['showitem' => 'title, signature, state, archived, meta_information, tx_openoap_call, answers, comments, applicant, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        // '1' => ['showitem' => 'title, signature, survey_hash, state, archived, meta_information, tx_openoap_call, answers, comments, applicant, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '1' => ['showitem' => 'title, signature, survey_hash, state, archived, meta_information, tx_openoap_call, applicant, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
     ],
     'columns' => [
 //        'sys_language_uid' => [
@@ -115,6 +116,17 @@ return [
                 'size' => 30,
                 'eval' => 'trim',
                 'default' => '',
+            ],
+        ],
+        'survey_hash' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_proposal.survey_hash',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'default' => '',
+                'readOnly' => true,
             ],
         ],
         'state' => [
@@ -260,25 +272,12 @@ return [
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_proposal.applicant',
             'config' => [
                 'type' => 'select',
-                'renderType' => 'selectMultipleSideBySide',
+                'renderType' => 'selectSingle',
                 'foreign_table' => 'fe_users',
                 'foreign_table_where' => 'AND {#fe_users}.pid=###PAGE_TSCONFIG_ID###',
                 'default' => 0,
-                'size' => 10,
-                'autoSizeMax' => 30,
                 'maxitems' => 1,
                 'multiple' => 0,
-                'fieldControl' => [
-                    'editPopup' => [
-                        'disabled' => false,
-                    ],
-                    'addRecord' => [
-                        'disabled' => true,
-                    ],
-                    'listModule' => [
-                        'disabled' => true,
-                    ],
-                ],
             ],
 
         ],

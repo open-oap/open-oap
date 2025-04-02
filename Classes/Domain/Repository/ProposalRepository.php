@@ -78,6 +78,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->matching(
             $query->logicalAnd(
                $query->equals('call', $call),
+               $query->equals('pid', $call->getProposalPid()),
                $query->greaterThanOrEqual('state', $state),
            )
         );
@@ -138,7 +139,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'Call.title AS call_title'
             )
             ->from('tx_openoap_domain_model_proposal', 'Proposal')
-            ->join(
+            ->leftJoin(
                 'Proposal',
                 'fe_users',
                 'Applicant',
