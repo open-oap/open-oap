@@ -1,14 +1,14 @@
 #########################################
-# Global Setup for open-oap Extension
+# Global Setup for open_oap Extension
 #########################################
 
 plugin.tx_openoap_dashboard {
     view {
-        templateRootPaths.0 = EXT:open-oap/Resources/Private/Templates/
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
         templateRootPaths.1 = {$plugin.tx_openoap_dashboard.view.templateRootPath}
-        partialRootPaths.0 = EXT:open-oap/Resources/Private/Partials/
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
         partialRootPaths.1 = {$plugin.tx_openoap_dashboard.view.partialRootPath}
-        layoutRootPaths.0 = EXT:open-oap/Resources/Private/Layouts/
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
         layoutRootPaths.1 = {$plugin.tx_openoap_dashboard.view.layoutRootPath}
     }
     persistence {
@@ -34,6 +34,7 @@ plugin.tx_openoap_dashboard {
         itemsPid = {$plugin.tx_openoap_dashboard.settings.itemsPoolId}
         proposalsActiveLimit = {$plugin.tx_openoap_dashboard.settings.proposalsActiveLimit}
         proposalsArchivedLimit = {$plugin.tx_openoap_dashboard.settings.proposalsArchivedLimit}
+        proposalsPoolId = {$plugin.tx_openoap_dashboard.settings.proposalsPoolId}
         answersPoolId = {$plugin.tx_openoap_dashboard.settings.answersPoolId}
         commentsPoolId = {$plugin.tx_openoap_dashboard.settings.commentsPoolId}
         countriesItemOptionId = {$plugin.tx_openoap_dashboard.settings.countriesItemOptionId}
@@ -63,11 +64,11 @@ plugin.tx_openoap_dashboard {
 
 plugin.tx_openoap_proposals {
     view {
-        templateRootPaths.0 = EXT:open-oap/Resources/Private/Templates/
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
         templateRootPaths.1 = {$plugin.tx_openoap_proposals.view.templateRootPath}
-        partialRootPaths.0 = EXT:open-oap/Resources/Private/Partials/
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
         partialRootPaths.1 = {$plugin.tx_openoap_proposals.view.partialRootPath}
-        layoutRootPaths.0 = EXT:open-oap/Resources/Private/Layouts/
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
         layoutRootPaths.1 = {$plugin.tx_openoap_proposals.view.layoutRootPath}
     }
     persistence {
@@ -84,11 +85,11 @@ plugin.tx_openoap_proposals {
 
 plugin.tx_openoap_applicant {
     view {
-        templateRootPaths.0 = EXT:open-oap/Resources/Private/Templates/
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
         templateRootPaths.1 = {$plugin.tx_openoap_applicant.view.templateRootPath}
-        partialRootPaths.0 = EXT:open-oap/Resources/Private/Partials/
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
         partialRootPaths.1 = {$plugin.tx_openoap_applicant.view.partialRootPath}
-        layoutRootPaths.0 = EXT:open-oap/Resources/Private/Layouts/
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
         layoutRootPaths.1 = {$plugin.tx_openoap_applicant.view.layoutRootPath}
     }
     persistence {
@@ -104,11 +105,11 @@ plugin.tx_openoap_applicant {
 
 plugin.tx_openoap_applicantform {
     view {
-        templateRootPaths.0 = EXT:open-oap/Resources/Private/Templates/
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
         templateRootPaths.1 = {$plugin.tx_openoap_applicantform.view.templateRootPath}
-        partialRootPaths.0 = EXT:open-oap/Resources/Private/Partials/
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
         partialRootPaths.1 = {$plugin.tx_openoap_applicantform.view.partialRootPath}
-        layoutRootPaths.0 = EXT:open-oap/Resources/Private/Layouts/
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
         layoutRootPaths.1 = {$plugin.tx_openoap_applicantform.view.layoutRootPath}
     }
     persistence {
@@ -124,11 +125,11 @@ plugin.tx_openoap_applicantform {
 
 plugin.tx_openoap_form {
     view {
-        templateRootPaths.0 = EXT:open-oap/Resources/Private/Templates/
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
         templateRootPaths.1 = {$plugin.tx_openoap_form.view.templateRootPath}
-        partialRootPaths.0 = EXT:open-oap/Resources/Private/Partials/
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
         partialRootPaths.1 = {$plugin.tx_openoap_form.view.partialRootPath}
-        layoutRootPaths.0 = EXT:open-oap/Resources/Private/Layouts/
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
         layoutRootPaths.1 = {$plugin.tx_openoap_form.view.layoutRootPath}
     }
     persistence {
@@ -144,11 +145,11 @@ plugin.tx_openoap_form {
 
 plugin.tx_openoap_notifications {
     view {
-        templateRootPaths.0 = EXT:open-oap/Resources/Private/Templates/
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Templates/
         templateRootPaths.1 = {$plugin.tx_openoap_notifications.view.templateRootPath}
-        partialRootPaths.0 = EXT:open-oap/Resources/Private/Partials/
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Partials/
         partialRootPaths.1 = {$plugin.tx_openoap_notifications.view.partialRootPath}
-        layoutRootPaths.0 = EXT:open-oap/Resources/Private/Layouts/
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Layouts/
         layoutRootPaths.1 = {$plugin.tx_openoap_notifications.view.layoutRootPath}
     }
     persistence {
@@ -168,23 +169,29 @@ plugin.tx_openoap._CSS_DEFAULT_STYLE (
         background-color:#FF9F9F;
         border: 1px #FF0000 solid;
     }
+
     input.f3-form-error {
         background-color:#FF9F9F;
         border: 1px #FF0000 solid;
     }
+
     .tx-open-oap table {
         border-collapse:separate;
         border-spacing:10px;
     }
+
     .tx-open-oap table th {
         font-weight:bold;
     }
+
     .tx-open-oap table td {
         vertical-align:top;
     }
+
     .typo3-messages .message-error {
         color:red;
     }
+
     .typo3-messages .message-ok {
         color:green;
     }
@@ -194,16 +201,16 @@ plugin.tx_openoap._CSS_DEFAULT_STYLE (
 plugin.tx_pdfviewhelpers.settings.config.fonts {
     addTTFFont {
         opensansr {
-            path = EXT:open-oap/Resources/Public/Fonts/OpenSansRegular.ttf
+            path = EXT:open_oap/Resources/Public/Fonts/OpenSansRegular.ttf
         }
         opensansm {
-            path = EXT:open-oap/Resources/Public/Fonts/OpenSansMedium.ttf
+            path = EXT:open_oap/Resources/Public/Fonts/OpenSansMedium.ttf
         }
         opensansb {
-            path = EXT:open-oap/Resources/Public/Fonts/OpenSansBold.ttf
+            path = EXT:open_oap/Resources/Public/Fonts/OpenSansBold.ttf
         }
         opensansl {
-            path = EXT:open-oap/Resources/Public/Fonts/OpenSansLight.ttf
+            path = EXT:open_oap/Resources/Public/Fonts/OpenSansLight.ttf
         }
     }
 }
@@ -214,11 +221,11 @@ module.tx_openoap_web_openoapbackendforms {
         storagePid = {$module.tx_openoap_backendforms.persistence.storagePid}
     }
     view {
-        templateRootPaths.0 = EXT:open-oap/Resources/Private/Backend/Templates/
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Templates/
         templateRootPaths.1 = {$module.tx_openoap_backendforms.view.templateRootPath}
-        partialRootPaths.0 = EXT:open-oap/Resources/Private/Backend/Partials/
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Partials/
         partialRootPaths.1 = {$module.tx_openoap_backendforms.view.partialRootPath}
-        layoutRootPaths.0 = EXT:open-oap/Resources/Private/Backend/Layouts/
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Layouts/
         layoutRootPaths.1 = {$module.tx_openoap_backendforms.view.layoutRootPath}
     }
     settings < plugin.tx_openoap_dashboard.settings
@@ -230,11 +237,11 @@ module.tx_openoap_web_openoapbackendproposals {
         storagePid = {$module.tx_openoap_backendproposals.persistence.storagePid}
     }
     view {
-        templateRootPaths.0 = EXT:open-oap/Resources/Private/Backend/Templates/
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Templates/
         templateRootPaths.1 = {$module.tx_openoap_backendproposals.view.templateRootPath}
-        partialRootPaths.0 = EXT:open-oap/Resources/Private/Backend/Partials/
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Partials/
         partialRootPaths.1 = {$module.tx_openoap_backendproposals.view.partialRootPath}
-        layoutRootPaths.0 = EXT:open-oap/Resources/Private/Backend/Layouts/
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Layouts/
         layoutRootPaths.1 = {$module.tx_openoap_backendproposals.view.layoutRootPath}
     }
     settings < plugin.tx_openoap_dashboard.settings
@@ -242,242 +249,10 @@ module.tx_openoap_web_openoapbackendproposals {
 
 page {
     includeCSS {
-        open-oap = EXT:open-oap/Resources/Public/Css/styles.css
+        open_oap = EXT:open_oap/Resources/Public/Css/styles.css
     }
 }
 
-# Include felogin setup (merged here)
-# Consider if an external template for felogin is strictly necessary. If errors occur after installation, try removing custom template paths or fallback to default felogin templates.
-plugin.tx_felogin_login {
-    view {
-        templateRootPaths {
-            20 = EXT:open-oap/Resources/Private/Extensions/felogin/Templates/
-        }
-        partialRootPaths {
-            20 = EXT:open-oap/Resources/Private/Extensions/felogin/Partials/
-        }
-        layoutRootPaths {
-            20 = EXT:open-oap/Resources/Private/Extensions/felogin/Layouts/
-        }
-    }
-    settings {
-        email {
-            templateRootPaths {
-                30 = EXT:open-oap/Resources/Private/Extensions/felogin/Email/Templates/
-            }
-            layoutRootPaths {
-                30 = EXT:open-oap/Resources/Private/Extensions/felogin/Email/Layouts/
-            }
-            partialRootPaths {
-                30 = EXT:open-oap/Resources/Private/Extensions/felogin/Email/Partials/
-            }
-        }
-        passwordValidators {
-            10 = TYPO3\CMS\Extbase\Validation\Validator\NotEmptyValidator
-            20 {
-                className = TYPO3\CMS\Extbase\Validation\Validator\StringLengthValidator
-                options {
-                    minimum = {$styles.content.loginform.newPasswordMinLength}
-                }
-            }
-            30 = OpenOAP\OpenOap\Domain\Validator\StringMustIncludeValidator
-        }
-    }
-
-    _LOCAL_LANG.default {
-        # This local-lang line must not be changed
-        password_recovery_mail_header = Your new password
-    }
-    _LOCAL_LANG.de {
-        # This local-lang line must not be changed
-        password_recovery_mail_header = Ihr neues Passwort
-    }
-}
-
-#########################################
-# FEMANAGER SETUP
-#########################################
-
-plugin.tx_femanager {
-    view {
-        templateRootPath >
-        templateRootPaths {
-            10 = EXT:femanager/Resources/Private/Templates/
-            20 = EXT:open-oap/Resources/Private/Extensions/femanager/Templates/
-        }
-        partialRootPath >
-        partialRootPaths {
-            10 = EXT:femanager/Resources/Private/Partials/
-            20 = EXT:open-oap/Resources/Private/Extensions/femanager/Partials/
-        }
-        layoutRootPath >
-        layoutRootPaths {
-            10 = EXT:femanager/Resources/Private/Layouts/
-            20 = EXT:open-oap/Resources/Private/Extensions/femanager/Layouts/
-        }
-    }
-
-    settings {
-        # Page ID references now linked to new constants with unified naming.
-        registrationPageId = {$plugin.tx_femanager.settings.registrationPageId}
-        registrationLoginPageId = {$plugin.tx_femanager.settings.registrationLoginPageId}
-        registrationMasterdataPageId = {$plugin.tx_femanager.settings.registrationMasterdataPageId}
-        dashboardPageId = {$plugin.tx_femanager.settings.dashboardPageId}
-        masterdataEditPageId = {$plugin.tx_femanager.settings.masterdataEditPageId}
-
-        # The femanager configuration is kept as in original, just referencing the updated constant names.
-        # Additional code from original femanager setup is merged below.
-
-        new {
-            fillEmailWithUsername = 1
-            login = 1
-            validation._enable.client = 1
-            validation._enable.server = 1
-
-            # Example of unified comments and ensuring no IDs are hardcoded.
-            # Integrator must set necessary parameters in constants.
-        }
-
-        edit {
-            fillEmailWithUsername = 1
-            redirect = TEXT
-            redirect {
-                typolink {
-                    parameter = {$plugin.tx_femanager.settings.dashboardPageId}
-                    returnLast = url
-                    linkAccessRestrictedPages = 1
-                }
-            }
-            validation._enable.client = 1
-            validation._enable.server = 1
-            keepPasswordIfEmpty = 1
-        }
-
-        invitation {
-            fillEmailWithUsername = 1
-            # Adjust the redirect pages after invitation according to your pages set in constants
-            validation._enable.client = 1
-            validation._enable.server = 1
-        }
-
-        delete {
-            # Optional redirect after delete can be configured here if needed
-        }
-
-        list {
-            filter {
-                searchword {
-                    fieldsToSearch = address, city, company, country, email, fax, first_name, image, last_name, middle_name, name, telephone, title, usergroup.title, username, www, zip
-                }
-            }
-        }
-
-        loginAs {
-            # Optional redirect after simulating login as FE user if needed
-        }
-
-        misc {
-            # Adjust uploadFolder if required, set in constants if necessary
-            uploadFolder =
-            uploadAmount = 3
-            uploadSize = 25000000
-            uploadFileExtension = jpeg, jpg, gif, png, bmp, tif, tiff
-            uploadMimeTypes = image/png,image/jpeg,image/gif
-            renderImageWidth = 250
-        }
-
-        # Rate limiter configuration is optional and can be set here as well.
-        # Just ensure no hardcoded IDs.
-
-        # Finishers, dataProcessors, autoAdminConfirmation remain unchanged in logic, just no IDs.
-        # All original femanager settings are kept as is, just referencing the updated constants.
-    }
-}
-
-# JavaScript and CSS includes for Femanager (if needed)
-[0 < {$plugin.tx_femanager.settings.jQuery}]
-    page.includeJSFooterlibs {
-        femanagerJQuery = //ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js
-        femanagerJQuery.external = 1
-    }
-[end]
-
-[0 < {$plugin.tx_femanager.settings.bootstrap}]
-    page.includeJSFooterlibs {
-        femanangerBootstrap = EXT:femanager/Resources/Public/JavaScript/Vendor/bootstrap.min.js
-    }
-[end]
-
-[0 < {$plugin.tx_femanager.settings.bootstrapCSS}]
-    page.includeCSS {
-        femanangerBootstrap = EXT:femanager/Resources/Public/JavaScript/Vendor/bootstrap.min.css
-    }
-[end]
-
-page {
-    includeCSS {
-        femanagerMain >
-    }
-    includeJSFooter {
-        femanagerValidation >
-        femanager >
-    }
-}
-
-femanager_validation = PAGE
-femanager_validation {
-    typeNum = 1548935210
-    config {
-        additionalHeaders.10.header = Content-Type: application/json
-        no_cache = 0
-        disableAllHeaderCode = 1
-        disablePrefixComment = 1
-        xhtml_cleaning = 0
-        admPanel = 0
-        debug = 0
-    }
-
-    10 = USER_INT
-    10 {
-        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-        extensionName = Femanager
-        pluginName = Validation
-        vendorName = In2code
-        controller = User
-        action = validate
-        features.requireCHashArgumentForActionArguments = 0
-    }
-}
-
-feManagerStateSelection = PAGE
-feManagerStateSelection {
-    typeNum = 1594138042
-    config {
-        additionalHeaders.10.header = Content-Type: application/json
-        no_cache = 0
-        disableAllHeaderCode = 1
-        disablePrefixComment = 1
-        xhtml_cleaning = 0
-        admPanel = 0
-        debug = 0
-    }
-
-    10 = USER_INT
-    10 {
-        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-        extensionName = Femanager
-        pluginName = Data
-        vendorName = In2code
-        controller = Data
-        action = getStatesForCountry
-        features.requireCHashArgumentForActionArguments = 0
-    }
-}
-
-[traverse(page, "uid") == {$plugin.tx_femanager.settings.registrationMasterdataPageId}]
-    plugin.tx_femanager.settings.registerMasterdata = 1
-[END]
-
-[traverse(page, "uid") == {$plugin.tx_femanager.settings.dashboardPageId}]
-    plugin.tx_femanager.settings.dashboardProfile = 1
-[END]
+# Extension configuration
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:open_oap/Configuration/TypoScript/Extensions/felogin/setup.typoscript">
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:open_oap/Configuration/TypoScript/Extensions/femanager/setup.typoscript">
