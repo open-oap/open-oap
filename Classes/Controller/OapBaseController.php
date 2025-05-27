@@ -1619,21 +1619,28 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $comments = [];
         $commentCounter = 0;
 
-//        $pageCounter = 0;
+        if ($type == self::WORD_EXPORT_DEFAULT) {
+            $pageCounter = 0;
+        }
         /** @var FormPage $formPage */
         foreach ($proposal->getCall()->getFormPages() as $formPage) {
             if ($formPage->getType() !== self::PAGETYPE_DEFAULT) {
                 continue;
             }
-//            $pageCounter++;
-//            if ($pageCounter > 1) {
-//                $section->addPageBreak();
-//            }
+
+            if ($type == self::WORD_EXPORT_DEFAULT) {
+                $pageCounter++;
+                if ($pageCounter > 1) {
+                    $section->addPageBreak();
+                }
+            }
 
             $this->addTextToSection($section, $formPage->getTitle(), $format['PageTitleFontFormat']);
-//            if (trim($formPage->getIntroText())) {
-//                $this->addHtmlToSection($section, $formPage->getIntroText());
-//            }
+            if ($type == self::WORD_EXPORT_DEFAULT) {
+                if (trim($formPage->getIntroText())) {
+                    $this->addHtmlToSection($section, $formPage->getIntroText());
+                }
+            }
 
             /** @var FormGroup $itemGroupL0 */
             foreach ($formPage->getItemGroups() as $itemGroupL0) {
@@ -1829,7 +1836,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         if ($call->getProposalPid()) {
             $proposalPid = $call->getProposalPid();
         } else {
-            $proposalPid = $this->settings['proposalPid'];
+            $proposalPid = $this->settings['proposalsPoolId'];
         }
         return $proposalPid;
     }
@@ -2341,6 +2348,13 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 break;
 
             case self::TYPE_UPLOAD:
+                if ($type == self::WORD_EXPORT_DEFAULT) {
+                    $this->addTextToSection(
+                        $section,
+                        'For your own notices - please upload the required documents in the online form.'
+                    );
+                }
+
                 $this->addTextToSection($section, ' ', null, $valueOutputFormat);
 
                 if ($answer->getValue() !== '') {
@@ -2590,11 +2604,13 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         array $comments,
         string $type
     ): void {
-//        if ($itemGroup->getRepeatableMax() > $itemGroup->getRepeatableMin()) {
-//            $label = LocalizationUtility::translate($this->locallangFile . ':tx_openoap.word.group_repeatable');
-//            $outputText = sprintf($label, $itemGroup->getRepeatableMax());
-//            $this->addHtmlToSection($section, '<span style="font-style:italic">' . $outputText . '</span>');
-//        }
+        if ($type == self::WORD_EXPORT_DEFAULT) {
+            if ($itemGroup->getRepeatableMax() > $itemGroup->getRepeatableMin()) {
+                $label = LocalizationUtility::translate($this->locallangFile . ':tx_openoap.word.group_repeatable');
+                $outputText = sprintf($label, $itemGroup->getRepeatableMax());
+                $this->addHtmlToSection($section, '<span style="font-style:italic">' . $outputText . '</span>');
+            }
+        }
 
         for ($i = 0; $i < $current; $i++) {
             $this->createWordGroupTitleBlock($itemGroup, $i, $current, $section, $format, $type);
@@ -2685,39 +2701,39 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     ): void {
         $this->addTextToSection($section, $itemGroup->getTitle(), $format['GroupTitleFontFormat']);
         // todo repeated groups? more then one output of the IntroText?
-//        $this->addHtmlToSection($section, $itemGroup->getIntroText());
         if ($type == self::WORD_EXPORT_DEFAULT) {
+            $this->addHtmlToSection($section, $itemGroup->getIntroText());
             $this->addHtmlToSection($section, '<i>' . $itemGroup->getHelpText() . '</i>');
         }
 
-//        foreach ($itemGroup->getItems() as $key => $item) {
-//            /** @var ItemValidator $validator */
-//            $mandatorySign = '';
-//            $validatorTexts = [];
-//            $this->createValidatortext($item, $validatorTexts, $mandatorySign);
-//
-//            $this->addTextToSection(
-//                $section,
-//                $item->getQuestion() . ' ' . $mandatorySign,
-//                null,
-//                $format['QuestionFont']
-//            );
-//            if (trim($item->getIntroText())) {
-//                $this->addHtmlToSection($section, $item->getIntroText());
-//            }
-//            if ($type == self::WORD_EXPORT_DEFAULT) {
-//                if (trim($item->getHelpText())) {
-//                    $this->addHtmlToSection($section, '<i>' . $item->getHelpText() . '</i>');
-//                }
-//                // todo formatting automatic created text/hints
-//                $this->addHtmlToSection(
-//                    $section,
-//                    '<span style="text-align:right;"><i>' .
-//                    implode('; ', $validatorTexts) .
-//                    '</i></span>'
-//                );
-//            }
-//        }
+        if ($type == self::WORD_EXPORT_DEFAULT) {
+            foreach ($itemGroup->getItems() as $key => $item) {
+                /** @var ItemValidator $validator */
+                $mandatorySign = '';
+                $validatorTexts = [];
+                $this->createValidatortext($item, $validatorTexts, $mandatorySign);
+
+                $this->addTextToSection(
+                    $section,
+                    $item->getQuestion() . ' ' . $mandatorySign,
+                    null,
+                    $format['QuestionFont']
+                );
+                if (trim($item->getIntroText())) {
+                    $this->addHtmlToSection($section, $item->getIntroText());
+                }
+                    if (trim($item->getHelpText())) {
+                        $this->addHtmlToSection($section, '<i>' . $item->getHelpText() . '</i>');
+                    }
+                    // todo formatting automatic created text/hints
+                    $this->addHtmlToSection(
+                        $section,
+                        '<span style="text-align:right;"><i>' .
+                        implode('; ', $validatorTexts) .
+                        '</i></span>'
+                    );
+            }
+        }
 
         $table = $section->addTable();
         $rowN = count($itemGroup->getItems()) + 1; // + 1 => groupLabel
@@ -2804,12 +2820,14 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         // todo repeated groups? more then one output of the IntroText?
-//        if (trim($itemGroup->getIntroText())) {
-//            $this->addHtmlToSection($section, $itemGroup->getIntroText());
-//        }
-//        if (trim($itemGroup->getHelpText()) and $type == self::WORD_EXPORT_DEFAULT) {
-//            $this->addHtmlToSection($section, '<i>' . $itemGroup->getHelpText() . '</i>');
-//        }
+        if ($type == self::WORD_EXPORT_DEFAULT) {
+            if (trim($itemGroup->getIntroText())) {
+                $this->addHtmlToSection($section, $itemGroup->getIntroText());
+            }
+            if (trim($itemGroup->getHelpText()) and $type == self::WORD_EXPORT_DEFAULT) {
+                $this->addHtmlToSection($section, '<i>' . $itemGroup->getHelpText() . '</i>');
+            }
+        }
     }
 
     /**

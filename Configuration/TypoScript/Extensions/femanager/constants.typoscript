@@ -1,0 +1,21 @@
+#########################################
+# FEMANAGER CONSTANTS
+#########################################
+plugin.tx_femanager {
+    settings {
+        # customsubcategory=ids=Page UIDs
+        # cat=plugin.tx_femanager/ids/registration; type=integer; label=ID of registration page
+        registrationPageId =
+        # cat=plugin.tx_femanager/ids/registrationlogin; type=integer; label=ID of login page within registration process
+        registrationLoginPageId =
+        # cat=plugin.tx_femanager/ids/registrationmasterdata; type=integer; label=ID of master data page within registration process
+        registrationMasterdataPageId =
+        # cat=plugin.tx_femanager/ids/dashboard; type=integer; label=ID of dashboard page
+        dashboardPageId =
+        # cat=plugin.tx_femanager/ids/masterdataedit; type=integer; label=ID of master data edit page
+        masterdataEditPageId =
+
+        # Additional femanager-related configuration can be placed here if needed.
+        # No IDs defined here, integrators should set them in the constants editor.
+    }
+}
