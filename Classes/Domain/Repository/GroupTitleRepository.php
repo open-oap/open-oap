@@ -17,6 +17,6 @@ namespace OpenOAP\OpenOap\Domain\Repository;
 /**
  * The repository for GroupTitles
  */
-class GroupTitleRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class GroupTitleRepository extends OapAbstractRepository
 {
 }

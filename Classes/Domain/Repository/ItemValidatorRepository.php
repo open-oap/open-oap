@@ -16,6 +16,6 @@ namespace OpenOAP\OpenOap\Domain\Repository;
 /**
  * The repository for ItemValidators
  */
-class ItemValidatorRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class ItemValidatorRepository extends OapAbstractRepository
 {
 }
