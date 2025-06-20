@@ -1476,6 +1476,21 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     /**
+     * @param FormItem $item
+     * @return boolean
+     */
+    protected function isItemNumeric(FormItem $item) {
+        if(count($item->getValidators()) > 0) {
+            foreach ($item->getValidators() as $validator) {
+                if ($validator->getType() == self::VALIDATOR_INTEGER || $validator->getType() == self::VALIDATOR_FLOAT) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param string $mode
      * @return array
      */
@@ -3128,5 +3143,22 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $fileSaveAsParts[] = basename($fileName);
         $fileSaveAs = join('/', $fileSaveAsParts);
         return $fileSaveAs;
+    }
+
+    /**
+     * @param string $value
+     * @return string $formattedValue
+     */
+    protected function cleanupByNumberStyle(string $value): string
+    {
+        if (trim($value) == '') {
+            return $value;
+        }
+        //   if ($this->settings['numberStyle'] == 'US') {
+        //      return preg_replace('~'.self::FLOAT_FORMAT_THOUSANDS_SEPARATOR_US.'~', '', $value);
+        //   }
+
+        //   return preg_replace(['~\.~','~'.self::FLOAT_FORMAT_DECIMAL_SEPARATOR_EU.'~'], ['',self::FLOAT_FORMAT_DECIMAL_SEPARATOR_US], $value);
+        return preg_replace(['~\.~','~,~'], ['','.'], $value);
     }
 }
