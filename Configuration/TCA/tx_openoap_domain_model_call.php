@@ -23,7 +23,28 @@ return [
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
     ],
     'types' => [
-        '1' => ['showitem' => 'call_group, supporter, type, extern_link, title, intro_text, teaser_text, shortcut, emails, call_start_time, call_end_time, hint, proposal_pid, form_pages, items, word_header_logo, word_styles, logo,blocked_languages,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, usergroup, starttime, endtime, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_tab,anonym, survey_codes'],
+        '1' => [
+            'showitem' => '
+                call_group, supporter, type, extern_link,
+                title, intro_text, teaser_text, shortcut, emails,
+                call_start_time, call_end_time, hint,
+                proposal_pid, form_pages, items, blocked_languages,
+                --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.documents,
+                    logo, --palette--;;wordDocPalette,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, usergroup, starttime, endtime,
+                --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_tab,
+                    anonym, survey_codes
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
+                    sys_language_uid, l10n_parent, l10n_diffsource,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
+                    hidden, usergroup, starttime, endtime,
+            '],
+    ],
+    'palettes' => [
+        'wordDocPalette' => [
+            'showitem' => 'enabled_format_word, --linebreak--, word_header_logo, --linebreak--, word_styles',
+        ],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -338,6 +359,22 @@ return [
                 'type' => 'file',
                 'maxitems' => 1,
                 'allowed' => ['docx'],
+            ],
+        ],
+        'enabled_format_word' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.enabled_format_word',
+            'config' => [
+                'type' => 'check',
+                'renderType' => 'checkboxToggle',
+                'items' => [
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.enabled_format_word_item.checked',
+                        'labelChecked' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.enabled_format_word_item.checked',
+                        'labelUnchecked' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.enabled_format_word_item.unchecked',
+                    ],
+                ],
             ],
         ],
         'logo' => [

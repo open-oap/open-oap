@@ -27,7 +27,10 @@
 				<source><![CDATA[Meta group type (wrapper, outside)]]></source>
 				<target><![CDATA[Meta-Gruppentyp (Verschachtelung außen)]]></target>
 			</trans-unit>
-
+			<trans-unit id="tx_openoap_domain_model_call.tab.documents" resname="tx_openoap_domain_model_call.tab.documents">
+				<source>Export documents</source>
+				<target>Export Dokumente</target>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.form_items" resname="tx_openoap_domain_model_call.form_items">
 				<source>Items for submit page</source>
 				<target>Fragen für die Abschlussseite</target>
@@ -40,6 +43,18 @@
 			<trans-unit id="tx_openoap_domain_model_call.word_template" resname="tx_openoap_domain_model_call.word_template">
 				<source>Word template for exports of proposal</source>
 				<target>Word-Datei für den Export als Word-Datei</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.enabled_format_word" resname="tx_openoap_domain_model_call.enabled_format_word">
+				<source>Word document format</source>
+				<target>Word Dokumenten-Format</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.enabled_format_word_item.checked" resname="tx_openoap_domain_model_call.enabled_format_word_item.checked">
+				<source>enabled</source>
+				<target>aktiv</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.enabled_format_word_item.unchecked" resname="tx_openoap_domain_model_call.enabled_format_word_item.unchecked">
+				<source>disabled</source>
+				<target>inaktiv</target>
 			</trans-unit>
 
 			<trans-unit id="tx_openoap_domain_model_call.logo" resname="tx_openoap_domain_model_call.logo">
