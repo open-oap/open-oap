@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace OpenOAP\OpenOap\Domain\Repository;
 
+use OpenOAP\OpenOap\Domain\Model\Applicant;
+
 /**
  * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
  *
@@ -18,21 +20,6 @@ namespace OpenOAP\OpenOap\Domain\Repository;
  */
 class CallRepository extends OapAbstractRepository
 {
-    /**
-     * Find Calls/Forms by pid
-     *
-     * @param int $pid
-     */
-    public function findAllByPid(int $pid)
-    {
-        $query = $this->createQuery();
-        $query->getQuerySettings()->setIgnoreEnableFields(true);
-        $query->getQuerySettings()->setRespectStoragePage(false);
-        $query->setOrderings(['title' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING]);
-        $query->matching($query->equals('pid', $pid));
-        $result = $query->execute();
-        return $result;
-    }
 
     /**
      * Find active Calls/Forms by pid and applicant
