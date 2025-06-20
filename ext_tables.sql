@@ -1,7 +1,7 @@
 CREATE TABLE tx_openoap_domain_model_call (
 	title varchar(255) NOT NULL DEFAULT '',
 	intro_text text NOT NULL DEFAULT '',
-	teaser_text varchar(255) NOT NULL DEFAULT '',
+	teaser_text text NOT NULL DEFAULT '',
 	shortcut varchar(255) NOT NULL DEFAULT '',
 	emails varchar(255) NOT NULL DEFAULT '',
 	call_start_time datetime DEFAULT NULL,
