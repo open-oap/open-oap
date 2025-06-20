@@ -246,7 +246,7 @@ Available variables:
                                 <f:if condition="{call.type} == 1">
                                     <f:then>
                                         <f:link.external target="_blank" class="call-list__create-proposal call-list__create-proposal--extern" uri="{call.externLink}">
-                                            {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title')}
+                                            {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title', arguments: {0: '{call.proposalName}'}, default: 'proposal')}
                                         </f:link.external>
                                     </f:then>
                                     <f:else>
@@ -254,7 +254,7 @@ Available variables:
                                                        action="create" controller="Proposal"
                                                        arguments="{applicant:applicant,call:call}"
                                                        class="call-list__create-proposal">
-                                            {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title')}
+                                            {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title', arguments: {0: '{call.proposalName}'}, default: 'proposal')}
                                         </f:link.action>
                                     </f:else>
                                 </f:if>
