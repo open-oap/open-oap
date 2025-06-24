@@ -2635,7 +2635,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     null,
                     $format['QuestionFont']
                 );
-                if (trim($item->getHelpText())) {
+                if (trim($item->getIntroText())) {
                     $this->addHtmlToSection($section, $item->getIntroText());
                 }
 
