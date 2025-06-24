@@ -14,3 +14,6 @@ composer.lock
 /Documentation/PhpDoc/
 /.Build/phpDoc-cache/
 /.Build/phpDocumentor.phar
+
+.DS_Store
+.idea/

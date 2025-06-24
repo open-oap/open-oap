@@ -139,10 +139,11 @@ return [
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.teaser_text',
             'displayCond' => 'FIELD:type:!=:1',
             'config' => [
-                'type' => 'input',
-                'size' => 30,
+                'type' => 'text',
+                'enableRichtext' => false,
+                'cols' => 40,
+                'rows' => 15,
                 'eval' => 'trim',
-                'default' => '',
             ],
         ],
         'shortcut' => [
