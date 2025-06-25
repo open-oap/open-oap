@@ -54,6 +54,9 @@ plugin.tx_openoap_dashboard {
         pidFormPages = {$plugin.tx_openoap_dashboard.settings.pidFormPages}
         pidFormGroups = {$plugin.tx_openoap_dashboard.settings.pidFormGroups}
         pidFormItems = {$plugin.tx_openoap_dashboard.settings.pidFormItems}
+        pidItemOptions = {$plugin.tx_openoap_dashboard.settings.pidItemOptions}
+        pidItemValidator = {$plugin.tx_openoap_dashboard.settings.pidItemValidator}
+
         zipFilePrefix = {$plugin.tx_openoap_dashboard.settings.zipFilePrefix}
         zipFileDateFormat = {$plugin.tx_openoap_dashboard.settings.zipFileDateFormat}
         zipStructureApplicantFormat = {$plugin.tx_openoap_dashboard.settings.zipStructureApplicantFormat}

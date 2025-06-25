@@ -16,7 +16,7 @@ namespace OpenOAP\OpenOap\Domain\Repository;
 /**
  * The repository for FormItems
  */
-class FormItemRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class FormItemRepository extends OapAbstractRepository
 {
     /**
      * Find FormItems enabled for filtering
@@ -35,20 +35,4 @@ class FormItemRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $result;
     }
 
-    /**
-     * Find formPage by pid
-     *
-     * @param int $pid
-     */
-    public function findAllByPid(int $pid)
-    {
-        $query = $this->createQuery();
-        $query->getQuerySettings()->setIgnoreEnableFields(false);
-        $query->getQuerySettings()->setRespectStoragePage(false);
-        $query->setOrderings(['question' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING]);
-        $query->matching($query->equals('pid', $pid));
-        $result = $query->execute();
-
-        return $result;
-    }
 }

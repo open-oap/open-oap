@@ -166,7 +166,6 @@ return [
                     'model' => 'formgroup',
                     'pidRoot' => 'pidFormGroups'
                 ],
-//                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formgroup}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formgroup}.hidden = 0 AND {#tx_openoap_domain_model_formgroup}.{#sys_language_uid} IN (-1,0)',
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,

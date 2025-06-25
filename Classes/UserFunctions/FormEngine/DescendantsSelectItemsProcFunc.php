@@ -1,19 +1,19 @@
 <?php
-declare(strict_types = 1);
-namespace OpenOAP\OpenOap\UserFunctions\FormEngine;
+declare(strict_types=1);
+
+namespace OpenOAP\OpenOAP\UserFunctions\FormEngine;
 
 use OpenOAP\OpenOap\Domain\Repository\FormGroupRepository;
 use OpenOAP\OpenOap\Domain\Repository\FormItemRepository;
 use OpenOAP\OpenOap\Domain\Repository\FormPageRepository;
-use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
-use TYPO3\CMS\Backend\Form\NodeFactory;
-use TYPO3\CMS\Backend\Form\NodeInterface;
+use OpenOAP\OpenOap\Domain\Repository\GroupTitleRepository;
+use OpenOAP\OpenOap\Domain\Repository\ItemOptionRepository;
+use OpenOAP\OpenOap\Domain\Repository\ItemValidatorRepository;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
-use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -23,89 +23,58 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class DescendantsSelectItemsProcFunc
 {
-    /**
-     * @var PageRepository
-     */
-    protected $pageRepository;
-
-    /**
-     * @var FormPageRepository
-     */
-    protected $formPageRepository;
-
-    /**
-     * @var FormGroupRepository
-     */
-    protected $formGroupRepository;
-
-    /**
-     * @var FormItemRepository
-     */
-    protected $formItemRepository;
-
-    /**
-     * @var int $depth
-     */
+    protected PageRepository $pageRepository;
+    protected FormPageRepository $formPageRepository;
+    protected FormGroupRepository $formGroupRepository;
+    protected GroupTitleRepository $groupTitleRepository;
+    protected FormItemRepository $formItemRepository;
+    protected ItemOptionRepository $itemOptionRepository;
+    protected ItemValidatorRepository $itemValidatorRepository;
     protected int $depth = 10;
 
-    /** @var array $childPids */
+    /** @var array<int> $childPids */
     protected array $childPids = [];
 
-    /** @var array $titles */
+    /** @var array<string> $titles */
     protected array $titles = [];
 
-    /**
-     * @param PageRepository $pageRepository
-     */
-    public function injectPageRepository(PageRepository $pageRepository)
+    public function __construct(
+        PageRepository          $pageRepository,
+        FormPageRepository      $formPageRepository,
+        FormGroupRepository     $formGroupRepository,
+        FormItemRepository      $formItemRepository,
+        ItemOptionRepository    $itemOptionRepository,
+        GroupTitleRepository    $groupTitleRepository,
+        ItemValidatorRepository $itemValidatorRepository
+    )
     {
         $this->pageRepository = $pageRepository;
-    }
-
-    /**
-     * @param FormPageRepository $formPageRepository
-     */
-    public function injectFormPageRepository(FormPageRepository $formPageRepository)
-    {
         $this->formPageRepository = $formPageRepository;
-    }
-
-    /**
-     * @param FormGroupRepository $formGroupRepository
-     */
-    public function injectFormGroupRepository(FormGroupRepository $formGroupRepository)
-    {
         $this->formGroupRepository = $formGroupRepository;
-    }
-
-    /**
-     * @param FormItemRepository $formItemRepository
-     */
-    public function injectFormItemRepository(FormItemRepository $formItemRepository)
-    {
         $this->formItemRepository = $formItemRepository;
+        $this->itemOptionRepository = $itemOptionRepository;
+        $this->itemValidatorRepository = $itemValidatorRepository;
+        $this->groupTitleRepository = $groupTitleRepository;
     }
 
     /**
      * Process custom options
      *
-     * @param array $params
+     * @return array<string>
      */
-    public function render():array
+    public function render(): array
     {
         $html = [];
         $html[] = '<div class="formengine-field-item t3js-formengine-field-item" style="padding: 5px; background-color: red;">';
-//        $html[] = $fieldInformationHtml;
-        $html[] =   '<div class="form-wizards-wrap">';
-        $html[] =      '<div class="form-wizards-element">';
-        $html[] =         '<div class="form-control-wrap">';
-        $html[] =            '<input type="text" value="' . htmlspecialchars('yepp', ENT_QUOTES) . '" ';
-//        $html[]=               GeneralUtility::implodeAttributes($attributes, true);
-        $html[]=               'yepp text';
-        $html[]=            ' />';
-        $html[] =         '</div>';
-        $html[] =      '</div>';
-        $html[] =   '</div>';
+        $html[] = '<div class="form-wizards-wrap">';
+        $html[] = '<div class="form-wizards-element">';
+        $html[] = '<div class="form-control-wrap">';
+        $html[] = '<input type="text" value="' . htmlspecialchars('yepp', ENT_QUOTES) . '" ';
+        $html[] = '-- will be replaced by the value of the selected item';
+        $html[] = ' />';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
         $html[] = '</div>';
         $resultArray['html'] = implode(LF, $html);
         return $resultArray;
@@ -113,90 +82,87 @@ class DescendantsSelectItemsProcFunc
 
     private function initialize(array $params): void
     {
-        if (!$this->formPageRepository) {
-            $this->formPageRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(FormPageRepository::class);
-        }
-        if (!$this->formGroupRepository) {
-            $this->formGroupRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(FormGroupRepository::class);
-        }
-        if (!$this->formItemRepository) {
-            $this->formItemRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(FormItemRepository::class);
-        }
-
         $configurationManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::class);
         $typoScript = $configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT,'sitepackage'
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT, 'sitepackage'
         );
 
         $pidKey = $params['config']['itemsProcConfig']['pidRoot'];
-        $pidRoot = (int)$typoScript['plugin.']['tx_openoap_dashboard.']['settings.'][$pidKey];
+        $pidRootsRaw = $typoScript['plugin.']['tx_openoap_dashboard.']['settings.'][$pidKey];
 
-        $childPidsString = $this->queryGeneratorGetTreeList($pidRoot, $this->depth); //Will be a string like 1,2,3
-        $this->childPids = explode(',',$childPidsString );
+        $pidRoots = GeneralUtility::trimExplode(',', $pidRootsRaw);
+        // If there is more than one root ID, we need the titles to distinguish between them
+        $rootLevelWithTitle = (count($pidRoots) > 1);
 
-        $this->titles = $this->collectPageTitle($this->childPids, $pidRoot);
+        $childPidsStrings = $this->pageRepository->getPageIdsRecursive($pidRoots, $this->depth);
+        $this->childPids = GeneralUtility::trimExplode(',', implode(',', $childPidsStrings));
+        $this->titles = $this->collectPageTitle($this->childPids, $pidRoots, $rootLevelWithTitle);
 
     }
+
     public function getAllElementsOfFormPages(array &$params): void
     {
-        $this->initialize($params);
-        $elementRepository = $this->formPageRepository;
-        $data['staticTCARecord'] = 'tcarecords-tx_openoap_domain_model_formpage-default';
-        $data['firstTitleAttribute'] = 'internalTitle';
-        $data['secondTitleAttribute'] = 'title';
-
-        $params = $this->buildParamItems(
+        $this->getAllElements(
             $params,
-            $elementRepository,
-            $data
+            $this->formPageRepository,
+            'getInternalTitle',
+            'tcarecords-tx_openoap_domain_model_formpage-default',
+            'getTitle'
         );
     }
 
     public function getAllElementsOfFormGroups(array &$params): void
     {
-        $this->initialize($params);
+        $this->getAllElements(
+            $params,
+            $this->formGroupRepository,
+            'getInternalTitle',
+            'tcarecords-tx_openoap_domain_model_formgroup-default',
+            'getTitle'
+        );
+    }
 
-        $params['items'] = [];
-        foreach ($this->childPids as $pageId) {
-            $elements = $this->formGroupRepository->findAllByPid((integer) $pageId);
-            foreach ($elements as $element) {
-                if (isset($params['config']['itemsProcConfig']['type'])) {
-                    if ($element->getType() !== (integer) $params['config']['itemsProcConfig']['type']) {
-                        continue;
-                    }
-                }
-                // todo no internal title for groups (yet)
-                $title = ($element->getInternalTitle()) ? $element->getInternalTitle() : $element->getTitle();
-                if ($this->titles[$pageId] !== '') {
-                    $label = $this->titles[$pageId] . ' / ' . $title;
-                } else {
-                    $label = $title;
-                }
-
-                $params['items'][] = [$label, (integer) $element->getUid(), 'tcarecords-tx_openoap_domain_model_formgroup-default'];
-            }
-        }
+    public function getAllElementsOfFormGroupTitles(array &$params): void
+    {
+        $this->getAllElements(
+            $params,
+            $this->groupTitleRepository,
+            'getInternalTitle',
+            'tcarecords-tx_openoap_domain_model_formgroup-default',
+            'getTitle'
+        );
     }
 
     public function getAllElementsOfFormItems(array &$params): void
     {
-        $this->initialize($params);
-        $params['items'] = [];
-        foreach ($this->childPids as $pageId) {
-            $elements = $this->formItemRepository->findAllByPid((integer) $pageId);
+        $this->getAllElements(
+            $params,
+            $this->formItemRepository,
+            'getInternalTitle',
+            'tcarecords-tx_openoap_domain_model_formitem-default',
+            'getQuestion'
+        );
+    }
 
-            foreach ($elements as $element) {
-                // todo no internal title for groups (yet)
-                $title = ($element->getInternalTitle()) ? $element->getInternalTitle() : $element->getQuestion();
-                if ($this->titles[$pageId] !== '') {
-                    $label = $this->titles[$pageId] . ' / ' . $title;
-                } else {
-                    $label = $title;
-                }
+    public function getAllElementsOfItemOptions(array &$params): void
+    {
+        $this->getAllElements(
+            $params,
+            $this->itemOptionRepository,
+            'getInternalTitle',
+            'tcarecords-tx_openoap_domain_model_itemoption-default',
+            'getTitle'
+        );
+    }
 
-                $params['items'][] = [$label, (integer) $element->getUid(), 'tcarecords-tx_openoap_domain_model_formitem-default'];
-            }
-        }
+    public function getAllElementsOfItemValidators(array &$params): void
+    {
+        $this->getAllElements(
+            $params,
+            $this->itemValidatorRepository,
+            'getTitle',
+            'tcarecords-tx_openoap_domain_model_itemvalidator-default'
+        );
     }
 
     /**
@@ -208,7 +174,7 @@ class DescendantsSelectItemsProcFunc
     {
         $configurationManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::class);
         $typoScript = $configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT,'sitepackage'
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT, 'sitepackage'
         );
         $proposalsPoolRoot = (int)($typoScript['plugin.']['tx_openoap_dashboard.']['settings.']['proposalsPoolId'] ?? 0);
 
@@ -218,12 +184,9 @@ class DescendantsSelectItemsProcFunc
             throw new \UnexpectedValueException('No table is given.', 1381823570);
         }
 
-        // v12-Solution - something like:
-        // $this->poolRepository->getPageIdsRecursive();
-        // https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Deprecation-97027-ContentObjectRenderer-getTreeList.html
-
-        $childPids = $this->queryGeneratorGetTreeList($proposalsPoolRoot, $this->depth); //Will be a string like 1,2,3
-        $childPids = explode(',',$childPids );
+        // v11-Solution
+        // $childPids = $this->queryGeneratorGetTreeList($proposalsPoolRoot, $this->depth); //Will be a string like 1,2,3
+        // $childPids = explode(',', $childPids);
 
         /**@var \TYPO3\CMS\Core\Domain\Repository\PageRepository $pageRepository */
         if (!$this->pageRepository) {
@@ -231,6 +194,10 @@ class DescendantsSelectItemsProcFunc
                 \TYPO3\CMS\Core\Domain\Repository\PageRepository::class
             );
         }
+
+        // v12-Solution
+        $childPids = $this->pageRepository->getPageIdsRecursive([$proposalsPoolRoot], $this->depth);
+
         $params['items'] = [];
         $title = [];
         foreach ($childPids as $pageId) {
@@ -247,32 +214,27 @@ class DescendantsSelectItemsProcFunc
                 } else {
                     $prefix = '';
                 }
-                $label =  $prefix . $label;
+                $label = $prefix . $label;
                 $title[$uid] = $label;
             }
-            $params['items'][] = [$label, (integer) $uid];
+            $params['items'][] = [$label, (integer)$uid];
 
         }
     }
 
     /**
-     * @param $childPids
-     * @param $pidRoot
+     * @param array $childPids
+     * @param array $pidRoots
+     * @param bool $rootLevelWithTitle
      * @return array
      */
-    protected function collectPageTitle($childPids, $pidRoot): array
+    protected function collectPageTitle(array $childPids, array $pidRoots, bool $rootLevelWithTitle): array
     {
-        /**@var \TYPO3\CMS\Core\Domain\Repository\PageRepository $pageRepository */
-        if (!$this->pageRepository) {
-            $this->pageRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \TYPO3\CMS\Core\Domain\Repository\PageRepository::class
-            );
-        }
 
         $titles = [];
         foreach ($childPids as $pageId) {
             $titles[$pageId] = '';
-            if ($pageId == $pidRoot) {
+            if (in_array($pageId, $pidRoots) and ! $rootLevelWithTitle) {
                 continue;
             }
             $page = $this->pageRepository->getPage($pageId);
@@ -280,7 +242,7 @@ class DescendantsSelectItemsProcFunc
             $pid = $page['pid'];
             $label = $titles[$uid] = $page['title'];
 
-            if ($titles[$pid]) {
+            if (!empty($titles[$pid])) {
                 $prefix = trim($titles[$pid]) . ' / ';
             } else {
                 $prefix = '';
@@ -292,35 +254,6 @@ class DescendantsSelectItemsProcFunc
     }
 
     /**
-     * @param array $params
-     * @param FormPageRepository|FormItemRepository|FormGroupRepository $elementRepository
-     * @param array $data
-     * @return array
-     */
-    // definition for 8.x
-    // protected function buildParamItems( array $params, FormPageRepository|FormItemRepository|FormGroupRepository $elementRepository): array {
-    protected function buildParamItems( array $params, $elementRepository, $data): array {
-        $params['items'] = [];
-        foreach ($this->childPids as $pageId) {
-            $elements = $elementRepository->findAllByPid((integer)$pageId);
-
-            foreach ($elements as $element) {
-                // $title = ($element->getInternalTitle()) ? $element->getInternalTitle() : $element->getTitle();
-                $title = ($element->_getProperty($data['firstTitleAttribute'])) ? $element->_getProperty($data['firstTitleAttribute'])
-                    : $element->_getProperty($data['secondTitleAttribute']);
-                if ($this->titles[$pageId] !== '') {
-                    $label = $this->titles[$pageId] . ' / ' . $title;
-                } else {
-                    $label = $title;
-                }
-
-                $params['items'][] = [$label, (integer)$element->getUid(), $data['staticTCARecord']];
-            }
-        }
-        return $params;
-    }
-
-    /**
      * Recursively fetch all descendants of a given page
      *
      * @param int $id uid of the page
@@ -328,6 +261,9 @@ class DescendantsSelectItemsProcFunc
      * @param int $begin
      * @param string $permClause
      * @return string comma separated list of descendant pages
+     *
+     * @deprecated This function is no longer required in V12. See also$this->pageRepository->getPageIdsRecursive
+     *
      */
     protected function queryGeneratorGetTreeList(int $id, int $depth, int $begin = 0, string $permClause = ''): string
     {
@@ -367,5 +303,63 @@ class DescendantsSelectItemsProcFunc
             }
         }
         return $theList;
+    }
+
+    protected function getAllElements(
+        array   &$params,
+                $repository,
+        string  $titleAttribute,
+        string  $tcaRecord,
+        ?string $fallbackTitleAttribute = null
+    ): void
+    {
+        $this->initialize($params);
+        $params['items'] = [];
+
+        foreach ($this->childPids as $pageId) {
+            $elements = $repository->findAllByPid((int)$pageId);
+
+            foreach ($elements as $element) {
+                if (isset($params['config']['itemsProcConfig']['type']) and $params['config']['itemsProcConfig']['type'] !== '0') {
+                    if (method_exists($element, 'getType') &&
+                        $element->getType() !== (int)$params['config']['itemsProcConfig']['type']) {
+                        continue;
+                    }
+                }
+
+                $title = $this->getElementTitle($element, $titleAttribute, $fallbackTitleAttribute);
+                $label = $this->createLabel((int)$pageId, $title, $element);
+
+                $params['items'][] = [
+                    $label,
+                    (int)$element->getUid(),
+                    $tcaRecord
+                ];
+            }
+        }
+    }
+
+    protected function getElementTitle($element, string $titleAttribute, ?string $fallbackTitleAttribute = null): string
+    {
+        $title = '';
+
+        if (method_exists($element, $titleAttribute)) {
+            $title = $element->$titleAttribute();
+        }
+
+        if (empty($title) && $fallbackTitleAttribute !== null && method_exists($element, $fallbackTitleAttribute)) {
+            $title = $element->$fallbackTitleAttribute();
+        }
+
+        return $title ?: '[Kein Titel]';
+    }
+
+    protected function createLabel(int $pageId, string $title, $element): string
+    {
+        $label = $this->titles[$pageId] !== ''
+            ? $this->titles[$pageId] . ' / ' . $title
+            : $title;
+
+        return $label . ' [' . (int)$element->getUid() . ']';
     }
 }

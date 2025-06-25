@@ -1,5 +1,12 @@
 # Change log
 
+## Version X.1
+
+- Repository refactoring (extended from ) OapAbstractRepository
+- Refactoring and extend DescendantsSelectItemsProcFunc for subfolder lists of call, pages, groups, items, options, validators
+- add pidItemValidator amd pidItemOptions: root folder IDs for Validators and Options (can be a comma separated list of PIDs) - use "global" as prefix of global folder
+-
+
 ## Version X
 
 - Enhanced compact Word export
