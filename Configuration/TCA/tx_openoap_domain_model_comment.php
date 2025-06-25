@@ -109,11 +109,11 @@ return [
                         'value' => 0,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.source_auto',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:comment.source_auto',
                         'value' => 1,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.source_edit',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:comment.source_edit',
                         'value' => 2,
                     ],
                 ],
@@ -140,19 +140,19 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_new',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:comment.state_new',
                         'value' => 0,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_accepted',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:comment.state_accepted',
                         'value' => 1,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_auto_accepted',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:comment.state_auto_accepted',
                         'value' => 2,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:comment.state_archived',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:comment.state_archived',
                         'value' => 9,
                     ],
                 ],

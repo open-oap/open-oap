@@ -50,6 +50,9 @@ Available variables:
                     ({f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.count_in_progress')})
                 </th>
                 <th nowrap="nowrap">
+                    {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.proposal_name')}
+                </th>
+                <th nowrap="nowrap">
                     {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.startTime')}
                 </th>
                 <th nowrap="nowrap">
@@ -73,6 +76,9 @@ Available variables:
                         <td nowrap="nowrap" class="col-title">
                             {statistics_submitted.{call.uid}}<br>
                             ({statistics_inProgress.{call.uid}})
+                        </td>
+                        <td nowrap="nowrap" class="col-title">
+                            {call.proposalName}
                         </td>
                         <td nowrap="nowrap" class="cell__date cell__date<f:if condition="{f:format.date(date:'now', format:'YmdHi')} >  {f:format.date(date:'{call.callStartTime}', format:'YmdHi')} && {f:format.date(date:'now', format:'YmdHi')} <  {f:format.date(date:'{call.callEndTime}', format:'YmdHi')}">--live</f:if>">
                             {call.callStartTime -> f:format.date(format:'d.m.Y H:i')}

@@ -138,11 +138,11 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:formpage.type_default',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:formpage.type_default',
                         'value' => 0,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:formpage.type_preview',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:formpage.type_preview',
                         'value' => 1,
                     ],
                 ],
@@ -166,7 +166,6 @@ return [
                     'model' => 'formgroup',
                     'pidRoot' => 'pidFormGroups'
                 ],
-//                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formgroup}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formgroup}.hidden = 0 AND {#tx_openoap_domain_model_formgroup}.{#sys_language_uid} IN (-1,0)',
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,

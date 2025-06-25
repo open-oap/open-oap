@@ -1,425 +1,425 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang.xlf"
-		  date="2022-03-25T09:12:02Z" product-name="open_oap">
-		<header/>
-		<body>
-			<!-- Form / Fields -->
-			<trans-unit id='tx_openoap_domain_model_call' resname='tx_openoap_domain_model_call'>
-				<source><![CDATA[Call]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_call.title' resname='tx_openoap_domain_model_call.title'>
-				<source><![CDATA[Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_call.intro_text' resname='tx_openoap_domain_model_call.intro_text'>
-				<source><![CDATA[Intro Text]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_call.teaser_text'
-						resname='tx_openoap_domain_model_call.teaser_text'>
-				<source><![CDATA[Teaser Text]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_call.emails' resname='tx_openoap_domain_model_call.emails'>
-				<source><![CDATA[Emails]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_call.call_start_time'
-						resname='tx_openoap_domain_model_call.call_start_time'>
-				<source><![CDATA[Call Start Time]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_call.call_end_time'
-						resname='tx_openoap_domain_model_call.call_end_time'>
-				<source><![CDATA[Call End Time]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_call.fe_user_exceptions'
-						resname='tx_openoap_domain_model_call.fe_user_exceptions'>
-				<source><![CDATA[Fe User Exceptions]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_call.proposal_pid'
-						resname='tx_openoap_domain_model_call.proposal_pid'>
-				<source><![CDATA[Proposal Pid]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_call.form_pages' resname='tx_openoap_domain_model_call.form_pages'>
-				<source><![CDATA[Form Pages]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formpage' resname='tx_openoap_domain_model_formpage'>
-				<source><![CDATA[Form Page]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formpage.title' resname='tx_openoap_domain_model_formpage.title'>
-				<source><![CDATA[Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formpage.menu_title'
-						resname='tx_openoap_domain_model_formpage.menu_title'>
-				<source><![CDATA[Menu Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formpage.internal_title'
-						resname='tx_openoap_domain_model_formpage.internal_title'>
-				<source><![CDATA[Internal Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formpage.intro_text'
-						resname='tx_openoap_domain_model_formpage.intro_text'>
-				<source><![CDATA[Intro Text]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formpage.type' resname='tx_openoap_domain_model_formpage.type'>
-				<source><![CDATA[Type]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formpage.item_groups'
-						resname='tx_openoap_domain_model_formpage.item_groups'>
-				<source><![CDATA[Item Groups]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup' resname='tx_openoap_domain_model_formgroup'>
-				<source><![CDATA[Form Group]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.title' resname='tx_openoap_domain_model_formgroup.title'>
-				<source><![CDATA[Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.intro_text'
-						resname='tx_openoap_domain_model_formgroup.intro_text'>
-				<source><![CDATA[Intro Text]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.help_text'
-						resname='tx_openoap_domain_model_formgroup.help_text'>
-				<source><![CDATA[Help Text]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.model_name'
-						resname='tx_openoap_domain_model_formgroup.model_name'>
-				<source><![CDATA[Model Name]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.repeatable_min'
-						resname='tx_openoap_domain_model_formgroup.repeatable_min'>
-				<source><![CDATA[Repeatable Min]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.repeatable_max'
-						resname='tx_openoap_domain_model_formgroup.repeatable_max'>
-				<source><![CDATA[Repeatable Max]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.items' resname='tx_openoap_domain_model_formgroup.items'>
-				<source><![CDATA[Items]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.group_title'
-						resname='tx_openoap_domain_model_formgroup.group_title'>
-				<source><![CDATA[Group Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formgroup.modificators'
-						resname='tx_openoap_domain_model_formgroup.modificators'>
-				<source><![CDATA[Modificators]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem' resname='tx_openoap_domain_model_formitem'>
-				<source><![CDATA[Form Item]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.question'
-						resname='tx_openoap_domain_model_formitem.question'>
-				<source><![CDATA[Question]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.intro_text'
-						resname='tx_openoap_domain_model_formitem.intro_text'>
-				<source><![CDATA[Intro Text]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.help_text'
-						resname='tx_openoap_domain_model_formitem.help_text'>
-				<source><![CDATA[Help Text]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.type' resname='tx_openoap_domain_model_formitem.type'>
-				<source><![CDATA[Type]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.enabled_filter'
-						resname='tx_openoap_domain_model_formitem.enabled_filter'>
-				<source><![CDATA[Enabled Filter]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.filter_label'
-						resname='tx_openoap_domain_model_formitem.filter_label'>
-				<source><![CDATA[Filter Label]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.enabled_info'
-						resname='tx_openoap_domain_model_formitem.enabled_info'>
-				<source><![CDATA[Enabled Info]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.enabled_title'
-						resname='tx_openoap_domain_model_formitem.enabled_title'>
-				<source><![CDATA[Enabled Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.additional_value'
-						resname='tx_openoap_domain_model_formitem.additional_value'>
-				<source><![CDATA[Additional Value]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.default_value'
-						resname='tx_openoap_domain_model_formitem.default_value'>
-				<source><![CDATA[Default Value]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.unit' resname='tx_openoap_domain_model_formitem.unit'>
-				<source><![CDATA[Unit]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.additional_label'
-						resname='tx_openoap_domain_model_formitem.additional_label'>
-				<source><![CDATA[Additional Label]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.options'
-						resname='tx_openoap_domain_model_formitem.options'>
-				<source><![CDATA[Options]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.validators'
-						resname='tx_openoap_domain_model_formitem.validators'>
-				<source><![CDATA[Validators]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemoption' resname='tx_openoap_domain_model_itemoption'>
-				<source><![CDATA[Item Option]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemoption.title'
-						resname='tx_openoap_domain_model_itemoption.title'>
-				<source><![CDATA[Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemoption.option_group'
-						resname='tx_openoap_domain_model_itemoption.option_group'>
-				<source><![CDATA[Option Group]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemoption.options'
-						resname='tx_openoap_domain_model_itemoption.options'>
-				<source><![CDATA[Options]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemoption.type' resname='tx_openoap_domain_model_itemoption.type'>
-				<source><![CDATA[Type]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemvalidator' resname='tx_openoap_domain_model_itemvalidator'>
-				<source><![CDATA[Item Validator]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemvalidator.title'
-						resname='tx_openoap_domain_model_itemvalidator.title'>
-				<source><![CDATA[Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemvalidator.type'
-						resname='tx_openoap_domain_model_itemvalidator.type'>
-				<source><![CDATA[Type]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemvalidator.param1'
-						resname='tx_openoap_domain_model_itemvalidator.param1'>
-				<source><![CDATA[Parameter 1]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemvalidator.param2'
-						resname='tx_openoap_domain_model_itemvalidator.param2'>
-				<source><![CDATA[Parameter 2]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemvalidator.item'
-						resname='tx_openoap_domain_model_itemvalidator.item'>
-				<source><![CDATA[Question/Item]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal' resname='tx_openoap_domain_model_proposal'>
-				<source><![CDATA[Proposal]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.title' resname='tx_openoap_domain_model_proposal.title'>
-				<source><![CDATA[Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.signature'
-						resname='tx_openoap_domain_model_proposal.signature'>
-				<source><![CDATA[Signature]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.survey_hash'
-						resname='tx_openoap_domain_model_proposal.survey_hash'>
-				<source><![CDATA[Survey (Hash)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state' resname='tx_openoap_domain_model_proposal.state'>
-				<source><![CDATA[State]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.archived'
-						resname='tx_openoap_domain_model_proposal.archived'>
-				<source><![CDATA[Archived]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.meta_information'
-						resname='tx_openoap_domain_model_proposal.meta_information'>
-				<source><![CDATA[Meta Information]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.tx_openoap_call'
-						resname='tx_openoap_domain_model_proposal.tx_openoap_call'>
-				<source><![CDATA[Call]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.answers'
-						resname='tx_openoap_domain_model_proposal.answers'>
-				<source><![CDATA[Answers]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.comments'
-						resname='tx_openoap_domain_model_proposal.comments'>
-				<source><![CDATA[Comment(s)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.applicant'
-						resname='tx_openoap_domain_model_proposal.applicant'>
-				<source><![CDATA[Applicant]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_answer' resname='tx_openoap_domain_model_answer'>
-				<source><![CDATA[Answer]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_answer.value' resname='tx_openoap_domain_model_answer.value'>
-				<source><![CDATA[Value]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_answer.type' resname='tx_openoap_domain_model_answer.type'>
-				<source><![CDATA[Type]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_answer.element_counter'
-						resname='tx_openoap_domain_model_answer.element_counter'>
-				<source><![CDATA[Element Counter]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_answer.additional_value'
-						resname='tx_openoap_domain_model_answer.additional_value'>
-				<source><![CDATA[Additional Value]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_answer.past_answers'
-						resname='tx_openoap_domain_model_answer.past_answers'>
-				<source><![CDATA[Past Answers]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_answer.item' resname='tx_openoap_domain_model_answer.item'>
-				<source><![CDATA[Item]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_answer.model' resname='tx_openoap_domain_model_answer.model'>
-				<source><![CDATA[Model]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_answer.comments' resname='tx_openoap_domain_model_answer.comments'>
-				<source><![CDATA[Comments]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_grouptitle' resname='tx_openoap_domain_model_grouptitle'>
-				<source><![CDATA[Group Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_grouptitle.title'
-						resname='tx_openoap_domain_model_grouptitle.title'>
-				<source><![CDATA[Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_grouptitle.internal_title'
-						resname='tx_openoap_domain_model_grouptitle.internal_title'>
-				<source><![CDATA[Internal Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_comment' resname='tx_openoap_domain_model_comment'>
-				<source><![CDATA[Comment]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_comment.text' resname='tx_openoap_domain_model_comment.text'>
-				<source><![CDATA[Text]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_comment.source' resname='tx_openoap_domain_model_comment.source'>
-				<source><![CDATA[Source]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_comment.code' resname='tx_openoap_domain_model_comment.code'>
-				<source><![CDATA[Code]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_comment.state' resname='tx_openoap_domain_model_comment.state'>
-				<source><![CDATA[State]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant' resname='tx_openoap_domain_model_applicant'>
-				<source><![CDATA[Applicant]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.username'
-						resname='tx_openoap_domain_model_applicant.username'>
-				<source><![CDATA[Email address]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.password'
-						resname='tx_openoap_domain_model_applicant.password'>
-				<source><![CDATA[Password]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.salutation'
-						resname='tx_openoap_domain_model_applicant.salutation'>
-				<source><![CDATA[Salutation]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.salutation.item1'
-						resname='tx_openoap_domain_model_applicant.salutation.item1'>
-				<source><![CDATA[Ms]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.salutation.item2'
-						resname='tx_openoap_domain_model_applicant.salutation.item2'>
-				<source><![CDATA[Mr]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.name' resname='tx_openoap_domain_model_applicant.name'>
-				<source><![CDATA[Contact person]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.first_name'
-						resname='tx_openoap_domain_model_applicant.first_name'>
-				<source><![CDATA[Contact person first name]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.last_name'
-						resname='tx_openoap_domain_model_applicant.last_name'>
-				<source><![CDATA[Contact person last name]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.company'
-						resname='tx_openoap_domain_model_applicant.company'>
-				<source><![CDATA[Company name]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.address'
-						resname='tx_openoap_domain_model_applicant.address'>
-				<source><![CDATA[Street and house number]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.addressCombined'
-						resname='tx_openoap_domain_model_applicant.addressCombined'>
-				<source><![CDATA[Address]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.zip' resname='tx_openoap_domain_model_applicant.zip'>
-				<source><![CDATA[Postcode]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.city' resname='tx_openoap_domain_model_applicant.city'>
-				<source><![CDATA[City]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.country'
-						resname='tx_openoap_domain_model_applicant.country'>
-				<source><![CDATA[Country]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.telephone'
-						resname='tx_openoap_domain_model_applicant.telephone'>
-				<source><![CDATA[Telephone]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.www' resname='tx_openoap_domain_model_applicant.www'>
-				<source><![CDATA[Website]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.company_email'
-						resname='tx_openoap_domain_model_applicant.company_email'>
-				<source><![CDATA[Company email]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.preferred_lang'
-						resname='tx_openoap_domain_model_applicant.preferred_lang'>
-				<source><![CDATA[Preferred communication language]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.privacypolicy.label'
-						resname='tx_openoap_domain_model_applicant.privacypolicy.label'>
-				<source><![CDATA[Privacy Policy]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_applicant.proposals'
-						resname='tx_openoap_domain_model_applicant.proposals'>
-				<source><![CDATA[Proposals]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_mandatory'
-						resname='tx_cboap_domain_model_itemvalidator.type_mandatory'>
-				<source><![CDATA[Mandatory]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_integer'
-						resname='tx_cboap_domain_model_itemvalidator.type_integer'>
-				<source><![CDATA[Whole number/integer]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_float'
-						resname='tx_cboap_domain_model_itemvalidator.type_float'>
-				<source><![CDATA[Float number/]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_maxChar'
-						resname='tx_cboap_domain_model_itemvalidator.type_maxChar'>
-				<source><![CDATA[Maximum Character]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_minValue'
-						resname='tx_cboap_domain_model_itemvalidator.type_minValue'>
-				<source><![CDATA[Minimum Value]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_maxValue'
-						resname='tx_cboap_domain_model_itemvalidator.type_maxValue'>
-				<source><![CDATA[Maximum Value]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_email'
-						resname='tx_cboap_domain_model_itemvalidator.type_email'>
-				<source><![CDATA[Email]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_website'
-						resname='tx_cboap_domain_model_itemvalidator.type_website'>
-				<source><![CDATA[Website address / URL]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.type_phone'
-						resname='tx_cboap_domain_model_itemvalidator.type_phone'>
-				<source><![CDATA[Phone / Fax number]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.file_type'
-						resname='tx_cboap_domain_model_itemvalidator.file_type'>
-				<source><![CDATA[File-Type for Uploads]]></source>
-			</trans-unit>
-			<trans-unit id='tx_cboap_domain_model_itemvalidator.file_size'
-						resname='tx_cboap_domain_model_itemvalidator.file_size'>
-				<source><![CDATA[File size for Uploads (in Bytes, kB, MB)]]></source>
-			</trans-unit>
+    <file source-language="en" datatype="plaintext" original="EXT:open_oap/Resources/Private/Language/locallang.xlf"
+          date="2022-03-25T09:12:02Z" product-name="open_oap">
+        <header/>
+        <body>
+            <!-- Form / Fields -->
+            <trans-unit id='tx_openoap_domain_model_call' resname='tx_openoap_domain_model_call'>
+                <source><![CDATA[Call]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_call.title' resname='tx_openoap_domain_model_call.title'>
+                <source><![CDATA[Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_call.intro_text' resname='tx_openoap_domain_model_call.intro_text'>
+                <source><![CDATA[Intro Text]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_call.teaser_text'
+                        resname='tx_openoap_domain_model_call.teaser_text'>
+                <source><![CDATA[Teaser Text]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_call.emails' resname='tx_openoap_domain_model_call.emails'>
+                <source><![CDATA[Emails]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_call.call_start_time'
+                        resname='tx_openoap_domain_model_call.call_start_time'>
+                <source><![CDATA[Call Start Time]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_call.call_end_time'
+                        resname='tx_openoap_domain_model_call.call_end_time'>
+                <source><![CDATA[Call End Time]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_call.fe_user_exceptions'
+                        resname='tx_openoap_domain_model_call.fe_user_exceptions'>
+                <source><![CDATA[Fe User Exceptions]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_call.proposal_pid'
+                        resname='tx_openoap_domain_model_call.proposal_pid'>
+                <source><![CDATA[Proposal Pid]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_call.form_pages' resname='tx_openoap_domain_model_call.form_pages'>
+                <source><![CDATA[Form Pages]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formpage' resname='tx_openoap_domain_model_formpage'>
+                <source><![CDATA[Form Page]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formpage.title' resname='tx_openoap_domain_model_formpage.title'>
+                <source><![CDATA[Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formpage.menu_title'
+                        resname='tx_openoap_domain_model_formpage.menu_title'>
+                <source><![CDATA[Menu Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formpage.internal_title'
+                        resname='tx_openoap_domain_model_formpage.internal_title'>
+                <source><![CDATA[Internal Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formpage.intro_text'
+                        resname='tx_openoap_domain_model_formpage.intro_text'>
+                <source><![CDATA[Intro Text]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formpage.type' resname='tx_openoap_domain_model_formpage.type'>
+                <source><![CDATA[Type]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formpage.item_groups'
+                        resname='tx_openoap_domain_model_formpage.item_groups'>
+                <source><![CDATA[Item Groups]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formgroup' resname='tx_openoap_domain_model_formgroup'>
+                <source><![CDATA[Form Group]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formgroup.title' resname='tx_openoap_domain_model_formgroup.title'>
+                <source><![CDATA[Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formgroup.intro_text'
+                        resname='tx_openoap_domain_model_formgroup.intro_text'>
+                <source><![CDATA[Intro Text]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formgroup.help_text'
+                        resname='tx_openoap_domain_model_formgroup.help_text'>
+                <source><![CDATA[Help Text]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formgroup.model_name'
+                        resname='tx_openoap_domain_model_formgroup.model_name'>
+                <source><![CDATA[Model Name]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formgroup.repeatable_min'
+                        resname='tx_openoap_domain_model_formgroup.repeatable_min'>
+                <source><![CDATA[Repeatable Min]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formgroup.repeatable_max'
+                        resname='tx_openoap_domain_model_formgroup.repeatable_max'>
+                <source><![CDATA[Repeatable Max]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formgroup.items' resname='tx_openoap_domain_model_formgroup.items'>
+                <source><![CDATA[Items]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formgroup.group_title'
+                        resname='tx_openoap_domain_model_formgroup.group_title'>
+                <source><![CDATA[Group Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formgroup.modificators'
+                        resname='tx_openoap_domain_model_formgroup.modificators'>
+                <source><![CDATA[Modificators]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem' resname='tx_openoap_domain_model_formitem'>
+                <source><![CDATA[Form Item]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.question'
+                        resname='tx_openoap_domain_model_formitem.question'>
+                <source><![CDATA[Question]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.intro_text'
+                        resname='tx_openoap_domain_model_formitem.intro_text'>
+                <source><![CDATA[Intro Text]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.help_text'
+                        resname='tx_openoap_domain_model_formitem.help_text'>
+                <source><![CDATA[Help Text]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.type' resname='tx_openoap_domain_model_formitem.type'>
+                <source><![CDATA[Type]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.enabled_filter'
+                        resname='tx_openoap_domain_model_formitem.enabled_filter'>
+                <source><![CDATA[Enabled Filter]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.filter_label'
+                        resname='tx_openoap_domain_model_formitem.filter_label'>
+                <source><![CDATA[Filter Label]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.enabled_info'
+                        resname='tx_openoap_domain_model_formitem.enabled_info'>
+                <source><![CDATA[Enabled Info]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.enabled_title'
+                        resname='tx_openoap_domain_model_formitem.enabled_title'>
+                <source><![CDATA[Enabled Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.additional_value'
+                        resname='tx_openoap_domain_model_formitem.additional_value'>
+                <source><![CDATA[Additional Value]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.default_value'
+                        resname='tx_openoap_domain_model_formitem.default_value'>
+                <source><![CDATA[Default Value]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.unit' resname='tx_openoap_domain_model_formitem.unit'>
+                <source><![CDATA[Unit]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.additional_label'
+                        resname='tx_openoap_domain_model_formitem.additional_label'>
+                <source><![CDATA[Additional Label]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.options'
+                        resname='tx_openoap_domain_model_formitem.options'>
+                <source><![CDATA[Options]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.validators'
+                        resname='tx_openoap_domain_model_formitem.validators'>
+                <source><![CDATA[Validators]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemoption' resname='tx_openoap_domain_model_itemoption'>
+                <source><![CDATA[Item Option]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemoption.title'
+                        resname='tx_openoap_domain_model_itemoption.title'>
+                <source><![CDATA[Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemoption.option_group'
+                        resname='tx_openoap_domain_model_itemoption.option_group'>
+                <source><![CDATA[Option Group]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemoption.options'
+                        resname='tx_openoap_domain_model_itemoption.options'>
+                <source><![CDATA[Options]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemoption.type' resname='tx_openoap_domain_model_itemoption.type'>
+                <source><![CDATA[Type]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemvalidator' resname='tx_openoap_domain_model_itemvalidator'>
+                <source><![CDATA[Item Validator]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemvalidator.title'
+                        resname='tx_openoap_domain_model_itemvalidator.title'>
+                <source><![CDATA[Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemvalidator.type'
+                        resname='tx_openoap_domain_model_itemvalidator.type'>
+                <source><![CDATA[Type]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemvalidator.param1'
+                        resname='tx_openoap_domain_model_itemvalidator.param1'>
+                <source><![CDATA[Parameter 1]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemvalidator.param2'
+                        resname='tx_openoap_domain_model_itemvalidator.param2'>
+                <source><![CDATA[Parameter 2]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemvalidator.item'
+                        resname='tx_openoap_domain_model_itemvalidator.item'>
+                <source><![CDATA[Question/Item]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal' resname='tx_openoap_domain_model_proposal'>
+                <source><![CDATA[Proposal]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.title' resname='tx_openoap_domain_model_proposal.title'>
+                <source><![CDATA[Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.signature'
+                        resname='tx_openoap_domain_model_proposal.signature'>
+                <source><![CDATA[Signature]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.survey_hash'
+                        resname='tx_openoap_domain_model_proposal.survey_hash'>
+                <source><![CDATA[Survey (Hash)]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state' resname='tx_openoap_domain_model_proposal.state'>
+                <source><![CDATA[State]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.archived'
+                        resname='tx_openoap_domain_model_proposal.archived'>
+                <source><![CDATA[Archived]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.meta_information'
+                        resname='tx_openoap_domain_model_proposal.meta_information'>
+                <source><![CDATA[Meta Information]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.tx_openoap_call'
+                        resname='tx_openoap_domain_model_proposal.tx_openoap_call'>
+                <source><![CDATA[Call]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.answers'
+                        resname='tx_openoap_domain_model_proposal.answers'>
+                <source><![CDATA[Answers]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.comments'
+                        resname='tx_openoap_domain_model_proposal.comments'>
+                <source><![CDATA[Comment(s)]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.applicant'
+                        resname='tx_openoap_domain_model_proposal.applicant'>
+                <source><![CDATA[Applicant]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_answer' resname='tx_openoap_domain_model_answer'>
+                <source><![CDATA[Answer]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_answer.value' resname='tx_openoap_domain_model_answer.value'>
+                <source><![CDATA[Value]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_answer.type' resname='tx_openoap_domain_model_answer.type'>
+                <source><![CDATA[Type]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_answer.element_counter'
+                        resname='tx_openoap_domain_model_answer.element_counter'>
+                <source><![CDATA[Element Counter]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_answer.additional_value'
+                        resname='tx_openoap_domain_model_answer.additional_value'>
+                <source><![CDATA[Additional Value]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_answer.past_answers'
+                        resname='tx_openoap_domain_model_answer.past_answers'>
+                <source><![CDATA[Past Answers]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_answer.item' resname='tx_openoap_domain_model_answer.item'>
+                <source><![CDATA[Item]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_answer.model' resname='tx_openoap_domain_model_answer.model'>
+                <source><![CDATA[Model]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_answer.comments' resname='tx_openoap_domain_model_answer.comments'>
+                <source><![CDATA[Comments]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_grouptitle' resname='tx_openoap_domain_model_grouptitle'>
+                <source><![CDATA[Group Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_grouptitle.title'
+                        resname='tx_openoap_domain_model_grouptitle.title'>
+                <source><![CDATA[Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_grouptitle.internal_title'
+                        resname='tx_openoap_domain_model_grouptitle.internal_title'>
+                <source><![CDATA[Internal Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_comment' resname='tx_openoap_domain_model_comment'>
+                <source><![CDATA[Comment]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_comment.text' resname='tx_openoap_domain_model_comment.text'>
+                <source><![CDATA[Text]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_comment.source' resname='tx_openoap_domain_model_comment.source'>
+                <source><![CDATA[Source]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_comment.code' resname='tx_openoap_domain_model_comment.code'>
+                <source><![CDATA[Code]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_comment.state' resname='tx_openoap_domain_model_comment.state'>
+                <source><![CDATA[State]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant' resname='tx_openoap_domain_model_applicant'>
+                <source><![CDATA[Applicant]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.username'
+                        resname='tx_openoap_domain_model_applicant.username'>
+                <source><![CDATA[Email address]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.password'
+                        resname='tx_openoap_domain_model_applicant.password'>
+                <source><![CDATA[Password]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.salutation'
+                        resname='tx_openoap_domain_model_applicant.salutation'>
+                <source><![CDATA[Salutation]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.salutation.item1'
+                        resname='tx_openoap_domain_model_applicant.salutation.item1'>
+                <source><![CDATA[Ms]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.salutation.item2'
+                        resname='tx_openoap_domain_model_applicant.salutation.item2'>
+                <source><![CDATA[Mr]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.name' resname='tx_openoap_domain_model_applicant.name'>
+                <source><![CDATA[Contact person]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.first_name'
+                        resname='tx_openoap_domain_model_applicant.first_name'>
+                <source><![CDATA[Contact person first name]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.last_name'
+                        resname='tx_openoap_domain_model_applicant.last_name'>
+                <source><![CDATA[Contact person last name]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.company'
+                        resname='tx_openoap_domain_model_applicant.company'>
+                <source><![CDATA[Company name]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.address'
+                        resname='tx_openoap_domain_model_applicant.address'>
+                <source><![CDATA[Street and house number]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.addressCombined'
+                        resname='tx_openoap_domain_model_applicant.addressCombined'>
+                <source><![CDATA[Address]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.zip' resname='tx_openoap_domain_model_applicant.zip'>
+                <source><![CDATA[Postcode]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.city' resname='tx_openoap_domain_model_applicant.city'>
+                <source><![CDATA[City]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.country'
+                        resname='tx_openoap_domain_model_applicant.country'>
+                <source><![CDATA[Country]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.telephone'
+                        resname='tx_openoap_domain_model_applicant.telephone'>
+                <source><![CDATA[Telephone]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.www' resname='tx_openoap_domain_model_applicant.www'>
+                <source><![CDATA[Website]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.company_email'
+                        resname='tx_openoap_domain_model_applicant.company_email'>
+                <source><![CDATA[Company email]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.preferred_lang'
+                        resname='tx_openoap_domain_model_applicant.preferred_lang'>
+                <source><![CDATA[Preferred communication language]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.privacypolicy.label'
+                        resname='tx_openoap_domain_model_applicant.privacypolicy.label'>
+                <source><![CDATA[Privacy Policy]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_applicant.proposals'
+                        resname='tx_openoap_domain_model_applicant.proposals'>
+                <source><![CDATA[Proposals]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_mandatory'
+                        resname='tx_cboap_domain_model_itemvalidator.type_mandatory'>
+                <source><![CDATA[Mandatory]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_integer'
+                        resname='tx_cboap_domain_model_itemvalidator.type_integer'>
+                <source><![CDATA[Whole number/integer]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_float'
+                        resname='tx_cboap_domain_model_itemvalidator.type_float'>
+                <source><![CDATA[Float number/]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_maxChar'
+                        resname='tx_cboap_domain_model_itemvalidator.type_maxChar'>
+                <source><![CDATA[Maximum Character]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_minValue'
+                        resname='tx_cboap_domain_model_itemvalidator.type_minValue'>
+                <source><![CDATA[Minimum Value]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_maxValue'
+                        resname='tx_cboap_domain_model_itemvalidator.type_maxValue'>
+                <source><![CDATA[Maximum Value]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_email'
+                        resname='tx_cboap_domain_model_itemvalidator.type_email'>
+                <source><![CDATA[Email]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_website'
+                        resname='tx_cboap_domain_model_itemvalidator.type_website'>
+                <source><![CDATA[Website address / URL]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.type_phone'
+                        resname='tx_cboap_domain_model_itemvalidator.type_phone'>
+                <source><![CDATA[Phone / Fax number]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.file_type'
+                        resname='tx_cboap_domain_model_itemvalidator.file_type'>
+                <source><![CDATA[File-Type for Uploads]]></source>
+            </trans-unit>
+            <trans-unit id='tx_cboap_domain_model_itemvalidator.file_size'
+                        resname='tx_cboap_domain_model_itemvalidator.file_size'>
+                <source><![CDATA[File size for Uploads (in Bytes, kB, MB)]]></source>
+            </trans-unit>
             <trans-unit id='tx_cboap_domain_model_itemvalidator.type_greaterThan'
                         resname='tx_cboap_domain_model_itemvalidator.type_greaterThan'>
                 <source><![CDATA[Greater than Question/Item]]></source>
@@ -428,951 +428,988 @@
                         resname='tx_cboap_domain_model_itemvalidator.type_lessThan'>
                 <source><![CDATA[Less than Question/Item]]></source>
             </trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.type_string'
-						resname='tx_openoap_domain_model_formitem.type_string'>
-				<source><![CDATA[Text - single line]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.type_text'
-						resname='tx_openoap_domain_model_formitem.type_text'>
-				<source><![CDATA[Textarea]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.type_date1'
-						resname='tx_openoap_domain_model_formitem.type_date1'>
-				<source><![CDATA[One date]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.type_date2'
-						resname='tx_openoap_domain_model_formitem.type_date2'>
-				<source><![CDATA[Two dates]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.type_checkbox'
-						resname='tx_openoap_domain_model_formitem.type_checkbox'>
-				<source><![CDATA[Checkbox (multiple)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.type_radiobutton'
-						resname='tx_openoap_domain_model_formitem.type_radiobutton'>
-				<source><![CDATA[Radiobutton (single)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.type_select_single'
-						resname='tx_openoap_domain_model_formitem.type_select_single'>
-				<source><![CDATA[Select (single)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formitem.type_select_multiple'
-						resname='tx_openoap_domain_model_formitem.type_select_multiple'>
-				<source><![CDATA[Select (multiple)]]></source>
-			</trans-unit>
-			<!-- Plugin -->
-			<trans-unit id='tx_openoap_applicant.name' resname='tx_openoap_applicant.name'>
-				<source><![CDATA[Applicant-Plugin]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.description' resname='tx_openoap_applicant.description'>
-				<source><![CDATA[Plugin zur Anzeige von Stammdaten und Antragsteller*innen-Profil]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicantform.name' resname='tx_openoap_applicantform.name'>
-				<source><![CDATA[Applicantform-Plugin]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicantform.description' resname='tx_openoap_applicantform.description'>
-				<source>
-					<![CDATA[Plugin zum Anlegen und Bearbeiten der Stammdaten des Antragsteller*innen-Profils]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.name' resname='tx_openoap_dashboard.name'>
-				<source><![CDATA[Dashboard-Plugin]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.description' resname='tx_openoap_dashboard.description'>
-				<source>
-					<![CDATA[Plugin zur Anzeige der vorhandenen Anträge für einen ausgewählten Call - wird im Plugin ausgewählt]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_form.name' resname='tx_openoap_form.name'>
-				<source><![CDATA[Form/Proposal-Plugin]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_form.description' resname='tx_openoap_form.description'>
-				<source><![CDATA[Plugin zur Erstellung und Nutzung des Formulars]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_proposals.name' resname='tx_openoap_proposals.name'>
-				<source><![CDATA[Proposals/Applicant-Plugin]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_proposals.description' resname='tx_openoap_proposals.description'>
-				<source>
-					<![CDATA[Plugin zur Anzeige aller aktuellen oder archivierten Anträge eines/r Antragsteller*in]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.name' resname='tx_openoap_notifications.name'>
-				<source><![CDATA[Notifications-Plugin]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.description' resname='tx_openoap_notifications.description'>
-				<source>
-					<![CDATA[Plugin zur Anzeige einer sortierbaren Liste aller automatischen und redaktionellen Kommentare eines Antrags]]></source>
-			</trans-unit>
-			<!-- Comment -->
-			<trans-unit id='comment.state_new' resname='comment.state_new'>
-				<source><![CDATA[New]]></source>
-			</trans-unit>
-			<trans-unit id='comment.state_accepted' resname='comment.state_accepted'>
-				<source><![CDATA[Accepted]]></source>
-			</trans-unit>
-			<trans-unit id='comment.state_auto_accepted' resname='comment.state_auto_accepted'>
-				<source><![CDATA[Auto Accepted]]></source>
-			</trans-unit>
-			<trans-unit id='comment.state_archived' resname='comment.state_archived'>
-				<source><![CDATA[Archived]]></source>
-			</trans-unit>
-			<trans-unit id='comment.source_auto' resname='comment.source_auto'>
-				<source><![CDATA[Auto]]></source>
-			</trans-unit>
-			<trans-unit id='comment.source_edit' resname='comment.source_edit'>
-				<source><![CDATA[Edit]]></source>
-			</trans-unit>
-			<!-- Formpage -->
-			<trans-unit id='formpage.type_default' resname='formpage.type_default'>
-				<source><![CDATA[Default]]></source>
-			</trans-unit>
-			<trans-unit id='formpage.type_preview' resname='formpage.type_preview'>
-				<source><![CDATA[Preview]]></source>
-			</trans-unit>
-			<!-- Status of proposal -->
-			<trans-unit id='tx_openoap_domain_model_proposal.state.0'
-						resname='tx_openoap_domain_model_proposal.state.0'>
-				<source><![CDATA[New]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.1'
-						resname='tx_openoap_domain_model_proposal.state.1'>
-				<source><![CDATA[Draft]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.2'
-						resname='tx_openoap_domain_model_proposal.state.2'>
-				<source><![CDATA[Submitted]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.3'
-						resname='tx_openoap_domain_model_proposal.state.3'>
-				<source><![CDATA[Revision]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.4'
-						resname='tx_openoap_domain_model_proposal.state.4'>
-				<source><![CDATA[Revision]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.5'
-						resname='tx_openoap_domain_model_proposal.state.5'>
-				<source><![CDATA[Contract]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.6'
-						resname='tx_openoap_domain_model_proposal.state.6'>
-				<source><![CDATA[Declined]]></source>
-			</trans-unit>
-			<!-- Status legend of proposal -->
-			<trans-unit id='tx_openoap_domain_model_proposal.state.0.legend'
-						resname='tx_openoap_domain_model_proposal.state.0.legend'>
-				<source><![CDATA[New proposal]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.1.legend'
-						resname='tx_openoap_domain_model_proposal.state.1.legend'>
-				<source><![CDATA[The proposal has not yet been submitted]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.2.legend'
-						resname='tx_openoap_domain_model_proposal.state.2.legend'>
-				<source><![CDATA[The proposal was successfully submitted]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.3.legend'
-						resname='tx_openoap_domain_model_proposal.state.3.legend'>
-				<source><![CDATA[The proposal is under review]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.4.legend'
-						resname='tx_openoap_domain_model_proposal.state.4.legend'>
-				<source><![CDATA[The proposal is in revision]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.5.legend'
-						resname='tx_openoap_domain_model_proposal.state.5.legend'>
-				<source><![CDATA[The proposal will be followed up]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.state.6.legend'
-						resname='tx_openoap_domain_model_proposal.state.6.legend'>
-				<source><![CDATA[The proposal will not be pursued]]></source>
-			</trans-unit>
-			<!-- Log codes of proposal -->
-			<trans-unit id='tx_openoap_domain_model_proposal.log.100'
-						resname='tx_openoap_domain_model_proposal.log.100'>
-				<source><![CDATA[The proposal was created.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.101'
-						resname='tx_openoap_domain_model_proposal.log.101'>
-				<source><![CDATA[The proposal was edited.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.102'
-						resname='tx_openoap_domain_model_proposal.log.102'>
-				<source><![CDATA[The proposal was submitted.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.103'
-						resname='tx_openoap_domain_model_proposal.log.103'>
-				<source><![CDATA[The proposal is under review.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.104'
-						resname='tx_openoap_domain_model_proposal.log.104'>
-				<source><![CDATA[The application has been reassigned to you for revision.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.105'
-						resname='tx_openoap_domain_model_proposal.log.105'>
-				<source><![CDATA[The proposal will be pursued.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.106'
-						resname='tx_openoap_domain_model_proposal.log.106'>
-				<source><![CDATA[The proposal will not be pursued.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.107'
-						resname='tx_openoap_domain_model_proposal.log.107'>
-				<source><![CDATA[The title of the proposal was changed.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.108'
-						resname='tx_openoap_domain_model_proposal.log.108'>
-				<source><![CDATA[%s comments were added to the proposal.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.108.1'
-						resname='tx_openoap_domain_model_proposal.log.108.1'>
-				<source><![CDATA[%s comment was added to the proposal.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.109'
-						resname='tx_openoap_domain_model_proposal.log.109'>
-				<source><![CDATA[The proposal was removed.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.200'
-						resname='tx_openoap_domain_model_proposal.log.200'>
-				<source><![CDATA[The form has been changed:]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.201'
-						resname='tx_openoap_domain_model_proposal.log.201'>
-				<source><![CDATA[The form has been changed - added question:]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.202'
-						resname='tx_openoap_domain_model_proposal.log.202'>
-				<source><![CDATA[The form has been changed - removed question:]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.log.300'
-						resname='tx_openoap_domain_model_proposal.log.300'>
-				<source><![CDATA[Problem with given e-mail: %s]]></source>
-			</trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.type_string'
+                        resname='tx_openoap_domain_model_formitem.type_string'>
+                <source><![CDATA[Text - single line]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.type_text'
+                        resname='tx_openoap_domain_model_formitem.type_text'>
+                <source><![CDATA[Textarea]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.type_date1'
+                        resname='tx_openoap_domain_model_formitem.type_date1'>
+                <source><![CDATA[One date]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.type_date2'
+                        resname='tx_openoap_domain_model_formitem.type_date2'>
+                <source><![CDATA[Two dates]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.type_checkbox'
+                        resname='tx_openoap_domain_model_formitem.type_checkbox'>
+                <source><![CDATA[Checkbox (multiple)]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.type_radiobutton'
+                        resname='tx_openoap_domain_model_formitem.type_radiobutton'>
+                <source><![CDATA[Radiobutton (single)]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.type_select_single'
+                        resname='tx_openoap_domain_model_formitem.type_select_single'>
+                <source><![CDATA[Select (single)]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formitem.type_select_multiple'
+                        resname='tx_openoap_domain_model_formitem.type_select_multiple'>
+                <source><![CDATA[Select (multiple)]]></source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.type_upload"
+                        resname="tx_openoap_domain_model_formitem.type_upload">
+                <source>Upload file</source>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.type_dropdown"
+                        resname="tx_openoap_domain_model_formitem.type_dropdown">
+                <source>Dropdown-Select</source>
+            </trans-unit>
 
-			<!-- Dashboard -->
-			<trans-unit id='tx_openoap_dashboard.proposalsActive.header'
-						resname='tx_openoap_dashboard.proposalsActive.header'>
-				<source><![CDATA[Active proposals]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposalsArchived.header'
-						resname='tx_openoap_dashboard.proposalsArchived.header'>
-				<source><![CDATA[Proposal history]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposalStatesLegend.header'
-						resname='tx_openoap_dashboard.proposalStatesLegend.header'>
-				<source><![CDATA[What does the proposal status mean?]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.noActiveProposals.text'
-						resname='tx_openoap_dashboard.noActiveProposals.text'>
-				<source><![CDATA[There are no active proposals.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.noArchivedProposals.text'
-						resname='tx_openoap_dashboard.noArchivedProposals.text'>
-				<source><![CDATA[There are no archived proposals.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.button.proposalsActiveAll.label'
-						resname='tx_openoap_dashboard.button.proposalsActiveAll.label'>
-				<source><![CDATA[All active proposals]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.button.proposalsArchivedAll.label'
-						resname='tx_openoap_dashboard.button.proposalsArchivedAll.label'>
-				<source><![CDATA[All archived proposals]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.linkEdit.title'
-						resname='tx_openoap_dashboard.proposal.linkEdit.title'>
-				<source><![CDATA[Edit proposal]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.linkDownload.title'
-						resname='tx_openoap_dashboard.proposal.linkDownload.title'>
-				<source><![CDATA[Download PDF]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.linkDownloadWord.title'
-						resname='tx_openoap_dashboard.proposal.linkDownloadWord.title'>
-				<source><![CDATA[Download Word]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.linkDownloadAttachments.title'
-						resname='tx_openoap_dashboard.proposal.linkDownloadAttachments.title'>
-				<source><![CDATA[Download Attachments (zip)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.linkCommunication.title'
-						resname='tx_openoap_dashboard.proposal.linkCommunication.title'>
-				<source><![CDATA[Notifications]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.linkDelete.title'
-						resname='tx_openoap_dashboard.proposal.linkDelete.title'>
-				<source><![CDATA[Delete proposal]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.links.show'
-						resname='tx_openoap_dashboard.proposal.links.show'>
-				<source><![CDATA[Show options]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_proposal.status' resname='tx_openoap_domain_model_proposal.status'>
-				<source><![CDATA[Status]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.buttonCreateNew.title'
-						resname='tx_openoap_dashboard.proposal.buttonCreateNew.title'>
-				<source><![CDATA[Create new proposal]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage'
-						resname='tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage'>
-				<source><![CDATA[The form is not available in the current language. Please change the language.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.callgroup.nocall'
-						resname='tx_openoap_dashboard.callgroup.nocall'>
-				<source>There is currently no call</source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.call.hint.language'
-						resname='tx_openoap_dashboard.call.hint.language'>
-				<source>Available in English only</source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.giz'
-						resname='tx_openoap_dashboard.giz'>
-				<source>Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH</source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.deg'
-						resname='tx_openoap_dashboard.deg'>
-				<source>DEG Impulse gGmbH</source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.masterdata.header' resname='tx_openoap_dashboard.masterdata.header'>
-				<source><![CDATA[Master data]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.masterdata.minimalInfo.text'
-						resname='tx_openoap_dashboard.masterdata.minimalInfo.text'>
-				<source><![CDATA[The data have not yet been entered (optional).]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.masterdata.linkEdit.title'
-						resname='tx_openoap_dashboard.masterdata.linkEdit.title'>
-				<source><![CDATA[Edit master data]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.masterdata.addressCombined.label'
-						resname='tx_openoap_dashboard.masterdata.addressCombined.label'>
-				<source><![CDATA[Address]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.call.active_until' resname='tx_openoap_dashboard.call.active_until'>
-				<source><![CDATA[Active until]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.call.noActive.header'
-						resname='tx_openoap_dashboard.call.noActive.header'>
-				<source><![CDATA[Currently no application submission is possible]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.lastChange.label'
-						resname='tx_openoap_dashboard.proposal.lastChange.label'>
-				<source><![CDATA[Last modified]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_dashboard.proposal.signature.label'
-						resname='tx_openoap_dashboard.proposal.signature.label'>
-				<source><![CDATA[ID of the proposal]]></source>
-			</trans-unit>
-			<!-- FlashMessages -->
-			<trans-unit id='tx_openoap.flash.proposal_successfully_submitted'
-						resname='tx_openoap.flash.proposal_successfully_submitted'>
-				<source><![CDATA[The proposal was successfully submitted.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.flash.proposal_successfully_deleted'
-						resname='tx_openoap.flash.proposal_successfully_deleted'>
-				<source><![CDATA[The proposal was successfully deleted.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.flash.proposal_editing_cancelled'
-						resname='tx_openoap.flash.proposal_editing_cancelled'>
-				<source><![CDATA[The editing of the proposal was cancelled. The changes after the last save or page change were discarded.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.flash.proposal_editing_saved'
-						resname='tx_openoap.flash.proposal_editing_saved'>
-				<source><![CDATA[The proposal has been saved.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.flash.proposal_editing_saved_closed'
-						resname='tx_openoap.flash.proposal_editing_saved_closed'>
-				<source><![CDATA[The proposal has been saved.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.flash.proposal_not_editable'
-						resname='tx_openoap.flash.proposal_not_editable'>
-				<source><![CDATA[Proposal is not yet editable. State is not "in progress" or "re-opened" or the submission deadline has passed.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.flash.proposal_access_denied'
-						resname='tx_openoap.flash.proposal_access_denied'>
-				<source><![CDATA[You are not the author of this application. You have no access.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.flash.proposal_access_denied_call_missing'
-						resname='tx_openoap.flash.proposal_access_denied_call_missing'>
-				<source><![CDATA[Proposal isn't editable yet. The based call isn't online.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.flash.proposal_not_found'
-						resname='tx_openoap.flash.proposal_not_found'>
-				<source><![CDATA[The form was made without specifying the record ID.]]></source>
-			</trans-unit>
+            <!-- Plugin -->
+            <trans-unit id='tx_openoap_applicant.name' resname='tx_openoap_applicant.name'>
+                <source><![CDATA[Applicant-Plugin]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.description' resname='tx_openoap_applicant.description'>
+                <source><![CDATA[Plugin zur Anzeige von Stammdaten und Antragsteller*innen-Profil]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicantform.name' resname='tx_openoap_applicantform.name'>
+                <source><![CDATA[Applicantform-Plugin]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicantform.description' resname='tx_openoap_applicantform.description'>
+                <source>
+                    <![CDATA[Plugin zum Anlegen und Bearbeiten der Stammdaten des Antragsteller*innen-Profils]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.name' resname='tx_openoap_dashboard.name'>
+                <source><![CDATA[Dashboard-Plugin]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.description' resname='tx_openoap_dashboard.description'>
+                <source>
+                    <![CDATA[Plugin zur Anzeige der vorhandenen Anträge für einen ausgewählten Call - wird im Plugin ausgewählt]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_form.name' resname='tx_openoap_form.name'>
+                <source><![CDATA[Form/Proposal-Plugin]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_form.description' resname='tx_openoap_form.description'>
+                <source><![CDATA[Plugin zur Erstellung und Nutzung des Formulars]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_proposals.name' resname='tx_openoap_proposals.name'>
+                <source><![CDATA[Proposals/Applicant-Plugin]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_proposals.description' resname='tx_openoap_proposals.description'>
+                <source>
+                    <![CDATA[Plugin zur Anzeige aller aktuellen oder archivierten Anträge eines/r Antragsteller*in]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.name' resname='tx_openoap_notifications.name'>
+                <source><![CDATA[Notifications-Plugin]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.description' resname='tx_openoap_notifications.description'>
+                <source>
+                    <![CDATA[Plugin zur Anzeige einer sortierbaren Liste aller automatischen und redaktionellen Kommentare eines Antrags]]></source>
+            </trans-unit>
+            <!-- Comment -->
+            <trans-unit id='comment.state_new' resname='comment.state_new'>
+                <source><![CDATA[New]]></source>
+            </trans-unit>
+            <trans-unit id='comment.state_accepted' resname='comment.state_accepted'>
+                <source><![CDATA[Accepted]]></source>
+            </trans-unit>
+            <trans-unit id='comment.state_auto_accepted' resname='comment.state_auto_accepted'>
+                <source><![CDATA[Auto Accepted]]></source>
+            </trans-unit>
+            <trans-unit id='comment.state_archived' resname='comment.state_archived'>
+                <source><![CDATA[Archived]]></source>
+            </trans-unit>
+            <trans-unit id='comment.source_auto' resname='comment.source_auto'>
+                <source><![CDATA[Auto]]></source>
+            </trans-unit>
+            <trans-unit id='comment.source_edit' resname='comment.source_edit'>
+                <source><![CDATA[Edit]]></source>
+            </trans-unit>
+            <!-- Formpage -->
+            <trans-unit id='formpage.type_default' resname='formpage.type_default'>
+                <source><![CDATA[Default]]></source>
+            </trans-unit>
+            <trans-unit id='formpage.type_preview' resname='formpage.type_preview'>
+                <source><![CDATA[Preview]]></source>
+            </trans-unit>
+            <!-- Status of proposal -->
+            <trans-unit id='tx_openoap_domain_model_proposal.state.0'
+                        resname='tx_openoap_domain_model_proposal.state.0'>
+                <source><![CDATA[New]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.1'
+                        resname='tx_openoap_domain_model_proposal.state.1'>
+                <source><![CDATA[Draft]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.2'
+                        resname='tx_openoap_domain_model_proposal.state.2'>
+                <source><![CDATA[Submitted]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.3'
+                        resname='tx_openoap_domain_model_proposal.state.3'>
+                <source><![CDATA[Revision]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.4'
+                        resname='tx_openoap_domain_model_proposal.state.4'>
+                <source><![CDATA[Revision]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.5'
+                        resname='tx_openoap_domain_model_proposal.state.5'>
+                <source><![CDATA[Contract]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.6'
+                        resname='tx_openoap_domain_model_proposal.state.6'>
+                <source><![CDATA[Declined]]></source>
+            </trans-unit>
+            <!-- Status legend of proposal -->
+            <trans-unit id='tx_openoap_domain_model_proposal.state.0.legend'
+                        resname='tx_openoap_domain_model_proposal.state.0.legend'>
+                <source><![CDATA[New proposal]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.1.legend'
+                        resname='tx_openoap_domain_model_proposal.state.1.legend'>
+                <source><![CDATA[The proposal has not yet been submitted]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.2.legend'
+                        resname='tx_openoap_domain_model_proposal.state.2.legend'>
+                <source><![CDATA[The proposal was successfully submitted]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.3.legend'
+                        resname='tx_openoap_domain_model_proposal.state.3.legend'>
+                <source><![CDATA[The proposal is under review]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.4.legend'
+                        resname='tx_openoap_domain_model_proposal.state.4.legend'>
+                <source><![CDATA[The proposal is in revision]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.5.legend'
+                        resname='tx_openoap_domain_model_proposal.state.5.legend'>
+                <source><![CDATA[The proposal will be followed up]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.state.6.legend'
+                        resname='tx_openoap_domain_model_proposal.state.6.legend'>
+                <source><![CDATA[The proposal will not be pursued]]></source>
+            </trans-unit>
+            <!-- Log codes of proposal -->
+            <trans-unit id='tx_openoap_domain_model_proposal.log.100'
+                        resname='tx_openoap_domain_model_proposal.log.100'>
+                <source><![CDATA[The proposal was created.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.101'
+                        resname='tx_openoap_domain_model_proposal.log.101'>
+                <source><![CDATA[The proposal was edited.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.102'
+                        resname='tx_openoap_domain_model_proposal.log.102'>
+                <source><![CDATA[The proposal was submitted.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.103'
+                        resname='tx_openoap_domain_model_proposal.log.103'>
+                <source><![CDATA[The proposal is under review.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.104'
+                        resname='tx_openoap_domain_model_proposal.log.104'>
+                <source><![CDATA[The application has been reassigned to you for revision.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.105'
+                        resname='tx_openoap_domain_model_proposal.log.105'>
+                <source><![CDATA[The proposal will be pursued.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.106'
+                        resname='tx_openoap_domain_model_proposal.log.106'>
+                <source><![CDATA[The proposal will not be pursued.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.107'
+                        resname='tx_openoap_domain_model_proposal.log.107'>
+                <source><![CDATA[The title of the proposal was changed.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.108'
+                        resname='tx_openoap_domain_model_proposal.log.108'>
+                <source><![CDATA[%s comments were added to the proposal.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.108.1'
+                        resname='tx_openoap_domain_model_proposal.log.108.1'>
+                <source><![CDATA[%s comment was added to the proposal.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.109'
+                        resname='tx_openoap_domain_model_proposal.log.109'>
+                <source><![CDATA[The proposal was removed.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.200'
+                        resname='tx_openoap_domain_model_proposal.log.200'>
+                <source><![CDATA[The form has been changed:]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.201'
+                        resname='tx_openoap_domain_model_proposal.log.201'>
+                <source><![CDATA[The form has been changed - added question:]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.202'
+                        resname='tx_openoap_domain_model_proposal.log.202'>
+                <source><![CDATA[The form has been changed - removed question:]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.300'
+                        resname='tx_openoap_domain_model_proposal.log.300'>
+                <source><![CDATA[Problem with given e-mail: %s]]></source>
+            </trans-unit>
 
-			<!-- Word Export, validators  -->
-			<trans-unit id='tx_openoap.word.group_repeatable' resname='tx_openoap.word.group_repeatable'>
-				<source><![CDATA[This group of questions can be repeated %s times]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.1' resname='tx_openoap.word.1'>
-				<source><![CDATA[Mandatory-Field]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.2' resname='tx_openoap.word.2'>
-				<source><![CDATA[Whole number/integer]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.3' resname='tx_openoap.word.3'>
-				<source><![CDATA[Float number]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.4' resname='tx_openoap.word.4'>
-				<source><![CDATA[Maximum Character: %s]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.5' resname='tx_openoap.word.5'>
-				<source><![CDATA[Minimum Value: %s]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.6' resname='tx_openoap.word.6'>
-				<source><![CDATA[Maximum Value: %s]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.7' resname='tx_openoap.word.7'>
-				<source><![CDATA[Email]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.8' resname='tx_openoap.word.8'>
-				<source><![CDATA[Website address / URL]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.9' resname='tx_openoap.word.9'>
-				<source><![CDATA[Phone / Fax number]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.10' resname='tx_openoap.word.10'>
-				<source><![CDATA[File-Types for uploads]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.word.11' resname='tx_openoap.word.11'>
-				<source><![CDATA[File size for uploads: %s]]></source>
-			</trans-unit>
-			<!-- Proposals -->
-			<trans-unit id='tx_openoap_proposals.button.dashboard.label'
-						resname='tx_openoap_proposals.button.dashboard.label'>
-				<source><![CDATA[Dashboard Back]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_proposals.author.label' resname='tx_openoap_proposals.author.label'>
-				<source><![CDATA[Author]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_proposals.exportGenerated.text'
-						resname='tx_openoap_proposals.exportGenerated.text'>
-				<source><![CDATA[Export generated on %s at %s]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_proposals.exportStatus.text' resname='tx_openoap_proposals.exportStatus.text'>
-				<source><![CDATA[Proposal status when this export was generated]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_proposals.draftStatus.text' resname='tx_openoap_proposals.draftStatus.text'>
-				<source><![CDATA[- DRAFT -]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_proposals.exportAuthor.text' resname='tx_openoap_proposals.exportAuthor.text'>
-				<source><![CDATA[Author]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_proposals.exportId.text' resname='tx_openoap_proposals.exportId.text'>
-				<source><![CDATA[Signature/Id]]></source>
-			</trans-unit>
-			<!-- Form/Edit -->
-			<trans-unit id='tx_openoap_form.helptext.header' resname='tx_openoap_form.helptext.header'>
-				<source><![CDATA[Help text for this question. Read more.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_form.modal.edit' resname='tx_openoap_form.modal.edit'>
-				<source><![CDATA[I'll keep working on the page.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_form.modal.save' resname='tx_openoap_form.modal.save'>
-				<source><![CDATA[Save]]></source>
-			</trans-unit>
-			<!-- Applicant -->
-			<trans-unit id='tx_openoap_applicant.masterdata.header' resname='tx_openoap_applicant.masterdata.header'>
-				<source><![CDATA[Master data]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.linkMasterdataEdit.title'
-						resname='tx_openoap_applicant.linkMasterdataEdit.title'>
-				<source><![CDATA[Edit]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.otherdata.header' resname='tx_openoap_applicant.otherdata.header'>
-				<source><![CDATA[Other data]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.otherdata.text' resname='tx_openoap_applicant.otherdata.text'>
-				<source><![CDATA[Please indicate the language(s) you prefer for communication.]]></source>
-			</trans-unit>
+            <!-- Dashboard -->
+            <trans-unit id='tx_openoap_dashboard.proposalsActive.header'
+                        resname='tx_openoap_dashboard.proposalsActive.header'>
+                <source><![CDATA[Active proposals]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposalsArchived.header'
+                        resname='tx_openoap_dashboard.proposalsArchived.header'>
+                <source><![CDATA[Proposal history]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposalStatesLegend.header'
+                        resname='tx_openoap_dashboard.proposalStatesLegend.header'>
+                <source><![CDATA[What does the proposal status mean?]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.noActiveProposals.text'
+                        resname='tx_openoap_dashboard.noActiveProposals.text'>
+                <source><![CDATA[There are no active proposals.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.noArchivedProposals.text'
+                        resname='tx_openoap_dashboard.noArchivedProposals.text'>
+                <source><![CDATA[There are no archived proposals.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.button.proposalsActiveAll.label'
+                        resname='tx_openoap_dashboard.button.proposalsActiveAll.label'>
+                <source><![CDATA[All active proposals]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.button.proposalsArchivedAll.label'
+                        resname='tx_openoap_dashboard.button.proposalsArchivedAll.label'>
+                <source><![CDATA[All archived proposals]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.linkEdit.title'
+                        resname='tx_openoap_dashboard.proposal.linkEdit.title'>
+                <source><![CDATA[Edit %s]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.linkDownload.title'
+                        resname='tx_openoap_dashboard.proposal.linkDownload.title'>
+                <source><![CDATA[Download PDF]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.linkDownloadWord.title'
+                        resname='tx_openoap_dashboard.proposal.linkDownloadWord.title'>
+                <source><![CDATA[Download Word]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.linkDownloadAttachments.title'
+                        resname='tx_openoap_dashboard.proposal.linkDownloadAttachments.title'>
+                <source><![CDATA[Download Attachments (zip)]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.linkCommunication.title'
+                        resname='tx_openoap_dashboard.proposal.linkCommunication.title'>
+                <source><![CDATA[Notifications]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.linkDelete.title'
+                        resname='tx_openoap_dashboard.proposal.linkDelete.title'>
+                <source><![CDATA[Delete %s]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.links.show'
+                        resname='tx_openoap_dashboard.proposal.links.show'>
+                <source><![CDATA[Show options]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.status' resname='tx_openoap_domain_model_proposal.status'>
+                <source><![CDATA[Status]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.buttonCreateNew.title'
+                        resname='tx_openoap_dashboard.proposal.buttonCreateNew.title'>
+                <source><![CDATA[Create new %s]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage'
+                        resname='tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage'>
+                <source>
+                    <![CDATA[The form is not available in the current language. Please change the language.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.callgroup.nocall'
+                        resname='tx_openoap_dashboard.callgroup.nocall'>
+                <source>There is currently no call</source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.call.hint.language'
+                        resname='tx_openoap_dashboard.call.hint.language'>
+                <source>Available in English only</source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.giz'
+                        resname='tx_openoap_dashboard.giz'>
+                <source>Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH</source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.deg'
+                        resname='tx_openoap_dashboard.deg'>
+                <source>DEG Impulse gGmbH</source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.masterdata.header' resname='tx_openoap_dashboard.masterdata.header'>
+                <source><![CDATA[Master data]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.masterdata.minimalInfo.text'
+                        resname='tx_openoap_dashboard.masterdata.minimalInfo.text'>
+                <source><![CDATA[The data have not yet been entered (optional).]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.masterdata.linkEdit.title'
+                        resname='tx_openoap_dashboard.masterdata.linkEdit.title'>
+                <source><![CDATA[Edit master data]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.masterdata.addressCombined.label'
+                        resname='tx_openoap_dashboard.masterdata.addressCombined.label'>
+                <source><![CDATA[Address]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.call.active_until' resname='tx_openoap_dashboard.call.active_until'>
+                <source><![CDATA[Active until]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.call.noActive.header'
+                        resname='tx_openoap_dashboard.call.noActive.header'>
+                <source><![CDATA[Currently no application submission is possible]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.lastChange.label'
+                        resname='tx_openoap_dashboard.proposal.lastChange.label'>
+                <source><![CDATA[Last modified]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.signature.label'
+                        resname='tx_openoap_dashboard.proposal.signature.label'>
+                <source><![CDATA[ID of the proposal]]></source>
+            </trans-unit>
+            <!-- FlashMessages -->
+            <trans-unit id='tx_openoap.flash.proposal_successfully_submitted'
+                        resname='tx_openoap.flash.proposal_successfully_submitted'>
+                <source><![CDATA[The proposal was successfully submitted.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.proposal_successfully_deleted'
+                        resname='tx_openoap.flash.proposal_successfully_deleted'>
+                <source><![CDATA[The proposal was successfully deleted.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.proposal_editing_cancelled'
+                        resname='tx_openoap.flash.proposal_editing_cancelled'>
+                <source>
+                    <![CDATA[The editing of the proposal was cancelled. The changes after the last save or page change were discarded.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.proposal_editing_saved'
+                        resname='tx_openoap.flash.proposal_editing_saved'>
+                <source><![CDATA[The proposal has been saved.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.proposal_editing_saved_closed'
+                        resname='tx_openoap.flash.proposal_editing_saved_closed'>
+                <source><![CDATA[The proposal has been saved.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.proposal_not_editable'
+                        resname='tx_openoap.flash.proposal_not_editable'>
+                <source>
+                    <![CDATA[Proposal is not yet editable. State is not "in progress" or "re-opened" or the submission deadline has passed.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.proposal_access_denied'
+                        resname='tx_openoap.flash.proposal_access_denied'>
+                <source><![CDATA[You are not the author of this application. You have no access.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.proposal_access_denied_call_missing'
+                        resname='tx_openoap.flash.proposal_access_denied_call_missing'>
+                <source><![CDATA[Proposal isn't editable yet. The based call isn't online.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.proposal_not_found'
+                        resname='tx_openoap.flash.proposal_not_found'>
+                <source><![CDATA[The form was made without specifying the record ID.]]></source>
+            </trans-unit>
 
-			<trans-unit id='tx_openoap_applicant.accessdata.header' resname='tx_openoap_applicant.accessdata.header'>
-				<source><![CDATA[Access data]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.linkAccessdataEdit.title'
-						resname='tx_openoap_applicant.linkAccessdataEdit.title'>
-				<source><![CDATA[Edit]]></source>
-			</trans-unit>
+            <!-- Word Export, validators  -->
+            <trans-unit id='tx_openoap.word.group_repeatable' resname='tx_openoap.word.group_repeatable'>
+                <source><![CDATA[This group of questions can be repeated %s times]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.1' resname='tx_openoap.word.1'>
+                <source><![CDATA[Mandatory-Field]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.2' resname='tx_openoap.word.2'>
+                <source><![CDATA[Whole number/integer]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.3' resname='tx_openoap.word.3'>
+                <source><![CDATA[Float number]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.4' resname='tx_openoap.word.4'>
+                <source><![CDATA[Maximum Character: %s]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.5' resname='tx_openoap.word.5'>
+                <source><![CDATA[Minimum Value: %s]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.6' resname='tx_openoap.word.6'>
+                <source><![CDATA[Maximum Value: %s]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.7' resname='tx_openoap.word.7'>
+                <source><![CDATA[Email]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.8' resname='tx_openoap.word.8'>
+                <source><![CDATA[Website address / URL]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.9' resname='tx_openoap.word.9'>
+                <source><![CDATA[Phone / Fax number]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.10' resname='tx_openoap.word.10'>
+                <source><![CDATA[File-Types for uploads]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.word.11' resname='tx_openoap.word.11'>
+                <source><![CDATA[File size for uploads: %s]]></source>
+            </trans-unit>
+            <!-- Proposals -->
+            <trans-unit id='tx_openoap_proposals.button.dashboard.label'
+                        resname='tx_openoap_proposals.button.dashboard.label'>
+                <source><![CDATA[Dashboard Back]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_proposals.author.label' resname='tx_openoap_proposals.author.label'>
+                <source><![CDATA[Author]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_proposals.exportGenerated.text'
+                        resname='tx_openoap_proposals.exportGenerated.text'>
+                <source><![CDATA[Export generated on %s at %s]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_proposals.exportStatus.text' resname='tx_openoap_proposals.exportStatus.text'>
+                <source><![CDATA[Proposal status when this export was generated]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_proposals.draftStatus.text' resname='tx_openoap_proposals.draftStatus.text'>
+                <source><![CDATA[- DRAFT -]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_proposals.exportAuthor.text' resname='tx_openoap_proposals.exportAuthor.text'>
+                <source><![CDATA[Author]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_proposals.exportId.text' resname='tx_openoap_proposals.exportId.text'>
+                <source><![CDATA[Signature/Id]]></source>
+            </trans-unit>
+            <!-- Form/Edit -->
+            <trans-unit id='tx_openoap_form.helptext.header' resname='tx_openoap_form.helptext.header'>
+                <source><![CDATA[Help text for this question. Read more.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_form.modal.edit' resname='tx_openoap_form.modal.edit'>
+                <source><![CDATA[I'll keep working on the page.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_form.modal.save' resname='tx_openoap_form.modal.save'>
+                <source><![CDATA[Save]]></source>
+            </trans-unit>
+            <!-- Applicant -->
+            <trans-unit id='tx_openoap_applicant.masterdata.header' resname='tx_openoap_applicant.masterdata.header'>
+                <source><![CDATA[Master data]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.linkMasterdataEdit.title'
+                        resname='tx_openoap_applicant.linkMasterdataEdit.title'>
+                <source><![CDATA[Edit]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.otherdata.header' resname='tx_openoap_applicant.otherdata.header'>
+                <source><![CDATA[Other data]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.otherdata.text' resname='tx_openoap_applicant.otherdata.text'>
+                <source><![CDATA[Please indicate the language(s) you prefer for communication.]]></source>
+            </trans-unit>
 
-			<trans-unit id='tx_openoap_applicant.deleteAccount.header' resname='tx_openoap_applicant.deleteAccount.header'>
-				<source><![CDATA[Delete account]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.deleteAccount.subheader' resname='tx_openoap_applicant.deleteAccount.subheader'>
-				<source><![CDATA[How can I delete my account?]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.deleteAccount.text' resname='tx_openoap_applicant.deleteAccount.text'>
-				<source><![CDATA[If you no longer wish to use your account, please send us an email. Your account will then be deleted. <br />You must use the email address of the account (%s). <br>In this email, also enter the following number: %s ]]></source>
-			</trans-unit>
+            <trans-unit id='tx_openoap_applicant.accessdata.header' resname='tx_openoap_applicant.accessdata.header'>
+                <source><![CDATA[Access data]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.linkAccessdataEdit.title'
+                        resname='tx_openoap_applicant.linkAccessdataEdit.title'>
+                <source><![CDATA[Edit]]></source>
+            </trans-unit>
 
-			<trans-unit id='tx_openoap_applicant.form.submitNext' resname='tx_openoap_applicant.form.submitNext'>
-				<source><![CDATA[Next step]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.form.submitSave' resname='tx_openoap_applicant.form.submitSave'>
-				<source><![CDATA[Save]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.form.submitClose' resname='tx_openoap_applicant.form.submitClose'>
-				<source><![CDATA[Close]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.form.skipStep' resname='tx_openoap_applicant.form.skipStep'>
-				<source><![CDATA[skip this step]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.fieldRequired.label'
-						resname='tx_openoap_applicant.fieldRequired.label'>
-				<source><![CDATA[this field is required]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.infoRequired' resname='tx_openoap_applicant.infoRequired'>
-				<source><![CDATA[Fields marked with a * are mandatory.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.masterdataEdit.header'
-						resname='tx_openoap_applicant.masterdataEdit.header'>
-				<source><![CDATA[Edit master data]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.masterdataEdit.text'
-						resname='tx_openoap_applicant.masterdataEdit.text'>
-				<source><![CDATA[Fill out basic information about your company.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.masterdataRegister.header'
-						resname='tx_openoap_applicant.masterdataRegister.header'>
-				<source><![CDATA[Master data (step 3 of 3)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.masterdataRegister.text'
-						resname='tx_openoap_applicant.masterdataRegister.text'>
-				<source>
-					<![CDATA[Fill out basic information about your company. You can also enter this data later in your profile.]]></source>
-			</trans-unit>
-			<!-- Notifications -->
-			<trans-unit id='tx_openoap_notifications.listEmpty.text' resname='tx_openoap_notifications.listEmpty.text'>
-				<source><![CDATA[There are no notifications.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.proposalCommentEdit.title'
-						resname='tx_openoap_notifications.proposalCommentEdit.title'>
-				<source><![CDATA[Comment on the proposal]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.proposalCommentEdit.titleWithAuthor'
-						resname='tx_openoap_notifications.proposalCommentEdit.titleWithAuthor'>
-				<source><![CDATA[Comment on the proposal by]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.buttonClose.title'
-						resname='tx_openoap_notifications.buttonClose.title'>
-				<source><![CDATA[Close notifications]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.filter.hideAuto.label'
-						resname='tx_openoap_notifications.filter.hideAuto.label'>
-				<source><![CDATA[Hide automatic entries]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.filter.showAuto.label'
-						resname='tx_openoap_notifications.filter.showAuto.label'>
-				<source><![CDATA[Show automatic entries]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.sort.title' resname='tx_openoap_notifications.sort.title'>
-				<source><![CDATA[Sort by]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.sort.latestFirst.label'
-						resname='tx_openoap_notifications.sort.latestFirst.label'>
-				<source><![CDATA[Latest first]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.sort.oldestFirst.label'
-						resname='tx_openoap_notifications.sort.oldestFirst.label'>
-				<source><![CDATA[Oldest first]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.pdf.header' resname='tx_openoap_notifications.pdf.header'>
-				<source><![CDATA[Notifications]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.pdf.singular.label'
-						resname='tx_openoap_notifications.pdf.singular.label'>
-				<source><![CDATA[notification]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.pdf.plural.label'
-						resname='tx_openoap_notifications.pdf.plural.label'>
-				<source><![CDATA[notifications]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.pdf.generalComments.label'
-						resname='tx_openoap_notifications.pdf.generalComments.label'>
-				<source><![CDATA[General notifications]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_notifications.pdf.answerComments.label'
-						resname='tx_openoap_notifications.pdf.answerComments.label'>
-				<source><![CDATA[Notes on information]]></source>
-			</trans-unit>
-			<!-- Log / Messages -->
-			<trans-unit id='tx_openoap_proposals.messages.200' resname='tx_openoap_proposals.messages.200'>
-				<source>
-					<![CDATA[Please note that the form has changed since you last saved it. Please check the entries completely.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_applicant.messages.noChanges' resname='tx_openoap_applicant.messages.noChanges'>
-				<source><![CDATA[No changes detected, nothing to update.]]></source>
-			</trans-unit>
-			<!-- itemoption -->
-			<trans-unit id='tx_openoap_domain_model_itemoption.type_single'
-						resname='tx_openoap_domain_model_itemoption.type_single'>
-				<source><![CDATA[single option]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemoption.type_multiple'
-						resname='tx_openoap_domain_model_itemoption.type_multiple'>
-				<source><![CDATA[multiple options - each per line]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_itemoption.type_function'
-						resname='tx_openoap_domain_model_itemoption.type_function'>
-				<source><![CDATA[callable function - not yet implemented]]></source>
-			</trans-unit>
+            <trans-unit id='tx_openoap_applicant.deleteAccount.header'
+                        resname='tx_openoap_applicant.deleteAccount.header'>
+                <source><![CDATA[Delete account]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.deleteAccount.subheader'
+                        resname='tx_openoap_applicant.deleteAccount.subheader'>
+                <source><![CDATA[How can I delete my account?]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.deleteAccount.text' resname='tx_openoap_applicant.deleteAccount.text'>
+                <source>
+                    <![CDATA[If you no longer wish to use your account, please send us an email. Your account will then be deleted. <br />You must use the email address of the account (%s). <br>In this email, also enter the following number: %s ]]></source>
+            </trans-unit>
 
-			<!-- Modificators -->
-			<trans-unit id='tx_openoap_domain_model_formmodificator.title' resname='tx_openoap_domain_model_formmodificator.title'>
-				<source><![CDATA[Title]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formmodificator.value' resname='tx_openoap_domain_model_formmodificator.value'>
-				<source><![CDATA[Value]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formmodificator.logic' resname='tx_openoap_domain_model_formmodificator.logic'>
-				<source><![CDATA[Logic]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap_domain_model_formmodificator.logic_total' resname='tx_openoap_domain_model_formmodificator.logic_total'>
-				<source><![CDATA[Grand total]]></source>
-			</trans-unit>
-            <trans-unit id='tx_openoap_domain_model_formmodificator.items' resname='tx_openoap_domain_model_formmodificator.items'>
+            <trans-unit id='tx_openoap_applicant.form.submitNext' resname='tx_openoap_applicant.form.submitNext'>
+                <source><![CDATA[Next step]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.form.submitSave' resname='tx_openoap_applicant.form.submitSave'>
+                <source><![CDATA[Save]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.form.submitClose' resname='tx_openoap_applicant.form.submitClose'>
+                <source><![CDATA[Close]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.form.skipStep' resname='tx_openoap_applicant.form.skipStep'>
+                <source><![CDATA[skip this step]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.fieldRequired.label'
+                        resname='tx_openoap_applicant.fieldRequired.label'>
+                <source><![CDATA[this field is required]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.infoRequired' resname='tx_openoap_applicant.infoRequired'>
+                <source><![CDATA[Fields marked with a * are mandatory.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.masterdataEdit.header'
+                        resname='tx_openoap_applicant.masterdataEdit.header'>
+                <source><![CDATA[Edit master data]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.masterdataEdit.text'
+                        resname='tx_openoap_applicant.masterdataEdit.text'>
+                <source><![CDATA[Fill out basic information about your company.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.masterdataRegister.header'
+                        resname='tx_openoap_applicant.masterdataRegister.header'>
+                <source><![CDATA[Master data (step 3 of 3)]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.masterdataRegister.text'
+                        resname='tx_openoap_applicant.masterdataRegister.text'>
+                <source>
+                    <![CDATA[Fill out basic information about your company. You can also enter this data later in your profile.]]></source>
+            </trans-unit>
+            <!-- Notifications -->
+            <trans-unit id='tx_openoap_notifications.listEmpty.text' resname='tx_openoap_notifications.listEmpty.text'>
+                <source><![CDATA[There are no notifications.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.proposalCommentEdit.title'
+                        resname='tx_openoap_notifications.proposalCommentEdit.title'>
+                <source><![CDATA[Comment on the proposal]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.proposalCommentEdit.titleWithAuthor'
+                        resname='tx_openoap_notifications.proposalCommentEdit.titleWithAuthor'>
+                <source><![CDATA[Comment on the proposal by]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.buttonClose.title'
+                        resname='tx_openoap_notifications.buttonClose.title'>
+                <source><![CDATA[Close notifications]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.filter.hideAuto.label'
+                        resname='tx_openoap_notifications.filter.hideAuto.label'>
+                <source><![CDATA[Hide automatic entries]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.filter.showAuto.label'
+                        resname='tx_openoap_notifications.filter.showAuto.label'>
+                <source><![CDATA[Show automatic entries]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.sort.title' resname='tx_openoap_notifications.sort.title'>
+                <source><![CDATA[Sort by]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.sort.latestFirst.label'
+                        resname='tx_openoap_notifications.sort.latestFirst.label'>
+                <source><![CDATA[Latest first]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.sort.oldestFirst.label'
+                        resname='tx_openoap_notifications.sort.oldestFirst.label'>
+                <source><![CDATA[Oldest first]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.pdf.header' resname='tx_openoap_notifications.pdf.header'>
+                <source><![CDATA[Notifications]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.pdf.singular.label'
+                        resname='tx_openoap_notifications.pdf.singular.label'>
+                <source><![CDATA[notification]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.pdf.plural.label'
+                        resname='tx_openoap_notifications.pdf.plural.label'>
+                <source><![CDATA[notifications]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.pdf.generalComments.label'
+                        resname='tx_openoap_notifications.pdf.generalComments.label'>
+                <source><![CDATA[General notifications]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_notifications.pdf.answerComments.label'
+                        resname='tx_openoap_notifications.pdf.answerComments.label'>
+                <source><![CDATA[Notes on information]]></source>
+            </trans-unit>
+            <!-- Log / Messages -->
+            <trans-unit id='tx_openoap_proposals.messages.200' resname='tx_openoap_proposals.messages.200'>
+                <source>
+                    <![CDATA[Please note that the form has changed since you last saved it. Please check the entries completely.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_applicant.messages.noChanges' resname='tx_openoap_applicant.messages.noChanges'>
+                <source><![CDATA[No changes detected, nothing to update.]]></source>
+            </trans-unit>
+            <!-- itemoption -->
+            <trans-unit id='tx_openoap_domain_model_itemoption.type_single'
+                        resname='tx_openoap_domain_model_itemoption.type_single'>
+                <source><![CDATA[single option]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemoption.type_multiple'
+                        resname='tx_openoap_domain_model_itemoption.type_multiple'>
+                <source><![CDATA[multiple options - each per line]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_itemoption.type_function'
+                        resname='tx_openoap_domain_model_itemoption.type_function'>
+                <source><![CDATA[callable function - not yet implemented]]></source>
+            </trans-unit>
+
+            <!-- Modificators -->
+            <trans-unit id='tx_openoap_domain_model_formmodificator.title'
+                        resname='tx_openoap_domain_model_formmodificator.title'>
+                <source><![CDATA[Title]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formmodificator.value'
+                        resname='tx_openoap_domain_model_formmodificator.value'>
+                <source><![CDATA[Value]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formmodificator.logic'
+                        resname='tx_openoap_domain_model_formmodificator.logic'>
+                <source><![CDATA[Logic]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formmodificator.logic_total'
+                        resname='tx_openoap_domain_model_formmodificator.logic_total'>
+                <source><![CDATA[Grand total]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_formmodificator.items'
+                        resname='tx_openoap_domain_model_formmodificator.items'>
                 <source><![CDATA[Questions/items]]></source>
             </trans-unit>
-			<!-- Global / Markup -->
-			<trans-unit id='tx_openoap.empty' resname='tx_openoap.empty'>
-				<source><![CDATA[(empty)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.notDisplayed' resname='tx_openoap.notDisplayed'>
-				<source><![CDATA[(not displayed)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.status' resname='tx_openoap.general.status'>
-				<source><![CDATA[Status]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.save' resname='tx_openoap.general.save'>
-				<source><![CDATA[Save]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.back_to_proposal' resname='tx_openoap.general.back_to_proposal'>
-				<source><![CDATA[Edit the proposal]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.save_next' resname='tx_openoap.general.save_next'>
-				<source><![CDATA[Save and next Page]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.save_back' resname='tx_openoap.general.save_back'>
-				<source><![CDATA[Previous Page]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.close' resname='tx_openoap.general.close'>
-				<source><![CDATA[Close]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.submit' resname='tx_openoap.general.submit'>
-				<source><![CDATA[Submit]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.save_close' resname='tx_openoap.general.save_close'>
-				<source><![CDATA[Save and close]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.cancel' resname='tx_openoap.general.cancel'>
-				<source><![CDATA[Cancel]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.add_group' resname='tx_openoap.general.add_group'>
-				<source><![CDATA[Add new <q>%s</q>]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.files_uploaded_label' resname='tx_openoap.general.files_uploaded_label'>
-				<source><![CDATA[Upload was successful]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.files_for_upload_label'
-						resname='tx_openoap.general.files_for_upload_label'>
-				<source><![CDATA[Ready for upload]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.files_for_upload_hint'
-						resname='tx_openoap.general.files_for_upload_hint'>
-				<source><![CDATA[Your files are not yet saved.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.upload_files' resname='tx_openoap.general.upload_files'>
-				<source><![CDATA[Upload files]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.uploaded_saved_file_label'
-						resname='tx_openoap.general.uploaded_saved_file_label'>
-				<source><![CDATA[Attached file]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.uploaded_saved_files_label'
-						resname='tx_openoap.general.uploaded_saved_files_label'>
-				<source><![CDATA[Attached files]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.no_uploaded_saved_files_label'
-						resname='tx_openoap.general.no_uploaded_saved_files_label'>
-				<source><![CDATA[No files attached]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.uploaded_files_label' resname='tx_openoap.general.uploaded_files_label'>
-				<source><![CDATA[Upload was successful]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.upload_files_clear' resname='tx_openoap.general.upload_files_clear'>
-				<source><![CDATA[Remove files not yet stored]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.remove_file' resname='tx_openoap.general.remove_file'>
-				<source><![CDATA[Remove file]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.add_file' resname='tx_openoap.general.add_file'>
-				<source><![CDATA[Add file]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.remove_group' resname='tx_openoap.general.remove_group'>
-				<source><![CDATA[Remove <q>%s</q>]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.submit_accepted' resname='tx_openoap.general.submit_accepted'>
-				<source><![CDATA[I'm accepting that I...]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.submit_disabled' resname='tx_openoap.general.submit_disabled'>
-				<source>
-					<![CDATA[Not all fields have been filled in completely. Therefore, submission is not yet possible.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.notLoggedIn.text' resname='tx_openoap.notLoggedIn.text'>
-				<source><![CDATA[Please log in before.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.formNavigation' resname='tx_openoap.general.formNavigation'>
-				<source><![CDATA[Form steps]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.formControls' resname='tx_openoap.general.formControls'>
-				<source><![CDATA[Form controls]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.date-from' resname='tx_openoap.general.date-from'>
-				<source><![CDATA[from]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.date-to' resname='tx_openoap.general.date-to'>
-				<source><![CDATA[to]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.general.select_default_option'
-						resname='tx_openoap.general.select_default_option'>
-				<source><![CDATA[Please select]]></source>
-			</trans-unit>
-			<!-- Frontend (error) messages -->
-			<trans-unit id='tx_openoap.js_msg.common_mandatory' resname='tx_openoap.js_msg.common_mandatory'>
-				<source><![CDATA[Please fill in all mandatory fields (marked with %s)]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.modal_content' resname='tx_openoap.js_msg.modal_content'>
-				<source><![CDATA[There are still clues on this page.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.modal_keepediting' resname='tx_openoap.js_msg.modal_keepediting'>
-				<source><![CDATA[I'll keep working on the page.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.modal_saveclose' resname='tx_openoap.js_msg.modal_saveclose'>
-				<source><![CDATA[Save/Close]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.modal_save' resname='tx_openoap.js_msg.modal_save'>
-				<source><![CDATA[Save]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.modal_warning_hint' resname='tx_openoap.js_msg.modal_warning_hint'>
-				<source><![CDATA[Attention: You are leaving the form without having saved it.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.modal_cancel' resname='tx_openoap.js_msg.modal_cancel'>
-				<source><![CDATA[Cancel]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.modal_content_delete' resname='tx_openoap.js_msg.modal_content_delete'>
-				<source><![CDATA[The proposal will be deleted!]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.modal_group_delete' resname='tx_openoap.js_msg.modal_group_delete'>
-				<source><![CDATA[Will be deleted!]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.modal_delete' resname='tx_openoap.js_msg.modal_delete'>
-				<source><![CDATA[Delete]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.error_label' resname='tx_openoap.js_msg.error_label'>
-				<source><![CDATA[Error]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.error_message' resname='tx_openoap.js_msg.error_message'>
-				<source><![CDATA[Please check the following fields, then re-submit the form.]]></source>
-			</trans-unit>
+            <!-- Global / Markup -->
+            <trans-unit id='tx_openoap.empty' resname='tx_openoap.empty'>
+                <source><![CDATA[(empty)]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.notDisplayed' resname='tx_openoap.notDisplayed'>
+                <source><![CDATA[(not displayed)]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.status' resname='tx_openoap.general.status'>
+                <source><![CDATA[Status]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.save' resname='tx_openoap.general.save'>
+                <source><![CDATA[Save]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.back_to_proposal' resname='tx_openoap.general.back_to_proposal'>
+                <source><![CDATA[Edit the proposal]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.save_next' resname='tx_openoap.general.save_next'>
+                <source><![CDATA[Save and next Page]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.save_back' resname='tx_openoap.general.save_back'>
+                <source><![CDATA[Previous Page]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.close' resname='tx_openoap.general.close'>
+                <source><![CDATA[Close]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.submit' resname='tx_openoap.general.submit'>
+                <source><![CDATA[Submit]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.save_close' resname='tx_openoap.general.save_close'>
+                <source><![CDATA[Save and close]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.cancel' resname='tx_openoap.general.cancel'>
+                <source><![CDATA[Cancel]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.add_group' resname='tx_openoap.general.add_group'>
+                <source><![CDATA[Add new <q>%s</q>]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.files_uploaded_label' resname='tx_openoap.general.files_uploaded_label'>
+                <source><![CDATA[Upload was successful]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.files_for_upload_label'
+                        resname='tx_openoap.general.files_for_upload_label'>
+                <source><![CDATA[Ready for upload]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.files_for_upload_hint'
+                        resname='tx_openoap.general.files_for_upload_hint'>
+                <source><![CDATA[Your files are not yet saved.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.upload_files' resname='tx_openoap.general.upload_files'>
+                <source><![CDATA[Upload files]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.uploaded_saved_file_label'
+                        resname='tx_openoap.general.uploaded_saved_file_label'>
+                <source><![CDATA[Attached file]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.uploaded_saved_files_label'
+                        resname='tx_openoap.general.uploaded_saved_files_label'>
+                <source><![CDATA[Attached files]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.no_uploaded_saved_files_label'
+                        resname='tx_openoap.general.no_uploaded_saved_files_label'>
+                <source><![CDATA[No files attached]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.uploaded_files_label' resname='tx_openoap.general.uploaded_files_label'>
+                <source><![CDATA[Upload was successful]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.upload_files_clear' resname='tx_openoap.general.upload_files_clear'>
+                <source><![CDATA[Remove files not yet stored]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.remove_file' resname='tx_openoap.general.remove_file'>
+                <source><![CDATA[Remove file]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.add_file' resname='tx_openoap.general.add_file'>
+                <source><![CDATA[Add file]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.remove_group' resname='tx_openoap.general.remove_group'>
+                <source><![CDATA[Remove <q>%s</q>]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.submit_accepted' resname='tx_openoap.general.submit_accepted'>
+                <source><![CDATA[I'm accepting that I...]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.submit_disabled' resname='tx_openoap.general.submit_disabled'>
+                <source>
+                    <![CDATA[Not all fields have been filled in completely. Therefore, submission is not yet possible.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.notLoggedIn.text' resname='tx_openoap.notLoggedIn.text'>
+                <source><![CDATA[Please log in before.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.formNavigation' resname='tx_openoap.general.formNavigation'>
+                <source><![CDATA[Form steps]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.formControls' resname='tx_openoap.general.formControls'>
+                <source><![CDATA[Form controls]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.date-from' resname='tx_openoap.general.date-from'>
+                <source><![CDATA[from]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.date-to' resname='tx_openoap.general.date-to'>
+                <source><![CDATA[to]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.select_default_option'
+                        resname='tx_openoap.general.select_default_option'>
+                <source><![CDATA[Please select]]></source>
+            </trans-unit>
+            <!-- Frontend (error) messages -->
+            <trans-unit id='tx_openoap.js_msg.common_mandatory' resname='tx_openoap.js_msg.common_mandatory'>
+                <source><![CDATA[Please fill in all mandatory fields (marked with %s)]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.modal_content' resname='tx_openoap.js_msg.modal_content'>
+                <source><![CDATA[There are still clues on this page.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.modal_keepediting' resname='tx_openoap.js_msg.modal_keepediting'>
+                <source><![CDATA[I'll keep working on the page.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.modal_saveclose' resname='tx_openoap.js_msg.modal_saveclose'>
+                <source><![CDATA[Save/Close]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.modal_save' resname='tx_openoap.js_msg.modal_save'>
+                <source><![CDATA[Save]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.modal_warning_hint' resname='tx_openoap.js_msg.modal_warning_hint'>
+                <source><![CDATA[Attention: You are leaving the form without having saved it.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.modal_cancel' resname='tx_openoap.js_msg.modal_cancel'>
+                <source><![CDATA[Cancel]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.modal_content_delete' resname='tx_openoap.js_msg.modal_content_delete'>
+                <source><![CDATA[The proposal will be deleted!]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.modal_group_delete' resname='tx_openoap.js_msg.modal_group_delete'>
+                <source><![CDATA[Will be deleted!]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.modal_delete' resname='tx_openoap.js_msg.modal_delete'>
+                <source><![CDATA[Delete]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.error_label' resname='tx_openoap.js_msg.error_label'>
+                <source><![CDATA[Error]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.error_message' resname='tx_openoap.js_msg.error_message'>
+                <source><![CDATA[Please check the following fields, then re-submit the form.]]></source>
+            </trans-unit>
             <trans-unit id='tx_openoap.js_msg.error_message_preview' resname='tx_openoap.js_msg.error_message_preview'>
                 <source><![CDATA[Please check the following pages, then re-submit the form.]]></source>
             </trans-unit>
-			<trans-unit id='tx_openoap.js_msg.characters_remaining' resname='tx_openoap.js_msg.characters_remaining'>
-				<source><![CDATA[%s characters remaining]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.mandatory' resname='tx_openoap.js_msg.mandatory'>
-				<source><![CDATA[This field is mandatory]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.max_value' resname='tx_openoap.js_msg.max_value'>
-				<source><![CDATA[The value must not exceed %d.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.min_value' resname='tx_openoap.js_msg.min_value'>
-				<source><![CDATA[The value must be at least %d.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.min_selected' resname='tx_openoap.js_msg.min_selected'>
-				<source><![CDATA[At least %d option must be selected.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.max_selected' resname='tx_openoap.js_msg.max_selected'>
-				<source><![CDATA[A maximum of %d options may be chosen.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.invalid_email' resname='tx_openoap.js_msg.invalid_email'>
-				<source><![CDATA[Please enter a valid email address.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.invalid_webaddress' resname='tx_openoap.js_msg.invalid_webaddress'>
-				<source><![CDATA[Please enter a valid web address.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.invalid_phone' resname='tx_openoap.js_msg.invalid_phone'>
-				<source><![CDATA[Please enter a valid phone number.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.invalid_format' resname='tx_openoap.js_msg.invalid_format'>
-				<source><![CDATA[Please enter a valid %s.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.max_len_exceeded' resname='tx_openoap.js_msg.max_len_exceeded'>
-				<source><![CDATA[Maximum length exceeded. Please shorten the input.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.is_not_an_integer' resname='tx_openoap.js_msg.is_not_an_integer'>
-				<source><![CDATA[This is not an integer.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.is_not_a_float' resname='tx_openoap.js_msg.is_not_a_float'>
-				<source><![CDATA[This is not a float number.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.upload_error_too_many_files'
-						resname='tx_openoap.js_msg.upload_error_too_many_files'>
-				<source><![CDATA[too many files selected]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.upload_error_file_size'
-						resname='tx_openoap.js_msg.upload_error_file_size'>
-				<source><![CDATA[The maximum file size has been exceeded (%1).]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.upload_error_file_size_simple'
-						resname='tx_openoap.js_msg.upload_error_file_size_simple'>
-				<source><![CDATA[The maximum file size has been exceeded.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.upload_file_removed_not_saved'
-						resname='tx_openoap.js_msg.upload_file_removed_not_saved'>
-				<source><![CDATA[File entry removed - The file is not removed until it is saved.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.upload_files_uploaded' resname='tx_openoap.js_msg.upload_files_uploaded'>
-				<source><![CDATA[Upload was successful - The files are not attached until it is saved.]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_msg.upload_max_files_reached' resname='tx_openoap.js_msg.upload_max_files_reached'>
-				<source><![CDATA[The maximum number of files has been reached.]]></source>
-			</trans-unit>
+            <trans-unit id='tx_openoap.js_msg.characters_remaining' resname='tx_openoap.js_msg.characters_remaining'>
+                <source><![CDATA[%s characters remaining]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.mandatory' resname='tx_openoap.js_msg.mandatory'>
+                <source><![CDATA[This field is mandatory]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.max_value' resname='tx_openoap.js_msg.max_value'>
+                <source><![CDATA[The value must not exceed %d.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.min_value' resname='tx_openoap.js_msg.min_value'>
+                <source><![CDATA[The value must be at least %d.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.min_selected' resname='tx_openoap.js_msg.min_selected'>
+                <source><![CDATA[At least %d option must be selected.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.max_selected' resname='tx_openoap.js_msg.max_selected'>
+                <source><![CDATA[A maximum of %d options may be chosen.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.invalid_email' resname='tx_openoap.js_msg.invalid_email'>
+                <source><![CDATA[Please enter a valid email address.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.invalid_webaddress' resname='tx_openoap.js_msg.invalid_webaddress'>
+                <source><![CDATA[Please enter a valid web address.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.invalid_phone' resname='tx_openoap.js_msg.invalid_phone'>
+                <source><![CDATA[Please enter a valid phone number.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.invalid_format' resname='tx_openoap.js_msg.invalid_format'>
+                <source><![CDATA[Please enter a valid %s.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.max_len_exceeded' resname='tx_openoap.js_msg.max_len_exceeded'>
+                <source><![CDATA[Maximum length exceeded. Please shorten the input.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.is_not_an_integer' resname='tx_openoap.js_msg.is_not_an_integer'>
+                <source><![CDATA[This is not an integer.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.is_not_a_float' resname='tx_openoap.js_msg.is_not_a_float'>
+                <source><![CDATA[This is not a float number.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.upload_error_too_many_files'
+                        resname='tx_openoap.js_msg.upload_error_too_many_files'>
+                <source><![CDATA[too many files selected]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.upload_error_file_size'
+                        resname='tx_openoap.js_msg.upload_error_file_size'>
+                <source><![CDATA[The maximum file size has been exceeded (%1).]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.upload_error_file_size_simple'
+                        resname='tx_openoap.js_msg.upload_error_file_size_simple'>
+                <source><![CDATA[The maximum file size has been exceeded.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.upload_file_removed_not_saved'
+                        resname='tx_openoap.js_msg.upload_file_removed_not_saved'>
+                <source><![CDATA[File entry removed - The file is not removed until it is saved.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.upload_files_uploaded' resname='tx_openoap.js_msg.upload_files_uploaded'>
+                <source><![CDATA[Upload was successful - The files are not attached until it is saved.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.upload_max_files_reached'
+                        resname='tx_openoap.js_msg.upload_max_files_reached'>
+                <source><![CDATA[The maximum number of files has been reached.]]></source>
+            </trans-unit>
 
-			<trans-unit id='tx_openoap.js_label.duallist.search.label' resname='tx_openoap.js_label.duallist_search.label'>
-				<source><![CDATA[Search]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_label.duallist.add.label' resname='tx_openoap.js_label.duallist.add.label'>
-				<source><![CDATA[Add]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_label.duallist.addAll.label' resname='tx_openoap.js_label.duallist.addAll.label'>
-				<source><![CDATA[Add all]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_label.duallist.remove.label' resname='tx_openoap.js_label.duallist.remove.label'>
-				<source><![CDATA[Remove]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.js_label.duallist.removeAll.label' resname='tx_openoap.js_label.duallist.removeAll.label'>
-				<source><![CDATA[Remove all]]></source>
-			</trans-unit>
+            <trans-unit id='tx_openoap.js_label.duallist.search.label'
+                        resname='tx_openoap.js_label.duallist_search.label'>
+                <source><![CDATA[Search]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_label.duallist.add.label' resname='tx_openoap.js_label.duallist.add.label'>
+                <source><![CDATA[Add]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_label.duallist.addAll.label'
+                        resname='tx_openoap.js_label.duallist.addAll.label'>
+                <source><![CDATA[Add all]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_label.duallist.remove.label'
+                        resname='tx_openoap.js_label.duallist.remove.label'>
+                <source><![CDATA[Remove]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_label.duallist.removeAll.label'
+                        resname='tx_openoap.js_label.duallist.removeAll.label'>
+                <source><![CDATA[Remove all]]></source>
+            </trans-unit>
 
-			<!-- Default text snippets -->
-			<trans-unit id='tx_openoap.default.default_title' resname='tx_openoap.default.default_title'>
-				<source><![CDATA[no title set for this proposal]]></source>
-			</trans-unit>
+            <!-- Default text snippets -->
+            <trans-unit id='tx_openoap.default.default_title' resname='tx_openoap.default.default_title'>
+                <source><![CDATA[no title set for this proposal]]></source>
+            </trans-unit>
             <trans-unit id='tx_openoap.default.default_title_survey' resname='tx_openoap.default.default_title_survey'>
                 <source>anonymous survey</source>
             </trans-unit>
 
-			<!-- E-Mail text -->
-			<trans-unit id='tx_openoap.email.submit_subject' resname='tx_openoap.email.submit_subject'>
-				<source><![CDATA[%s - Confirmation of submit: %s]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.email.revision_subject' resname='tx_openoap.email.revision_subject'>
-				<source><![CDATA[%s - For revision: %s]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.email.status_2.subject' resname='tx_openoap.email.status_2.subject'>
-				<source><![CDATA[%s - Proposal %s: Confirmation of submit]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.email.status_4.subject' resname='tx_openoap.email.status_4.subject'>
-				<source><![CDATA[%s - Proposal %s: For revision]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.email.status_5.subject' resname='tx_openoap.email.status_5.subject'>
-				<source><![CDATA[%s - Proposal %s: Contract]]></source>
-			</trans-unit>
-			<trans-unit id='tx_openoap.email.status_6.subject' resname='tx_openoap.email.status_6.subject'>
-				<source><![CDATA[%s - Proposal %s: Declined]]></source>
-			</trans-unit>
-			<!-- PDF -->
-			<trans-unit id='tx_openoap_proposals.pdf.submit_section.text' resname='tx_openoap_proposals.pdf.submit_section.text'>
-				<source><![CDATA[Submit section]]></source>
-			</trans-unit>
+            <!-- E-Mail text -->
+            <trans-unit id='tx_openoap.email.submit_subject' resname='tx_openoap.email.submit_subject'>
+                <source><![CDATA[%s - Confirmation of submit: %s]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.email.revision_subject' resname='tx_openoap.email.revision_subject'>
+                <source><![CDATA[%s - For revision: %s]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.email.status_2.subject' resname='tx_openoap.email.status_2.subject'>
+                <source><![CDATA[%s - Proposal %s: Confirmation of submit]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.email.status_4.subject' resname='tx_openoap.email.status_4.subject'>
+                <source><![CDATA[%s - Proposal %s: For revision]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.email.status_5.subject' resname='tx_openoap.email.status_5.subject'>
+                <source><![CDATA[%s - Proposal %s: Contract]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.email.status_6.subject' resname='tx_openoap.email.status_6.subject'>
+                <source><![CDATA[%s - Proposal %s: Declined]]></source>
+            </trans-unit>
+            <!-- PDF -->
+            <trans-unit id='tx_openoap_proposals.pdf.submit_section.text'
+                        resname='tx_openoap_proposals.pdf.submit_section.text'>
+                <source><![CDATA[Submit section]]></source>
+            </trans-unit>
 
-			<!-- account user -->
-			<trans-unit id="tx_openoapusers_domain_model_user" resname="tx_openoapusers_domain_model_user">
-				<source>User</source>
-			</trans-unit>
-			<trans-unit id="tx_openoapusers_domain_model_user.company_email" resname="tx_openoapusers_domain_model_user.company_email">
-				<source>Company email address</source>
-			</trans-unit>
-			<trans-unit id="tx_openoapusers_domain_model_user.preferred_lang" resname="tx_openoapusers_domain_model_user.preferred_lang">
-				<source>Preferred language</source>
-			</trans-unit>
-			<trans-unit id="tx_openoapusers_domain_model_user.privacypolicy" resname="tx_openoapusers_domain_model_user.privacypolicy" xml:space="preserve">
+            <!-- account user -->
+            <trans-unit id="tx_openoapusers_domain_model_user" resname="tx_openoapusers_domain_model_user">
+                <source>User</source>
+            </trans-unit>
+            <trans-unit id="tx_openoapusers_domain_model_user.company_email"
+                        resname="tx_openoapusers_domain_model_user.company_email">
+                <source>Company email address</source>
+            </trans-unit>
+            <trans-unit id="tx_openoapusers_domain_model_user.preferred_lang"
+                        resname="tx_openoapusers_domain_model_user.preferred_lang">
+                <source>Preferred language</source>
+            </trans-unit>
+            <trans-unit id="tx_openoapusers_domain_model_user.privacypolicy"
+                        resname="tx_openoapusers_domain_model_user.privacypolicy" xml:space="preserve">
 				<source>I have read and acknowledge the %s.</source>
 			</trans-unit>
-			<trans-unit id="tx_openoapusers_domain_model_user.privacypolicy.linkText" resname="tx_openoapusers_domain_model_user.privacypolicy.LinkText">
-				<source>privacy policy</source>
-			</trans-unit>
-			<trans-unit id="oap_registration.header" resname="oap_registration.header">
-				<source>Registration</source>
-			</trans-unit>
-			<trans-unit id="oap_profile.header" resname="oap_profile.header">
-				<source>Profile</source>
-			</trans-unit>
-			<trans-unit id="oap_registration.intro" resname="oap_registration.intro">
-				<source>Here you can register in 3 steps to create a user account.</source>
-			</trans-unit>
-			<trans-unit id="oap_registrationform_step1.header" resname="oap_registration_step1.header">
-				<source>Create new account (step 1 of 3)</source>
-			</trans-unit>
-			<trans-unit id="oap_registrationform_step1.intro" resname="oap_registrationform_step1.intro">
-				<source><![CDATA[Enter your email address and agree to the <a target="_blank" href="/privacy_policy">privacy policy</a>. You will then receive an email with a confirmation link. By clicking the link inside the confirmation email, you complete your registration. In rare cases our registration email may end up in your spam folder. In this case please check your company's internet settings.]]></source>
-			</trans-unit>
-			<trans-unit id="oap_registrationform_step2.header" resname="oap_registrationform_step2.header">
-				<source>Set a new Password (step 2 of 3)</source>
-			</trans-unit>
-			<trans-unit id="oap_registration_password.info" resname="oap_registration_password.info">
-				<source>The password must be at least 8 characters long. It must contain letters, numbers and special characters (e.g. ! ? _ *).</source>
-			</trans-unit>
-			<trans-unit id="oap_validation_stringMustInclude.error" resname="oap_validation_stringMustInclude.error">
-				<source>The password does not meet the requirements. Please check your entries. It must contain letters, numbers and special characters (e.g. ! ? _ *).</source>
-			</trans-unit>
-			<trans-unit id="oap_registrationform_step3.header" resname="oap_registration_step3.header">
-				<source>Master data (step 3 of 3)</source>
-			</trans-unit>
-			<trans-unit id="oap_registrationform_step3.intro" resname="oap_registrationform_step3.intro">
-				<source>Fill out basic information about your company. You can also enter this data later in your profile.</source>
-			</trans-unit>
-			<trans-unit id="oap_registrationform_skipStep.title" resname="oap_registrationform_skipStep.title">
-				<source>Skip this step</source>
-			</trans-unit>
-			<trans-unit id="oap_profileform_masterdata.intro" resname="oap_profileform_masterdata.intro">
-				<source>Fill out basic information about your company.</source>
-			</trans-unit>
-			<trans-unit id="oap_profileform_otherdata.intro" resname="oap_profileform_otherdata.intro">
-				<source>Please indicate the language(s) you prefer for communication.</source>
-			</trans-unit>
-			<trans-unit id="profile.updateEmail.header" resname="profile.updateEmail.header">
-				<source>New email address</source>
-			</trans-unit>
-			<trans-unit id="profile.updatePassword.header" resname="profile.updatePassword.header">
-				<source>Change password</source>
-			</trans-unit>
-			<trans-unit id="field.updateEmail.label" resname="field.updateEmail.label">
-				<source>New email address</source>
-			</trans-unit>
-			<trans-unit id="field.updateEmail_repeat.label" resname="field.updateEmail_repeat.label">
-				<source>Repeat new email address</source>
-			</trans-unit>
-			<trans-unit id="field.updatePassword.label" resname="field.updatePassword.label">
-				<source>New password</source>
-			</trans-unit>
-			<trans-unit id="field.updatePassword_current.label" resname="field.updatePassword_current.label">
-				<source>Current password</source>
-			</trans-unit>
-			<trans-unit id="field.updatePassword_repeat.label" resname="field.updatePassword_repeat.label">
-				<source>Repeat new password</source>
-			</trans-unit>
-			<trans-unit id="oap_masterdata.header" resname="oap_masterdata.header">
-				<source>Master data</source>
-			</trans-unit>
-			<trans-unit id="oap_masterdata.minimal.info" resname="oap_masterdata.minimal.info">
-				<source>Complete information about your company is not yet available.</source>
-			</trans-unit>
-			<trans-unit id="oap_accessdata.header" resname="oap_accessdata.header">
-				<source>Access data</source>
-			</trans-unit>
-			<trans-unit id="oap_dataEdit.title" resname="oap_dataEdit.title">
-				<source>Edit</source>
-			</trans-unit>
-		</body>
-	</file>
+            <trans-unit id="tx_openoapusers_domain_model_user.privacypolicy.linkText"
+                        resname="tx_openoapusers_domain_model_user.privacypolicy.LinkText">
+                <source>privacy policy</source>
+            </trans-unit>
+            <trans-unit id="oap_registration.header" resname="oap_registration.header">
+                <source>Registration</source>
+            </trans-unit>
+            <trans-unit id="oap_profile.header" resname="oap_profile.header">
+                <source>Profile</source>
+            </trans-unit>
+            <trans-unit id="oap_registration.intro" resname="oap_registration.intro">
+                <source>Here you can register in 3 steps to create a user account.</source>
+            </trans-unit>
+            <trans-unit id="oap_registrationform_step1.header" resname="oap_registration_step1.header">
+                <source>Create new account (step 1 of 3)</source>
+            </trans-unit>
+            <trans-unit id="oap_registrationform_step1.intro" resname="oap_registrationform_step1.intro">
+                <source>
+                    <![CDATA[Enter your email address and agree to the <a target="_blank" href="/privacy_policy">privacy policy</a>. You will then receive an email with a confirmation link. By clicking the link inside the confirmation email, you complete your registration. In rare cases our registration email may end up in your spam folder. In this case please check your company's internet settings.]]></source>
+            </trans-unit>
+            <trans-unit id="oap_registrationform_step2.header" resname="oap_registrationform_step2.header">
+                <source>Set a new Password (step 2 of 3)</source>
+            </trans-unit>
+            <trans-unit id="oap_registration_password.info" resname="oap_registration_password.info">
+                <source>The password must be at least 8 characters long. It must contain letters, numbers and special
+                    characters (e.g. ! ? _ *).
+                </source>
+            </trans-unit>
+            <trans-unit id="oap_validation_stringMustInclude.error" resname="oap_validation_stringMustInclude.error">
+                <source>The password does not meet the requirements. Please check your entries. It must contain letters,
+                    numbers and special characters (e.g. ! ? _ *).
+                </source>
+            </trans-unit>
+            <trans-unit id="oap_registrationform_step3.header" resname="oap_registration_step3.header">
+                <source>Master data (step 3 of 3)</source>
+            </trans-unit>
+            <trans-unit id="oap_registrationform_step3.intro" resname="oap_registrationform_step3.intro">
+                <source>Fill out basic information about your company. You can also enter this data later in your
+                    profile.
+                </source>
+            </trans-unit>
+            <trans-unit id="oap_registrationform_skipStep.title" resname="oap_registrationform_skipStep.title">
+                <source>Skip this step</source>
+            </trans-unit>
+            <trans-unit id="oap_profileform_masterdata.intro" resname="oap_profileform_masterdata.intro">
+                <source>Fill out basic information about your company.</source>
+            </trans-unit>
+            <trans-unit id="oap_profileform_otherdata.intro" resname="oap_profileform_otherdata.intro">
+                <source>Please indicate the language(s) you prefer for communication.</source>
+            </trans-unit>
+            <trans-unit id="profile.updateEmail.header" resname="profile.updateEmail.header">
+                <source>New email address</source>
+            </trans-unit>
+            <trans-unit id="profile.updatePassword.header" resname="profile.updatePassword.header">
+                <source>Change password</source>
+            </trans-unit>
+            <trans-unit id="field.updateEmail.label" resname="field.updateEmail.label">
+                <source>New email address</source>
+            </trans-unit>
+            <trans-unit id="field.updateEmail_repeat.label" resname="field.updateEmail_repeat.label">
+                <source>Repeat new email address</source>
+            </trans-unit>
+            <trans-unit id="field.updatePassword.label" resname="field.updatePassword.label">
+                <source>New password</source>
+            </trans-unit>
+            <trans-unit id="field.updatePassword_current.label" resname="field.updatePassword_current.label">
+                <source>Current password</source>
+            </trans-unit>
+            <trans-unit id="field.updatePassword_repeat.label" resname="field.updatePassword_repeat.label">
+                <source>Repeat new password</source>
+            </trans-unit>
+            <trans-unit id="oap_masterdata.header" resname="oap_masterdata.header">
+                <source>Master data</source>
+            </trans-unit>
+            <trans-unit id="oap_masterdata.minimal.info" resname="oap_masterdata.minimal.info">
+                <source>Complete information about your company is not yet available.</source>
+            </trans-unit>
+            <trans-unit id="oap_accessdata.header" resname="oap_accessdata.header">
+                <source>Access data</source>
+            </trans-unit>
+            <trans-unit id="oap_dataEdit.title" resname="oap_dataEdit.title">
+                <source>Edit</source>
+            </trans-unit>
+        </body>
+    </file>
 </xliff>

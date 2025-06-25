@@ -1,5 +1,10 @@
 # Change log
 
+## Version X.1
+
+- Allows the name or type of the linked proposals to be specified in the call (proposalName). Examples: proposal (default), concept, outline...
+- Refactoring xlf files - removes locallang_oap.xlf, locallang_oap_de.xlf
+
 ## Version X
 
 - Enhanced compact Word export

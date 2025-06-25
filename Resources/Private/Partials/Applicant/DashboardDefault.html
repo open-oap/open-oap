@@ -142,7 +142,7 @@ Available variables:
                       <f:if condition="!{CallDisabled}">
                           <f:then>
                           <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form" action="create" controller="Proposal" arguments="{applicant:applicant,call:call}" class="call-list__create-proposal">
-                              {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title')}
+                              {f:translate(key: 'tx_openoap_dashboard.proposal.buttonCreateNew.title', arguments: {0: '{call.proposalName}'}, default: 'proposal')}
                           </f:link.action>
                           </f:then>
                           <f:else>
