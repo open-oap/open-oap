@@ -149,6 +149,19 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $blockedLanguages;
 
     /**
+     * assessment_items
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormItem>
+     */
+    protected $assessmentItems;
+
+    /**
+     * @var int assessmentThreshold
+     */
+    protected int $assessmentThreshold = 0;
+
+
+    /**
      * @var bool $anonym
      */
     protected $anonym = false;
@@ -687,4 +700,25 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->hint = $hint;
     }
+
+    public function getAssessmentItems(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->assessmentItems;
+    }
+
+    public function setAssessmentItems(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $assessmentItems): void
+    {
+        $this->assessmentItems = $assessmentItems;
+    }
+
+    public function getAssessmentThreshold(): int
+    {
+        return $this->assessmentThreshold;
+    }
+
+    public function setAssessmentThreshold(int $assessmentThreshold): void
+    {
+        $this->assessmentThreshold = $assessmentThreshold;
+    }
+
 }

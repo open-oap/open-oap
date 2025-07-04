@@ -31,9 +31,22 @@
 				<source>Export documents</source>
 				<target>Export Dokumente</target>
 			</trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_call.tab.assessment" resname="tx_openoap_domain_model_call.tab.assessment">
+				<source>Assessment</source>
+				<target>Bewertung</target>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.form_items" resname="tx_openoap_domain_model_call.form_items">
 				<source>Items for submit page</source>
 				<target>Fragen für die Abschlussseite</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.form_assessment_items" resname="tx_openoap_domain_model_call.form_assessment_items">
+				<source>Items for an assessment (backend module)</source>
+				<target>Fragen für die Bewertung (Backend-Modul)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.form_assessment_threshold" resname="tx_openoap_domain_model_call.form_assessment_threshold">
+				<source>Threshold value for enable (backend module)</source>
+				<target>Schwellwert für Freigabe (Backend-Modul)</target>
 			</trans-unit>
 
 			<trans-unit id="tx_openoap_domain_model_call.word_styles" resname="tx_openoap_domain_model_call.word_styles">
@@ -104,6 +117,30 @@
 			<trans-unit id="tx_openoap_domain_model_proposal.state" resname="tx_openoap_domain_model_proposal.state">
 				<source>State</source>
 				<target>Status</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.imported_score" resname="tx_openoap_domain_model_proposal.imported_score">
+				<source>Imported Score</source>
+				<target>Importierte Punktzahl</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.imported_action" resname="tx_openoap_domain_model_proposal.imported_action">
+				<source>Imported Action</source>
+				<target>Importierte Aktion</target>
+			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_call.successor_call' resname='tx_openoap_domain_model_call.successor_call'>
+				<source><![CDATA[Successor call for data overtake]]></source>
+				<target><![CDATA[Nachfolge-Call zur Datenübernahme]]></target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.no_successor_call" resname="tx_openoap_domain_model_call.no_successor_call">
+				<source>No successor call (yet)</source>
+				<target>kein Nachfolge-Call (zur Zeit)</target>
+			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_call.predecessor_call' resname='tx_openoap_domain_model_call.predecessor_call'>
+				<source><![CDATA[Predecessor call - if this is selected no new empty proposal is possible]]></source>
+				<target><![CDATA[Vorgänger-Call - wenn dieser ausgewählt ist, kann kein leerer, neuer Antrag erstellt werden]]></target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.no_predecessor_call" resname="tx_openoap_domain_model_call.no_predecessor_call">
+				<source>No predecessor call (yet)</source>
+				<target>kein Vorgänger-Call (zur Zeit)</target>
 			</trans-unit>
 
 			<!-- account user -->

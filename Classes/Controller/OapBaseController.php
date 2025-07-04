@@ -304,12 +304,22 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const FLASH_MSG_PROPOSAL_NOT_FOUND = 'proposal_not_found';
     protected const FLASH_MSG_CALL_MISSING = 'proposal_access_denied';
 
-    protected const PAGINATOR_ITEMS_PER_PAGE = 50;
-
     protected const SURVEY_URL_PARAMETER_CALLID = 'survey';
     protected const SURVEY_URL_PARAMETER_HASH = 'hash';
 
     protected const FE_GROUP_EDIT_IT = 3;
+
+    // PAGINATOR VALUES
+    protected const PAGINATOR_PAGES = 1;
+    protected const PAGINATOR_ITEMS = 2;
+    protected const PAGINATOR_ITEMS_PER_PAGE = 1000;
+    protected const PAGINATOR_SHOW_AFTER = 10;
+    protected const PAGINATOR_SHOW_BEFORE = 10;
+
+    // ASSESSMENT IMPORT COLUMN NAMES TO COMPARE
+    protected const PROPOSAL_ASSESSMENT_COLUMN_ID = 'id';
+    protected const PROPOSAL_ASSESSMENT_COLUMN_SCORE = 'pred_score';
+    protected const PROPOSAL_ASSESSMENT_COLUMN_ACTION = 'pred_action';
 
     /**
      * @var Applicant
@@ -437,7 +447,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         FormItemRepository $formItemRepository,
         ItemOptionRepository $itemOptionRepository,
         PersistenceManager $persistenceManager,
-        CallGroupRepository $callGroupRepository
+        CallGroupRepository $callGroupRepository,
+        protected readonly ExtensionConfiguration $extensionConfiguration
     ) {
         $this->applicantRepository = $applicantRepository;
         $this->callRepository = $callRepository;
@@ -1165,6 +1176,18 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $signature .=  sprintf($this->settings['signatureFormat'], (int)$proposal->getSignature());
         return $signature;
+    }
+
+    /**
+     * @param string $signature
+     * @param string $shortCut
+     * @return int
+     */
+    protected function rebuildProposalSignatureFromSignature(string $signature, string $shortcut): int
+    {
+        $explodedSignature = GeneralUtility::trimExplode($shortcut, $signature, true);
+        $uid = (int)$explodedSignature[0];
+        return $uid;
     }
 
     /**

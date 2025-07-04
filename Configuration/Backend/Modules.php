@@ -35,7 +35,8 @@ return [
                 'listProposals',
                 'showReleaseNotesProposals',
                 'showProposal',
-                'customizeStatusMail'
+                'customizeStatusMail',
+                'uploadAssessmentExcel'
             ],
         ],
     ],

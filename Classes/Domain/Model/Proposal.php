@@ -120,11 +120,55 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $comments;
 
     /**
+     * assessmentAnswers
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Answer>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     */
+    protected $assessmentAnswers;
+
+    /**
      * applicant
      *
      * @var \OpenOAP\OpenOap\Domain\Model\Applicant
      */
     protected $applicant;
+
+    /**
+     * assessmentValue
+     *
+     * @var string
+     */
+    protected string $assessmentValue = '';
+
+    /**
+     * reviewer
+     *
+     * @var \TYPO3\CMS\Beuser\Domain\Model\BackendUser|null
+     */
+    protected $reviewer;
+
+    /**
+     * reviewTime
+     *
+     * @var ?\DateTime
+     */
+    protected $reviewTime;
+
+    /**
+     * importedScore
+     *
+     * @var string
+     */
+    protected $importedScore = '';
+
+    /**
+     * importedAction
+     *
+     * @var string
+     */
+    protected string $importedAction = '';
+
 
     /**
      * @param int $pageNumber
@@ -158,6 +202,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->answers = $this->answers ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->comments = $this->comments ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->assessmentAnswers = $this->assessmentAnswers ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
     /**
@@ -488,6 +533,27 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->rejectionEmail = $rejectionEmail;
     }
 
+
+    public function getAssessmentValue(): string
+    {
+        return $this->assessmentValue;
+    }
+
+    public function setAssessmentValue(string $assessmentValue): void
+    {
+        $this->assessmentValue = $assessmentValue;
+    }
+
+    public function getAssessmentAnswers()
+    {
+        return $this->assessmentAnswers;
+    }
+
+    public function setAssessmentAnswers(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $assessmentAnswers): void
+    {
+        $this->assessmentAnswers = $assessmentAnswers;
+    }
+
     /**
      * Returns the surveyHash
      *
@@ -506,5 +572,64 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setSurveyHash(string $surveyHash): void
     {
         $this->surveyHash = $surveyHash;
+    }
+    /**
+     * Adds a assessmentAnswer
+     *
+     * @param \OpenOAP\OpenOap\Domain\Model\Answer $answer
+     */
+    public function addAssessmentAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answer)
+    {
+        $this->assessmentAnswers->attach($answer);
+    }
+
+    /**
+     * Removes a assessmentAnswer
+     *
+     * @param \OpenOAP\OpenOap\Domain\Model\Answer $answerToRemove The Answer to be removed
+     */
+    public function removeAssessmentAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answerToRemove)
+    {
+        $this->assessmentAnswers->detach($answerToRemove);
+    }
+
+    public function getReviewer()
+    {
+        return $this->reviewer;
+    }
+
+    public function setReviewer(\TYPO3\CMS\Beuser\Domain\Model\BackendUser $reviewer): void
+    {
+        $this->reviewer = $reviewer;
+    }
+
+    public function getReviewTime(): ?\DateTime
+    {
+        return $this->reviewTime;
+    }
+
+    public function setReviewTime(\DateTime $reviewTime): void
+    {
+        $this->reviewTime = $reviewTime;
+    }
+
+    public function getImportedScore(): string
+    {
+        return $this->importedScore;
+    }
+
+    public function setImportedScore(string $importedScore): void
+    {
+        $this->importedScore = $importedScore;
+    }
+
+    public function getImportedAction(): string
+    {
+        return $this->importedAction;
+    }
+
+    public function setImportedAction(string $importedAction): void
+    {
+        $this->importedAction = $importedAction;
     }
 }
