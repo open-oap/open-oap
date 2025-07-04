@@ -1,0 +1,27 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<div style="max-width: 500px;border: 1px solid #777;float: right;padding: 1rem;">
+    <h3 style="margin-bottom:1rem;"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:upload.assessment.headline"/></h3>
+    <f:form action="uploadAssessmentExcel" enctype="multipart/form-data">
+        <f:form.hidden value="{call}" name="call" />
+        <!-- xlsx upload -->
+        <div>
+            <fieldset style="margin-bottom: 0.3rem;">
+                <label>
+                    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:upload.assessment.label" />:<br />
+                    <f:form.upload
+                        name="upload[upload]"
+                        additionalAttributes="{accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}"
+                    />
+                </label>
+            </fieldset>
+            <f:form.button class="btn btn-primary" name="upload[submit]" value="submitted" >
+                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:upload.assessment.submit')}
+            </f:form.button>
+            <p><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:upload.assessment.hint" /></p>
+        </div>
+        <!-- // xlsx upload -->
+    </f:form>
+</div>
+
+</html>

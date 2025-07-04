@@ -32,6 +32,24 @@
                 <target>Liste der Calls</target>
             </trans-unit>
 
+            <!-- upload -->
+            <trans-unit id="upload.assessment.headline" resname="upload.assessment.headline">
+                <source>Import assessment values</source>
+                <target>Externe Beurteilungswerte importieren</target>
+            </trans-unit>
+            <trans-unit id="upload.assessment.label" resname="upload.assessment.label">
+                <source>Integrate external assessment values</source>
+                <target>Integrieren Sie externe Bewertungswerte</target>
+            </trans-unit>
+            <trans-unit id="upload.assessment.submit" resname="upload.assessment.submit">
+                <source>Import from .xlsx</source>
+                <target>Importieren von .xlsx</target>
+            </trans-unit>
+			<trans-unit id="upload.assessment.hint" resname="pload.assessment.hint">
+				<source>Depending on the number of items, the import may take several seconds.</source>
+				<target>Je nach Anzahl der Artikel kann der Import mehrere Sekunden dauern.</target>
+			</trans-unit>
+
             <!-- filter -->
             <trans-unit id="filter.state" resname="filter.state">
                 <source>State</source>
@@ -253,6 +271,14 @@
             <trans-unit id="preview.proposal.label" resname="preview.proposal.label">
                 <source>The proposal</source>
             </trans-unit>
+			<trans-unit id="preview.proposal.assessment.label" resname="preview.proposal.assessment.label">
+				<source>Assessment</source>
+				<source>Bewertung</source>
+			</trans-unit>
+			<trans-unit id="preview.proposal.buttonSubmitAssessment.label" resname="preview.proposal.buttonSubmitAssessment.label">
+				<source>Save</source>
+				<source>Speichern</source>
+			</trans-unit>
 
             <!-- Flexform -->
             <trans-unit id="flexform.pluginSettings.title" resname="flexform.pluginSettings.title">

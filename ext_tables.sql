@@ -18,6 +18,9 @@ CREATE TABLE tx_openoap_domain_model_call (
     word_styles text,
     anonym tinyint(3) DEFAULT '0' NOT NULL,
     survey_codes text,
+	assessment_items int(11) unsigned NOT NULL DEFAULT '0',
+	assessment_threshold int(11) unsigned NOT NULL DEFAULT '0',
+	available_states int(11) unsigned NOT NULL DEFAULT '0',
 );
 
 CREATE TABLE tx_openoap_domain_model_formpage (
@@ -62,7 +65,9 @@ CREATE TABLE tx_openoap_domain_model_formitem (
 	additional_label varchar(255) NOT NULL DEFAULT '',
 	options int(11) unsigned NOT NULL DEFAULT '0',
 	validators int(11) unsigned NOT NULL DEFAULT '0',
-	modificators int(11) unsigned NOT NULL DEFAULT '0'
+	modificators int(11) unsigned NOT NULL DEFAULT '0',
+	assessment_item smallint(1) unsigned NOT NULL DEFAULT '0',
+	assessment_on_item int(11) unsigned NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE tx_openoap_domain_model_itemoption (
@@ -105,7 +110,13 @@ CREATE TABLE tx_openoap_domain_model_proposal (
 	submit_tstamp int(11) DEFAULT '0' NOT NULL,
 	rejection_tstamp int(11) DEFAULT '0' NOT NULL,
 	rejection_email varchar(255) NOT NULL DEFAULT '',
-    survey_hash varchar(255) NOT NULL DEFAULT ''
+    survey_hash varchar(255) NOT NULL DEFAULT '',
+	assessment_value varchar(5) DEFAULT '' NOT NULL,
+	assessment_answers text NOT NULL,
+	reviewer int(11) DEFAULT '0' NOT NULL,
+	review_time datetime DEFAULT NULL,
+	imported_score varchar(5) DEFAULT '' NOT NULL,
+	imported_action varchar(255) NOT NULL DEFAULT ''
 );
 
 CREATE TABLE tx_openoap_domain_model_answer (
@@ -187,4 +198,18 @@ CREATE TABLE tx_openoap_domain_model_supporter (
     event_proposal_in_revision_mailtext text NOT NULL DEFAULT '' ,
     event_proposal_accepted_mailtext text NOT NULL DEFAULT '' ,
     event_proposal_declined_mailtext text NOT NULL DEFAULT '' ,
+);
+
+CREATE TABLE tx_openoap_call_formitem_mm (
+		uid_local int(10) unsigned NOT NULL DEFAULT 0,
+		uid_foreign int(10) unsigned NOT NULL DEFAULT 0,
+		sorting int(10) unsigned NOT NULL DEFAULT 0,
+		sorting_foreign int(10) unsigned NOT NULL DEFAULT 0,
+		fieldname VARCHAR(255) NOT NULL DEFAULT '',
+
+		PRIMARY KEY (uid_local,uid_foreign,fieldname),
+		KEY uid_local (uid_local),
+		KEY uid_foreign (uid_foreign),
+		KEY fieldname (fieldname),
+
 );

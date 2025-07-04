@@ -4,14 +4,26 @@
 		<f:if condition="{pagination.previousPageNumber} && {pagination.previousPageNumber} >= {pagination.firstPageNumber}">
 			<f:then>
 				<li class="page-item">
-					<a class="page-link" href="{f:uri.action(action:actionName, arguments:{currentPage: 1, itemsPerPage: itemsPerPage, call: call})}" title="{f:translate(key:'pagination.first')}">
-						<span aria-hidden="true">&laquo;</span>
-					</a>
+                    <f:if condition="{actionName} == 'showProposals'">
+                        <f:then>
+                            <a class="page-link" href="{f:uri.action(controller: 'BackendProposals', action:'showProposal', arguments:{proposal: paginationButtons.first, currentPage: buttons.first, itemsPerPage: itemsPerPage, call: call, filter: filter, sorting: sorted})}" title="{f:translate(key:'pagination.previous')}">
+                        </f:then>
+                        <f:else>
+                            <a class="page-link" href="{f:uri.action(controller: 'BackendProposals', action:actionName, arguments:{proposal: proposal, currentPage: pagination.firstPageNumber, itemsPerPage: itemsPerPage, call: call, filter: filter, sorting: sorted})}" title="{f:translate(key:'pagination.first')}">
+                        </f:else>
+                    </f:if>
+						<span aria-hidden="true">&laquo;</span></a>
 				</li>
 				<li class="page-item">
-					<a class="page-link" href="{f:uri.action(action:actionName, arguments:{currentPage: pagination.previousPageNumber, itemsPerPage: itemsPerPage, call: call})}" title="{f:translate(key:'pagination.previous')}">
-						<span aria-hidden="true">&lsaquo;</span>
-					</a>
+                    <f:if condition="{actionName} == 'showProposals'">
+                        <f:then>
+                            <a class="page-link" href="{f:uri.action(controller: 'BackendProposals', action:'showProposal', arguments:{proposal: paginationButtons.previous, currentPage: buttons.previous, itemsPerPage: itemsPerPage, call: call, filter: filter, sorting: sorted})}" title="{f:translate(key:'pagination.previous')}">
+                        </f:then>
+                        <f:else>
+                            <a class="page-link" href="{f:uri.action(controller: 'BackendProposals', action:actionName, arguments:{proposal: proposal, currentPage: pagination.previousPageNumber, itemsPerPage: itemsPerPage, call: call, filter: filter, sorting: sorted})}" title="{f:translate(key:'pagination.previous')}">
+                        </f:else>
+                    </f:if>
+                    <span aria-hidden="true">&lsaquo;</span></a>
 				</li>
 			</f:then>
 			<f:else>
@@ -19,21 +31,53 @@
 				<li class="page-item disabled"><a class="page-link" href="#"><span aria-hidden="true">&lsaquo;</span></a></li>
 			</f:else>
 		</f:if>
-		<f:for each="{pages}" as="page">
-			<li class="page-item{f:if(condition: '{page} == {paginator.currentPageNumber}', then:' active')}">
-				<a class="page-link" href="{f:uri.action(action:actionName, arguments:{currentPage: page, itemsPerPage: itemsPerPage, call: call})}">{page}</a>
-			</li>
-		</f:for>
-
+        <f:if condition="{paginationShow.minPage} > 1"><li class="page-item disabled"><a class="page-link" href="#"><span aria-hidden="true">…</span></a></li></f:if>
+        <f:if condition="{actionName} == 'showProposals'">
+            <f:then>
+                <f:for each="{allItems}" key="page" as="proposal" iteration="pageIterator">
+                    <f:if condition="{pageIterator.cycle} >= {paginationShow.minPage} && {pageIterator.cycle} <= {paginationShow.maxPage}">
+                        <li class="page-item{f:if(condition: '{pageIterator.cycle} == {paginator.currentPageNumber}', then:' active')}">
+                            <a class="page-link" title="{proposal.title}" href="{f:uri.action(controller: 'BackendProposals', action:'showProposal', arguments:{proposal: proposal.uid, currentPage: pageIterator.cycle, itemsPerPage: itemsPerPage, call: call, filter: filter, sorting: sorted})}">{pageIterator.cycle}</a>
+                        </li>
+                    </f:if>
+                </f:for>
+            </f:then>
+            <f:else>
+                <f:for each="{pages}" as="page">
+                    <f:if condition="{page} >= {paginationShow.minPage} && {page} <= {paginationShow.maxPage}">
+                        <li class="page-item{f:if(condition: '{page} == {paginator.currentPageNumber}', then:' active')}">
+                            <a class="page-link" href="{f:uri.action(controller: 'BackendProposals', action:actionName, arguments:{proposal: proposal, currentPage: page, itemsPerPage: itemsPerPage, call: call, filter: filter, sorting: sorted})}">{page}</a>
+                        </li>
+                    </f:if>
+                </f:for>
+            </f:else>
+        </f:if>
+        <f:if condition="{paginationShow.maxPage} < {pagination.lastPageNumber}"><li class="page-item disabled"><a class="page-link" href="#"><span aria-hidden="true">…</span></a></li></f:if>
 		<f:if condition="{pagination.nextPageNumber} && {pagination.nextPageNumber} <= {pagination.lastPageNumber}">
 			<f:then>
 				<li class="page-item">
-					<a class="page-link" href="{f:uri.action(action:actionName, arguments:{currentPage: pagination.nextPageNumber, itemsPerPage: itemsPerPage, call: call})}" title="{f:translate(key:'pagination.next')}">
-						<span aria-hidden="true">&rsaquo;</span>
+                    <f:if condition="{actionName} == 'showProposals'">
+                        <f:then>
+                            <a class="page-link" href="{f:uri.action(controller: 'BackendProposals', action:'showProposal', arguments:{proposal: paginationButtons.next, currentPage: buttons.next, itemsPerPage: itemsPerPage, call: call, filter: filter, sorting: sorted})}" title="{f:translate(key:'pagination.previous')}">
+                        </f:then>
+                        <f:else>
+                            <a class="page-link" href="{f:uri.action(controller: 'BackendProposals', action:actionName, arguments:{proposal: proposal, currentPage: pagination.nextPageNumber, itemsPerPage: itemsPerPage, call: call,  filter: filter, sorting: sorted})}" title="{f:translate(key:'pagination.next')}">
+                        </f:else>
+                    </f:if>
+
+                        <span aria-hidden="true">&rsaquo;</span>
 					</a>
 				</li>
 				<li class="page-item">
-					<a class="page-link" href="{f:uri.action(action:actionName, arguments:{currentPage: pagination.lastPageNumber, itemsPerPage: itemsPerPage, call: call})}" title="{f:translate(key:'pagination.last')}">
+                    <f:if condition="{actionName} == 'showProposals'">
+                        <f:then>
+                            <a class="page-link" href="{f:uri.action(controller: 'BackendProposals', action:'showProposal', arguments:{proposal: paginationButtons.last, currentPage: buttons.last, itemsPerPage: itemsPerPage, call: call, filter: filter, sorting: sorted})}" title="{f:translate(key:'pagination.previous')}">
+                        </f:then>
+                        <f:else>
+                            <a class="page-link" href="{f:uri.action(controller: 'BackendProposals', action:actionName, arguments:{proposal: proposal, currentPage: pagination.lastPageNumber, itemsPerPage: itemsPerPage, call: call,  filter: filter, sorting: sorted})}" title="{f:translate(key:'pagination.last')}">
+                        </f:else>
+                    </f:if>
+
 						<span aria-hidden="true">&raquo;</span>
 					</a>
 				</li>

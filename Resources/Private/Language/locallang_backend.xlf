@@ -29,6 +29,17 @@
         <source>List of Calls</source>
     </trans-unit>
 
+<!-- upload -->
+    <trans-unit id="upload.assessment.label" resname="upload.assessment.label">
+        <source>Integrate external assessment values</source>
+    </trans-unit>
+    <trans-unit id="upload.assessment.submit" resname="upload.assessment.submit">
+        <source>Import from .xlsx</source>
+    </trans-unit>
+    <trans-unit id="upload.assessment.hint" resname="pload.assessment.hint">
+        <source>Depending on the number of items, the import may take several seconds.</source>
+    </trans-unit>
+
 <!-- filter -->
     <trans-unit id="filter.state" resname="filter.state">
         <source>State</source>
@@ -113,6 +124,16 @@
     <trans-unit id="message.multiple_selected" resname="message.multiple_selected">
         <source>CAUTION: You have selected several applications!</source>
     </trans-unit>
+
+	<trans-unit id='message.file_upload_failed' resname='message.file_upload_failed'>
+		<source><![CDATA[File upload failed. Make sure to choose an .xlsx file before press the import button.]]></source>
+	</trans-unit>
+    <trans-unit id='message.file_upload_error' resname='message.file_upload_error'>
+		<source><![CDATA[An error occured during the upload. File upload failed. Please try again.]]></source>
+	</trans-unit>
+    <trans-unit id='message.data_import_failed' resname='message.data_import_failed'>
+		<source><![CDATA[Data import failed. Column names could not be found in configuration.]]></source>
+	</trans-unit>
 
 <!-- MENU -->
     <trans-unit id="menu.overview" resname="menu.overview">
@@ -233,6 +254,12 @@
     <trans-unit id="preview.proposal.label" resname="preview.proposal.label">
         <source>The proposal</source>
     </trans-unit>
+    <trans-unit id="preview.proposal.assessment.label" resname="preview.proposal.assessment.label">
+        <source>Assessment</source>
+    </trans-unit>
+	<trans-unit id="preview.proposal.buttonSubmitAssessment.label" resname="preview.proposal.buttonSubmitAssessment.label">
+		<source>Save</source>
+	</trans-unit>
 
 <!-- Flexform -->
     <trans-unit id="flexform.pluginSettings.title" resname="flexform.pluginSettings.title">

@@ -23,7 +23,14 @@ return [
         'iconfile' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
     ],
     'types' => [
-        '1' => ['showitem' => 'call_group, supporter, type, extern_link, title, intro_text, teaser_text, shortcut, emails, call_start_time, call_end_time, hint, proposal_pid, form_pages, items, word_header_logo, word_styles, logo,blocked_languages,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, usergroup, starttime, endtime, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_tab,anonym, survey_codes'],
+        '1' => ['showitem' => '
+            call_group, supporter, type, extern_link,
+            title, intro_text, teaser_text, shortcut, emails,
+            call_start_time, call_end_time, hint,
+            proposal_pid, form_pages, items, word_header_logo, word_styles, logo,blocked_languages,
+            --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.assessment,
+                assessment_items, assessment_threshold,
+            --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, usergroup, starttime, endtime, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_tab,anonym, survey_codes'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -274,6 +281,9 @@ return [
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_openoap_domain_model_formitem',
                 'MM' => 'tx_openoap_call_formitem_mm',
+                'MM_match_fields' => [
+                    'fieldname' => 'items',
+                ],
 //                'foreign_table_where' ist replaced by itemsProcFunc
 //                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formitem}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formitem}.hidden = 0 AND {#tx_openoap_domain_model_formitem}.{#sys_language_uid} IN (-1,0) AND {#tx_openoap_domain_model_formitem}.{#type} = ###PAGE_TSCONFIG_STR###',
                 'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class . '->getAllElementsOfFormItems',
@@ -303,6 +313,66 @@ return [
             ],
 
         ],
+        'assessment_items' => [
+            'exclude' => false,
+            'l10n_display' => 'defaultAsReadonly',
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.form_assessment_items',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'tx_openoap_domain_model_formitem',
+                'MM' => 'tx_openoap_call_formitem_mm',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class . '->getAllElementsOfFormItems',
+                'itemsProcConfig' => [
+                    'model' => 'formitem',
+                    'pidRoot' => 'pidFormItems',
+                    'types' => [2, 5, 6],
+                ],
+                'MM_match_fields' => [
+                    'fieldname' => 'assessment_items',
+                ],
+
+                'size' => 10,
+                'autoSizeMax' => 30,
+                'maxitems' => 9999,
+                'multiple' => 0,
+                'fieldControl' => [
+                    'editPopup' => [
+                        'disabled' => false,
+                    ],
+                    'addRecord' => [
+                        'disabled' => false,
+                        'options' => [
+                            'pid' => '###PAGE_TSCONFIG_ID###',
+                        ],
+                    ],
+                    'listModule' => [
+                        'disabled' => true,
+                    ],
+                ],
+            ],
+        ],
+        'assessment_threshold' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.form_assessment_threshold',
+            'config' => [
+                'type' => 'input',
+                'size' => 5,
+                'eval' => 'trim,int',
+                'range' => [
+                    'lower' => 0,
+                    'upper' => 10,
+                ],
+                'default' => 0,
+                'slider' => [
+                    'step' => 1,
+                    'width' => 200,
+                ],
+            ],
+        ],
+
         'usergroup' => [
             'exclude' => false,
             'l10n_mode' => 'exclude',

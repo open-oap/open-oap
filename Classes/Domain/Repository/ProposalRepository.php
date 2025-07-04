@@ -86,6 +86,73 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
+     * @throws DBALException
+     * @throws Exception
+     */
+    public function fetchImportedActionsByCall(Call $call): array
+    {
+        $table = 'tx_openoap_domain_model_proposal';
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
+        $queryBuilder = $connection->createQueryBuilder();
+        $result = $queryBuilder
+            ->select(
+                'Proposal.imported_action'
+            )
+            ->from($table, 'Proposal')
+            ->where(
+                $queryBuilder->expr()->eq('tx_openoap_call', $queryBuilder->createNamedParameter($call->getUid())),
+                $queryBuilder->expr()->gt('state', 1),
+            )
+            ->orderBy('Proposal.imported_action',\TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING)
+            ->groupBy('Proposal.imported_action')
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        $actions = [];
+        foreach ($result as $item) {
+            if ($item['imported_action'] !== '') {
+                $actions[$item['imported_action']] = $item['imported_action'];
+            }
+        }
+        return $actions;
+    }
+
+    /**
+     * @throws DBALException
+     * @throws Exception
+     */
+    public function fetchAssessmentThresholdsByCall(Call $call): array
+    {
+        $table = 'tx_openoap_domain_model_proposal';
+//        $query->getQuerySettings()->setRespectStoragePage(false);
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
+        $queryBuilder = $connection->createQueryBuilder();
+        $result = $queryBuilder
+        ->select(
+            'Proposal.assessment_value'
+        )
+        ->from($table, 'Proposal')
+        ->where(
+            $queryBuilder->expr()->eq('tx_openoap_call', $queryBuilder->createNamedParameter($call->getUid())),
+//            $queryBuilder->expr()->gt('Proposal.assessment_value',$queryBuilder->createNamedParameter(0, \PDO::PARAM_INT))
+        )
+        ->orderBy('Proposal.assessment_value',\TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING)
+        ->groupBy('Proposal.assessment_value')
+        ->executeQuery()
+        ->fetchAllAssociative();
+
+        $thresholds = [];
+        foreach ($result as $item) {
+            $thresholds[] =  $item['assessment_value'];
+        }
+
+//        DebuggerUtility::var_dump($queryBuilder->getSQL());
+//        DebuggerUtility::var_dump($queryBuilder->getParameters());
+//        die();
+        return $thresholds;
+    }
+
+    /**
      * Find
      *
      * @param array $uids
@@ -106,6 +173,28 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
+     * Find proposals by signature and pid
+     *
+     * @param array $signatures
+     * @param int $pid
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function findBySignatures(array $signatures, int $pid)
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->matching(
+            $query->logicalAnd(
+                $query->in('signature', $signatures),
+                $query->equals('pid', $pid)
+            )
+        );
+
+        return $query->execute();
+    }
+
+
+    /**
      * @param int $pid
      * @param int $minStatusLevel
      * @param array $filter
@@ -113,8 +202,9 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @return object[]|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function findDemanded(int $pid, int $minStatusLevel, array $filter = [], array $sorting = [])
+    public function findDemanded(int $pid, int $minStatusLevel, int $assessmentThreshold, array $filter = [], array $sorting = [])
     {
+
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_openoap_domain_model_proposal');
         $queryBuilder = $connection->createQueryBuilder();
         if (isset($filter['state']) && $filter['state'] !== '') {
@@ -122,6 +212,23 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         } else {
             $stateWhere = $queryBuilder->expr()->gte('Proposal.state', $queryBuilder->createNamedParameter($minStatusLevel, Connection::PARAM_INT));
         }
+        if (isset($filter['assessment_value']) AND $filter['assessment_value'] !== '' AND $filter['assessment_value'] !== '-1' AND $filter['assessment_value'] !== null) {
+            if ($filter['assessment_value'] == 'threshold') {
+                $ratingWhere = $queryBuilder->expr()->gte('Proposal.assessment_value', $queryBuilder->createNamedParameter((string) $assessmentThreshold, \PDO::PARAM_STR));
+            } else {
+                $ratingWhere = $queryBuilder->expr()->eq('Proposal.assessment_value', $queryBuilder->createNamedParameter((string) $filter['assessment_value'], \PDO::PARAM_STR));
+            }
+        } elseif (isset($filter['assessment_value']) AND $filter['assessment_value'] == '') {
+            $ratingWhere = $queryBuilder->expr()->eq('Proposal.assessment_value', $queryBuilder->createNamedParameter('', \PDO::PARAM_STR));
+        } else {
+            $ratingWhere = '';
+        }
+        if (isset($filter['imported_action_value']) AND $filter['imported_action_value'] != '-1') {
+            $importedActionWhere = $queryBuilder->expr()->eq('Proposal.imported_action', $queryBuilder->createNamedParameter($filter['imported_action_value'], \PDO::PARAM_STR));
+        } else {
+            $importedActionWhere = '';
+        }
+
         $query = $queryBuilder
             ->select(
                 'Proposal.uid',
@@ -133,6 +240,9 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'Proposal.state',
                 'Proposal.signature',
                 'Proposal.applicant',
+                'Proposal.assessment_value AS assessmentValue',
+                'Proposal.imported_score',
+                'Proposal.imported_action',
                 'Proposal.tx_openoap_call AS `call`',
                 'Applicant.company AS applicant_company',
                 'Applicant.username AS applicant_username',
@@ -153,7 +263,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             )
             ->where(
                 $queryBuilder->expr()->eq('Proposal.pid', $queryBuilder->createNamedParameter($pid, Connection::PARAM_INT)),
-                $stateWhere
+                $stateWhere,$ratingWhere,$importedActionWhere
             );
 
         if (!empty($filter['searchword'])) {
@@ -225,8 +335,17 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
         }
 
+        if (!isset($sorting['direction']) or $sorting['direction'] == '') {
+            $sorting['direction'] = 'ASC';
+        }
+        if (!isset($sorting['field']) or $sorting['field'] == '') {
+            $sorting['field'] = 'signature';
+        }
+
         if (count($sorting) > 0) {
             $query->OrderBy($sorting['field'], $sorting['direction']);
+            // add uid as order - in case of sorting with empty sorting (default = signature)
+            $query->addOrderBy('uid', 'ASC');
         }
 
         return $query->executeQuery()->fetchAllAssociative();

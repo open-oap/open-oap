@@ -1,0 +1,108 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+      data-namespace-typo3-fluid="true">
+
+<div class="section section__assessment" >
+<f:form action="showProposal" name="proposal" object="{proposal}" arguments="{filter:filter,sorted:sorted}">
+    <f:form.hidden name="task" value="assessment" />
+    <f:form.hidden name="currentPage" value="{paginator.currentPageNumber}" />
+    <f:comment><!-- <f:form.hidden name="filter" value="{filter}" />--></f:comment>
+    <f:comment><!-- <f:form.hidden name="sorted" value="{sorted}" />--></f:comment>
+    <f:for each="{proposal.assessmentAnswers}" as="answer" iteration="a">
+        <v:variable.set name="aIndex" value="{a.index}"/>
+        <f:form.hidden property="assessmentAnswers.{aIndex}.__identity" value="{answer.uid}"/>
+        <f:form.hidden property="assessmentAnswers.{aIndex}.item.__identity" value="{answer.item.uid}"/>
+    </f:for>
+    <span class="section-label section-label__assessment" >{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:preview.proposal.assessment.label")}</span>
+
+    <ol class="assessment--items">
+        <f:for each="{proposal.call.assessmentItems}" as="item" iteration="assessmentIteration">
+            <v:variable.set name="propertyKeyIndex" value="{item.uid}" />
+            <v:variable.set name="propertyKeyArray" value="assessmentAnswers.{itemAnswerMap.{propertyKeyIndex}}.value" />
+            <li class="assessment--item" >
+                            <span class="assessment--label"  >
+                                <f:if condition="{item.assessmentOnItem}">
+                                    <f:then>
+                                        <a href="#{item.assessmentOnItem.uid}--0--0" style="">
+                                            {item.question}
+                                        </a>
+                                    </f:then>
+                                    <f:else>
+                                    {item.question}
+                                    </f:else>
+                               </f:if>
+                            </span>
+                <div class="assessment--queastion">
+                    <f:if condition="{item.introText}">
+                        <span class="assessment--intro" ><f:format.raw>{item.introText} </f:format.raw></span>
+                    </f:if>
+                    <f:if condition="{item.assessmentOnItem}">
+                        <a href="#{item.assessmentOnItem.uid}--0--0" style="font-weight:bold;display:block;margin-bottom:1rem;">see here</a>
+
+                    </f:if>
+                </div>
+                <div class="assessment--answer">
+                    <f:switch expression="{item.type}">
+                        <f:case value="{itemTypes.TYPE_TEXT}">
+                            <br><f:form.textarea
+                            property="assessmentAnswers.{assessmentIteration.index}.value"
+                            class="form__textarea form__textarea{classModifier} {answersMap.{answerId}.item.classStr}"
+                            id="cb-a{item.uid}_{i.index}"
+                            additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                        />
+                        </f:case>
+                        <f:case value="{itemTypes.TYPE_CHECKBOX}">
+                            <fieldset>
+                                <div class="form__checkable-group form__checkable-group--radio ">
+                                    <f:comment><f:form.hidden property="assessmentValues.{assessmentIteration.index}[]" value="" /></f:comment>
+                                    <f:for each="{assessmentsMap.{item.uid}.options}" as="checkboxItem" iteration="i">
+                                        <div class="checkbox">
+                                            <label for="cb-a{item.uid}_{i.index}" class="form__checkable-label" <f:if condition="{i.isFirst}">data-legend="legend--{propertyKeyIndex}"</f:if> >
+                                            <f:form.checkbox
+                                                property="assessmentAnswers.{assessmentIteration.index}.arrayValue"
+                                                value="{checkboxItem.key}"
+                                                class="form__checkable"
+                                                id="cb-a{item.uid}_{i.index}"
+                                                additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                                            />
+                                            <span class="form__styled-checkbox"></span><f:format.raw>{checkboxItem.label}</f:format.raw>
+                                            </label>
+                                        </div>
+                                    </f:for>
+                                </div>
+                            </fieldset>
+                        </f:case>
+                        <f:case value="{itemTypes.TYPE_RADIOBUTTON}">
+                            <fieldset>
+                                <div class="form__checkable-group form__checkable-group--radio ">
+                                    <f:comment><f:form.hidden property="assessmentValues.{assessmentIteration.index}[]" value="" /></f:comment>
+                                    Criteria:
+                                    <f:for each="{assessmentsMap.{item.uid}.options}" as="radiobuttonItem" iteration="i">
+                                        <label for="cb-a{item.uid}_{i.index}" class="form__checkable-label" <f:if condition="{i.isFirst}">data-legend="legend--{propertyKeyIndex}"</f:if> >
+                                        <f:form.radio
+                                            property="assessmentAnswers.{assessmentIteration.index}.value"
+                                            value="{radiobuttonItem.key}"
+                                            class="form__checkable"
+                                            id="cb-a{item.uid}_{i.index}"
+                                            additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                                        />
+                                        <span class="form__styled-radio"></span><f:format.raw>{radiobuttonItem.label}</f:format.raw>
+                                        </label>
+                                    </f:for>
+                                </div>
+                            </fieldset>
+                        </f:case>
+                    </f:switch>
+                </div>
+            </li>
+        </f:for>
+    </ol>
+    <div>
+        <f:form.button type="submit" name="submit" class="button">
+            <span class="button-text">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:preview.proposal.buttonSubmitAssessment.label")}</span>
+        </f:form.button>
+    </div>
+</f:form>
+</div>

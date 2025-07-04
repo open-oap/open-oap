@@ -21,16 +21,40 @@ Available variables:
 
     <f:section name="content">
         <f:render partial="Style" />
-
+        <a id="top" class="anker"></a>
         <f:flashMessages />
+
+        <f:render partial="Utility/Paginator" arguments="{pagination: pagination, paginationShow: paginationShow, allItems: allItems, pages: pages, paginator: paginator, actionName: 'showProposals', call: call, itemsPerPage:itemsPerPage, paginationButtons: paginationButtons}" />
 
         <h1><span class="highlighted">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.proposal_preview")}</span> {proposal.title}</h1>
 
         <p class="download-wrapper">
-                <f:link.action action="showProposal" arguments="{proposal:proposal,download:1}" class="download">
-                    <span>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:download.pdf.label")}</span>
-                </f:link.action>
+            <f:link.action action="showProposal" arguments="{proposal:proposal,download:1}" class="download">
+                <span>{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:download.pdf.label")}</span>
+            </f:link.action>
         </p>
+        <div class="section ">
+            <span class="section-label ">Info</span>
+            <table class="table table__information">
+                <tr><th>Applicant</th><td><f:if condition="{proposal.applicant.company}">{proposal.applicant.company} | </f:if>{proposal.applicant.username}</td></tr>
+                <tr><th>Signature</th><td><f:if condition="{call.shortcut} !== ''">{call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf></td></tr>
+                <f:if condition="{proposal.submitTstamp} > 0"><tr><th>Submitted</th><td>{proposal.submitTstamf}</td></tr></f:if>
+                <f:if condition="{proposal.importedAction}">
+                    <tr><th>Imported rating</th><td>{proposal.importedAction} ({proposal.importedScore}) </td></tr>
+                </f:if>
+                <f:if condition="{proposal.assessmentValue}">
+                    <tr><th>Assessment rating</th><td>{proposal.assessmentValue}</td></tr>
+                </f:if>
+            </table>
+        </div>
+
+
+        <f:comment><!-- GLOBAL ASSESSMENT --></f:comment>
+
+        <a href="#top" class="form__jump-to-top"><svg class="form__icon form__icon--jump-to-top form__icon--large form__icon--jump-to-top" width="37" height="37" focusable="false" aria-hidden="true"><use xlink:href="{f:uri.resource(path:'Icons/sprite.svg',extensionName: 'open_oap')}#icon-jump-to-top" x="0" y="0"></use></svg></a>
+        <f:if condition="{proposal.assessmentAnswers}">
+            <f:render partial="AssessmentForm" arguments="{_all}"/>
+        </f:if>
 
         <f:comment><!-- GLOBAL COMMENTS --></f:comment>
         <div class="section">
@@ -270,7 +294,8 @@ Available variables:
                                 <f:render partial="Proposal/ButtonNewComment" arguments="{labeled:0}" />
                             </f:if>
                         </td>
-                        <td class="item--wrapper">
+                        <td class="item--wrapper" >
+                            <div id="{item.uid}--{groupCounterL0}--{groupCounterL0}" class="anker">&nbsp;</div>
 
                             <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}--{item.uid}" />
                             <v:variable.set name="propertyKeyUid" value="answers.{itemAnswerMap.{propertyKeyIndex}}.uid" />

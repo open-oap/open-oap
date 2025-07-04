@@ -64,23 +64,58 @@ class OapBackendController extends OapBaseController
     }
 
     /**
-     * @param array $allitems
+     * @param array $allItems
      * @param int $currentPage
      * @param int $itemsPerPage
      * @return array
      */
-    protected function createPaginator(array $allitems, int $currentPage, int $itemsPerPage = 50): array
+    protected function createPaginator(array $allItems, int $currentPage, int $itemsPerPage = 50, int $type = self::PAGINATOR_PAGES): array
     {
         $pagination['array'] = [];
         $pagination['pagination'] = null;
 
-        if (!count($allitems)) {
+        if (!count($allItems)) {
             $this->setMessage('no_calls_found', self::WARNING);
         } else {
             // todo use constant instead of magic number - even here
-            $pagination['array'] = new ArrayPaginator($allitems, $currentPage, $itemsPerPage);
+            $pagination['array'] = new ArrayPaginator($allItems, $currentPage, $itemsPerPage);
             $pagination['pagination'] = new SimplePagination($pagination['array']);
             $this->view->assign('pages', range(1, $pagination['pagination']->getLastPageNumber()));
+            $minPage = 1;
+            $maxPage = count($allItems);
+            $pagesBefore = self::PAGINATOR_SHOW_BEFORE;
+            $pagesAfter = self::PAGINATOR_SHOW_AFTER;
+
+            if ($maxPage > $pagesBefore + $pagesAfter) {
+                $minPage = max($minPage, $currentPage - $pagesBefore);
+                if ($minPage === 1) {
+                    $pagesAfter += $pagesBefore - ($currentPage - $minPage);
+                }
+                $maxPage = min($maxPage, $currentPage + $pagesAfter);
+                if (($maxPage - $currentPage) < $pagesAfter) {
+                    $remainingPages = $pagesAfter - ($maxPage - $currentPage);
+                    $minPage = max(1, $minPage - $remainingPages);
+                }
+            }
+            $pagination['show'] = [
+                'minPage' => $minPage,
+                'maxPage' => $maxPage,
+            ];
+            if ($type == self::PAGINATOR_ITEMS) {
+                $pagination['buttons']['first'] = 0;
+                $pagination['buttons']['previous'] = 0;
+                $pagination['buttons']['next'] = 0;
+                $pagination['buttons']['last'] = 0;
+                if ($currentPage > 1) {
+                    $pagination['buttons']['first'] = $allItems[0]['uid'];
+                    $pagination['buttons']['previous'] = $allItems[$currentPage - 2]['uid'];
+                }
+                $pagination['buttons']['current'] = $allItems[$currentPage - 1];
+                if ($currentPage < count($allItems)) {
+                    $pagination['buttons']['next'] = $allItems[$currentPage]['uid'];
+                    $pagination['buttons']['last'] = $allItems[count($allItems) - 1]['uid'];
+                }
+            }
         }
         return $pagination;
     }

@@ -191,11 +191,57 @@
     a.download:hover, a.download:focus {
     }
     a.download span {
-       border-bottom: 2px solid transparent; 
+       border-bottom: 2px solid transparent;
     }
     a.download:hover span, a.download:focus span {
         text-decoration: none;
-        border-bottom: 2px solid transparent; 
+        border-bottom: 2px solid transparent;
         color: #0078e6;
     }
+    .section__assessment {
+        background-color: #faebd7;
+    }
+    .section-label__assessment {
+        background-color: #f6bb69;
+    }
+    .assessment--items {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        grid-column-gap: 24px;
+        grid-row-gap: 0;
+        padding: 0;
+    }
+    .assessment--label {
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+    }
+    .assessment--item {
+        list-style: decimal inside;
+        padding: 1rem;
+        border: 1px solid black;
+        margin-bottom: 1rem;
+    }
+    .assessment--item::marker {
+        font-weight: bold;
+    }
+    .assessment--item .form__textarea {
+        width: 100%;
+        height: 7rem;
+    }
+    .form__jump-to-top {
+        position: absolute;
+        bottom: 2rem;
+        right: 2rem;
+    }
+    .anker {
+        display:inline;
+        position:relative;
+        top:-90px;
+        left:-100px;
+    }
+     .table__information th {
+         width: 100px;
+     }
 </style>
