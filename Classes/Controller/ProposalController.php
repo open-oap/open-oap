@@ -441,6 +441,7 @@ class ProposalController extends OapFrontendController
             'proposalStates' => $this->getConstants()['PROPOSAL'],
             'commentStates' => $this->getConstants()['COMMENT'],
             'groupDisplayTypes' => $this->getConstants()['GROUPDISPLAY'],
+            'textareaCharLevels' => $this->getConstants()['TEXTAREA'],
             'answersMap' => $answersMap,
             'pageControl' => $pageControl,
             'itemAnswerMap' => $itemAnswerMap,
@@ -851,6 +852,7 @@ class ProposalController extends OapFrontendController
             'proposalStates' => $this->getConstants()['PROPOSAL'],
             'commentStates' => $this->getConstants()['COMMENT'],
             'groupDisplayTypes' => $this->getConstants()['GROUPDISPLAY'],
+            'textareaCharLevels' => $this->getConstants()['TEXTAREA'],
         ];
 
         $this->renderPdfView(self::EXPORT_TEMPLATE_PATH_PDF, $arguments);

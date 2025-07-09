@@ -177,6 +177,11 @@
 				<source><![CDATA[Additional Value]]></source>
 				<target><![CDATA[Zusätzlicher Wert]]></target>
 			</trans-unit>
+			<trans-unit id='tx_openoap_domain_model_formitem.additional_type'
+						resname='tx_openoap_domain_model_formitem.additional_type'>
+				<source><![CDATA[Type of Additional Value]]></source>
+				<target><![CDATA[Typ des Zusatzwertes]]></target>
+			</trans-unit>
 			<trans-unit id='tx_openoap_domain_model_formitem.default_value'
 						resname='tx_openoap_domain_model_formitem.default_value'>
 				<source><![CDATA[Default Value]]></source>

@@ -8,14 +8,17 @@
     const selector = {
         checkableGroupWithAdditionalValue: '.form__checkable-group--additionalvalue',
         checkableItem: '.form__checkable-label input.form__checkable',
-        additionalInput: '.form__textfield',
+        additionalInput: {
+            textfield: '.form__textfield',
+            textarea: '.form__textarea',
+        }
     };
 
     const initialize = function () {
 
         document.querySelectorAll(selector.checkableGroupWithAdditionalValue).forEach(function (formField) {
             // last item checked?
-            let additionalInput = formField.querySelector(selector.additionalInput);
+            let additionalInput = formField.querySelector(selector.additionalInput.textfield + ',' + selector.additionalInput.textarea);
             let allItems = formField.querySelectorAll(selector.checkableItem);
             let lastItem = allItems[allItems.length - 1];
 

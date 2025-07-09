@@ -304,6 +304,12 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const FLASH_MSG_PROPOSAL_NOT_FOUND = 'proposal_not_found';
     protected const FLASH_MSG_CALL_MISSING = 'proposal_access_denied';
 
+    /**
+     * identifier for js-text - see open_oap/Resources/Private/Language/locallang.xlf
+     */
+    protected const TEXTAREA_MEDIUM_MIN_CHARS = 300;
+    protected const TEXTAREA_MEDIUM_MAX_CHARS = 1500;
+
     protected const PAGINATOR_ITEMS_PER_PAGE = 50;
 
     protected const SURVEY_URL_PARAMETER_CALLID = 'survey';
