@@ -16,9 +16,12 @@
         /> <span class="form__unit">{item.unit}</span>
     </f:case>
     <f:case value="{itemTypes.TYPE_TEXT}">
+        <f:if condition="{answersMap.{answerId}.item.additionalAttributes.data-oap-maxlength} <= {textareaCharLevels.TEXTAREA_MEDIUM_MIN_CHARS}"><f:variable name="classModifier" value="--s"/></f:if>
+        <f:if condition="{answersMap.{answerId}.item.additionalAttributes.data-oap-maxlength} > {textareaCharLevels.TEXTAREA_MEDIUM_MIN_CHARS} and {answersMap.{answerId}.item.additionalAttributes.data-oap-maxlength} <= {textareaCharLevels.TEXTAREA_MEDIUM_MAX_CHARS}"><f:variable name="classModifier" value="--m"/></f:if>
+        <f:if condition="{answersMap.{answerId}.item.additionalAttributes.data-oap-maxlength} > {textareaCharLevels.TEXTAREA_MEDIUM_MAX_CHARS}"><f:variable name="classModifier" value="--l"/></f:if>
         <f:form.textarea
             property="{propertyKey}"
-            class="form__textarea {answersMap.{answerId}.item.classStr}"
+            class="form__textarea form__textarea{classModifier} {answersMap.{answerId}.item.classStr}"
             id="oap-input-{propertyKeyIndex}"
             additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
         />

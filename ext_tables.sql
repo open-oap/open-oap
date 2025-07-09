@@ -17,9 +17,9 @@ CREATE TABLE tx_openoap_domain_model_call (
 	enabled_format_word smallint(1) unsigned NOT NULL DEFAULT '0',
 	logo int(11) unsigned DEFAULT '0',
 	blocked_languages varchar(255) NOT NULL DEFAULT '',
-    word_styles text,
-    anonym tinyint(3) DEFAULT '0' NOT NULL,
-    survey_codes text,
+	word_styles text,
+	anonym tinyint(3) DEFAULT '0' NOT NULL,
+	survey_codes text,
 );
 
 CREATE TABLE tx_openoap_domain_model_formpage (
@@ -50,7 +50,7 @@ CREATE TABLE tx_openoap_domain_model_formgroup (
 
 CREATE TABLE tx_openoap_domain_model_formitem (
 	question varchar(255) NOT NULL DEFAULT '',
-    internal_title varchar(255) NOT NULL DEFAULT '',
+	internal_title varchar(255) NOT NULL DEFAULT '',
 	intro_text text,
 	help_text text NOT NULL DEFAULT '',
 	type int(11) DEFAULT '0' NOT NULL,
@@ -62,6 +62,7 @@ CREATE TABLE tx_openoap_domain_model_formitem (
 	default_value text NOT NULL DEFAULT '',
 	unit varchar(255) NOT NULL DEFAULT '',
 	additional_label varchar(255) NOT NULL DEFAULT '',
+	additional_type int(11) DEFAULT '1' NOT NULL,
 	options int(11) unsigned NOT NULL DEFAULT '0',
 	validators int(11) unsigned NOT NULL DEFAULT '0',
 	modificators int(11) unsigned NOT NULL DEFAULT '0'
@@ -107,7 +108,7 @@ CREATE TABLE tx_openoap_domain_model_proposal (
 	submit_tstamp int(11) DEFAULT '0' NOT NULL,
 	rejection_tstamp int(11) DEFAULT '0' NOT NULL,
 	rejection_email varchar(255) NOT NULL DEFAULT '',
-    survey_hash varchar(255) NOT NULL DEFAULT ''
+	survey_hash varchar(255) NOT NULL DEFAULT ''
 );
 
 CREATE TABLE tx_openoap_domain_model_answer (
