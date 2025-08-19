@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace OpenOAP\OpenOAP\UserFunctions\FormEngine;
+namespace OpenOAP\OpenOap\UserFunctions\FormEngine;
 
 use OpenOAP\OpenOap\Domain\Repository\FormGroupRepository;
 use OpenOAP\OpenOap\Domain\Repository\FormItemRepository;
@@ -9,14 +9,9 @@ use OpenOAP\OpenOap\Domain\Repository\FormPageRepository;
 use OpenOAP\OpenOap\Domain\Repository\GroupTitleRepository;
 use OpenOAP\OpenOap\Domain\Repository\ItemOptionRepository;
 use OpenOAP\OpenOap\Domain\Repository\ItemValidatorRepository;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryHelper;
-use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * A user function used in select
@@ -238,6 +233,10 @@ class DescendantsSelectItemsProcFunc
                 continue;
             }
             $page = $this->pageRepository->getPage($pageId);
+            // perhaps better to catch possible errors here
+            if (empty($page)) {
+                continue;
+            }
             $uid = $page['uid'];
             $pid = $page['pid'];
             $label = $titles[$uid] = $page['title'];
@@ -251,58 +250,6 @@ class DescendantsSelectItemsProcFunc
             $titles[$pageId] = $label;
         }
         return $titles;
-    }
-
-    /**
-     * Recursively fetch all descendants of a given page
-     *
-     * @param int $id uid of the page
-     * @param int $depth
-     * @param int $begin
-     * @param string $permClause
-     * @return string comma separated list of descendant pages
-     *
-     * @deprecated This function is no longer required in V12. See also$this->pageRepository->getPageIdsRecursive
-     *
-     */
-    protected function queryGeneratorGetTreeList(int $id, int $depth, int $begin = 0, string $permClause = ''): string
-    {
-        if ($id < 0) {
-            $id = abs($id);
-        }
-        if ($begin == 0) {
-            $theList = (string)$id;
-        } else {
-            $theList = '';
-        }
-        if ($id && $depth > 0) {
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-            $queryBuilder->getRestrictions()->removeAll()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
-            $queryBuilder->select('uid')
-                ->from('pages')
-                ->where(
-                    $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($id, Connection::PARAM_INT)),
-                    $queryBuilder->expr()->eq('sys_language_uid', 0)
-                )
-                ->orderBy('uid');
-            if ($permClause !== '') {
-                $queryBuilder->andWhere(QueryHelper::stripLogicalOperatorPrefix($permClause));
-            }
-            $statement = $queryBuilder->executeQuery();
-            while ($row = $statement->fetchAssociative()) {
-                if ($begin <= 0) {
-                    $theList .= ',' . $row['uid'];
-                }
-                if ($depth > 1) {
-                    $theSubList = $this->queryGeneratorGetTreeList($row['uid'], $depth - 1, $begin - 1, $permClause);
-                    if (!empty($theList) && !empty($theSubList) && ($theSubList[0] !== ',')) {
-                        $theList .= ',';
-                    }
-                    $theList .= $theSubList;
-                }
-            }
-        }
-        return $theList;
     }
 
     protected function getAllElements(
