@@ -189,6 +189,9 @@
 			<trans-unit id="tx_openoap_domain_model_formitem.additional_value" resname="tx_openoap_domain_model_formitem.additional_value">
 				<source>Additional Value</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.additional_type" resname="tx_openoap_domain_model_formitem.additional_type">
+				<source>Additional Value: Type</source>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_formitem.default_value" resname="tx_openoap_domain_model_formitem.default_value">
 				<source>Default Value</source>
 			</trans-unit>

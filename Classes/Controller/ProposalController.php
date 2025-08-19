@@ -1047,7 +1047,11 @@ class ProposalController extends OapFrontendController
                         }
                         break;
                     case self::VALIDATOR_MAXCHAR:
-                        $cleanedString = preg_replace('~[\n\r\t]~', '', $answer->getValue());
+                        $answerValue = $answer->getValue();
+                        if (!$answer->getItem()->isAdditionalValue()) {
+                            $answerValue = $answer->getAdditionalValue();
+                        }
+                        $cleanedString = preg_replace('~[\n\r\t]~', '', $answerValue);
                         if (mb_strlen($cleanedString) > (int)$validator->getParam1()) {
                             $this->setValidationResult(
                                 $validationResult,
