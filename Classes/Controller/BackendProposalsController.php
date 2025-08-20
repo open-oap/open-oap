@@ -720,7 +720,6 @@ class BackendProposalsController extends OapBackendController
         $signatureNotFound = [];
 
         $callShortcut = $call->getShortcut();
-
         for ($row = 1; $row <= $highestRow; $row++) {
             // In the first row we are looking for the columns we need by header name
             if ($row === 1) {
@@ -738,6 +737,9 @@ class BackendProposalsController extends OapBackendController
             }
             // Loop through the rows and columns collecting the selected data we need
             $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
+            if (!$rowData[0][$idColumn]) {
+                continue;
+            }
             $importSignature = $rowData[0][$idColumn];
             $proposalSignatureIdentifier = $this->rebuildProposalSignatureFromSignature($importSignature, $callShortcut);
             if ($proposalSignatureIdentifier > 0) {
