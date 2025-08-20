@@ -587,7 +587,7 @@
                     let modalSubmit = labels[e.submitter.dataset[dataSet.modalSubmit]];
                     let modalCancel = labels[e.submitter.dataset[dataSet.modalCancel]];
 
-                    OAP.utils.modal.show(modalContent, modalSubmit, modalCancel, activeForm);
+                    OAP.utils.modal.show(modalContent, modalSubmit, modalCancel, activeForm, e.submitter);
                 }
             } else {
                 // no error and no reason for a hint - but to prevent competing actions, show the loading circle
@@ -595,7 +595,6 @@
                     return;
                 }
                 loaderWrapper.style.display = styles.loaderVisible;
-
             }
             document.querySelectorAll(selector.enableDisabledElements).forEach(function (element) {
                 element.disabled = 0;
