@@ -30,6 +30,9 @@
     </trans-unit>
 
 <!-- upload -->
+	<trans-unit id="upload.assessment.headline" resname="upload.assessment.headline">
+		<source>Import assessment values</source>
+	</trans-unit>
     <trans-unit id="upload.assessment.label" resname="upload.assessment.label">
         <source>Integrate external assessment values</source>
     </trans-unit>
