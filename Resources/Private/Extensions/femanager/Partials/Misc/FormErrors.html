@@ -12,23 +12,23 @@
 						<li class="form__error-list-item">
 							<f:if condition="{error.code} == 1221560718">
 								<f:then>
-									<f:comment>
+									<f:comment><!--
 										If any required field in model was empty (normally username or password)
-									</f:comment>
+									--></f:comment>
 									<f:translate key="validationErrorRequiredModel" />
 								</f:then>
 								<f:else>
 									<f:if condition="{error.code} == 1307719788">
 										<f:then>
-											<f:comment>
+											<f:comment><!--
 												If given date format failed
-											</f:comment>
+											--></f:comment>
 											<f:translate key="validationErrorWrongDateFormat" />
 										</f:then>
 										<f:else>
-											<f:comment>
+											<f:comment><!--
 												If a validator check (see TypoScript) failed
-											</f:comment>
+											--></f:comment>
 											<f:format.raw><f:format.printf arguments="{0: '{fieldname -> f:translate(key:\'tx_femanager_domain_model_user.{error.arguments.field}\')}'}">
 												<a href="#femanager_field_{error.arguments.field}" class="form__error-list-link"><f:translate key="{error.message}">{error.message}</f:translate></a>
 											</f:format.printf></f:format.raw>

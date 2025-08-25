@@ -172,16 +172,18 @@ defined('TYPO3') || die();
         'className' => \OpenOAP\OpenOap\Domain\Model\ApplicantGroup::class,
     ];
 
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\InvitationController::class] = [
-        'className' => \OpenOAP\OpenOap\Controller\UserInvitationController::class,
-    ];
+//  changed registration from invitation plugin to "new user" plugin - not needed anymore
+//    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\InvitationController::class] = [
+//        'className' => \OpenOAP\OpenOap\Controller\UserInvitationController::class,
+//    ];
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][ \Bithost\Pdfviewhelpers\ViewHelpers\ImageViewHelper::class ] = [
         'className' => \OpenOAP\OpenOap\Xclass\Pdfviewhelpers\ImageViewHelper::class,
     ];
 
-    // Add statusAction to nonCacheableAction of femanager invitation plugin
-    if (!in_array('status', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Invitation']['controllers'][\In2code\Femanager\Controller\InvitationController::class]['nonCacheableActions'])) {
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Invitation']['controllers'][\In2code\Femanager\Controller\InvitationController::class]['nonCacheableActions'][] = 'status';
-    }
+//  changed registration from invitation plugin to "new user" plugin - not needed anymore
+//  Add statusAction to nonCacheableAction of femanager invitation plugin
+//    if (!in_array('status', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Invitation']['controllers'][\In2code\Femanager\Controller\InvitationController::class]['nonCacheableActions'])) {
+//        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Invitation']['controllers'][\In2code\Femanager\Controller\InvitationController::class]['nonCacheableActions'][] = 'status';
+//    }
 })();

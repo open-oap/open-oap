@@ -14,22 +14,22 @@ Available variables:
     <f:then>
       <h2><f:translate key="tx_openoap_applicant.masterdataEdit.header" /></h2>
       <p><f:translate key="tx_openoap_applicant.masterdataEdit.text" /></p>
-      
+
       <f:render partial="FlashMessages" arguments="{_all}" />
       <f:render partial="FormErrors" arguments="{object:Applicant}" />
-      
+
       <f:form
           name="applicant"
           object="{applicant}"
           action="update"
           class="form form--register">
-          
+
           <f:comment><f:form.hidden name="token" value="{token}" /></f:comment>
-          
+
           <div>
             <f:render partial="Applicant/FormFields" arguments="{applicant:applicant, countries:countries, stateEdit:1}" />
           </div>
-          
+
           <div class="form__buttons">
             <f:link.typolink class="button button--alternative" parameter="{settings.dashboardPageId}">
               <f:translate key="tx_openoap_applicant.form.submitClose" />
@@ -38,15 +38,15 @@ Available variables:
                 <f:translate key="tx_openoap_applicant.form.submitSave" />
             </f:form.button>
           </div>
-      </f:form> 
+      </f:form>
     </f:then>
-    
+
     <f:else>
       <p><f:translate key="tx_openoap_applicant.notLoggedIn.text" /></p>
     </f:else>
-    
+
   </f:if>
-  
+
   <f:comment>
     <h1>Edit Applicant</h1>
 
@@ -55,10 +55,10 @@ Available variables:
     <f:render partial="FormErrors" />
 
     <f:form action="update" name="applicant" object="{applicant}" >
-    
+
     <f:form.submit value="Save" />
     </f:form>
   </f:comment>
-  
+
 </f:section>
 </html>
