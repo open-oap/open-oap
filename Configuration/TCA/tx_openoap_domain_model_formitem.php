@@ -32,9 +32,9 @@ return [
         // type_date2 4
         '4' => ['showitem' => 'question, internal_title, intro_text, help_text, type, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta,enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_checkbox 5
-        '5' => ['showitem' => 'question, internal_title, intro_text, help_text, type, options, additional_value, additional_label, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '5' => ['showitem' => 'question, internal_title, intro_text, help_text, type, options, additional_value, additional_type, additional_label, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_radiobutton 6
-        '6' => ['showitem' => 'question, internal_title, intro_text, help_text, type, options, additional_value, additional_label, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta,enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '6' => ['showitem' => 'question, internal_title, intro_text, help_text, type, options, additional_value, additional_type, additional_label, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta,enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_select 7
         '7' => ['showitem' => 'question, internal_title, intro_text, help_text, type, default_value, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_select multiple 8
@@ -268,6 +268,23 @@ return [
                     ],
                 ],
                 'default' => 0,
+            ],
+        ],
+        'additional_type' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.additional_type',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.additionalvaluetype_string', 'value' => 1],
+                    ['label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.additionalvaluetype_text', 'value' => 2],
+                    ],
+                'size' => 1,
+                'maxitems' => 1,
+                'eval' => 'required',
+                'default' => 1,
             ],
         ],
         'default_value' => [

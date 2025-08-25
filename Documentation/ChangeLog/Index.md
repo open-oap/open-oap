@@ -1,5 +1,10 @@
 # Change log
 
+## Version X+1
+
+- add select for radiobuttons/checkboxes items to select type of additional field (string / textarea)
+- textfield size depending on maxChar validator
+
 ## Version X
 
 - Enhanced compact Word export

@@ -5,12 +5,29 @@
      data-namespace-typo3-fluid="true">
 
     <f:if condition="{item.additionalValue}">
-        <f:form.textfield
-            type="text"
-            property="{propertyKeyAdditionalValue}"
-            class="form__textfield form__textfield--additional"
-            id="oap-input-{propertyKeyIndexAddValue}"
-        />
+        <div class="form__additional-text" data-legend="legend--{propertyKeyIndex}">
+        <f:if condition="{item.additionalType} == 2">
+            <f:then>
+                <f:if condition="{answersMap.{answerId}.item.additionalAttributes.data-oap-maxlength} <= {textareaCharLevels.TEXTAREA_MEDIUM_MIN_CHARS}"><f:variable name="classModifier" value="--s"/></f:if>
+                <f:if condition="{answersMap.{answerId}.item.additionalAttributes.data-oap-maxlength} > {textareaCharLevels.TEXTAREA_MEDIUM_MIN_CHARS} and {answersMap.{answerId}.item.additionalAttributes.data-oap-maxlength} <= {textareaCharLevels.TEXTAREA_MEDIUM_MAX_CHARS}"><f:variable name="classModifier" value="--m"/></f:if>
+                <f:if condition="{answersMap.{answerId}.item.additionalAttributes.data-oap-maxlength} > {textareaCharLevels.TEXTAREA_MEDIUM_MAX_CHARS}"><f:variable name="classModifier" value="--l"/></f:if>
+                <f:form.textarea
+                        property="{propertyKeyAdditionalValue}"
+                        class="form__textarea form__textarea--additional form__textarea{classModifier} {answersMap.{answerId}.item.classStr}"
+                        id="oap-input-{propertyKeyIndexAddValue}"
+                        additionalAttributes='{answersMap.{answerId}.item.additionalAttributes--additionalValue}'
+                />
+            </f:then>
+            <f:else>
+                <f:form.textfield
+                        type="text"
+                        property="{propertyKeyAdditionalValue}"
+                        class="form__textfield form__textfield--additional"
+                        id="oap-input-{propertyKeyIndexAddValue}"
+                />
+            </f:else>
+        </f:if>
+        </div>
     </f:if>
 
 </html>

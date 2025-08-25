@@ -192,6 +192,19 @@
         &[disabled] {
             @include disabled-form-element;
         }
+
+        &--s {
+            min-height: rem(100);
+        }
+
+        &--m {
+            min-height: rem(200);
+        }
+
+        &--l {
+            min-height: rem(300);
+        }
+
     }
 
     &__textfield {
@@ -227,6 +240,11 @@
             }
         }
     }
+
+    &__additional-text {
+        margin-left: rem(30);
+    }
+
 
     &__buttons {
         // Exclusive media-queries to avoid excessive overwrites

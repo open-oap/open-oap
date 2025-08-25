@@ -57,6 +57,15 @@
                 <source>Upload file</source>
                 <target>Datei-Upload</target>
             </trans-unit>
+
+            <trans-unit id="tx_openoap_domain_model_formitem.additionalvaluetype_string" resname="tx_openoap_domain_model_formitem.additionalvaluetype_string">
+                <source>Text - single line</source>
+                <target>Text - einfaches Feld</target>
+            </trans-unit>
+            <trans-unit id="tx_openoap_domain_model_formitem.additionalvaluetype_text" resname="tx_openoap_domain_model_formitem.additionalvaluetype_text">
+                <source>Textarea</source>
+                <target>Textbereich</target>
+            </trans-unit>
             <trans-unit id="tx_openoap_domain_model_formitem.dropdown" resname="tx_openoap_domain_model_formitem.dropdown">
                 <source>Dropdown-Select</source>
                 <target>Dropdown-Auswahl</target>
