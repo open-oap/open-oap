@@ -13,3 +13,7 @@ services:
 
   OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc:
     public: true
+
+  OpenOAP\OpenOap\Upgrades\ReplaceInvitationByNewWizard:
+    tags:
+      - name: install.upgradewizard
