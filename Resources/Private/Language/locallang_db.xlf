@@ -36,6 +36,9 @@
 			<trans-unit id="tx_openoap_domain_model_call.proposal_pid" resname="tx_openoap_domain_model_call.proposal_pid">
 				<source>Proposal Pid</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.tab.documents" resname="tx_openoap_domain_model_call.tab.documents">
+				<source>Export documents</source>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.form_pages" resname="tx_openoap_domain_model_call.form_pages">
 				<source>Form Pages</source>
 			</trans-unit>
@@ -47,6 +50,15 @@
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.word_template" resname="tx_openoap_domain_model_call.word_template">
 				<source>Word template for exports of proposal</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.enabled_format_word" resname="tx_openoap_domain_model_call.enabled_format_word">
+				<source>Word document format</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.enabled_format_word_item.checked" resname="tx_openoap_domain_model_call.enabled_format_word_item.checked">
+				<source>enabled</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.enabled_format_word_item.unchecked" resname="tx_openoap_domain_model_call.enabled_format_word_item.unchecked">
+				<source>disabled</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.blocked_languages" resname="tx_openoap_domain_model_call.blocked_languages">
 				<source>Not accessible with these languages in the frontend</source>

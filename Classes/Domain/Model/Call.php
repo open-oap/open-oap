@@ -134,6 +134,11 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $wordHeaderLogo;
 
     /**
+     * @var bool $enabledFormatWord
+     */
+    protected $enabledFormatWord = false;
+
+    /**
      * @var FileReference|null
      */
     protected $logo;
@@ -561,6 +566,26 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setWordStyles(string $wordStyles): void
     {
         $this->wordStyles = $wordStyles;
+    }
+
+    /**
+     * Returns the enabledFormatWord boolean state
+     *
+     * @return bool $enabledFormatWord
+     */
+    public function isEnabledFormatWord(): bool
+    {
+        return $this->enabledFormatWord;
+    }
+
+    /**
+     * Sets the enabledFormatWord
+     *
+     * @param bool $enabledFormatWord
+     */
+    public function setEnabledFormatWord(bool $enabledFormatWord): void
+    {
+        $this->enabledFormatWord = $enabledFormatWord;
     }
 
     public function isAnonym(): bool

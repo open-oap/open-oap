@@ -71,7 +71,9 @@
                                             <button class="proposals__item-pulldown-control proposals__item-option proposals__item-option--download" data-disclosure-control data-disclosure-has-overlay aria-controls="download-format-list--{proposal.uid}" aria-expanded="false">Download</button>
                                             <ul class="proposals__item-pulldown-options" id="download-format-list--{proposal.uid}"  data-disclosure-overlay="" >
                                                 <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" /></li>
-                                                <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadWord', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadWord'}" /></li>
+                                                <f:if condition="{proposal.call.enabledFormatWord}">
+                                                    <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadWord', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadWord'}" /></li>
+                                                </f:if>
                                                 <f:if condition="{filesCount.{proposal.uid}} > 0">
                                                     <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadAttachments', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadAttachments'}" /></li>
                                                 </f:if>
