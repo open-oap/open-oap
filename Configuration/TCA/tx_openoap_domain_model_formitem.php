@@ -150,43 +150,43 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_string',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_formitem.type_string',
                         'value' => 1,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_text',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_formitem.type_text',
                         'value' => 2,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_date1',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_formitem.type_date1',
                         'value' => 3,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_date2',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_formitem.type_date2',
                         'value' => 4,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_checkbox',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_formitem.type_checkbox',
                         'value' => 5,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_radiobutton',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_formitem.type_radiobutton',
                         'value' => 6,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_select_single',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_formitem.type_select_single',
                         'value' => 7,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_select_multiple',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_formitem.type_select_multiple',
                         'value' => 8,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.type_upload',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_formitem.type_upload',
                         'value' => 9,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.dropdown',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_domain_model_formitem.type_dropdown',
                         'value' => 10,
                     ],
                 ],
@@ -308,8 +308,14 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_openoap_domain_model_itemoption',
-                'foreign_table_where' => 'AND {#tx_openoap_domain_model_itemoption}.pid IN ( ###PAGE_TSCONFIG_IDLIST###) AND {#tx_openoap_domain_model_itemoption}.hidden = 0 AND {#tx_openoap_domain_model_itemoption}.{#sys_language_uid} IN (-1,0)',
                 'MM' => 'tx_openoap_formitem_itemoption_mm',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class .'->getAllElementsOfItemOptions',
+                'foreign_table_where' => 'AND {#tx_openoap_domain_model_itemoption}.{#type} IN (0)',
+                'itemsProcConfig' => [
+                    'model' => 'itemoption',
+                    'pidRoot' => 'pidItemOptions',
+                ],
+
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
@@ -340,8 +346,12 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_openoap_domain_model_itemvalidator',
-                'foreign_table_where' => 'AND {#tx_openoap_domain_model_itemvalidator}.pid IN (###PAGE_TSCONFIG_IDLIST###) AND {#tx_openoap_domain_model_itemvalidator}.hidden = 0 AND {#tx_openoap_domain_model_itemvalidator}.{#sys_language_uid} IN (-1,0)',
                 'MM' => 'tx_openoap_formitem_itemvalidator_mm',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class . '->getAllElementsOfItemValidators',
+                'itemsProcConfig' => [
+                    'model' => 'itemvalidator',
+                    'pidRoot' => 'pidItemValidator',
+                ],
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,

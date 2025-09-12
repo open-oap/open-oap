@@ -9,6 +9,9 @@
 			<trans-unit id="tx_openoap_domain_model_call.title" resname="tx_openoap_domain_model_call.title">
 				<source>Title</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.proposal_name" resname="tx_openoap_domain_model_call.proposal_name">
+				<source>Proposal name/type</source>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.intro_text" resname="tx_openoap_domain_model_call.intro_text">
 				<source>Intro Text</source>
 			</trans-unit>

@@ -1,5 +1,6 @@
 CREATE TABLE tx_openoap_domain_model_call (
 	title varchar(255) NOT NULL DEFAULT '',
+	proposal_name varchar(255) NOT NULL DEFAULT '',
 	intro_text text NOT NULL DEFAULT '',
 	teaser_text text NOT NULL DEFAULT '',
 	shortcut varchar(255) NOT NULL DEFAULT '',

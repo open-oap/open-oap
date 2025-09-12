@@ -17,7 +17,7 @@ Available variables:
         <f:if condition="{proposal.state} < {states.PROPOSAL_SUBMITTED} || {proposal.state} == {states.PROPOSAL_RE_OPENED}">
             <div class="notifications__edit-proposal">
                 <f:link.action pluginName="form" pageUid="{settings.formPageId}" action="edit" controller="Proposal" arguments="{proposal:proposal}" class="proposals__item-option proposals__item-option--edit">
-                    {f:translate(key:'tx_openoap_dashboard.proposal.linkEdit.title')}
+                    {f:translate(key: 'tx_openoap_dashboard.proposal.linkEdit.title', arguments: {0: '{call.proposalName}'}, default: 'proposal')}
                 </f:link.action>
             </div>
         </f:if>

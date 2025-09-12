@@ -26,19 +26,17 @@ return [
         '1' => [
             'showitem' => '
                 call_group, supporter, type, extern_link,
-                title, intro_text, teaser_text, shortcut, emails,
+                title, proposal_name, intro_text, teaser_text, shortcut, emails,
                 call_start_time, call_end_time, hint,
                 proposal_pid, form_pages, items, blocked_languages,
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.documents,
                     logo, --palette--;;wordDocPalette,
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource,
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, usergroup, starttime, endtime,
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_tab,
                     anonym, survey_codes
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
                     sys_language_uid, l10n_parent, l10n_diffsource,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
-                    hidden, usergroup, starttime, endtime,
+                    hidden, usergroup, starttime, endtime
             '],
     ],
     'palettes' => [
@@ -134,6 +132,16 @@ return [
                 'eval' => 'trim',
                 'default' => '',
                 'required' => true,
+            ],
+        ],
+        'proposal_name' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.proposal_name',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim,required',
+                'default' => 'proposal',
             ],
         ],
         'intro_text' => [

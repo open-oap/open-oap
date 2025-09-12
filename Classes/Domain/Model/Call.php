@@ -34,6 +34,14 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $title = '';
 
     /**
+     * ProposalName
+     *
+     * @var string
+     */
+    #[\TYPO3\CMS\Extbase\Annotation\Validate(['validator' => 'NotEmpty'])]
+    protected $proposalName = '';
+
+    /**
      * Intro text
      *
      * @var string
@@ -214,6 +222,22 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProposalName(): string
+    {
+        return $this->proposalName;
+    }
+
+    /**
+     * @param string $proposalName
+     */
+    public function setProposalName(string $proposalName): void
+    {
+        $this->proposalName = $proposalName;
     }
 
     /**
