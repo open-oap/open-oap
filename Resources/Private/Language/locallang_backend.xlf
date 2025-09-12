@@ -202,7 +202,10 @@
         <source>Calls found: </source>
     </trans-unit>
     <trans-unit id="table.call.count_submitted" resname="table.call.count_submitted">
-        <source>submitted</source>
+        <source>submitted or higher</source>
+    </trans-unit>
+    <trans-unit id="table.call.proposal_name" resname="table.call.proposal_name">
+        <source>Name/Type of proposal</source>
     </trans-unit>
     <trans-unit id="table.call.count_in_progress" resname="table.call.count_in_progress">
         <source>draft versions</source>
