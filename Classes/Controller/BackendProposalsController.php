@@ -14,6 +14,10 @@ use OpenOAP\OpenOap\Domain\Model\GroupTitle;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
 
+use OpenOAP\OpenOap\Service\ExcelExportService;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 use OpenOAP\OpenOap\Domain\Repository\SupporterRepository;
 use PhpOffice\PhpWord\Exception\Exception;
 use Psr\Http\Message\ResponseInterface;
@@ -168,6 +172,9 @@ class BackendProposalsController extends OapBackendController
                     case 'csv':
                         $this->exportCsv($selection['records']);
                         break;
+                    case 'excel':
+                        $this->exportExcel($selection['records']);
+                        break;
                     case 'downloadDocuments':
                         /** @var Folder $folder */
                         $folder = $this->createFolder();
@@ -270,7 +277,7 @@ class BackendProposalsController extends OapBackendController
             'filter' => $filter,
             'states' => $states,
             'filterSelects' => $filterSelects,
-            'exportFormats' => ['csv' => 'CSV', 'downloadDocuments' => 'Documents', 'pdf' => 'PDF'],
+            'exportFormats' => ['csv' => 'CSV', 'excel' => 'Excel', 'downloadDocuments' => 'Documents', 'pdf' => 'PDF'],
             'stateReopenedValue' => self::PROPOSAL_RE_OPENED,
             'actionName' => $this->actionMethodName,
             'paginator' => $pagination['array'],
@@ -850,6 +857,8 @@ class BackendProposalsController extends OapBackendController
         $head[$itemHeadRow] = [];
 
         $head[$itemHeadRow][$columnNo++] = 'ID (intern)';
+        $head[$itemHeadRow][$columnNo++] = 'Applicant-E-Mail (intern)';
+        $head[$itemHeadRow][$columnNo++] = 'Applicant-ID (intern)';
         $head[$itemHeadRow][$columnNo++] = 'Signature (intern)';
         $head[$itemHeadRow][$columnNo++] = 'State (intern)';
         $head[$itemHeadRow][$columnNo++] = 'Submitted';
@@ -937,12 +946,15 @@ class BackendProposalsController extends OapBackendController
         foreach ($proposals as $proposal) {
             $proposalUid = $proposal->getUid();
             $export[$proposalUid] = [];
-            $export[$proposalUid][0] = $proposalUid;
-            $export[$proposalUid][1] = $this->buildSignature($proposal);
-            $export[$proposalUid][2] = $states[$proposal->getState()];
-            $export[$proposalUid][3] = date("d.m.Y", $proposal->getSubmitTstamp());
-            $export[$proposalUid][4] = date("d.m.Y", $proposal->getEditTstamp());
-            $export[$proposalUid][5] = $proposal->getSurveyHash();
+            $colI = 0;
+            $export[$proposalUid][$colI++] = $proposalUid;
+            $export[$proposalUid][$colI++] = $proposal->getApplicant()->getEmail();
+            $export[$proposalUid][$colI++] = $proposal->getApplicant()->getUid();
+            $export[$proposalUid][$colI++] = $this->buildSignature($proposal);
+            $export[$proposalUid][$colI++] = $states[$proposal->getState()];
+            $export[$proposalUid][$colI++] = date("d.m.Y", $proposal->getSubmitTstamp());
+            $export[$proposalUid][$colI++] = date("d.m.Y", $proposal->getEditTstamp());
+            $export[$proposalUid][$colI++] = $proposal->getSurveyHash();
 
             /** @var Answer $answer */
             foreach ($proposal->getAnswers() as $answer) {
@@ -1021,6 +1033,40 @@ class BackendProposalsController extends OapBackendController
             }
             fputcsv($output, $lineData);
         }
+        die();
+    }
+
+    /**
+     * Excel export function with phpspreadsheet based on csv export function
+     *
+     * @param $records
+     * @throws InvalidQueryException
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    protected function exportExcel($records): void
+    {
+        /** @var ExcelExportService $excelExportService */
+        $excelExportService = GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\ExcelExportService::class);
+
+        $proposals = $this->proposalRepository->findByUids($records);
+
+        $excelExportService->setProposals($proposals);
+
+        // translations of state const for export
+        $states = $this->createStatesArray();
+        $excelExportService->setStates($states);
+
+        $excelExportService->setResourceFactory($this->resourceFactory);
+        $excelExportService->setSettings($this->settings);
+
+        $spreadsheet = $excelExportService->createSpreadsheet();
+        // Write to file
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'proposal-export--' . date('Ymd-Hi');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0, must-revalidate');
+        $writer->save('php://output');
         die();
     }
 
