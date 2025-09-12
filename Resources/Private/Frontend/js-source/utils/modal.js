@@ -24,7 +24,8 @@
             modalCancel,
             loaderWrapper;
 
-        const show = function (content, submit, cancel, trigger) {
+        const show = function (content, submit, cancel, form, trigger) {
+
             if (!modalWrapper || !loaderWrapper) {
                 return;
             }
@@ -48,11 +49,11 @@
 
             if (modalSubmit) {
                 modalSubmit.addEventListener('click', function () {
-                    trigger.dataset[dataSet.warningAccepted] = 1;
+                    form.dataset[dataSet.warningAccepted] = 1;
                     modal.hide();
 
                     // Submit from whichever button was originally clicked
-                    document.activeElement.click();
+                    trigger.click();
                     loaderWrapper.style.display = 'flex';
 
                 });
