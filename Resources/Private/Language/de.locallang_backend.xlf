@@ -208,7 +208,7 @@
             </trans-unit>
             <trans-unit id="action.preview_form" resname="action.preview_form">
                 <source>show form preview</source>
-                <target>show form preview</target>
+                <target>Formularvorschau anzeigen</target>
             </trans-unit>
             <!-- TABLE - calls -->
             <trans-unit id="table.call.countCalls" resname="table.call.countCalls">

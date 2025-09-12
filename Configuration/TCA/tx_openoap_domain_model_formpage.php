@@ -138,11 +138,11 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:formpage.type_default',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:formpage.type_default',
                         'value' => 0,
                     ],
                     [
-                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:formpage.type_preview',
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:formpage.type_preview',
                         'value' => 1,
                     ],
                 ],

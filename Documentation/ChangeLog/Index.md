@@ -2,10 +2,11 @@
 
 ## Version X.1
 
+- Allows the name or type of the linked proposals to be specified in the call (proposalName). Examples: proposal (default), concept, outline...
+- Refactoring xlf files - removes locallang_oap.xlf, locallang_oap_de.xlf
 - Repository refactoring (extended from ) OapAbstractRepository
 - Refactoring and extend DescendantsSelectItemsProcFunc for subfolder lists of call, pages, groups, items, options, validators
 - add pidItemValidator amd pidItemOptions: root folder IDs for Validators and Options (can be a comma separated list of PIDs) - use "global" as prefix of global folder
--
 
 ## Version X
 
