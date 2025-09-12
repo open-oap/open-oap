@@ -47,7 +47,8 @@
     const idRoot = 'oap-proposal-';
     const blockSubmit = true;
     const validatorSeparator = ',';
-    const errorIcon = '<svg class="form__icon form__icon--error" width="20" height="22" focusable="false" aria-hidden="true"> <use xlink:href="/_assets/d867b284b013b280ddc9dda86ad2fa21/Icons/sprite.svg#icon-error" x="0" y="0"/> </svg>';
+    const pathIconSvg = OAP.assetPath + 'Icons/sprite.svg';
+    const errorIcon = '<svg class="form__icon form__icon--error" width="20" height="22" focusable="false" aria-hidden="true"> <use xlink:href="' + pathIconSvg + '#icon-error" x="0" y="0"/> </svg>';
     let validationOnStart = false;
     let countId = 0;
     let validatableFormFields = [];
