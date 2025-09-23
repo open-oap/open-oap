@@ -207,6 +207,12 @@
 			<trans-unit id="tx_openoap_domain_model_formitem.additional_type" resname="tx_openoap_domain_model_formitem.additional_type">
 				<source>Type of Additional Value</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.additionalvaluetype_string" resname="tx_openoap_domain_model_formitem.additionalvaluetype_string">
+				<source>Text - single line</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.additionalvaluetype_text" resname="tx_openoap_domain_model_formitem.additionalvaluetype_text">
+				<source>Textarea</source>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_formitem.default_value" resname="tx_openoap_domain_model_formitem.default_value">
 				<source>Default Value</source>
 			</trans-unit>

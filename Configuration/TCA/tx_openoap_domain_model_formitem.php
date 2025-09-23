@@ -278,8 +278,8 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.additionalvaluetype_string', 'value' => 1],
-                    ['label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_oap.xlf:tx_openoap_domain_model_formitem.additionalvaluetype_text', 'value' => 2],
+                    ['label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.additionalvaluetype_string', 'value' => 1],
+                    ['label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.additionalvaluetype_text', 'value' => 2],
                     ],
                 'size' => 1,
                 'maxitems' => 1,
