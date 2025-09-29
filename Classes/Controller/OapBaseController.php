@@ -309,7 +309,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected const TEXTAREA_MEDIUM_MIN_CHARS = 300;
     protected const TEXTAREA_MEDIUM_MAX_CHARS = 1500;
-    
+
+    protected const PAGINATOR_ITEMS_PER_PAGE = 50;
+
     protected const SURVEY_URL_PARAMETER_CALLID = 'survey';
     protected const SURVEY_URL_PARAMETER_HASH = 'hash';
 
@@ -318,7 +320,6 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     // PAGINATOR VALUES
     protected const PAGINATOR_PAGES = 1;
     protected const PAGINATOR_ITEMS = 2;
-    protected const PAGINATOR_ITEMS_PER_PAGE = 1000;
     protected const PAGINATOR_SHOW_AFTER = 10;
     protected const PAGINATOR_SHOW_BEFORE = 10;
 
