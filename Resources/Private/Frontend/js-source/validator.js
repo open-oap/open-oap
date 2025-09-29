@@ -10,9 +10,14 @@
         // serverErrorList: '.form__error-list-box',
         serverErrorList: '[data-oap-servererror]',
         enableDisabledElements: '[type=checkbox][disabled], [type=radiobutton][disabled], select[disabled]',
+        additionalInput: {
+            textfield: '.form__textfield--additional',
+            textarea: '.form__textarea--additional',
+        }
     };
     const cssClass = {
         pseudoFileInput: 'form__upload-value',
+        additionalTextarea: 'form__textarea--additional',
         errorMessage: 'error-message',
         errorMessageLabel: 'form__label-question--error',
         errorMessageItem: 'error-message__item'
@@ -65,6 +70,12 @@
 
         if (type === 'TYPE_CHECKBOX' || type === 'TYPE_RADIOBUTTON') {
             insertionParent = formField.closest('.form__checkable-group');
+
+            formField.addEventListener('change', function () {
+                selectValues = {};
+
+                validateFormField(formField, type, validators, messageBox);
+            });
         }
 
         const messageBox = addMessageBox(insertionParent, formField);
@@ -174,6 +185,23 @@
                                 passed = true;
                             }
                         });
+
+                        // check if additional value required
+                        const additionalTextElement = document.querySelector('#' + formField.id).closest('.form__checkable-group').querySelector(selector.additionalInput.textfield + ',' + selector.additionalInput.textarea);
+
+                        if (additionalTextElement) {
+                            const ariaDescriptedByIds = additionalTextElement.getAttribute('aria-describedby');
+                            let regResult = ariaDesciptionByPattern.exec(ariaDescriptedByIds);
+
+                            if (regResult) {
+                                const additionalTextMessageBox =  document.querySelector('#' + regResult[0]);
+
+                                if (passed) {
+                                    additionalTextMessageBox.innerHTML = '';
+                                }
+
+                            }
+                        }
                         selectValues[parentId] = passed;
                     }
                     break;
@@ -188,6 +216,39 @@
                 }
                 case 'file': {
                     passed = true;
+                    break;
+                }
+                case 'textarea': {
+                    // special case for additional values for radiobuttons/checkboxes
+
+                    if (formField.classList.contains(cssClass.additionalTextarea)) {
+                        const parentId = document.querySelector('#' + formField.id).closest('.form__group').querySelector(':scope legend').id;
+                        const selectItems = document.querySelector('#' + formField.id).closest('.form__checkable-group').querySelectorAll('input.form__checkable');
+                        let lastSelectedItem = -1;
+
+                        formField.labelElement = document.querySelector('#' + parentId);
+                        selectItems.forEach(function (selectItem, index) {
+                            if (selectItem.checked) {
+                                passed = true;
+                                lastSelectedItem = index;
+                            }
+                        });
+                        // if last checkbox is checked the additional textarea shouldn't be empty
+                        messageBox.innerHTML = '';
+
+                        if (lastSelectedItem + 1 === selectItems.length && (!formField.value || formField.value === '')) {
+                            // in this case we give the error to the radiobutton element instead of the textarea
+                            showErrorMessage(messageBox, labels.JSMSG_MANDATORY, formField);
+                            passedValidation.relaxed = false;
+                            // fake passing
+                            passed = true;
+                        }
+                    } else if (!formField.value || formField.value === '') {
+                        // like default behaviour
+                        passed = false;
+
+                    }
+
                     break;
                 }
                 default: {

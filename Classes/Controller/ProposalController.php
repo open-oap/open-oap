@@ -441,6 +441,7 @@ class ProposalController extends OapFrontendController
             'proposalStates' => $this->getConstants()['PROPOSAL'],
             'commentStates' => $this->getConstants()['COMMENT'],
             'groupDisplayTypes' => $this->getConstants()['GROUPDISPLAY'],
+            'textareaCharLevels' => $this->getConstants()['TEXTAREA'],
             'answersMap' => $answersMap,
             'pageControl' => $pageControl,
             'itemAnswerMap' => $itemAnswerMap,
@@ -851,6 +852,7 @@ class ProposalController extends OapFrontendController
             'proposalStates' => $this->getConstants()['PROPOSAL'],
             'commentStates' => $this->getConstants()['COMMENT'],
             'groupDisplayTypes' => $this->getConstants()['GROUPDISPLAY'],
+            'textareaCharLevels' => $this->getConstants()['TEXTAREA'],
         ];
 
         $this->renderPdfView(self::EXPORT_TEMPLATE_PATH_PDF, $arguments);
@@ -1045,7 +1047,11 @@ class ProposalController extends OapFrontendController
                         }
                         break;
                     case self::VALIDATOR_MAXCHAR:
-                        $cleanedString = preg_replace('~[\n\r\t]~', '', $answer->getValue());
+                        $answerValue = $answer->getValue();
+                        if (!$answer->getItem()->isAdditionalValue()) {
+                            $answerValue = $answer->getAdditionalValue();
+                        }
+                        $cleanedString = preg_replace('~[\n\r\t]~', '', $answerValue);
                         if (mb_strlen($cleanedString) > (int)$validator->getParam1()) {
                             $this->setValidationResult(
                                 $validationResult,
