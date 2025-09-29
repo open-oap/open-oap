@@ -17,9 +17,9 @@ CREATE TABLE tx_openoap_domain_model_call (
 	enabled_format_word smallint(1) unsigned NOT NULL DEFAULT '0',
 	logo int(11) unsigned DEFAULT '0',
 	blocked_languages varchar(255) NOT NULL DEFAULT '',
-    word_styles text,
-    anonym tinyint(3) DEFAULT '0' NOT NULL,
-    survey_codes text,
+	word_styles text,
+	anonym tinyint(3) DEFAULT '0' NOT NULL,
+	survey_codes text,
 	assessment_items int(11) unsigned NOT NULL DEFAULT '0',
 	assessment_threshold int(11) unsigned NOT NULL DEFAULT '0',
 );
