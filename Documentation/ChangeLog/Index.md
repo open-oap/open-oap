@@ -13,6 +13,13 @@
 - add select for radiobuttons/checkboxes items to select type of additional field (string / textarea)
 - textfield size depending on maxChar validator
 
+## Version X+1
+
+- BE mpdule "OAP Proposals": The detail page of the proposals is supplemented by the display of meta data
+- BE module "OAP Proposals": Upload and filtering by external ratings
+- BE module "OAP Proposals": Extension to include back-end evaluation of applications by clerks
+- BE module "OAP Proposals": Improvement and adjustment of filtering in the backend using cookies, improvement of pagination, scrolling functions
+
 ## Version X
 
 - Enhanced compact Word export
