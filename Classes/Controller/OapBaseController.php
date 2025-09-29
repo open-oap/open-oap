@@ -304,6 +304,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const FLASH_MSG_PROPOSAL_NOT_FOUND = 'proposal_not_found';
     protected const FLASH_MSG_CALL_MISSING = 'proposal_access_denied';
 
+    protected const PAGINATOR_ITEMS_PER_PAGE = 50;
     /**
      * identifier for js-text - see open_oap/Resources/Private/Language/locallang.xlf
      */
@@ -318,7 +319,6 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     // PAGINATOR VALUES
     protected const PAGINATOR_PAGES = 1;
     protected const PAGINATOR_ITEMS = 2;
-    protected const PAGINATOR_ITEMS_PER_PAGE = 1000;
     protected const PAGINATOR_SHOW_AFTER = 10;
     protected const PAGINATOR_SHOW_BEFORE = 10;
 
