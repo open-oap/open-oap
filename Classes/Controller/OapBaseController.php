@@ -317,6 +317,18 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     protected const FE_GROUP_EDIT_IT = 3;
 
+    // PAGINATOR VALUES
+    protected const PAGINATOR_PAGES = 1;
+    protected const PAGINATOR_ITEMS = 2;
+    protected const PAGINATOR_ITEMS_PER_PAGE = 1000;
+    protected const PAGINATOR_SHOW_AFTER = 10;
+    protected const PAGINATOR_SHOW_BEFORE = 10;
+
+    // ASSESSMENT IMPORT COLUMN NAMES TO COMPARE
+    protected const PROPOSAL_ASSESSMENT_COLUMN_ID = 'id';
+    protected const PROPOSAL_ASSESSMENT_COLUMN_SCORE = 'pred_score';
+    protected const PROPOSAL_ASSESSMENT_COLUMN_ACTION = 'pred_action';
+
     /**
      * @var Applicant
      */
