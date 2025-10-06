@@ -133,6 +133,20 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $filterLabel = '';
 
     /**
+     * assessmentItem
+     *
+     * @var bool
+     */
+    protected $assessmentItem = false;
+
+    /**
+     * assessmentOnItem
+     *
+     * @var \OpenOAP\OpenOap\Domain\Model\FormItem|?
+     */
+    protected $assessmentOnItem;
+
+    /**
      * modificators
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormModificator>
@@ -586,4 +600,26 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->modificators = $modificators;
     }
+
+    public function isAssessmentItem(): bool
+    {
+        return $this->assessmentItem;
+    }
+
+    public function setAssessmentItem(bool $assessmentItem): void
+    {
+        $this->assessmentItem = $assessmentItem;
+    }
+
+    public function getAssessmentOnItem(): ?FormItem
+    {
+        return $this->assessmentOnItem;
+    }
+
+    public function setAssessmentOnItem(FormItem $assessmentOnItem): void
+    {
+        $this->assessmentOnItem = $assessmentOnItem;
+    }
+
+
 }

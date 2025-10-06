@@ -39,12 +39,22 @@
 			<trans-unit id="tx_openoap_domain_model_call.tab.documents" resname="tx_openoap_domain_model_call.tab.documents">
 				<source>Export documents</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.tab.assessment" resname="tx_openoap_domain_model_call.tab.assessment">
+				<source>Assessment</source>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.form_pages" resname="tx_openoap_domain_model_call.form_pages">
 				<source>Form Pages</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.form_items" resname="tx_openoap_domain_model_call.form_items">
 				<source>Items for submit page</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.form_assessment_items" resname="tx_openoap_domain_model_call.form_assessment_items">
+				<source>Items for an assessment (backend module)</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.form_assessment_threshold" resname="tx_openoap_domain_model_call.form_assessment_threshold">
+				<source>Threshold value for enable (backend module)</source>
+			</trans-unit>
+
 			<trans-unit id="tx_openoap_domain_model_call.word_styles" resname="tx_openoap_domain_model_call.word_styles">
 				<source>Word styles (json format)</source>
 			</trans-unit>
@@ -225,12 +235,21 @@
 			<trans-unit id="tx_openoap_domain_model_formitem.options" resname="tx_openoap_domain_model_formitem.options">
 				<source>Options</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.assessment_item" resname="tx_openoap_domain_model_formitem.assessment_item">
+				<source>This item is an assessment item</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.assessment_on_item" resname="tx_openoap_domain_model_formitem.assessment_on_item">
+				<source>Assessment based on this item</source>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_formitem.validators" resname="tx_openoap_domain_model_formitem.validators">
 				<source>Validators</source>
 			</trans-unit>
 
 			<trans-unit id="tx_openoap_domain_model_formitem.tab.meta" resname="tx_openoap_domain_model_formitem.tab.meta">
 				<source>Meta-Settings</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.tab.assessment" resname="tx_openoap_domain_model_formitem.tab.assessment">
+				<source>Assessment-Settings</source>
 			</trans-unit>
 
 			<trans-unit id="tx_openoap_domain_model_formitem.modificators" resname="tx_openoap_domain_model_formitem.modificators">
@@ -331,6 +350,15 @@
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_proposal.applicant" resname="tx_openoap_domain_model_proposal.applicant">
 				<source>Applicant</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.assessment_value" resname="tx_openoap_domain_model_proposal.assessment_value">
+				<source>Assessment value</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.imported_score" resname="tx_openoap_domain_model_proposal.imported_score">
+				<source>Imported Score</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_proposal.imported_action" resname="tx_openoap_domain_model_proposal.imported_action">
+				<source>Imported Action</source>
 			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_answer" resname="tx_openoap_domain_model_answer">
 				<source>Answer</source>

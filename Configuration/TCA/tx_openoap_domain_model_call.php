@@ -303,6 +303,9 @@ return [
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_openoap_domain_model_formitem',
                 'MM' => 'tx_openoap_call_formitem_mm',
+                'MM_match_fields' => [
+                    'fieldname' => 'items',
+                ],
 //                'foreign_table_where' ist replaced by itemsProcFunc
 //                'foreign_table_where' => 'AND {#tx_openoap_domain_model_formitem}.pid=###PAGE_TSCONFIG_ID### AND {#tx_openoap_domain_model_formitem}.hidden = 0 AND {#tx_openoap_domain_model_formitem}.{#sys_language_uid} IN (-1,0) AND {#tx_openoap_domain_model_formitem}.{#type} = ###PAGE_TSCONFIG_STR###',
                 'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class . '->getAllElementsOfFormItems',
@@ -332,6 +335,66 @@ return [
             ],
 
         ],
+        'assessment_items' => [
+            'exclude' => false,
+            'l10n_display' => 'defaultAsReadonly',
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.form_assessment_items',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'tx_openoap_domain_model_formitem',
+                'MM' => 'tx_openoap_call_formitem_mm',
+                'itemsProcFunc' => \OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc::class . '->getAllElementsOfFormItems',
+                'itemsProcConfig' => [
+                    'model' => 'formitem',
+                    'pidRoot' => 'pidFormItems',
+                    'types' => [2, 5, 6],
+                ],
+                'MM_match_fields' => [
+                    'fieldname' => 'assessment_items',
+                ],
+
+                'size' => 10,
+                'autoSizeMax' => 30,
+                'maxitems' => 9999,
+                'multiple' => 0,
+                'fieldControl' => [
+                    'editPopup' => [
+                        'disabled' => false,
+                    ],
+                    'addRecord' => [
+                        'disabled' => false,
+                        'options' => [
+                            'pid' => '###PAGE_TSCONFIG_ID###',
+                        ],
+                    ],
+                    'listModule' => [
+                        'disabled' => true,
+                    ],
+                ],
+            ],
+        ],
+        'assessment_threshold' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.form_assessment_threshold',
+            'config' => [
+                'type' => 'input',
+                'size' => 5,
+                'eval' => 'trim,int',
+                'range' => [
+                    'lower' => 0,
+                    'upper' => 10,
+                ],
+                'default' => 0,
+                'slider' => [
+                    'step' => 1,
+                    'width' => 200,
+                ],
+            ],
+        ],
+
         'usergroup' => [
             'exclude' => false,
             'l10n_mode' => 'exclude',

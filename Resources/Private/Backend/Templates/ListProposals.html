@@ -20,9 +20,14 @@ Available variables:
         <v:variable.set name="itemsPerPage" value="{filter.itemsPerPage}" />
         <f:flashMessages />
 
-        <h2 style="margin-bottom:3rem;"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.list_of_proposals"/>: {call.title}</h2>
-        <f:form action="listProposals">
+        <p style="margin-bottom:0;"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.list_of_proposals"/>:</p>
+        <h2 style="margin-bottom:2rem;margin-top:0;">{call.title}</h2>
+
+        <f:render partial="ProposalList/UploadForm.html" arguments="{_all}" />
+
+        <f:form action="listProposals" enctype="multipart/form-data">
             <f:form.hidden value="{call}" name="call" />
+
             <div class="form-inline">
                 <fieldset class="form-group">
                     <label>
@@ -36,6 +41,36 @@ Available variables:
                                 class="form-select"
                         />
                     </label>
+                    <f:if condition="{importedFilterShow}">
+                    <label>
+                        Imported Action:<br />
+                        <f:form.select
+                            name="filter[imported_action_value]"
+                            value="{filter.imported_action_value}"
+                            options="{importedAction.filter}"
+                            optionValueField="key"
+                            optionLabelField="label"
+                            prependOptionLabel="All actions"
+                            prependOptionValue="-1"
+                            class="form-select"
+                        />
+                    </label>
+                    </f:if>
+                    <f:if condition="{assessmentFilterShow}">
+                    <label>
+                        Rating*<f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.rating" />:<br />
+                        <f:form.select
+                            name="filter[assessment_value]"
+                            value="{filter.assessment_value}"
+                            options="{ratings.filter}"
+                            optionValueField="key"
+                            optionLabelField="label"
+                            prependOptionLabel="All ratings *<f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:filter.ratings.all' />"
+                            prependOptionValue="-1"
+                            class="form-select"
+                        />
+                    </label>
+                    </f:if>
                 </fieldset>
 
                 <f:render section="DynamicFilter" arguments="{_all}" />
@@ -178,6 +213,10 @@ Available variables:
                 <th nowrap="nowrap">
                     <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.signature\')}', sortField:'signature', sorted:sorted, call:call, filter:filter, currentPage: currentPage}" />
                 </th>
+                <!-- assessmentValue -->
+                <th nowrap="nowrap" >
+                    <f:render section="ColHeader" arguments="{title:'Rating*{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.assessment\')}', sortField:'assessmentValue', sorted:sorted, call:call, filter:filter}" />
+                </th>
                 <!-- state -->
                 <th nowrap="nowrap">
                     <f:render section="ColHeader" arguments="{title:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.state\')}', sortField:'state', sorted:sorted, call:call, filter:filter, currentPage: currentPage}" />
@@ -237,6 +276,12 @@ Available variables:
                             <f:if condition="{call.shortcut} !== ''">{call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
                         </f:if>
 
+                    </td>
+                    <td nowrap="nowrap" class="col-title col--number__right" style="text-align:right;">
+                        <f:if condition="{proposal.assessmentValue} !== ''">{proposal.assessmentValue}<br></f:if>
+                        <f:if condition="{proposal.imported_action}">
+                            {proposal.imported_action} ({proposal.imported_score})
+                        </f:if>
                     </td>
                     <td nowrap="nowrap" class="col-title">
                         <f:translate key="tx_openoap_domain_model_proposal.state.{proposal.state}" />

@@ -19,14 +19,17 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 use OpenOAP\OpenOap\Domain\Repository\SupporterRepository;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpWord\Exception\Exception;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
@@ -45,6 +48,9 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class BackendProposalsController extends OapBackendController
 {
+    const SESSION_TAG_OAP_PROPOSAL_BACKEND = 'oapProposalBackend';
+
+
     /**
      * overview page
      */
@@ -151,6 +157,9 @@ class BackendProposalsController extends OapBackendController
      */
     public function listProposalsAction(?Call $call = null, array $filter = [], array $selection = [], int $currentPage = 1, int $itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE): ResponseInterface
     {
+        $userSession = $GLOBALS['BE_USER']->getSession();
+        $sessionStoredData = $userSession->get(self::SESSION_TAG_OAP_PROPOSAL_BACKEND);
+
         if(is_null($call)) {
             return $this->redirect('showOverviewCalls' , 'BackendProposals');
         }
@@ -165,8 +174,25 @@ class BackendProposalsController extends OapBackendController
         }
         $filter['call'] = $call->getUid();
 
+        $allThresholds = [];
+        if ($call->getAssessmentThreshold() > 0) {
+            // build filter even for AssessmentThreshold
+            try {
+                $allThresholds = $this->proposalRepository->fetchAssessmentThresholdsByCall($call);
+            } catch (DBALException $e) {
+            } catch (\Doctrine\DBAL\Driver\Exception $e) {
+            }
+        }
+
         // update state of proposal selection
         if (count($selection) > 0 && is_array($selection['records'])) {
+            if ($selection['todo'] == 'submit-assessment') {
+                // forwarding to the assessment detail page with the list of ids from selection
+                if ($selection['records'][0]) {
+                    $proposal = $this->proposalRepository->findByUid($selection['records'][0]);
+                    return (new ForwardResponse('showProposal'))->withArguments(['proposal' => $proposal, 'selection' => $selection]);
+                }
+            }
             if ($selection['todo'] == 'submit-export') {
                 switch ($selection['export']) {
                     case 'csv':
@@ -233,70 +259,105 @@ class BackendProposalsController extends OapBackendController
         $allItems = $this->getItemsOfCall($call);
         $states['filter'] = $this->createStatesArray('selected');
         $states['task'] = $this->createStatesArray('task');
+        $ratings['filter'] = [];
 
-        $filterSelects = [];
-        /** @var FormItem $filterItem */
-        foreach ($allItems as $filterItem) {
-            if ($filterItem->getEnabledFilter()) {
-                $filterSelects[$filterItem->getUid()]['item'] = $filterItem;
-                foreach ($filterItem->getOptions() as $optionItem) {
-                    $itemOptionsArray = explode("\r\n", $optionItem->getOptions());
-                    foreach ($itemOptionsArray as $itemOption) {
-                        $itemOption = $this->cleanupOptionItem($itemOption);
-                        if ($itemOption !== '') {
-                            $filterSelects[$filterItem->getUid()]['options'][$itemOption['key']] = $itemOption['label'];
-                        }
-                    }
-                }
+        $importedAction['filter'] = $this->proposalRepository->fetchImportedActionsByCall($call);
+        $importedFilterShow = false;
+        if (count($importedAction['filter']) > 0) {
+            $importedFilterShow = true;
+        }
+
+        $assessmentFilterShow = false;
+        foreach ($allThresholds as $thresholdItem) {
+            $assessmentFilterShow = true;
+            $thresholdItemLabel = $thresholdItem;
+            if ($thresholdItem == '') {
+                $thresholdItemLabel = 'not rated yet**';
             }
+            $ratings['filter'][] = ['key' => $thresholdItem,'label' => $thresholdItemLabel];
         }
-
-        $sorting = [];
-        $sortRev = null;
-        $sortField = null;
-
-        if ($this->request->hasArgument('sortField')) {
-            $sortField = htmlspecialchars($this->request->getArgument('sortField'));
-            $sortRev = (int)($this->request->getArgument('sortRev'));
-            if ($sortRev == 1) {
-                $sorting = ['field' => $sortField, 'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING];
-            } else {
-                $sorting = ['field' => $sortField, 'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING];
-            }
-        }
-        else {
-            $sorting = ['field' => 'signature', 'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING];
-        }
-
-        $allItems = $this->proposalRepository->findDemanded($call->getProposalPid(), self::STATE_ACCESS_MIN_FILTER, $filter, $sorting);
-        $pagination = $this->createPaginator($allItems, $currentPage, (int)$filter['itemsPerPage']);
+        $ratings['filter'][] = ['key' => "threshold",'label' => 'threshold ** ('.$call->getAssessmentThreshold().')'];
+        $filterSelects = $this->applyFilter($allItems);
+        $sorting = $this->buildSorting();
+        $allItems = $this->proposalRepository->findDemanded($call->getProposalPid(), self::STATE_ACCESS_MIN_FILTER, $call->getAssessmentThreshold(), $filter, $sorting);
+        $pagination = $this->createPaginator($allItems, $currentPage, (int) $filter['itemsPerPage']);
 
         $this->view->assignMultiple([
             'proposalStates' => $this->getConstants()['PROPOSAL'],
             'countOfItems' => count($allItems),
             'filter' => $filter,
             'states' => $states,
+            'ratings' => $ratings,
+            'importedAction' => $importedAction,
             'filterSelects' => $filterSelects,
             'exportFormats' => ['csv' => 'CSV', 'excel' => 'Excel', 'downloadDocuments' => 'Documents', 'pdf' => 'PDF'],
             'stateReopenedValue' => self::PROPOSAL_RE_OPENED,
             'actionName' => $this->actionMethodName,
             'paginator' => $pagination['array'],
             'pagination' => $pagination['pagination'],
-            'sorted' => ['sortField' => $sortField, 'sortRev' => $sortRev],
+            'sorted' => ['sortField' => $sorting['field'], 'sortRev' => $sorting['revert']],
             'call' => $call,
-            'currentPage' => $currentPage
+            'paginatorPageDirectLink' => true,
+            'assessmentFilterShow' => $assessmentFilterShow,
+            'importedFilterShow' => $importedFilterShow,
         ]);
 
+        $dataCollection = ['filter' => $filter, 'sorting' => $sorting, 'selection' => $selection, 'currentPage' => $currentPage, 'itemsPerPage' => $itemsPerPage];
+        $userSession->set(self::SESSION_TAG_OAP_PROPOSAL_BACKEND,$dataCollection);
         return $this->htmlResponse();
+    }
+
+    /**
+     * @param Call $call
+     * @param array $upload
+     * @return ResponseInterface
+     */
+    public function uploadAssessmentExcelAction(Call $call, array $upload = []): ResponseInterface
+    {
+        $call = $this->importXlsxData($call, $upload);
+        return (new ForwardResponse('listProposals'))->withArguments(['call' => $call]);
     }
 
     /**
      * @param Proposal $proposal
      * @return ResponseInterface
      */
-    public function showProposalAction(Proposal $proposal): ResponseInterface
+    public function showProposalAction(Proposal $proposal, array $filter = [], array $selection = [], int $currentPage = 0): ResponseInterface
     {
+        $userSession = $GLOBALS['BE_USER']->getSession();
+        $sessionStoredData = $userSession->get(self::SESSION_TAG_OAP_PROPOSAL_BACKEND);
+
         $updateProposal = false;
+        $call = $proposal->getCall();
+        $filter = !empty($sessionStoredData['filter']) ? $sessionStoredData['filter'] : $filter;
+
+        $states['filter'] = $this->createStatesArray('selected', $call);
+        $states['task'] = $this->createStatesArray('task', $call);
+
+        $sorting = !empty($sessionStoredData['sorting']) ? $sessionStoredData['sorting'] : ['direction' => '', 'field' => '', 'revert' => false];;
+
+        $allItems = $this->proposalRepository->findDemanded($call->getProposalPid(), self::STATE_ACCESS_MIN_FILTER, $call->getAssessmentThreshold(), $filter, $sorting);
+        // change the proposal to the one from the paginator
+        // $currentPage
+        if ($this->request->hasArgument('download')) {
+            // in case of download call... use the given proposal
+            $proposalId = $proposal->getUid();
+        } else {
+            if ($currentPage == 0) {
+                // change current page to the selected one
+                foreach ($allItems as $pageCounter => $proposalItem) {
+                    if ($proposalItem['uid'] == $proposal->getUid()) {
+                        $currentPage = $pageCounter + 1;
+                    }
+                }
+            } else {
+                $proposalId = $allItems[$currentPage - 1]['uid'];
+                $proposal = $this->proposalRepository->findByUid((integer) $proposalId);
+            }
+
+            $pagination = $this->createPaginator($allItems, $currentPage, 1,self::PAGINATOR_ITEMS);
+        }
+
 
         // Update proposal state
         if ($this->request->hasArgument('selection') && is_array($this->request->getArgument('selection'))) {
@@ -406,6 +467,82 @@ class BackendProposalsController extends OapBackendController
             $this->renderPdfView(self::EXPORT_TEMPLATE_PATH_PDF, $pdfArguments);
         }
 
+        // create assessment data
+        $assessmentItems = $proposal->getCall()->getAssessmentItems();
+
+        $assessmentMap = [];
+        $assessmentValues = [];
+        /** @var Answer $assessmentAnswer */
+
+        if ($this->request->hasArgument('task')) {
+            if ($this->request->getArgument('task') == 'assessment') {
+                // catch assessment data
+                $allAssessmentAnswers = $proposal->getAssessmentAnswers();
+                // DebuggerUtility::var_dump($allAssessmentAnswers,(string)__LINE__);
+                $proposal->setAssessmentValue('0');
+
+                $beUserUid = $GLOBALS['BE_USER']->user['uid'];
+                /** @var \TYPO3\CMS\Beuser\Domain\Model\BackendUser $beUser */
+                $beUser = GeneralUtility::makeInstance(BackendUserRepository::class)->findByUid($beUserUid);
+
+                $proposal->setReviewer($beUser);
+                $now = new \DateTime();
+                $proposal->setReviewTime($now);
+                foreach ($allAssessmentAnswers as $assessmentAnswer) {
+                    if (in_array($assessmentAnswer->getItem()->getType(),[self::TYPE_CHECKBOX, self::TYPE_RADIOBUTTON, self::TYPE_SELECT_SINGLE, self::TYPE_SELECT_MULTIPLE])) {
+                        if (count($assessmentAnswer->getArrayValue())) {
+                            $assessmentAnswer->setValue(json_encode($assessmentAnswer->getArrayValue(), JSON_FORCE_OBJECT));
+                            foreach ($assessmentAnswer->getArrayValue() as $value) {
+                                $newValueInt = (integer) $proposal->getAssessmentValue() + (integer) $value;
+                                $proposal->setAssessmentValue((string) $newValueInt);
+                            }
+                        } else {
+                            $newValueInt = (integer) $proposal->getAssessmentValue() + (integer) $assessmentAnswer->getValue();
+                            $proposal->setAssessmentValue((string) $newValueInt);
+                        }
+                    }
+                    // DebuggerUtility::var_dump($assessmentAnswer->getValue(),(string)__LINE__);
+                    $this->answerRepository->update($assessmentAnswer);
+                }
+                // update proposal assessment data
+            }
+            $this->proposalRepository->update($proposal);
+            $this->persistenceManager->persistAll();
+        }
+        if ($proposal->getAssessmentAnswers()) {
+
+            foreach ($proposal->getAssessmentAnswers() as $assessmentAnswer) {
+                if ($assessmentAnswer->getItem()) {
+                    $assessmentValues[$assessmentAnswer->getItem()->getUid()] = $assessmentAnswer;
+                    if (is_object(json_decode($assessmentAnswer->getValue()))) {
+                        $assessmentAnswer->setArrayValue(json_decode($assessmentAnswer->getValue(), true));
+                    }
+                }
+            }
+        }
+
+        $newAnswers = false;
+        /** @var FormItem $assessmentItem */
+        foreach ($assessmentItems as $assessmentItem) {
+            $this->getOptionsToItemsMap($assessmentItem,$assessmentMap);
+
+            if (!isset($assessmentValues[$assessmentItem->getUid()])) {
+                $newAnswers = true;
+                $newAssessmentAnswer = new Answer();
+                $newAssessmentAnswer->setItem($assessmentItem);
+                $newAssessmentAnswer->setPid((int)$this->settings['answersPoolId']);
+                $newAssessmentAnswer->setValue('');
+                $newAssessmentAnswer->setArrayValue([]);
+                $this->answerRepository->add($newAssessmentAnswer);
+                $proposal->addAssessmentAnswer($newAssessmentAnswer);
+                $assessmentValues[$assessmentItem->getUid()] = $newAssessmentAnswer;
+            }
+        }
+        if ($newAnswers) {
+            $this->proposalRepository->update($proposal);
+            $this->persistenceManager->persistAll();
+        }
+
         $this->view->assignMultiple([
             'comments' => $comments,
             'itemTypes' => $this->getConstants()['TYPE'],
@@ -421,6 +558,16 @@ class BackendProposalsController extends OapBackendController
             'annotationButtonEnabled' => $proposal->getState() != self::PROPOSAL_RE_OPENED,
             'limitEditableFields' => $limitEditableFields,
             'call' => $proposal->getCall(),
+            'paginator' => $pagination['array'],
+            'paginationButtons' => $pagination['buttons'],
+            'allItems' => $allItems,
+            'pagination' => $pagination['pagination'],
+            'paginationShow' => $pagination['show'],
+            'filter' => $filter,
+            'sorted' => ['sortField' => $sorting['field'], 'sortRev' => $sorting['revert']],
+            'paginatorPageDirectLink' => false,
+            'assessmentsMap' => $assessmentMap,
+            'assessmentValues' => $assessmentValues,
         ]);
 
         return $this->htmlResponse();
@@ -522,6 +669,189 @@ class BackendProposalsController extends OapBackendController
         ]);
 
         return $this->htmlResponse();
+    }
+
+    /**
+     * Upload xlsx file and import external data to the proposals of the given call
+     *
+     * @param Call $call
+     * @param array $upload
+     * @return Call $call
+     */
+    public function importXlsxData(Call $call, array $upload): Call
+    {
+        if (array_key_exists('name', $upload) == false) {
+            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.file_upload_failed'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            return $call;
+        }
+
+        if ($upload['error'] !== 0) {
+            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.file_upload_error'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            return $call;
+        }
+
+        $extensionConfiguration = $this->extensionConfiguration->get('open_oap');
+        $proposalAssessmentImportColumnNames = $extensionConfiguration['proposalAssessmentImportColumnNames'] ?? '';
+        $proposalAssessmentImportColumnNames = GeneralUtility::trimExplode(',', $proposalAssessmentImportColumnNames, true);
+        $idNameKey = array_search(self::PROPOSAL_ASSESSMENT_COLUMN_ID, $proposalAssessmentImportColumnNames);
+        $scoreNameKey = array_search(self::PROPOSAL_ASSESSMENT_COLUMN_SCORE, $proposalAssessmentImportColumnNames);
+        $actionNameKey = array_search(self::PROPOSAL_ASSESSMENT_COLUMN_ACTION, $proposalAssessmentImportColumnNames);
+
+        if ($idNameKey === false || $scoreNameKey === false || $actionNameKey === false) {
+            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.data_import_failed'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            return $call;
+        }
+
+        $tempFilePath = GeneralUtility::upload_to_tempfile($upload['tmp_name']);
+
+        $spreadsheet = IOFactory::load($tempFilePath);
+
+        // Data are assumed in the first sheet
+        $sheet = $spreadsheet->getSheet(0);
+
+        // First row and last column identifier
+        $highestRow = $sheet->getHighestRow();
+        $highestColumn = $sheet->getHighestColumn();
+
+        // Array for collecting data we want to import
+        $importData = [];
+
+        $signatures = [];
+        $signatureNotFound = [];
+
+        $callShortcut = $call->getShortcut();
+        for ($row = 1; $row <= $highestRow; $row++) {
+            // In the first row we are looking for the columns we need by header name
+            if ($row === 1) {
+                $headerRowData = $sheet->rangeToArray('A1:' . $highestColumn . '1', NULL, TRUE, FALSE);
+                foreach ($headerRowData[0] as $key => $value) {
+                    if ($value == $proposalAssessmentImportColumnNames[$idNameKey]) {
+                        $idColumn = $key;
+                    } elseif ($value == $proposalAssessmentImportColumnNames[$scoreNameKey]) {
+                        $scoreColumn = $key;
+                    } elseif ($value == $proposalAssessmentImportColumnNames[$actionNameKey]) {
+                        $actionColumn = $key;
+                    }
+                }
+                continue;
+            }
+            // Loop through the rows and columns collecting the selected data we need
+            $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
+            if (!$rowData[0][$idColumn]) {
+                continue;
+            }
+            $importSignature = $rowData[0][$idColumn];
+            $proposalSignatureIdentifier = $this->rebuildProposalSignatureFromSignature($importSignature, $callShortcut);
+            if ($proposalSignatureIdentifier > 0) {
+                $score = $rowData[0][$scoreColumn];
+                $action = $rowData[0][$actionColumn];
+                $importData[$proposalSignatureIdentifier] = [
+                    'signature' => $importSignature,
+                    'import_score' => $score,
+                    'import_action' => $action
+                ];
+                $signatures[] = $proposalSignatureIdentifier;
+            } else {
+                $signatureNotFound[] = $rowData[0][$idColumn];
+            }
+        }
+
+        $scoreImportNew = 0;
+        $scoreImportNoChanges = 0;
+        $scoreImportUpdated = [];
+        $actionImportNew = 0;
+        $actionImportNoChanges = 0;
+        $actionImportUpdated = [];
+        foreach ($importData as $signatureKey => $import) {
+            $doUpdate = false;
+
+            $proposalResult = $this->proposalRepository->findBySignatures([$signatureKey], $call->getProposalPid());
+
+            $proposal = $proposalResult->getFirst();
+            $proposalSignature = $proposal->getSignature();
+
+            $signatureOfImport = $importData[$proposalSignature]['signature'];
+            // the score value to import
+            $scoreToImport = (string)$importData[$proposalSignature]['import_score'];
+            // the action value to import
+            $actionToImport = $importData[$proposalSignature]['import_action'];
+            // the imported_score value of the proposal
+            $proposalScore = $proposal->getImportedScore();
+            // the imported_action value of the proposal
+            $proposalAction = $proposal->getImportedAction();
+
+            // CASE 1: the score value is initially imported to the proposal
+            if ($proposalScore == '' && $scoreToImport != '') {
+                $proposal->setImportedScore($scoreToImport);
+                $doUpdate = true;
+                $scoreImportNew++;
+
+                // CASE 2: an already existing score value of the proposal is updated by the import value
+            } elseif ($proposalScore != '' && $scoreToImport != '' && $proposalScore != $scoreToImport) {
+                $proposal->setImportedScore($scoreToImport);
+                $doUpdate = true;
+                $scoreImportUpdated[] = $signatureOfImport;
+
+                // CASE 3: the score value of the proposal and the import value are the same, no import is done
+            } elseif ($proposalScore == $scoreToImport) {
+                $scoreImportNoChanges++;
+            }
+
+            // CASE 1: the action value is initially imported to the proposal
+            if ($proposalAction == '' && $actionToImport != '') {
+                $proposal->setImportedAction($actionToImport);
+                $doUpdate = true;
+                $actionImportNew++;
+
+                // CASE 2: an already existing import_action value of the proposal is updated by the import
+            } elseif ($proposalAction != '' && $actionToImport != '' && $proposalAction != $actionToImport) {
+                $proposal->setImportedAction($actionToImport);
+                $doUpdate = true;
+                $actionImportUpdated[] = $signatureOfImport;
+
+                // CASE 3: the import_action value of the proposal and the action value of the import are the same, no import is done
+            } elseif ($proposalAction == $actionToImport) {
+                $actionImportNoChanges++;
+            }
+
+            if ($doUpdate) {
+                $this->proposalRepository->update($proposal);
+            }
+
+        }
+        $this->persistenceManager->persistAll();
+
+        $LINEBREAK = "\r\n";
+        $successMessage = "The import results:" . $LINEBREAK;
+        $successMessage .= "Values:" . $LINEBREAK;
+        $successMessage .= '- new score values inserted: ' . $scoreImportNew . $LINEBREAK;
+        $successMessage .= '- score values without change: ' . $scoreImportNoChanges . $LINEBREAK;
+        $successMessage .= '- score values overwritten: ' . count($scoreImportUpdated);
+        if (count($scoreImportUpdated) > 0) {
+            $successMessage .= ' (' . implode(', ', $scoreImportUpdated) . ')';
+        }
+        $successMessage .= $LINEBREAK;
+        $successMessage .= 'Actions: ' . $LINEBREAK;
+        $successMessage .= '- new action values entered: ' . $actionImportNew . $LINEBREAK;
+        $successMessage .= '- action values without change: ' . $actionImportNoChanges . $LINEBREAK;
+        $successMessage .= '- action values overwritten : ' . count($actionImportUpdated);
+        if (count($actionImportUpdated) > 0) {
+            $successMessage .= ' (' . implode(', ', $actionImportUpdated) . ')' . $LINEBREAK;
+        }
+        $this->addFlashMessage($successMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
+
+        if (count($signatureNotFound) > 0) {
+            $warningMessage = count($signatureNotFound) . ' proposal(s) were not found (' . implode(', ', $signatureNotFound) . '). ';
+            $this->addFlashMessage($warningMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
+        }
+
+        $lastMessage = ' To update the results below after an import, please click the search button.';
+        $this->addFlashMessage($lastMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO);
+
+        // The file is no longer needed
+        unlink($tempFilePath);
+
+        return $call;
     }
 
     /**
@@ -864,6 +1194,14 @@ class BackendProposalsController extends OapBackendController
         $head[$itemHeadRow][$columnNo++] = 'Submitted';
         $head[$itemHeadRow][$columnNo++] = 'Last Changed';
         $head[$itemHeadRow][$columnNo++] = 'Survey (Hash)';
+        $head[$itemHeadRow][$columnNo++] = 'Assessment (intern)';
+        $head[$itemHeadRow][$columnNo++] = 'Reviewer (intern)';
+        $head[$itemHeadRow][$columnNo++] = 'Reviewed on (intern)';
+
+        /** @var FormItem $assessmentItem */
+        foreach ($proposals[0]->getCall()->getAssessmentItems() as $assessmentItem) {
+            $head[$itemHeadRow][$columnNo++] = $assessmentItem->getQuestion();
+        }
 
         // calculate group repeats
         $groupsCounter = [];
@@ -956,6 +1294,43 @@ class BackendProposalsController extends OapBackendController
             $export[$proposalUid][$colI++] = date("d.m.Y", $proposal->getEditTstamp());
             $export[$proposalUid][$colI++] = $proposal->getSurveyHash();
 
+            $value = (string) $proposal->getAssessmentValue();
+            if ($value == '') {
+                $value = '--';
+            }
+            if ((string) $value == '0' OR (integer) $value == 0) {
+                $value = '0 ';
+            }
+            $export[$proposalUid][$colI++] = $value;
+            $reviewerName = '';
+            if ($proposal->getReviewer()) {
+                $reviewerName = $proposal->getReviewer()->getRealName();
+                if ($reviewerName == '') {
+                    $reviewerName = $proposal->getReviewer()->getUserName();
+                }
+            }
+            $export[$proposalUid][$colI++] = $reviewerName;
+            $reviewTime = '';
+            if ($proposal->getReviewTime()) {
+                $reviewTime = $proposal->getReviewTime()->format('Y-m-d H:i');
+            }
+            $export[$proposalUid][$colI++] = $reviewTime;
+
+            /** @var Answer $assessmentAnswer */
+            foreach ($proposal->getAssessmentAnswers() as $assessmentAnswer) {
+                $valueArray = [];
+                if (is_array(json_decode($assessmentAnswer->getValue(), true))) {
+                    $valueArray = json_decode($assessmentAnswer->getValue(), true);
+                } else {
+                    $valueArray = [$assessmentAnswer->getValue()];
+                }
+                foreach ($valueArray as $i => $valueItem) {
+                    if (is_integer((integer) $valueItem) AND $valueItem === '0') {
+                            $valueArray[$i] = $valueItem.' ';
+                    }
+                }
+                $export[$proposalUid][$colI++] = join(',',$valueArray);
+            }
             /** @var Answer $answer */
             foreach ($proposal->getAnswers() as $answer) {
                 $value = $answer->getValue();
@@ -1110,6 +1485,86 @@ class BackendProposalsController extends OapBackendController
         } catch (\Throwable) {
             return 'en';
         }
+    }
+
+    /**
+     * @param array $allItems
+     * @return array
+     */
+    private function applyFilter(array $allItems): array
+    {
+        $filterSelects = [];
+        /** @var FormItem $filterItem */
+        foreach ($allItems as $filterItem) {
+            if ($filterItem->getEnabledFilter()) {
+                $filterSelects[$filterItem->getUid()]['item'] = $filterItem;
+                foreach ($filterItem->getOptions() as $optionItem) {
+                    $itemOptionsArray = explode("\r\n", $optionItem->getOptions());
+                    foreach ($itemOptionsArray as $itemOption) {
+                        $itemOption = $this->cleanupOptionItem($itemOption);
+                        if ($itemOption !== '') {
+                            $filterSelects[$filterItem->getUid()]['options'][$itemOption['key']] = $itemOption['label'];
+                        }
+                    }
+                }
+            }
+        }
+        return $filterSelects;
+    }
+
+    /**
+     * @return array
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     */
+    private function buildSorting(): array
+    {
+        $sorting = [];
+        $sortField = 'signature';
+        $sortRevert = 0;
+
+        // two cases of transmitted values, one nested, one directly
+        if ($this->request->hasArgument('sorted')) {
+            $sortField = htmlspecialchars($this->request->getArgument('sorted')['sortField']);
+            $sortRevert = (int)($this->request->getArgument('sorted')['sortRev']);
+        }
+        if ($this->request->hasArgument('sortField')) {
+            $sortField = htmlspecialchars($this->request->getArgument('sortField'));
+            $sortRevert = (int)($this->request->getArgument('sortRev'));
+        }
+        if ($sortField !== '') {
+            if ($sortRevert == 1) {
+                $sorting = [
+                    'field' => $sortField,
+                    'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
+                ];
+            } else {
+                $sorting = [
+                    'field' => $sortField,
+                    'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+                ];
+            }
+            $sorting['revert'] = $sortRevert;
+        }
+        return $sorting;
+    }
+
+    /**
+     * @param array $filter
+     * @param int $itemsPerPage
+     * @param Call $call
+     * @return array
+     */
+    private function getFilter(array $filter, int $itemsPerPage, Call $call): array
+    {
+        if (isset($filter['todo']) and $filter['todo'] == 'clear') {
+            $filter = [];
+        }
+
+        if (!isset($filter['itemsPerPage'])) {
+            $filter['itemsPerPage'] = $itemsPerPage;
+        }
+        $filter['call'] = $call->getUid();
+        return $filter;
     }
 
     /**

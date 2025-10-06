@@ -453,7 +453,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         FormItemRepository $formItemRepository,
         ItemOptionRepository $itemOptionRepository,
         PersistenceManager $persistenceManager,
-        CallGroupRepository $callGroupRepository
+        CallGroupRepository $callGroupRepository,
+        protected readonly ExtensionConfiguration $extensionConfiguration
     ) {
         $this->applicantRepository = $applicantRepository;
         $this->callRepository = $callRepository;
@@ -1190,6 +1191,18 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $signature .=  sprintf($this->settings['signatureFormat'], (int)$proposal->getSignature());
         return $signature;
+    }
+
+    /**
+     * @param string $signature
+     * @param string $shortCut
+     * @return int
+     */
+    protected function rebuildProposalSignatureFromSignature(string $signature, string $shortcut): int
+    {
+        $explodedSignature = GeneralUtility::trimExplode($shortcut, $signature, true);
+        $uid = (int)$explodedSignature[0];
+        return $uid;
     }
 
     /**

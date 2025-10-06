@@ -2,3 +2,5 @@
 mailStage = 0
 # cat=EMail; type=string; label=substition email
 fakeUserMail =
+# cat=Backend; type=string; label=comma separated list of the column names for import
+proposalAssessmentImportColumnNames = id,pred_score,pred_action
