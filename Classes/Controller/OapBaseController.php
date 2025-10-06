@@ -305,11 +305,27 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const FLASH_MSG_CALL_MISSING = 'proposal_access_denied';
 
     protected const PAGINATOR_ITEMS_PER_PAGE = 50;
+    /**
+     * identifier for js-text - see open_oap/Resources/Private/Language/locallang.xlf
+     */
+    protected const TEXTAREA_MEDIUM_MIN_CHARS = 300;
+    protected const TEXTAREA_MEDIUM_MAX_CHARS = 1500;
 
     protected const SURVEY_URL_PARAMETER_CALLID = 'survey';
     protected const SURVEY_URL_PARAMETER_HASH = 'hash';
 
     protected const FE_GROUP_EDIT_IT = 3;
+
+    // PAGINATOR VALUES
+    protected const PAGINATOR_PAGES = 1;
+    protected const PAGINATOR_ITEMS = 2;
+    protected const PAGINATOR_SHOW_AFTER = 10;
+    protected const PAGINATOR_SHOW_BEFORE = 10;
+
+    // ASSESSMENT IMPORT COLUMN NAMES TO COMPARE
+    protected const PROPOSAL_ASSESSMENT_COLUMN_ID = 'id';
+    protected const PROPOSAL_ASSESSMENT_COLUMN_SCORE = 'pred_score';
+    protected const PROPOSAL_ASSESSMENT_COLUMN_ACTION = 'pred_action';
 
     /**
      * @var Applicant
@@ -742,6 +758,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected function getOptionsToItemsMap(FormItem $item, array &$itemsMap, $mode = 'add'): void
     {
         $options = [];
+        $convertLabel = false;
+
         /** @var ItemOption $optionItem */
         foreach ($item->getOptions() as $optionItem) {
             $convertLabel = false;
@@ -899,8 +917,15 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     $itemsMap[$itemUid]['Mandatory'] = 1;
                     break;
                 case self::VALIDATOR_MAXCHAR:
-                    $itemsMap[$itemUid]['MaxChar'] = $validator->getParam1();
-                    $itemsMap[$itemUid]['additionalAttributes']['data-oap-maxlength'] = $validator->getParam1();
+                    if ($item->getAdditionalValue()) {
+                        // remove MAXCHAR as validation from validationCodes
+                        $additionalValuaValidatorMaxChar = array_pop($validationCodes);
+                        $itemsMap[$itemUid]['additionalAttributes--additionalValue']['data-oap-validat'] = $additionalValuaValidatorMaxChar;
+                        $itemsMap[$itemUid]['additionalAttributes--additionalValue']['data-oap-maxlength'] =  $validator->getParam1();
+                    } else {
+                        $itemsMap[$itemUid]['MaxChar'] = $validator->getParam1();
+                        $itemsMap[$itemUid]['additionalAttributes']['data-oap-maxlength'] = $validator->getParam1();
+                    }
                     break;
                 case self::VALIDATOR_MINVALUE:
                     $minValue = $validator->getParam1();

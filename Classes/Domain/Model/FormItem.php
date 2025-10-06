@@ -84,6 +84,13 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $additionalValue = false;
 
     /**
+     * additionalType
+     *
+     * @var integer
+     */
+    protected $additionalType = 1;
+
+    /**
      * defaultValue
      *
      * @var string
@@ -382,6 +389,22 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getAdditionalValue()
     {
         return $this->additionalValue;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getAdditionalType(): int
+    {
+        return $this->additionalType;
+    }
+
+    /**
+     * @param integer $additionalType
+     */
+    public function setAdditionalType(int $additionalType): void
+    {
+        $this->additionalType = $additionalType;
     }
 
     /**
