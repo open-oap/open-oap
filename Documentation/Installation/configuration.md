@@ -20,3 +20,6 @@ Read more about possible configurations using TypoScript in the [constants](../C
 *  [Constants](../Configuration/constants.md), mainly configuration for the frontend
 *  [TsConfig](../Configuration/tsconfig.md), configuration for the backend
 *  [Language](../Configuration/overwriting-xlf-items.md), configuration for language override
+
+
+ddev typo3 extension:setup
