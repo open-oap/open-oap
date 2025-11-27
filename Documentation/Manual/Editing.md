@@ -312,11 +312,13 @@ Only optionally available in OAP!
 
 **Note:** This special function is only relevant if entries from an already successfully submitted application of a previous call are to be taken over.
 
-If data from a previously submitted request of a predecessor call is to be taken over in an item, the field is filled with the call ID and the item ID. The notation at this point is then
+If data from a previously submitted request from a predecessor call is to be transferred to an item, this happens automatically when the item (group or question) is reused in the subsequent call; however, it can also be done by explicit assignment.
 
-`<call-id>.<item-id>` e.g. `.58.104`
+![item-data-transfer.png](../Images/Manual/Editing/item-data-transfer.png)
 
-Here, the content of a submitted request based on the call with the ID 58 is taken from the item with the ID 104. The transfer cannot take place in nested or repeated groups.
+The source groups for the transfer (with settings for repetitions) are automatically selected if the group is used in both calls, or by selecting a specific group.
+
+![group-data-transfer.png](../Images/Manual/Editing/group-data-transfer.png)
 
 The set-up of the call for this option is described in chapter "[Call with data transfer](#special-function-call-with-data-transfer)".
 
