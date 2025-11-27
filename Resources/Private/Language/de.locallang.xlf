@@ -1695,12 +1695,12 @@
                 <target>Profil</target>
             </trans-unit>
             <trans-unit id="oap_registration.intro" resname="oap_registration.intro">
-                <source>Here you can register in 3 steps to create a user account with OAP.</source>
-                <target>Hier können Sie sich in 3 Schritten registrieren, um ein Benutzerkonto anzulegen.</target>
+				<source>Here you can register in 2 steps to create a user account with OAP.</source>
+				<target>Hier können Sie sich in 2 Schritten registrieren, um ein Benutzerkonto anzulegen.</target>
             </trans-unit>
             <trans-unit id="oap_registrationform_step1.header" resname="oap_registration_step1.header">
-                <source>Create new account (step 1 of 3)</source>
-                <target>Neues Benutzerkonto erstellen (Schritt 1 von 3)</target>
+				<source>Create new account (step 1 of 2)</source>
+				<target>Neues Benutzerkonto erstellen (Schritt 1 von 2)</target>
             </trans-unit>
             <trans-unit id="oap_registrationform_step1.intro" resname="oap_registrationform_step1.intro">
                 <source>
