@@ -1338,10 +1338,10 @@
                 <source>Profile</source>
             </trans-unit>
             <trans-unit id="oap_registration.intro" resname="oap_registration.intro">
-                <source>Here you can register in 3 steps to create a user account.</source>
+				<source>Here you can register in 2 steps to create a user account.</source>
             </trans-unit>
             <trans-unit id="oap_registrationform_step1.header" resname="oap_registration_step1.header">
-                <source>Create new account (step 1 of 3)</source>
+				<source>Create new account (step 1 of 2)</source>
             </trans-unit>
             <trans-unit id="oap_registrationform_step1.intro" resname="oap_registrationform_step1.intro">
                 <source>
