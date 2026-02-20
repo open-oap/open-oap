@@ -6,8 +6,9 @@ namespace OpenOAP\OpenOap\Controller;
 
 use OpenOAP\OpenOap\Domain\Model\Call;
 use OpenOAP\OpenOap\Domain\Model\FormPage;
-
+use OpenOAP\OpenOap\Utility\LocalizationUtility;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Attribute\AsController;
 
 /***
  *
@@ -23,6 +24,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * BackendController
  */
+#[AsController]
 class BackendFormsController extends OapBackendController
 {
     /**
@@ -37,11 +39,11 @@ class BackendFormsController extends OapBackendController
         */
     public function showOverviewFormsAction(): ResponseInterface
     {
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'actionName' => $this->actionMethodName,
         ]);
 
-        return $this->htmlResponse();
+        return $this->moduleTemplate->renderResponse('ShowOverviewForms');
     }
 
     /**
@@ -50,6 +52,7 @@ class BackendFormsController extends OapBackendController
     public function previewFormAction(Call $call): ResponseInterface
     {
         $this->evaluateForm($call);
+
         /**
          * /typo3/module/web/OpenOapBackend
          * ?id=24
@@ -57,13 +60,13 @@ class BackendFormsController extends OapBackendController
          * &tx_openoap_web_openoapbackend%5Baction%5D=previewForm
          * &tx_openoap_web_openoapbackend%5Bcontroller%5D=OapBackend
          */
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'evaluationResults' => $this->evalutionResults,
             'actionName' => $this->actionMethodName,
             'call' => $call,
         ]);
 
-        return $this->htmlResponse();
+        return $this->moduleTemplate->renderResponse('PreviewForm');
     }
 
     /**
@@ -75,11 +78,11 @@ class BackendFormsController extends OapBackendController
     {
         $this->listObjects($this->callRepository, $currentPage);
 
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'actionName' => $this->actionMethodName,
         ]);
 
-        return $this->htmlResponse();
+        return $this->moduleTemplate->renderResponse('ListForms');
     }
 
     /**
@@ -135,5 +138,29 @@ class BackendFormsController extends OapBackendController
         // witch items have the meta information
 
         // witch items are set as a filter
+    }
+
+    protected function handleMenu(string $currentAction): void
+    {
+        $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $menu->setIdentifier('OpenOapBackendForms');
+
+        if ($currentAction === 'previewForm') {
+            $menu->addMenuItem(
+                $menu->makeMenuItem()
+                    ->setTitle(LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.show_call_form'))
+                    ->setHref($this->uriBuilder->reset()->uriFor('previewForm', ['call' => $this->request->getArgument('call')]))
+                    ->setActive(true)
+            );
+        }
+
+        $menu->addMenuItem(
+            $menu->makeMenuItem()
+                ->setTitle(LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_forms'))
+                ->setHref($this->uriBuilder->reset()->uriFor('listForms'))
+                ->setActive($currentAction === 'listForms')
+        );
+
+        $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
     }
 }

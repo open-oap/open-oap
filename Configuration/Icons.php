@@ -29,4 +29,8 @@ return [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
         'source' => 'EXT:open_oap/Resources/Public/Icons/oap_model.svg',
     ],
+    'open_oap-plugin-backup' => [
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:open_oap/Resources/Public/Icons/oap_module_backup.svg',
+    ],
 ];

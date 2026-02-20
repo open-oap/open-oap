@@ -85,6 +85,10 @@
          * @param {NodeElement} listItem
          */
         addSelected(listItem) {
+            if (this._isAvailableDisabled()) {
+                return;
+            }
+
             let index = this.available.indexOf(listItem);
             let errorMessage = this.dualListbox.nextSibling.nextSibling;
 
@@ -187,6 +191,10 @@
         _actionAllSelected(event) {
             event.preventDefault();
 
+            if (this._isAvailableDisabled()) {
+                return;
+            }
+
             let selected = this.available.filter((item) => item.style.display !== "none");
             selected.forEach((item) => this.addSelected(item));
         }
@@ -210,6 +218,10 @@
          */
         _actionItemSelected(event) {
             event.preventDefault();
+
+            if (this._isAvailableDisabled()) {
+                return;
+            }
 
             let selected = this.dualListbox.querySelector(`.${SELECTED_MODIFIER}`);
             if (selected) {
@@ -251,6 +263,10 @@
             if (this.selected.indexOf(listItem) > -1) {
                 this.removeSelected(listItem);
             } else {
+                if (this._isAvailableDisabled()) {
+                    return;
+                }
+
                 this.addSelected(listItem);
             }
         }
@@ -269,13 +285,23 @@
                 let value = items[i];
                 if (value !== listItem) {
                     value.classList.remove(SELECTED_MODIFIER);
+                    value.setAttribute('aria-selected', 'false');
                 }
             }
 
             if (listItem.classList.contains(SELECTED_MODIFIER)) {
                 listItem.classList.remove(SELECTED_MODIFIER);
+                listItem.setAttribute('aria-selected', 'false');
             } else {
                 listItem.classList.add(SELECTED_MODIFIER);
+                listItem.setAttribute('aria-selected', 'true');
+
+                // Update activedescendant on corresponding listbox
+                const list = listItem.parentElement;
+
+                if (list && (list === this.availableList || list === this.selectedList)) {
+                    list.setAttribute('aria-activedescendant', listItem.id);
+                }
             }
         }
 
@@ -286,6 +312,7 @@
         _addActions() {
             this._addButtonActions();
             this._addSearchActions();
+            this._addKeyboardActions();
         }
 
         /**
@@ -316,8 +343,330 @@
         _addSearchActions() {
             this.search_left.addEventListener('change', (event) => this.searchLists(event.target.value, this.availableList));
             this.search_left.addEventListener('keyup', (event) => this.searchLists(event.target.value, this.availableList));
+            this.search_left.addEventListener('keydown', (event) => this._handleSearchKeydown(event, this.availableList));
             this.search_right.addEventListener('change', (event) => this.searchLists(event.target.value, this.selectedList));
             this.search_right.addEventListener('keyup', (event) => this.searchLists(event.target.value, this.selectedList));
+            this.search_right.addEventListener('keydown', (event) => this._handleSearchKeydown(event, this.selectedList));
+        }
+
+        /**
+         * @Private
+         * Keyboard interactions for accessibility.
+         */
+        _addKeyboardActions() {
+            // Focus handlers: if no active option exists in the focused list, select first visible
+            const onFocusList = (list) => {
+                // When the underlying select is disabled, do not alter active option via keyboard focus
+                if (this.select && this.select.disabled) {
+                    return;
+                }
+
+                const current = this.dualListbox.querySelector(`.${SELECTED_MODIFIER}`);
+
+                if (!current || current.parentElement !== list || current.style.display === 'none') {
+                    const first = this._getFirstVisibleItem(list);
+
+                    if (first) {
+                        this._setActiveOptionGlobal(first);
+                    }
+                }
+
+                // Set activedescendant on the focused list to the active item if present
+                const active = this.dualListbox.querySelector(`.${SELECTED_MODIFIER}`);
+
+                if (active && active.parentElement === list) {
+                    list.setAttribute('aria-activedescendant', active.id);
+                }
+            };
+
+            this.availableList.addEventListener('focus', () => onFocusList(this.availableList));
+            this.selectedList.addEventListener('focus', () => onFocusList(this.selectedList));
+
+            // Keydown handlers
+            this.availableList.addEventListener('keydown', (e) => this._handleListKeydown(e, 'available'));
+            this.selectedList.addEventListener('keydown', (e) => this._handleListKeydown(e, 'selected'));
+        }
+
+        _handleSearchKeydown(event, dualListBox) {
+            // ArrowDown in the search field should focus the listbox below
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+
+                if (dualListBox && typeof dualListBox.focus === 'function') {
+                    dualListBox.focus();
+                }
+            }
+
+            // Enter/NumpadEnter in the search field must not submit the form; focus the listbox if it has visible items
+            else if (event.key === 'Enter' || event.key === 'NumpadEnter') {
+                event.preventDefault();
+
+                const hasItems = dualListBox && this._getVisibleItems(dualListBox).length > 0;
+
+                if (hasItems && typeof dualListBox.focus === 'function') {
+                    dualListBox.focus();
+                }
+            }
+        }
+
+        _handleListKeydown(event, which) {
+            // Block all keyboard interactions when the component is disabled
+            if (this.select && this.select.disabled) {
+                return;
+            }
+
+            const list = which === 'available' ? this.availableList : this.selectedList;
+            const otherList = which === 'available' ? this.selectedList : this.availableList;
+            const key = event.key;
+            const prevent = () => { event.preventDefault(); event.stopPropagation(); };
+
+            if (['ArrowDown','ArrowUp','Home','End','PageDown','PageUp'].includes(key)) {
+                prevent();
+
+                // ArrowUp in the listbox should focus the search field if the first visible item is already selected
+                if (key === 'ArrowUp') {
+                    const visible = this._getVisibleItems(list);
+                    const current = this.dualListbox.querySelector(`.${SELECTED_MODIFIER}`);
+                    const inThisList = current && current.parentElement === list;
+                    const index = inThisList ? visible.indexOf(current) : -1;
+
+                    if (index === 0) {
+                        const searchInput = which === 'available' ? this.search_left : this.search_right;
+
+                        if (searchInput && typeof searchInput.focus === 'function') {
+                            searchInput.focus();
+                        }
+
+                        return;
+                    }
+                }
+
+                this._moveActive(list, key);
+
+                // reflect active item on the focused listbox
+                const active = this.dualListbox.querySelector(`.${SELECTED_MODIFIER}`);
+
+                if (active && active.parentElement === list) {
+                    list.setAttribute('aria-activedescendant', active.id);
+                }
+            }
+
+            else if (key === 'Enter' || key === ' ') {
+                prevent();
+
+                const active = this.dualListbox.querySelector(`.${SELECTED_MODIFIER}`);
+
+                if (!active) {
+                    return;
+                }
+
+                if (which === 'available' && active.parentElement === list) {
+                    if (this._isAvailableDisabled()) {
+                        return;
+                    }
+
+                    // Determine the next visible item relative to the current active one
+                    const visibleBefore = this._getVisibleItems(list);
+                    let nextIndex = visibleBefore.indexOf(active);
+
+                    this.addSelected(active);
+
+                    // After transfer, select the next visible item (or previous if at end)
+                    const visibleAfter = this._getVisibleItems(list);
+                    let next = null;
+
+                    if (visibleAfter.length) {
+                        if (nextIndex === -1) {
+                            nextIndex = 0;
+                        }
+
+                        if (nextIndex >= visibleAfter.length) {
+                            nextIndex = visibleAfter.length - 1;
+                        }
+
+                        next = visibleAfter[nextIndex];
+                    }
+
+                    if (next) {
+                        this._setActiveOptionGlobal(next);
+                        list.setAttribute('aria-activedescendant', next.id);
+                    }
+                }
+                else if (which === 'selected' && active.parentElement === list) {
+                    // Determine the next visible item relative to the current active one
+                    const visibleBefore = this._getVisibleItems(list);
+                    let nextIndex = visibleBefore.indexOf(active);
+
+                    this.removeSelected(active);
+
+                    // After transfer, select the next visible item (or previous if at end)
+                    const visibleAfter = this._getVisibleItems(list);
+                    let next = null;
+
+                    if (visibleAfter.length) {
+                        if (nextIndex === -1) {
+                            nextIndex = 0;
+                        }
+
+                        if (nextIndex >= visibleAfter.length) {
+                            nextIndex = visibleAfter.length - 1;
+                        }
+
+                        next = visibleAfter[nextIndex];
+                    }
+
+                    if (next) {
+                        this._setActiveOptionGlobal(next);
+                        list.setAttribute('aria-activedescendant', next.id);
+                    }
+                }
+            }
+
+            // ArrowRight/ArrowLeft should only switch focus to the opposite listbox (no transfer)
+            else if (key === 'ArrowRight' && which === 'available') {
+                prevent();
+                otherList.focus();
+            }
+
+            else if (key === 'ArrowLeft' && which === 'selected') {
+                prevent();
+
+                if (this._isAvailableDisabled()) {
+                    return;
+                }
+
+                otherList.focus();
+            }
+
+            // Typing in a list should focus the respective search field and trigger filtering
+            else {
+                // Ignore composing and modifier combinations
+                if (event.isComposing || event.ctrlKey || event.metaKey || event.altKey) {
+                    return;
+                }
+
+                const searchInput = which === 'available' ? this.search_left : this.search_right;
+
+                // Handle backspace (remove the last character)
+                if (key === 'Backspace') {
+                    prevent();
+
+                    searchInput.value = (searchInput.value || '').slice(0, -1);
+                }
+
+                // Append typed character
+                else if (typeof key === 'string' && key.length === 1) {
+                    prevent();
+
+                    searchInput.value = (searchInput.value || '') + key;
+                }
+                else {
+                    // Do not interfere with other keys
+                    return;
+                }
+
+                // Focus search field, place caret at the end, and trigger search
+                try { searchInput.focus(); } catch (e) {}
+                try {
+                    const len = searchInput.value.length;
+
+                    if (typeof searchInput.setSelectionRange === 'function') {
+                        searchInput.setSelectionRange(len, len);
+                    }
+                } catch (e) {}
+
+                const targetList = which === 'available' ? this.availableList : this.selectedList;
+                this.searchLists(searchInput.value, targetList);
+            }
+        }
+
+        _getVisibleItems(list) {
+            const items = list.querySelectorAll(`.${ITEM_ELEMENT}`);
+            const visible = [];
+
+            for (let i = 0; i < items.length; i++) {
+                const it = items[i];
+
+                if (it.style.display !== 'none') {
+                    visible.push(it);
+                }
+            }
+
+            return visible;
+        }
+
+        _getFirstVisibleItem(list) {
+            const visible = this._getVisibleItems(list);
+
+            return visible.length ? visible[0] : null;
+        }
+
+        _moveActive(list, key) {
+            const visible = this._getVisibleItems(list);
+
+            if (!visible.length) {
+                return;
+            }
+
+            const current = this.dualListbox.querySelector(`.${SELECTED_MODIFIER}`);
+            let index = current && current.parentElement === list ? visible.indexOf(current) : -1;
+
+            if (key === 'Home' || key === 'PageUp') {
+                index = 0;
+            }
+            else if (key === 'End' || key === 'PageDown') {
+                index = visible.length - 1;
+            }
+            else if (key === 'ArrowDown') {
+                index = Math.min(index + 1, visible.length - 1);
+
+                if (index === -1) {
+                    index = 0;
+                }
+            }
+            else if (key === 'ArrowUp') {
+                index = Math.max(index - 1, 0);
+
+                if (index === -1) {
+                    index = 0;
+                }
+            }
+
+            const target = visible[index];
+
+            if (target) {
+                this._setActiveOptionGlobal(target);
+
+                // ensure in view
+                if (typeof target.scrollIntoView === 'function') {
+                    target.scrollIntoView({ block: 'nearest' });
+                }
+            }
+        }
+
+        _setActiveOptionGlobal(item) {
+            const items = this.dualListbox.querySelectorAll(`.${ITEM_ELEMENT}`);
+
+            for (let i = 0; i < items.length; i++) {
+                const it = items[i];
+
+                if (it === item) {
+                    it.classList.add(SELECTED_MODIFIER);
+                    it.setAttribute('aria-selected', 'true');
+                }
+                else {
+                    it.classList.remove(SELECTED_MODIFIER);
+                    it.setAttribute('aria-selected', 'false');
+                }
+            }
+        }
+
+        _isAvailableDisabled() {
+            if (!this.availableList) {
+                return false;
+            }
+
+            return this.availableList.getAttribute('aria-disabled') === 'true';
         }
 
         /**
@@ -398,6 +747,10 @@
             listItem.classList.add(ITEM_ELEMENT);
             listItem.innerHTML = option.text.replace(/\|/g,'<br>');
             listItem.dataset.id = option.value;
+            listItem.setAttribute('role', 'option');
+            listItem.setAttribute('aria-selected', 'false');
+            listItem.setAttribute('tabindex', '-1');
+            listItem.id = this.select.id + '-option-' + String(option.value).replace(/\s+/g, '_');
 
             this._addClickActions(listItem);
 
@@ -410,8 +763,11 @@
          */
         _createSearchLeft() {
             this.search_left = document.createElement('input');
+            this.search_left.id = this.select.id + '-search-available';
             this.search_left.classList.add(SEARCH_ELEMENT);
             this.search_left.placeholder = this.searchPlaceholder;
+            this.search_left.setAttribute('aria-label', this.searchPlaceholder + (this.availableTitle ? ': ' + this.availableTitle : ''));
+            this.search_left.setAttribute('aria-controls', this.select.id + '-available-list');
         }
 
         /**
@@ -420,8 +776,11 @@
          */
         _createSearchRight() {
             this.search_right = document.createElement('input');
+            this.search_right.id = this.select.id + '-search-selected';
             this.search_right.classList.add(SEARCH_ELEMENT);
             this.search_right.placeholder = this.searchPlaceholder;
+            this.search_right.setAttribute('aria-label', this.searchPlaceholder + (this.selectedTitle ? ': ' + this.selectedTitle : ''));
+            this.search_right.setAttribute('aria-controls', this.select.id + '-selected-list');
         }
 
         /**
@@ -472,19 +831,31 @@
             this.dualListBoxContainer = document.createElement('div');
             this.dualListBoxContainer.classList.add(CONTAINER_ELEMENT);
 
-            this.availableList = document.createElement('ul');
-            this.availableList.classList.add(AVAILABLE_ELEMENT);
-
-            this.selectedList = document.createElement('ul');
-            this.selectedList.classList.add(SELECTED_ELEMENT);
-
             this.availableListTitle = document.createElement('div');
+            this.availableListTitle.id = this.select.id + '-available-title';
             this.availableListTitle.classList.add(TITLE_ELEMENT);
             this.availableListTitle.innerText = this.availableTitle;
 
+            this.availableList = document.createElement('ul');
+            this.availableList.classList.add(AVAILABLE_ELEMENT);
+            this.availableList.id = this.select.id + '-available-list';
+            this.availableList.setAttribute('role', 'listbox');
+            this.availableList.setAttribute('tabindex', '0');
+            this.availableList.setAttribute('aria-multiselectable', 'false');
+            this.availableList.setAttribute('aria-labelledby', this.availableListTitle.id);
+
             this.selectedListTitle = document.createElement('div');
+            this.selectedListTitle.id = this.select.id + '-selected-title';
             this.selectedListTitle.classList.add(TITLE_ELEMENT);
             this.selectedListTitle.innerText = this.selectedTitle;
+
+            this.selectedList = document.createElement('ul');
+            this.selectedList.classList.add(SELECTED_ELEMENT);
+            this.selectedList.id = this.select.id + '-selected-list';
+            this.selectedList.setAttribute('role', 'listbox');
+            this.selectedList.setAttribute('tabindex', '0');
+            this.selectedList.setAttribute('aria-multiselectable', 'false');
+            this.selectedList.setAttribute('aria-labelledby', this.selectedListTitle.id);
 
             this._createButtons();
             this._createSearchLeft();

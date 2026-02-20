@@ -1,8 +1,7 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
-      xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
-      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
-      data-namespace-typo3-fluid="true">
+<html
+    xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+    data-namespace-typo3-fluid="true">
 
 <f:comment><!--
 Available variables:
@@ -18,83 +17,88 @@ Available variables:
     {sorted}
 --></f:comment>
 
-<f:layout name="ProposalsBELayout" />
-    <f:section name="content">
-        <v:variable.set name="statistics_submitted" value="{counts.{states.PROPOSAL_SUBMITTED}}" />
-        <v:variable.set name="statistics_inProgress" value="{counts.{states.PROPOSAL_IN_PROGRESS}}" />
+<f:layout name="Module" />
 
-        <f:flashMessages />
+<f:section name="Content">
+    <f:be.pageRenderer
+        includeCssFiles="{0: 'EXT:open_oap/Resources/Public/Css/backend.css'}"
+        includeJavaScriptModules="{0: '@openoap/open-oap/BackendProposals.js'}"
+    />
 
-        <h2><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.list_of_calls"/></h2>
+    <v:variable.set name="statistics_submitted" value="{counts.{states.PROPOSAL_SUBMITTED}}" />
+    <v:variable.set name="statistics_inProgress" value="{counts.{states.PROPOSAL_IN_PROGRESS}}" />
 
-        <div id="t3-table-tx_openoap_domain_model_proposal" data-multi-record-selection-identifier="t3-table-tx_openoap_domain_model_proposal">
-            <table data-table="tx_openoap_domain_model_proposal" cellspacing="0" cellpadding="0" border="0" class="table table-striped table-hover">
-            <thead>
-                <tr class="t3-row-header">
-                    <th nowrap="nowrap" class="col-icon">&nbsp;</th>
-                    <th nowrap="nowrap" colspan="9">
-                        <span class="c-table">
-                            <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.countCalls"/> {countOfItems}
-                        </span>
-                    </th>
-                    <th nowrap="nowrap" class="col-icon">&nbsp;</th>
+    <f:flashMessages />
+
+    <h2><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.list_of_calls"/></h2>
+
+    <div id="t3-table-tx_openoap_domain_model_proposal" data-multi-record-selection-identifier="t3-table-tx_openoap_domain_model_proposal">
+        <table data-table="tx_openoap_domain_model_proposal" cellspacing="0" cellpadding="0" border="0" class="table table-striped table-hover">
+        <thead>
+            <tr class="t3-row-header">
+                <th nowrap="nowrap" class="col-icon">&nbsp;</th>
+                <th nowrap="nowrap" colspan="9">
+                    <span class="c-table">
+                        <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.countCalls"/> {countOfItems}
+                    </span>
+                </th>
+                <th nowrap="nowrap" class="col-icon">&nbsp;</th>
+            </tr>
+
+            <tr class="c-headLine">
+            <th nowrap="nowrap">&nbsp;</th>
+            <th nowrap="nowrap">
+                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.title')}
+            </th>
+            <th nowrap="nowrap">
+                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.count_submitted')}<br>
+                ({f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.count_in_progress')})
+            </th>
+            <th nowrap="nowrap">
+                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.proposal_name')}
+            </th>
+            <th nowrap="nowrap">
+                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.startTime')}
+            </th>
+            <th nowrap="nowrap">
+                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.endTime')}
+            </th>
+            </tr>
+        </thead>
+            <tbody id="proposals" data-multi-record-selection-row-selection="true">
+            <f:for each="{paginator.array.paginatedItems}" as="call">
+                <tr data-table="tx_openoap_domain_model_call" class="t3js-entity" data-uid="{call.uid}" title="id={call.uid}">
+                    <td nowrap="nowrap" class="col-icon">
+                    <span title="id={call.uid}" class="" style="{f:if(condition:'{form.hidden}', then:'display:none', else:'')}">
+                        <core:icon identifier="open_oap-common" size="small" />
+                    </span>
+                    </td>
+                    <td class="col-title">
+                        <f:link.action action="listProposals" arguments="{call:call}" class="" title="{f:translate(key:'action.show_proposals')}">
+                            {call.title}
+                        </f:link.action>
+                    </td>
+                    <td nowrap="nowrap" class="col-title">
+                        {statistics_submitted.{call.uid}}<br>
+                        ({statistics_inProgress.{call.uid}})
+                    </td>
+                    <td nowrap="nowrap" class="col-title">
+                        {call.proposalName}
+                    </td>
+                    <td nowrap="nowrap" class="cell__date cell__date<f:if condition="{f:format.date(date:'now', format:'YmdHi')} >  {f:format.date(date:'{call.callStartTime}', format:'YmdHi')} && {f:format.date(date:'now', format:'YmdHi')} <  {f:format.date(date:'{call.callEndTime}', format:'YmdHi')}">--live</f:if>">
+                        {call.callStartTime -> f:format.date(format:'d.m.Y H:i')}
+                    </td>
+                    <td nowrap="nowrap" class="cell__date cell__date<f:if condition="{f:format.date(date:'now', format:'YmdHi')} >  {f:format.date(date:'{call.callStartTime}', format:'YmdHi')} && {f:format.date(date:'now', format:'YmdHi')} <  {f:format.date(date:'{call.callEndTime}', format:'YmdHi')}">--live</f:if>">
+                        {call.callEndTime -> f:format.date(format:'d.m.Y H:i')}
+                    </td>
                 </tr>
+            </f:for>
+        </table>
+    </div>
 
-                <tr class="c-headLine">
-                <th nowrap="nowrap">&nbsp;</th>
-                <th nowrap="nowrap">
-                    {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.title')}
-                </th>
-                <th nowrap="nowrap">
-                    {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.count_submitted')}<br>
-                    ({f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.count_in_progress')})
-                </th>
-                <th nowrap="nowrap">
-                    {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.proposal_name')}
-                </th>
-                <th nowrap="nowrap">
-                    {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.startTime')}
-                </th>
-                <th nowrap="nowrap">
-                    {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.endTime')}
-                </th>
-                </tr>
-            </thead>
-                <tbody id="proposals" data-multi-record-selection-row-selection="true">
-                <f:for each="{paginator.array.paginatedItems}" as="call">
-                    <tr data-table="tx_openoap_domain_model_call" class="t3js-entity" data-uid="{call.uid}" title="id={call.uid}">
-                        <td nowrap="nowrap" class="col-icon">
-                        <span title="id={call.uid}" class="" style="{f:if(condition:'{form.hidden}', then:'display:none', else:'')}">
-                            <core:icon identifier="open_oap-common" size="small" />
-                        </span>
-                        </td>
-                        <td class="col-title">
-                            <f:link.action action="listProposals" arguments="{call:call}" class="" title="{f:translate(key:'action.show_proposals')}">
-                                {call.title}
-                            </f:link.action>
-                        </td>
-                        <td nowrap="nowrap" class="col-title">
-                            {statistics_submitted.{call.uid}}<br>
-                            ({statistics_inProgress.{call.uid}})
-                        </td>
-                        <td nowrap="nowrap" class="col-title">
-                            {call.proposalName}
-                        </td>
-                        <td nowrap="nowrap" class="cell__date cell__date<f:if condition="{f:format.date(date:'now', format:'YmdHi')} >  {f:format.date(date:'{call.callStartTime}', format:'YmdHi')} && {f:format.date(date:'now', format:'YmdHi')} <  {f:format.date(date:'{call.callEndTime}', format:'YmdHi')}">--live</f:if>">
-                            {call.callStartTime -> f:format.date(format:'d.m.Y H:i')}
-                        </td>
-                        <td nowrap="nowrap" class="cell__date cell__date<f:if condition="{f:format.date(date:'now', format:'YmdHi')} >  {f:format.date(date:'{call.callStartTime}', format:'YmdHi')} && {f:format.date(date:'now', format:'YmdHi')} <  {f:format.date(date:'{call.callEndTime}', format:'YmdHi')}">--live</f:if>">
-                            {call.callEndTime -> f:format.date(format:'d.m.Y H:i')}
-                        </td>
-                    </tr>
-                </f:for>
-            </table>
-        </div>
+    <f:render partial="Utility/Paginator" arguments="{pagination: pagination, pages: pages, paginator: paginator, actionName: 'listForms'}" />
+    <f:comment><!-- <f:debug>{forms}</f:debug> --></f:comment>
 
-        <f:render partial="Utility/Paginator" arguments="{pagination: pagination, pages: pages, paginator: paginator, actionName: 'listForms'}" />
-        <f:comment><!-- <f:debug>{forms}</f:debug> --></f:comment>
-
-    </f:section>
-
+</f:section>
 
 </html>

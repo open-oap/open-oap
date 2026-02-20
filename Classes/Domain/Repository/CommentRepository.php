@@ -34,6 +34,12 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     protected $defaultOrderings = [
         'crdate' => QueryInterface::ORDER_DESCENDING,
     ];
+
+    public function __construct(private readonly \TYPO3\CMS\Core\Database\ConnectionPool $connectionPool)
+    {
+        parent::__construct();
+    }
+
     /**
      * Find demanded comments
      *
@@ -50,7 +56,9 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(false);
         $query->getQuerySettings()->setRespectSysLanguage(false);
-        $query->getQuerySettings()->setLanguageOverlayMode(false);
+        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
+        $languageAspect = new \TYPO3\CMS\Core\Context\LanguageAspect($languageAspect->getId(), $languageAspect->getContentId(), \TYPO3\CMS\Core\Context\LanguageAspect::OVERLAYS_OFF);
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
         $query->getQuerySettings()->setRespectStoragePage(false);
         if ($sortOrder == 'asc') {
             $query->setOrderings([
@@ -89,7 +97,9 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(false);
         $query->getQuerySettings()->setRespectSysLanguage(false);
-        $query->getQuerySettings()->setLanguageOverlayMode(false);
+        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
+        $languageAspect = new \TYPO3\CMS\Core\Context\LanguageAspect($languageAspect->getId(), $languageAspect->getContentId(), \TYPO3\CMS\Core\Context\LanguageAspect::OVERLAYS_OFF);
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
         $query->getQuerySettings()->setRespectStoragePage(false);
 
         $constraints = [];
@@ -115,7 +125,9 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(false);
         $query->getQuerySettings()->setRespectSysLanguage(false);
-        $query->getQuerySettings()->setLanguageOverlayMode(false);
+        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
+        $languageAspect = new \TYPO3\CMS\Core\Context\LanguageAspect($languageAspect->getId(), $languageAspect->getContentId(), \TYPO3\CMS\Core\Context\LanguageAspect::OVERLAYS_OFF);
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
         $query->getQuerySettings()->setRespectStoragePage(false);
 
         $constraints = [];
@@ -139,7 +151,7 @@ class CommentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         //DebuggerUtility::var_dump(\OpenOAP\OpenOap\Controller\OapBaseController::COMMENT_SOURCE_EDIT_ANSWER, 'Konstante Edit_Answer');exit;
         $table = 'tx_openoap_domain_model_comment';
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);
         $where[] = $queryBuilder->expr()->in('t.proposal', $queryBuilder->createNamedParameter($proposalIds, ArrayParameterType::INTEGER));
         $where[] = $queryBuilder->expr()->eq('t.state', $queryBuilder->createNamedParameter($oldState, Connection::PARAM_INT));
         if ($source != null) {

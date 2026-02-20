@@ -5,42 +5,61 @@ defined('TYPO3') || die();
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'OpenOap',
     'Dashboard',
-    'oap dashboard'
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_dashboard.name',
+    'open_oap-plugin-dashboard',
+    'plugins',
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_dashboard.description',
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'OpenOap',
     'Proposals',
-    'oap proposals'
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_proposals.name',
+    'open_oap-plugin-proposals',
+    'plugins',
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_proposals.description',
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'OpenOap',
     'Applicant',
-    'oap applicant'
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_applicant.name',
+    'open_oap-plugin-applicant',
+    'plugins',
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_applicant.description',
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'OpenOap',
     'Applicantform',
-    'oap applicantform'
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_applicantform.name',
+    'open_oap-plugin-applicantform',
+    'plugins',
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_applicantform.description',
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'OpenOap',
     'Form',
-    'oap form'
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_form.name',
+    'open_oap-plugin-form',
+    'plugins',
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_form.description',
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'OpenOap',
     'Notifications',
-    'oap notifications'
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.name',
+    'open_oap-plugin-notifications',
+    'plugins',
+    'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.description',
 );
 
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['openoap_dashboard'] = 'pi_flexform';
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tt_content', '--div--;Configuration,pi_flexform,', 'openoap_dashboard', 'after:subheader');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
-    'openoap_dashboard',
+    '*',
     // Flexform configuration schema file
-    'FILE:EXT:open_oap/Configuration/FlexForms/Dashboard.xml'
+    'FILE:EXT:open_oap/Configuration/FlexForms/Dashboard.xml',
+    'openoap_dashboard'
 );

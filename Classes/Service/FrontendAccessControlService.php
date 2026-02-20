@@ -8,6 +8,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FrontendAccessControlService implements SingletonInterface
 {
+    public function __construct(private readonly \TYPO3\CMS\Core\Context\Context $context)
+    {
+    }
+
     /**
      * Frontend user id
      *
@@ -15,10 +19,10 @@ class FrontendAccessControlService implements SingletonInterface
      */
     public function getFrontendUserId()
     {
-        $context = GeneralUtility::makeInstance(Context::class);
-        if ($context->getPropertyFromAspect('frontend.user', 'isLoggedIn')) {
-            return $context->getPropertyFromAspect('frontend.user', 'id');
+        if ($this->context->getPropertyFromAspect('frontend.user', 'isLoggedIn')) {
+            return $this->context->getPropertyFromAspect('frontend.user', 'id');
         }
+
         return null;
     }
 }

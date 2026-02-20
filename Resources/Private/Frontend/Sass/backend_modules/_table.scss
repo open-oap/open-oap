@@ -8,7 +8,7 @@
 .table {
     .cell__date {
         &--live {
-            background-color: lightgreen;
+            background-color: var(--typo3-surface-success);
         }
 
     }

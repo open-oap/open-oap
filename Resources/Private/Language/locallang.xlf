@@ -733,6 +733,9 @@
                         resname='tx_openoap_dashboard.call.hint.language'>
                 <source>Available in English only</source>
             </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.call.hint.info' resname='tx_openoap_dashboard.call.hint.info'>
+                <source>Additional information</source>
+            </trans-unit>
             <trans-unit id='tx_openoap_dashboard.giz'
                         resname='tx_openoap_dashboard.giz'>
                 <source>Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH</source>
@@ -881,6 +884,9 @@
             </trans-unit>
             <trans-unit id='tx_openoap_form.modal.save' resname='tx_openoap_form.modal.save'>
                 <source><![CDATA[Save]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap_form.preview.edit' resname='tx_openoap_form.preview.edit'>
+                <source><![CDATA[Edit]]></source>
             </trans-unit>
             <!-- Applicant -->
             <trans-unit id='tx_openoap_applicant.masterdata.header' resname='tx_openoap_applicant.masterdata.header'>
@@ -1123,6 +1129,9 @@
             <trans-unit id='tx_openoap.general.remove_file' resname='tx_openoap.general.remove_file'>
                 <source><![CDATA[Remove file]]></source>
             </trans-unit>
+            <trans-unit id='tx_openoap.general.download_file' resname='tx_openoap.general.download_file'>
+                <source><![CDATA[Download file]]></source>
+            </trans-unit>
             <trans-unit id='tx_openoap.general.add_file' resname='tx_openoap.general.add_file'>
                 <source><![CDATA[Add file]]></source>
             </trans-unit>
@@ -1144,6 +1153,9 @@
             </trans-unit>
             <trans-unit id='tx_openoap.general.formControls' resname='tx_openoap.general.formControls'>
                 <source><![CDATA[Form controls]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.jump_to_top' resname='tx_openoap.general.jump_to_top'>
+                <source><![CDATA[Scroll to top]]></source>
             </trans-unit>
             <trans-unit id='tx_openoap.general.date-from' resname='tx_openoap.general.date-from'>
                 <source><![CDATA[from]]></source>
@@ -1338,10 +1350,10 @@
                 <source>Profile</source>
             </trans-unit>
             <trans-unit id="oap_registration.intro" resname="oap_registration.intro">
-				<source>Here you can register in 2 steps to create a user account.</source>
+                <source>Here you can register in 2 steps to create a user account.</source>
             </trans-unit>
             <trans-unit id="oap_registrationform_step1.header" resname="oap_registration_step1.header">
-				<source>Create new account (step 1 of 2)</source>
+                <source>Create new account (step 1 of 2)</source>
             </trans-unit>
             <trans-unit id="oap_registrationform_step1.intro" resname="oap_registrationform_step1.intro">
                 <source>
@@ -1410,6 +1422,50 @@
             <trans-unit id="oap_dataEdit.title" resname="oap_dataEdit.title">
                 <source>Edit</source>
             </trans-unit>
+
+			<!-- Backup Module -->
+			<trans-unit id="backup.scheduled">
+				<source><![CDATA[The backup process has been started and will run in the background.]]></source>
+			</trans-unit>
+			<trans-unit id="backup.started">
+				<source><![CDATA[The backup process has been started and will run in the background.]]></source>
+			</trans-unit>
+			<trans-unit id="backup.canceled">
+				<source><![CDATA[The backup process has been canceled.]]></source>
+			</trans-unit>
+			<trans-unit id="backup.downloaded">
+				<source><![CDATA[The backup has been downloaded and the file has been deleted.]]></source>
+			</trans-unit>
+			<trans-unit id="backup.download.error">
+				<source><![CDATA[The backup is not available for download.]]></source>
+			</trans-unit>
+			<trans-unit id="backup.email.subject">
+				<source><![CDATA[OAP Backup completed]]></source>
+			</trans-unit>
+			<trans-unit id="backup.email.body">
+				<source><![CDATA[Your TYPO3 backup has been created and is ready for download. You can download the backup in the backend module.]]></source>
+			</trans-unit>
+			<trans-unit id="backup.cancel.title">
+				<source><![CDATA[Cancel Backup]]></source>
+			</trans-unit>
+			<trans-unit id="backup.cancel.confirm">
+				<source><![CDATA[Are you sure you want to cancel the backup process?]]></source>
+			</trans-unit>
+			<trans-unit id="backup.cancel.success">
+				<source><![CDATA[The backup process has been canceled.]]></source>
+			</trans-unit>
+			<trans-unit id="backup.cancel.error">
+				<source><![CDATA[No backup ID provided. Cannot cancel the backup.]]></source>
+			</trans-unit>
+			<trans-unit id="backup.download.error">
+				<source><![CDATA[The backup file could not be found or is not ready for download.]]></source>
+			</trans-unit>
+			<trans-unit id="backup.config.phpBinaryPath">
+				<source><![CDATA[PHP Binary Path (leave empty to use default PHP_BINARY)]]></source>
+			</trans-unit>
+			<trans-unit id="backup.config.mysqlDumpBinaryPath">
+				<source><![CDATA[MySQL Dump Binary Path (leave empty to use default "mysqldump")]]></source>
+			</trans-unit>
         </body>
     </file>
 </xliff>

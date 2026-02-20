@@ -123,8 +123,8 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * assessmentAnswers
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\Answer>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      */
+    #[\TYPO3\CMS\Extbase\Annotation\ORM\Cascade(['value' => 'remove'])]
     protected $assessmentAnswers;
 
     /**
@@ -578,7 +578,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Answer $answer
      */
-    public function addAssessmentAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answer)
+    public function addAssessmentAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answer): void
     {
         $this->assessmentAnswers->attach($answer);
     }
@@ -588,7 +588,7 @@ class Proposal extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \OpenOAP\OpenOap\Domain\Model\Answer $answerToRemove The Answer to be removed
      */
-    public function removeAssessmentAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answerToRemove)
+    public function removeAssessmentAnswer(\OpenOAP\OpenOap\Domain\Model\Answer $answerToRemove): void
     {
         $this->assessmentAnswers->detach($answerToRemove);
     }

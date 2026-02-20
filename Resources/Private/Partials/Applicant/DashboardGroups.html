@@ -1,7 +1,6 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+<html
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
       xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
       data-namespace-typo3-fluid="true">
 
 <f:comment><!--
@@ -226,11 +225,11 @@ Available variables:
                     </f:if>
                     <li class="call-list__item column column--size12 {class}">
                         <h2 class="call-list__title">{call.title}
-                            <f:if condition="{byTester} == 1"><span style="color:orange;">TEST</span></f:if>
+                            <f:if condition="{byTester} == 1"><span style="color:#b40900">TEST</span></f:if>
                         </h2>
                         <f:if condition="{call.hint}">
-                            <a class="call-list__hint" data-fslightbox="call-text-{call.uid}"  data-class="d-block" href="#call-hint-{call.uid}"></a>
-                            <div class="call-hint" id="call-hint-{call.uid}" hidden>
+                            <a class="call-list__hint" data-fslightbox="call-text-{call.uid}" data-class="d-block" href="#call-hint-{call.uid}" aria-controls="call-hint-{call.uid}" aria-label="{f:translate(key:'tx_openoap_dashboard.call.hint.info')}"></a>
+                            <div class="call-hint" id="call-hint-{call.uid}" hidden role="dialog" aria-modal="true">
                                 <a class="call-hint--close" onclick="fsLightboxInstances['call-text-{call.uid}'].close()"></a>
                                 {call.hint -> f:format.html()}
                             </div>

@@ -75,7 +75,6 @@ return [
                 'items' => [
                     [
                         'label' => '',
-                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],

@@ -1,33 +1,31 @@
 # Change log
 
-## Version X.1
+## Version 3.0.0
 
-- Allows the name or type of the linked proposals to be specified in the call (proposalName). Examples: proposal (default), concept, outline...
-- Refactoring xlf files - removes locallang_oap.xlf, locallang_oap_de.xlf
-- Repository refactoring (extended from ) OapAbstractRepository
-- Refactoring and extend DescendantsSelectItemsProcFunc for subfolder lists of call, pages, groups, items, options, validators
-- add pidItemValidator amd pidItemOptions: root folder IDs for Validators and Options (can be a comma separated list of PIDs) - use "global" as prefix of global folder
-
-## Version X+1
-
-- add select for radiobuttons/checkboxes items to select type of additional field (string / textarea)
-- textfield size depending on maxChar validator
-
-## Version X+1
-
-- BE mpdule "OAP Proposals": The detail page of the proposals is supplemented by the display of meta data
-- BE module "OAP Proposals": Upload and filtering by external ratings
-- BE module "OAP Proposals": Extension to include back-end evaluation of applications by clerks
-- BE module "OAP Proposals": Improvement and adjustment of filtering in the backend using cookies, improvement of pagination, scrolling functions
-
-## Version X
-
+- TYPO3 v13 compatibility
+- Removed fal_securedownload extension dependency
+- Added a new module to manage the site backups
 - Enhanced compact Word export
-- Show proposals of deleted applicants in proposal list
+- Show proposals of deleted applicants in the proposal list
 - Allow proposal editing in the backend and avoid memory allocation issues
 - Fixed issue with sending individual emails during mass status updates
 - Prevent accidental form submissions while the date-picker popup is active
 - Allow any date restriction that starts with an "@" symbol, not just "@today". Like "@tomorrow" or "@next Thursday"
+- Restore broken "femanager" configuration
+- Converted femanager registration from customised invitation to standard registration process, including an upgrade wizard
+- Simplified registration process from 3 steps to 2 steps
+- Improved accessibility (ARIA labels, focus styles, keyboard navigation for dual listbox, form fields and sticky navigation)
+- Allows the name or type of the linked proposals to be specified in the call (proposalName). Examples: proposal (default), concept, outline...
+- Refactoring xlf files - removes locallang_oap.xlf, locallang_oap_de.xlf
+- Repository refactoring (extended from) OapAbstractRepository
+- Refactoring and extend DescendantsSelectItemsProcFunc for subfolder lists of call, pages, groups, items, options, validators
+- add pidItemValidator and pidItemOptions: root folder IDs for Validators and Options (can be a comma-separated list of PIDs) - use "global" as prefix of global folder
+- add select for radiobuttons/checkboxes items to select type of additional field (string / textarea)
+- textfield size depending on maxChar validator
+- BE module "OAP Proposals": The detail page of the proposals is supplemented by the display of meta data
+- BE module "OAP Proposals": Upload and filtering by external ratings
+- BE module "OAP Proposals": Extension to include back-end evaluation of applications by clerks
+- BE module "OAP Proposals": Improvement and adjustment of filtering in the backend using cookies, improvement of pagination, scrolling functions
 - Various minor fixes
 
 ## Version 2.0.0

@@ -9,12 +9,14 @@ plugin.tx_femanager {
             10 = EXT:femanager/Resources/Private/Templates/
             20 = EXT:open_oap/Resources/Private/Extensions/femanager/Templates/
         }
+
         partialRootPath >
         partialRootPaths {
             10 = EXT:femanager/Resources/Private/Partials/
             20 = EXT:open_oap/Resources/Private/Extensions/femanager/Partials/
             30 = EXT:open_oap/Resources/Private/Partials/
         }
+
         layoutRootPath >
         layoutRootPaths {
             10 = EXT:femanager/Resources/Private/Layouts/
@@ -22,14 +24,13 @@ plugin.tx_femanager {
         }
     }
     persistence {
-      storagePid = {$plugin.tx_femanager.persistence.storagePid}
+        storagePid = {$plugin.tx_femanager.persistence.storagePid}
     }
     features {
-      #skipDefaultArguments = 1
-      requireCHashArgumentForActionArguments = 0
+        #skipDefaultArguments = 1
+        requireCHashArgumentForActionArguments = 0
     }
     settings {
-
         #############################
         # Custom settings
         #############################
@@ -63,6 +64,7 @@ plugin.tx_femanager {
                 #        email = TEXT
                 #        email.value = test@in2code.de
             }
+
             # redirect user (or admin if adminconfirmation) after profile creation (could be a PID, URL or fileadmin-Link)
             #      redirect = TEXT
             #      redirect {
@@ -86,12 +88,12 @@ plugin.tx_femanager {
             # redirect user after user clicks confirmation link in email (only if user confirmation is activated) (could be a PID, URL or fileadmin-Link)
             userConfirmationRedirect = TEXT
             userConfirmationRedirect {
-              typolink {
-                parameter = {$plugin.tx_femanager.settings.dashboardPageId}
-                returnLast = url
-                additionalParams = &alert=3
-                linkAccessRestrictedPages = 1
-              }
+                typolink {
+                    parameter = {$plugin.tx_femanager.settings.dashboardPageId}
+                    returnLast = url
+                    additionalParams = &alert=3
+                    linkAccessRestrictedPages = 1
+                }
             }
 
             # redirect user after user clicks refuse link in confirmation email (only if user confirmation is activated) (could be a PID, URL or fileadmin-Link)
@@ -145,6 +147,7 @@ plugin.tx_femanager {
                     # Enable serverside Formvalidation (PHP)
                     server = 1
                 }
+
                 username {
                     required = 0
                     uniqueInDb = 0
@@ -153,67 +156,85 @@ plugin.tx_femanager {
                     max = 255
                     email = 1
                 }
+
                 email {
                     required = 1
                     email = 1
                     uniqueInPage = 1
                 }
+
                 password {
                     required = 1
                     min = 8
                     mustInclude = number,letter,special
                 }
+
                 password_repeat {
                     required = 1
                     sameAs = password
                 }
+
                 usergroup {
                     #inList = 1,2,3
                 }
+
                 captcha {
                     # requires installation of sr_freecap
                     #          captcha = 1
                 }
+
                 terms {
                     # requires to check terms and conditions checkbox
                     required = 1
                 }
+
                 state {
                     required = 0
                     if = In2code\Femanager\Domain\Validator\ShouldValidateStateCondition
                 }
+
                 name {
-                  max = 160
+                    max = 160
                 }
+
                 first_name {
-                  max = 50
+                    max = 50
                 }
+
                 middle_name {
-                  max = 50
+                    max = 50
                 }
+
                 last_name {
-                  max = 50
+                    max = 50
                 }
+
                 telephone {
-                  max = 30
-                    }
+                    max = 30
+                }
+
                 fax {
-                  max = 30
+                    max = 30
                 }
+
                 title {
-                  max = 40
+                    max = 40
                 }
+
                 zip {
-                  max = 10
+                    max = 10
                 }
+
                 city {
-                  max = 50
+                    max = 50
                 }
+
                 country {
-                  max = 40
+                    max = 40
                 }
+
                 www {
-                  max = 80
+                    max = 80
                 }
             }
 
@@ -240,6 +261,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -247,6 +269,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailCreateUserConfirmationSubject
@@ -302,8 +325,8 @@ plugin.tx_femanager {
                     # this is a useful setting, as some virus scanners are preloading all links in an email, which then deletes this user automatically
                     # default = 0
                     confirmUserConfirmationRefused = 1
+                }
 
-            }
                 # Email for Admin confirmation (Admin must confirm registration in an email)
                 createAdminConfirmation {
                     ##########################
@@ -321,6 +344,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -328,6 +352,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailCreateAdminConfirmationSubject
@@ -362,6 +387,7 @@ plugin.tx_femanager {
                                 fieldName = image
                                 uid.field = uid
                             }
+
                             begin = 0
                             maxItems = 1
 
@@ -374,11 +400,13 @@ plugin.tx_femanager {
                                 }
                             }
                         }
+
                         #            20 = TEXT
                         #            20.wrap = ,|
                         #            20.value = fileadmin/image.jpg
                     }
                 }
+
                 # Email to user to confirm his new profile (with and without admin confirmation)
                 createUserNotify {
                     ##########################
@@ -396,6 +424,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -403,6 +432,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailCreateUserNotifySubject
@@ -454,6 +484,7 @@ plugin.tx_femanager {
                     #            20.value = fileadmin/image.jpg
                     #          }
                 }
+
                 # Email for User notify, if admin refused profile registration
                 createUserNotifyRefused {
                     ##########################
@@ -471,6 +502,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -478,6 +510,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailCreateUserNotifyRefusedSubject
@@ -529,6 +562,7 @@ plugin.tx_femanager {
                     #            20.value = fileadmin/image.jpg
                     #          }
                 }
+
                 # Email for Admin notify, if profile registration
                 createAdminNotify {
                     ##########################
@@ -546,6 +580,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -553,6 +588,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailCreateNotifySubject
@@ -587,6 +623,7 @@ plugin.tx_femanager {
                                 fieldName = image
                                 uid.field = uid
                             }
+
                             begin = 0
                             maxItems = 1
 
@@ -599,12 +636,14 @@ plugin.tx_femanager {
                                 }
                             }
                         }
+
                         #            20 = TEXT
                         #            20.wrap = ,|
                         #            20.value = fileadmin/image.jpg
                     }
                 }
             }
+
             # overwrite any user values with TypoScript
             forceValues {
                 # Overwrite initally (default)
@@ -617,6 +656,7 @@ plugin.tx_femanager {
                     #          email = TEXT
                     #          email.value = service@in2code.de
                 }
+
                 # Overwrite on user confirmation (only if user confirmation was activated)
                 onUserConfirmation {
                     # Usergroups can be set with a commaseparated list
@@ -627,6 +667,7 @@ plugin.tx_femanager {
                     #          company = TEXT
                     #          company.value = in2code.de
                 }
+
                 # Overwrite on admin confirmation (only if admin confirmation was activated)
                 onAdminConfirmation {
                     # Usergroups can be set with a commaseparated list
@@ -638,6 +679,7 @@ plugin.tx_femanager {
                     #          www.value = http://www.in2code.de
                 }
             }
+
             # Send Form values via POST to another system (e.g. CRM like salesforce or eloqua)
             sendPost {
                 # Activate sendPost (0/1)
@@ -679,6 +721,7 @@ plugin.tx_femanager {
                 # activate debug mode - shows all configuration from curl settings (needs extension devlog)
                 #        debug = 0
             }
+
             # Save user values to one or more other tables (e.g. tt_address or something else)
             #       With .field=[fieldname] you have access to the user object
             #       Possible values are: uid, username, address, city, company, country, email, fax, firstName, lastName, middleName, name, password, telephone, fax, title, www, zip and uid_[tablename] (to have access to the uid of one of the last loop)
@@ -703,6 +746,7 @@ plugin.tx_femanager {
                 #          last_name.field = lastName
                 #        }
             }
+
             misc {
                 # Remove Usergroups from Usergroup Selection in Frontend
                 #        removeFromUserGroupSelection = 2,3
@@ -722,6 +766,7 @@ plugin.tx_femanager {
                         # Allow special Characters
                         addSpecialCharacters = 0
                     }
+
                     password {
                         # Length
                         length = 10
@@ -735,6 +780,7 @@ plugin.tx_femanager {
                 }
             }
         }
+
 
         ###################################
         # Settings for UPDATE user profiles
@@ -771,6 +817,7 @@ plugin.tx_femanager {
                 #        email = TEXT
                 #        email.value = test@in2code.de
             }
+
             # validation of user input values
             # possible validations for each field are: required, email, min, max, intOnly, lettersOnly, unicodeLettersOnly, uniqueInPage, uniqueInDb, date, mustInclude(number,letter,special,space,uppercase), mustNotInclude(number,letter,uppercase,special,space), inList(1,2,3), captcha, sameAs(password)
             validation {
@@ -781,67 +828,85 @@ plugin.tx_femanager {
                     # Enable serverside Formvalidation (PHP)
                     server = 1
                 }
+
                 username {
                     required = 0
-                    mustNotInclude = space
                     email = 1
                     uniqueInDb = 0
                     uniqueInPage = 1
+                    mustNotInclude = space
                 }
+
                 email {
                     required = 0
                     email = 1
                 }
+
                 password {
                     required = 0
                     #min = 8
                     #mustInclude = number,letter,special
                 }
+
                 password_repeat {
                     required = 0
                     sameAs = password
                 }
+
                 usergroup {
                     #inList = 1,2,3
                 }
+
                 captcha {
                     # requires installation of sr_freecap
                     #          captcha = 1
                 }
+
                 name {
-                  max = 160
+                    max = 160
                 }
+
                 first_name {
-                  max = 50
+                    max = 50
                 }
+
                 middle_name {
-                  max = 50
+                    max = 50
                 }
+
                 last_name {
-                  max = 50
+                    max = 50
                 }
+
                 telephone {
-                  max = 30
-                    }
+                    max = 30
+                }
+
                 fax {
-                  max = 30
+                    max = 30
                 }
+
                 title {
-                  max = 40
+                    max = 40
                 }
+
                 zip {
-                  max = 10
+                    max = 10
                 }
+
                 city {
-                  max = 50
+                    max = 50
                 }
+
                 country {
-                  max = 40
+                    max = 40
                 }
+
                 www {
-                  max = 80
+                    max = 80
                 }
             }
+
             # All email settings within the update process
             email {
 
@@ -862,6 +927,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -869,6 +935,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailUpdateRequestSubject
@@ -920,6 +987,7 @@ plugin.tx_femanager {
                     #            20.value = fileadmin/image.jpg
                     #          }
                 }
+
                 # Email to user if update request was refused by admin
                 updateRequestRefused {
                     ##########################
@@ -937,6 +1005,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -944,6 +1013,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailUpdateRequestRefusedSubject
@@ -995,6 +1065,7 @@ plugin.tx_femanager {
                     #            20.value = fileadmin/image.jpg
                     #          }
                 }
+
                 # Email for if update request was refused by admin
                 notifyAdmin {
                     ##########################
@@ -1012,6 +1083,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -1019,6 +1091,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailUpdateNotifySubject
@@ -1071,6 +1144,7 @@ plugin.tx_femanager {
                     #          }
                 }
             }
+
             # overwrite any user values with TypoScript
             forceValues {
                 # Overwrite initally (default) - Note: This values will be updated as soon as the admin confirms the request (if admin confirm is activated)
@@ -1083,6 +1157,7 @@ plugin.tx_femanager {
                     #          email = TEXT
                     #          email.value = service@in2code.de
                 }
+
                 # Overwrite on admin confirmation (only if admin confirmation was activated)
                 onAdminConfirmation {
                     # Usergroups can be set with a commaseparated list
@@ -1094,6 +1169,7 @@ plugin.tx_femanager {
                     #          www.value = http://www.in2code.de
                 }
             }
+
             misc {
                 # Don't change password if it is empty
                 keepPasswordIfEmpty = 1
@@ -1105,6 +1181,7 @@ plugin.tx_femanager {
                 #        passwordSave = Argon2i
             }
         }
+
 
         ###################################
         # Settings for INVITATION View
@@ -1154,23 +1231,28 @@ plugin.tx_femanager {
                     # Enable serverside Formvalidation (PHP)
                     server = 1
                 }
+
                 username {
                     required = 1
-          uniqueInDb = 1
+                    uniqueInDb = 1
                     mustNotInclude = space
                 }
+
                 email {
-          required = 1
+                    required = 1
                     email = 1
                 }
+
                 usergroup {
                     #inList = 1,2,3
                 }
+
                 captcha {
                     # requires installation of sr_freecap
                     #          captcha = 1
                 }
             }
+
             # Validation for second Step (Edit)
             validationEdit {
                 _enable {
@@ -1180,16 +1262,19 @@ plugin.tx_femanager {
                     # Enable serverside Formvalidation (PHP)
                     server = 1
                 }
+
                 password {
                     required = 1
-          #min = 10
-          #mustInclude = number,letter,special
+                    #min = 10
+                    #mustInclude = number,letter,special
                 }
+
                 password_repeat {
                     required = 1
                     sameAs = password
                 }
             }
+
             # All email settings within the update process
             email {
 
@@ -1210,6 +1295,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -1217,6 +1303,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailInvitationSubject
@@ -1268,6 +1355,7 @@ plugin.tx_femanager {
                     #            20.value = fileadmin/image.jpg
                     #          }
                 }
+
                 # Email for admin if profile added (only if admin notify is activated)
                 invitationAdminNotifyStep1 {
                     ##########################
@@ -1285,6 +1373,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -1292,6 +1381,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailInvitationAdminNotifiyStep1Subject
@@ -1343,6 +1433,7 @@ plugin.tx_femanager {
                     #            20.value = fileadmin/image.jpg
                     #          }
                 }
+
                 # Email for admin if profile added (only if admin notify is activated)
                 invitationAdminNotify {
                     ##########################
@@ -1360,6 +1451,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -1367,6 +1459,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailInvitationAdminNotifiySubject
@@ -1418,6 +1511,7 @@ plugin.tx_femanager {
                     #            20.value = fileadmin/image.jpg
                     #          }
                 }
+
                 # Email for admin if user refused profile invitation (only if admin notify on step 1 is activated)
                 invitationRefused {
                     ##########################
@@ -1435,6 +1529,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value = {$plugin.tx_femanager.settings.adminName}
                     }
+
                     # Overwrite Senders (please fill both)
                     sender {
                         email = TEXT
@@ -1442,6 +1537,7 @@ plugin.tx_femanager {
                         name = TEXT
                         name.value =
                     }
+
                     # Overwrite Subject
                     subject = TEXT
                     subject.data = LLL:EXT:femanager/Resources/Private/Language/locallang.xlf:emailInvitationUserRefusedAdminNotifiyStep1Subject
@@ -1494,6 +1590,7 @@ plugin.tx_femanager {
                     #          }
                 }
             }
+
             # overwrite any user values with TypoScript
             forceValues {
                 # Overwrite initally (default)
@@ -1506,6 +1603,7 @@ plugin.tx_femanager {
                     #          email = TEXT
                     #          email.value = service@in2code.de
                 }
+
                 # Overwrite on admin confirmation (only if admin confirmation was activated)
                 onAdminConfirmation {
                     # Usergroups can be set with a commaseparated list
@@ -1517,6 +1615,7 @@ plugin.tx_femanager {
                     #          www.value = http://www.in2code.de
                 }
             }
+
             misc {
                 # Remove Usergroups from Usergroup Selection in Frontend
                 #        removeFromUserGroupSelection = 2,3
@@ -1525,6 +1624,7 @@ plugin.tx_femanager {
                 #        passwordSave = Argon2i
             }
         }
+
 
         delete {
             # redirect after profile delete
@@ -1537,6 +1637,7 @@ plugin.tx_femanager {
             #        }
             #      }
         }
+
         list {
             filter {
                 searchword {
@@ -1544,6 +1645,7 @@ plugin.tx_femanager {
                 }
             }
         }
+
         loginAs {
             # redirect when simulate a frontenduser login from administrator
             #      redirect = TEXT
@@ -1555,6 +1657,7 @@ plugin.tx_femanager {
             #        }
             #      }
         }
+
         misc {
             # Where to save new image files
             uploadFolder = {$plugin.tx_femanager.settings.uploadFolder}
@@ -1574,12 +1677,14 @@ plugin.tx_femanager {
             # Width of the rendered image in FE
             renderImageWidth = 250
         }
+
         ratelimiter {
             # Number of seconds for the sliding window rate limiter
             timeframe = {$plugin.tx_femanager.settings.ratelimiter.timeframe}
             # Request count. How many requests are allowed in the last <timeframe> seconds. Set to 0 to disable rate limiter.
             limit = {$plugin.tx_femanager.settings.ratelimiter.limit}
         }
+
         # Add own finisher classes that will be called after registration, profile update, invitation or deletion (e.g. if you want to do something with form values by your own: Save into tables, call an API, etc...)
         finishers {
             # Femanager finishers
@@ -1602,6 +1707,7 @@ plugin.tx_femanager {
             #        require = fileadmin/femanager/finisher/DoSomethingFinisher.php
             #      }
         }
+
         # Add any dataProcessor classes that will be called just before the action will be rendered
         dataProcessors {
             # Birthdate converter
@@ -1611,11 +1717,13 @@ plugin.tx_femanager {
                 config {
                     fieldNames = dateOfBirth
                 }
+
                 events {
                     New = create
                     Edit = update
                 }
             }
+
             #      100 {
             # Classname that should be called with an existing method process()
             #        class = Vendor\Ext\DataProcessor\DoSomethingDataProcessor
@@ -1634,6 +1742,7 @@ plugin.tx_femanager {
             #        }
             #      }
         }
+
         # Add own autoAdminConfirmation classes that can decide if confirmation by admin (only if activated) can be skipped. E.g. if an Email domain fits to a given list.
         autoAdminConfirmation {
             # Femanager autoAdminConfirmation classes
@@ -1659,6 +1768,7 @@ plugin.tx_femanager {
             #        }
             #      }
         }
+
         showResendUserConfirmationRequestView = {$plugin.tx_femanager.settings.showResendUserConfirmationRequestView}
 
         # Don't touch this - this is needed to let the plugin know if the main typoscript is included - otherwise an errormessage will be shown in the frontend
@@ -1677,12 +1787,14 @@ plugin.tx_femanager {
         femanagerJQuery.external = 1
     }
 [global]
+
 # add twitter bootstrap JS if it was turned on in the constants
 [0 < {$plugin.tx_femanager.settings.bootstrap}]
     page.includeJSFooterlibs {
         femanangerBootstrap = EXT:femanager/Resources/Public/JavaScript/Vendor/bootstrap.min.js
     }
 [global]
+
 #########################
 # Inlude CSS files
 #########################
@@ -1692,18 +1804,20 @@ plugin.tx_femanager {
         femanangerBootstrap = EXT:femanager/Resources/Public/JavaScript/Vendor/bootstrap.min.css
     }
 [global]
+
 page {
     includeCSS {
-      # femanagerMain = EXT:femanager/Resources/Public/Css/Main.min.css
-      # Not needed, own styles
-      femanagerMain >
+        # femanagerMain = EXT:femanager/Resources/Public/Css/Main.min.css
+        # Not needed, own styles
+        femanagerMain >
     }
+
     includeJSFooter {
-      # femanagerValidation = EXT:femanager/Resources/Public/JavaScript/Validation.min.js
-      # femanager = EXT:femanager/Resources/Public/JavaScript/Femanager.min.js
-      # Currently just causing JS errors - no jQuery in project. Unclear if behaviour needed
-      femanagerValidation >
-      femanager >
+        # femanagerValidation = EXT:femanager/Resources/Public/JavaScript/Validation.min.js
+        # femanager = EXT:femanager/Resources/Public/JavaScript/Femanager.min.js
+        # Currently just causing JS errors - no jQuery in project. Unclear if behaviour needed
+        femanagerValidation >
+        femanager >
     }
 }
 
@@ -1714,7 +1828,7 @@ femanager_validation = PAGE
 femanager_validation {
     typeNum = 1548935210
     config {
-    additionalHeaders.10.header = Content-type:application/json
+        additionalHeaders.10.header = Content-Type: application/json
         no_cache = 0
         disableAllHeaderCode = 1
         disablePrefixComment = 1
@@ -1722,6 +1836,7 @@ femanager_validation {
         admPanel = 0
         debug = 0
     }
+
     10 = USER_INT
     10 {
         userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
@@ -1747,6 +1862,7 @@ feManagerStateSelection {
         admPanel = 0
         debug = 0
     }
+
     10 = USER_INT
     10 {
         userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
@@ -1768,10 +1884,10 @@ module.tx_femanager.settings.configPID = 1
 # Configuration Setting for OAP Registration
 ##################################################
 
-[traverse(page, "uid") == {$plugin.tx_femanager.settings.registrationMasterdataPid}]
+[traverse(page, "uid") == {$plugin.tx_femanager.settings.registrationMasterdataPageId}]
     plugin.tx_femanager.settings.registerMasterdata = 1
-[END]
+[end]
 
 [traverse(page, "uid") == {$plugin.tx_femanager.settings.dashboardPageId}]
     plugin.tx_femanager.settings.dashboardProfile = 1
-[END]
+[end]

@@ -25,7 +25,7 @@ final class ProposalNameWizard implements UpgradeWizardInterface, LoggerAwareInt
     protected const TABLE_CALLS = 'tx_openoap_domain_model_call';
     protected const DEFAULT_PROPOSAL_NAME = 'proposal';
 
-    public function __construct()
+    public function __construct(private readonly \TYPO3\CMS\Core\Database\ConnectionPool $connectionPool)
     {
         $this->setLogger(
             GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__)
@@ -98,7 +98,7 @@ final class ProposalNameWizard implements UpgradeWizardInterface, LoggerAwareInt
 
     protected function getQueryBuilder(string $table): QueryBuilder
     {
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);
         return $queryBuilder;
     }
 }

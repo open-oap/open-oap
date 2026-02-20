@@ -256,8 +256,8 @@ class ExcelExportService extends OapBaseController
             $export[$proposalUid] = [];
             $colI = 0;
             $export[$proposalUid][$colI++] = $proposalUid;
-            $export[$proposalUid][$colI++] = $proposal->getApplicant()->getEmail();
-            $export[$proposalUid][$colI++] = $proposal->getApplicant()->getUid();
+            $export[$proposalUid][$colI++] = $proposal->getApplicant()?->getEmail() ?? '[Deleted Applicant]';
+            $export[$proposalUid][$colI++] = $proposal->getApplicant()?->getUid() ?? 0;
             $export[$proposalUid][$colI++] = $this->buildSignature($proposal);
             $export[$proposalUid][$colI++] = $states[$proposal->getState()];
             $export[$proposalUid][$colI++] = date("d.m.Y", $proposal->getSubmitTstamp());

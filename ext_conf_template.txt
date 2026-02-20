@@ -4,3 +4,11 @@ mailStage = 0
 fakeUserMail =
 # cat=Backend; type=string; label=comma separated list of the column names for import
 proposalAssessmentImportColumnNames = id,pred_score,pred_action
+# cat=Backup; type=boolean; label=Enable backup module (requires TYPO3 cache flush after changing)
+enableBackupModule = 0
+# cat=Backup; type=options[user,admin]; label=Backup module access level (requires TYPO3 cache flush after changing)
+backupAccess = admin
+# cat=Backup; type=string; label=PHP Binary Path (leave empty to use default PHP_BINARY)
+phpBinaryPath = php
+# cat=Backup; type=string; label=MySQL Dump Binary Path (leave empty to use default "mysqldump")
+mysqlDumpBinaryPath = mysqldump

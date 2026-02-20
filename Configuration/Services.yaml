@@ -14,6 +14,18 @@ services:
   OpenOAP\OpenOap\UserFunctions\FormEngine\DescendantsSelectItemsProcFunc:
     public: true
 
+  OpenOAP\OpenOap\Command\CreateBackupCommand:
+    tags:
+      - name: 'console.command'
+        command: 'open-oap:backup:create'
+        description: 'Creates a complete backup of the TYPO3 installation.'
+
+  OpenOAP\OpenOap\Command\CleanupTemporaryLinksCommand:
+    tags:
+      - name: 'console.command'
+        command: 'open-oap:backup:cleanup-links'
+        description: 'Removes expired temporary download links for backup files.'
+
   OpenOAP\OpenOap\Upgrades\ReplaceInvitationByNewWizard:
     tags:
       - name: install.upgradewizard

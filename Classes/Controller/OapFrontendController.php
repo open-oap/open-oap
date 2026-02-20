@@ -9,8 +9,6 @@ use OpenOAP\OpenOap\Domain\Model\Comment;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 
@@ -30,14 +28,24 @@ class OapFrontendController extends OapBaseController
 {
     protected string $ext = 'OpenOap';
 
-    /**
-     * @var UriBuilder|null
-     */
-    protected $uriBuilder;
+    protected ?Context $context = null;
+
+    protected ?LanguageServiceFactory $languageServiceFactory = null;
+
+    public function injectContext(Context $context): void
+    {
+        $this->context = $context;
+    }
+
+    public function injectLanguageServiceFactory(LanguageServiceFactory $languageServiceFactory): void
+    {
+        $this->languageServiceFactory = $languageServiceFactory;
+    }
 
     public function initializeAction(): void
     {
         parent::initializeAction();
+
         if (!$this->settings) {
             $this->settings = $this->configurationManager->getConfiguration(
                 \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
@@ -46,10 +54,8 @@ class OapFrontendController extends OapBaseController
             );
         }
 
-        $context = GeneralUtility::makeInstance(Context::class);
-
         $this->site = $GLOBALS['TYPO3_REQUEST']->getAttribute('site');
-        $langId = $context->getPropertyFromAspect('language', 'id');
+        $langId = $this->context->getPropertyFromAspect('language', 'id');
 
         $this->language = $this->site->getLanguageById($langId);
         $this->langCode = $this->language->getLocale()->getLanguageCode();
@@ -64,7 +70,7 @@ class OapFrontendController extends OapBaseController
         if (($GLOBALS['LANG'] ?? null) instanceof LanguageService) {
             return $GLOBALS['LANG'];
         }
-        return GeneralUtility::makeInstance(LanguageServiceFactory::class)->create('default');
+        return $this->languageServiceFactory->create('default');
     }
 
     /**

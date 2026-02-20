@@ -52,6 +52,7 @@ CREATE TABLE tx_openoap_domain_model_formgroup (
 
 CREATE TABLE tx_openoap_domain_model_formitem (
 	question varchar(255) NOT NULL DEFAULT '',
+	short_question varchar(255) NOT NULL DEFAULT '',
 	internal_title varchar(255) NOT NULL DEFAULT '',
 	intro_text text,
 	help_text text NOT NULL DEFAULT '',
@@ -112,7 +113,7 @@ CREATE TABLE tx_openoap_domain_model_proposal (
 	submit_tstamp int(11) DEFAULT '0' NOT NULL,
 	rejection_tstamp int(11) DEFAULT '0' NOT NULL,
 	rejection_email varchar(255) NOT NULL DEFAULT '',
-    survey_hash varchar(255) NOT NULL DEFAULT '',
+	survey_hash varchar(255) NOT NULL DEFAULT '',
 	assessment_value varchar(5) DEFAULT '' NOT NULL,
 	assessment_answers text NOT NULL,
 	reviewer int(11) DEFAULT '0' NOT NULL,
@@ -207,7 +208,7 @@ CREATE TABLE tx_openoap_call_formitem_mm (
 		uid_foreign int(10) unsigned NOT NULL DEFAULT 0,
 		sorting int(10) unsigned NOT NULL DEFAULT 0,
 		sorting_foreign int(10) unsigned NOT NULL DEFAULT 0,
-		fieldname VARCHAR(255) NOT NULL DEFAULT '',
+		fieldname VARCHAR(255) NOT NULL DEFAULT 'items',
 
 		PRIMARY KEY (uid_local,uid_foreign,fieldname),
 		KEY uid_local (uid_local),

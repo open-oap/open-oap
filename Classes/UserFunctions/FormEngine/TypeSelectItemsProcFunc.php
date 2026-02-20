@@ -15,12 +15,7 @@ class TypeSelectItemsProcFunc
      */
     protected ItemOptionRepository $itemOptionRepository;
 
-    /**
-     * Injects the ItemOptionRepository
-     *
-     * @param ItemOptionRepository $itemOptionRepository
-     */
-    public function injectItemOptionRepository(ItemOptionRepository $itemOptionRepository): void
+    public function __construct(\OpenOAP\OpenOap\Domain\Repository\ItemOptionRepository $itemOptionRepository)
     {
         $this->itemOptionRepository = $itemOptionRepository;
     }

@@ -930,6 +930,10 @@
                 <source>Available in English only</source>
                 <target>Nur auf Englisch verfügbar</target>
             </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.call.hint.info' resname='tx_openoap_dashboard.call.hint.info'>
+                <source>Additional information</source>
+                <target>Zusätzliche Informationen</target>
+            </trans-unit>
             <trans-unit id='tx_openoap_dashboard.masterdata.header' resname='tx_openoap_dashboard.masterdata.header'>
                 <source><![CDATA[Master data]]></source>
                 <target><![CDATA[Stammdaten]]></target>
@@ -1113,6 +1117,10 @@
             <trans-unit id='tx_openoap_form.modal.save' resname='tx_openoap_form.modal.save'>
                 <source><![CDATA[Save]]></source>
                 <target><![CDATA[Speichern]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap_form.preview.edit' resname='tx_openoap_form.preview.edit'>
+                <source><![CDATA[Edit]]></source>
+                <target><![CDATA[Bearbeiten]]></target>
             </trans-unit>
             <!-- Applicant -->
             <trans-unit id='tx_openoap_applicant.masterdata.header' resname='tx_openoap_applicant.masterdata.header'>
@@ -1422,6 +1430,10 @@
                 <source><![CDATA[Remove file]]></source>
                 <target><![CDATA[Datei entfernen]]></target>
             </trans-unit>
+            <trans-unit id='tx_openoap.general.download_file' resname='tx_openoap.general.download_file'>
+                <source><![CDATA[Download file]]></source>
+                <target><![CDATA[Datei herunterladen]]></target>
+            </trans-unit>
             <trans-unit id='tx_openoap.general.add_file' resname='tx_openoap.general.add_file'>
                 <source><![CDATA[Add file]]></source>
                 <target><![CDATA[Datei hinzufügen]]></target>
@@ -1451,6 +1463,10 @@
             <trans-unit id='tx_openoap.general.formControls' resname='tx_openoap.general.formControls'>
                 <source><![CDATA[Form controls]]></source>
                 <target><![CDATA[Formular Steuerelement]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap.general.jump_to_top' resname='tx_openoap.general.jump_to_top'>
+                <source><![CDATA[Scroll to top]]></source>
+                <target><![CDATA[Nach oben scrollen]]></target>
             </trans-unit>
             <trans-unit id='tx_openoap.general.date-from' resname='tx_openoap.general.date-from'>
                 <source><![CDATA[from]]></source>
@@ -1695,12 +1711,12 @@
                 <target>Profil</target>
             </trans-unit>
             <trans-unit id="oap_registration.intro" resname="oap_registration.intro">
-				<source>Here you can register in 2 steps to create a user account with OAP.</source>
-				<target>Hier können Sie sich in 2 Schritten registrieren, um ein Benutzerkonto anzulegen.</target>
+                <source>Here you can register in 2 steps to create a user account with OAP.</source>
+                <target>Hier können Sie sich in 2 Schritten registrieren, um ein Benutzerkonto anzulegen.</target>
             </trans-unit>
             <trans-unit id="oap_registrationform_step1.header" resname="oap_registration_step1.header">
-				<source>Create new account (step 1 of 2)</source>
-				<target>Neues Benutzerkonto erstellen (Schritt 1 von 2)</target>
+                <source>Create new account (step 1 of 2)</source>
+                <target>Neues Benutzerkonto erstellen (Schritt 1 von 2)</target>
             </trans-unit>
             <trans-unit id="oap_registrationform_step1.intro" resname="oap_registrationform_step1.intro">
                 <source>

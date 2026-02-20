@@ -15,7 +15,7 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'question,internal_title,intro_text,help_text,filter_label,default_value,unit,additional_label',
+        'searchFields' => 'question,short_question,internal_title,intro_text,help_text,filter_label,default_value,unit,additional_label',
         'security' => [
             'ignorePageTypeRestriction' => true,
         ],
@@ -24,25 +24,25 @@ return [
     ],
     'types' => [
         // type_string
-        '1' => ['showitem' => 'question, internal_title, intro_text, help_text, type, unit, default_value, modificators, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_info, enabled_title, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '1' => ['showitem' => 'question, short_question, internal_title, intro_text, help_text, type, unit, default_value, modificators, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_info, enabled_title, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_text 2
-        '2' => ['showitem' => 'question, internal_title, intro_text, help_text, type, default_value, validators, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '2' => ['showitem' => 'question, short_question, internal_title, intro_text, help_text, type, default_value, validators, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_date1 3
-        '3' => ['showitem' => 'question, internal_title, intro_text, help_text, type, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta,enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '3' => ['showitem' => 'question, short_question, internal_title, intro_text, help_text, type, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta,enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_date2 4
-        '4' => ['showitem' => 'question, internal_title, intro_text, help_text, type, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta,enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '4' => ['showitem' => 'question, short_question, internal_title, intro_text, help_text, type, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta,enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_checkbox 5
-        '5' => ['showitem' => 'question, internal_title, intro_text, help_text, type, options, additional_value, additional_type, additional_label, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '5' => ['showitem' => 'question, short_question, internal_title, intro_text, help_text, type, options, additional_value, additional_type, additional_label, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_radiobutton 6
-        '6' => ['showitem' => 'question, internal_title, intro_text, help_text, type, options, additional_value, additional_type, additional_label, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta,enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '6' => ['showitem' => 'question, short_question, internal_title, intro_text, help_text, type, options, additional_value, additional_type, additional_label, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta,enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_select 7
-        '7' => ['showitem' => 'question, internal_title, intro_text, help_text, type, default_value, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '7' => ['showitem' => 'question, short_question, internal_title, intro_text, help_text, type, default_value, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_select multiple 8
-        '8' => ['showitem' => 'question, internal_title, intro_text, help_text, type, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '8' => ['showitem' => 'question, short_question, internal_title, intro_text, help_text, type, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // type_upload 9
-        '9' => ['showitem' => 'question, internal_title, intro_text, help_text, type, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '9' => ['showitem' => 'question, short_question, internal_title, intro_text, help_text, type, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
         // dropdown-select 10
-        '10' => ['showitem' => 'question, internal_title, intro_text, help_text, type, default_value, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
+        '10' => ['showitem' => 'question, short_question, internal_title, intro_text, help_text, type, default_value, options, validators, --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.tab.meta, enabled_filter, filter_label, enabled_info, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, sys_language_uid, l10n_parent, l10n_diffsource, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden, '],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -83,7 +83,6 @@ return [
                 'items' => [
                     [
                         'label' => '',
-                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -99,6 +98,17 @@ return [
                 'eval' => 'trim',
                 'default' => '',
                 'required' => true,
+            ],
+        ],
+        'short_question' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_formitem.short_question',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'max' => 100,
+                'eval' => 'trim',
+                'default' => '',
             ],
         ],
         'internal_title' => [
@@ -203,12 +213,6 @@ return [
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
-                'items' => [
-                    [
-                        'label' => '',
-                        'value' => '',
-                    ],
-                ],
                 'default' => 0,
             ],
         ],
@@ -229,12 +233,6 @@ return [
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
-                'items' => [
-                    [
-                        'label' => '',
-                        'value' => '',
-                    ],
-                ],
                 'default' => 0,
             ],
         ],
@@ -245,12 +243,6 @@ return [
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
-                'items' => [
-                    [
-                        'label' => '',
-                        'value' => '',
-                    ],
-                ],
                 'default' => 0,
             ],
         ],
@@ -261,12 +253,6 @@ return [
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
-                'items' => [
-                    [
-                        'label' => '',
-                        'value' => '',
-                    ],
-                ],
                 'default' => 0,
             ],
         ],
@@ -283,8 +269,8 @@ return [
                     ],
                 'size' => 1,
                 'maxitems' => 1,
-                'eval' => 'required',
                 'default' => 1,
+                'required' => true,
             ],
         ],
         'default_value' => [
@@ -427,12 +413,6 @@ return [
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
-                'items' => [
-                    [
-                        0 => '',
-                        1 => '',
-                    ],
-                ],
                 'default' => 0,
             ],
         ],

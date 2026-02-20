@@ -34,7 +34,7 @@ class GetLabelOfOptionViewHelper extends AbstractViewHelper
 
         $options = $this->arguments['options'];
         $multiple = $this->arguments['multiple'];
-        $additionalValue = $this->arguments['additionalValue'];
+        $additionalValue = (string)$this->arguments['additionalValue'];
 
         if ($multiple) {
             $values = json_decode($valueRaw, true);

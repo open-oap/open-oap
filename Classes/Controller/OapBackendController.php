@@ -7,12 +7,15 @@ namespace OpenOAP\OpenOap\Controller;
 use OpenOAP\OpenOap\Domain\Model\Answer;
 use OpenOAP\OpenOap\Domain\Model\Comment;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
-
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 
@@ -34,20 +37,32 @@ class OapBackendController extends OapBaseController
 {
     protected string $ext = 'open_oap';
 
-    /**
-     * @var UriBuilder|null
-     */
-    protected $backendUriBuilder;
+    protected ?UriBuilder $backendUriBuilder = null;
 
-    /**
-     * @var int
-     */
     protected int $pageUid = 0;
 
-    /**
-     * @var string
-     */
     protected string $siteIdentifier = '';
+
+    protected ?ModuleTemplateFactory $moduleTemplateFactory = null;
+
+    protected ModuleTemplate $moduleTemplate;
+
+    protected ?BackendConfigurationManager $backendConfigurationManager = null;
+
+    public function injectModuleTemplateFactory(ModuleTemplateFactory $moduleTemplateFactory): void
+    {
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
+    }
+
+    public function injectBackendConfigurationManager(BackendConfigurationManager $backendConfigurationManager): void
+    {
+        $this->backendConfigurationManager = $backendConfigurationManager;
+    }
+
+    public function injectBackendUriBuilder(UriBuilder $backendUriBuilder): void
+    {
+        $this->backendUriBuilder = $backendUriBuilder;
+    }
 
     public function initializeAction(): void
     {
@@ -55,12 +70,13 @@ class OapBackendController extends OapBaseController
         // set messageSource
         $this->messageSource = 'LLL:EXT:' . $this->ext . '/Resources/Private/Language/' . $this->messageFile . ':message.';
 
-        $this->pageUid = (int)($GLOBALS['_GET']['id'] ?? 0);
+        $this->pageUid = (int)($this->request->getQueryParams()['id'] ?? 0);
         $this->siteIdentifier = $GLOBALS['TYPO3_REQUEST']->getAttribute('site')->getIdentifier();
 
-        $this->backendUriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $this->moduleTemplate->assign('settings', $this->settings);
 
-        $this->resourceFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
+        $this->handleMenu($this->request->getControllerActionName());
     }
 
     /**
@@ -145,7 +161,7 @@ class OapBackendController extends OapBaseController
      * @param string $messageId
      * @param int $messageType
      */
-    protected function setMessage(string $messageId, int $messageType): void
+    protected function setMessage(string $messageId,  ContextualFeedbackSeverity $messageType): void
     {
         $messageText = $this->getLanguageService()->sL($this->messageSource . $messageId);
 
@@ -183,7 +199,7 @@ class OapBackendController extends OapBaseController
             $this->view->assign('pages', range(1, $pagination->getLastPageNumber()));
         }
 
-        $this->view->assignMultiple(
+        $this->moduleTemplate->assignMultiple(
             [
                 'moduleUri' => $moduleUri,
                 'paginator' => $arrayPaginator,
@@ -248,8 +264,7 @@ class OapBackendController extends OapBaseController
      */
     protected function getMailTemplatePaths(): TemplatePaths
     {
-        $backendConfigurationManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager::class);
-        $typoscriptSetup = $backendConfigurationManager->getTypoScriptSetup();
+        $typoscriptSetup = $this->backendConfigurationManager->getTypoScriptSetup($this->request);
         $view = $typoscriptSetup['module.']['tx_openoap_web_openoapbackendproposals.']['view.'];
         $pathArray = array_replace_recursive(
             [
@@ -264,5 +279,16 @@ class OapBackendController extends OapBaseController
             ]
         );
         return new TemplatePaths($pathArray);
+    }
+
+    /**
+     * Handle and manage menu items in the backend module
+     *
+     * @param string $currentAction The current action being executed in the backend module
+     * @return void
+     */
+    protected function handleMenu(string $currentAction): void
+    {
+        // Override this method to add menu items to the backend module
     }
 }

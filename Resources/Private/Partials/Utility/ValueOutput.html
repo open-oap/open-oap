@@ -1,8 +1,7 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+<html
      xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-     xmlns:oap="OpenOAP\OpenOap\ViewHelpers"
-     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+     xmlns:oap="http://typo3.org/ns/OpenOAP/OpenOap/ViewHelpers"
      data-namespace-typo3-fluid="true">
 <f:comment><!--
 <v:variable.set name="propertyKeyIndex" value="{itemGroup.uid}--{elementCounter}--{item.uid}" />
@@ -12,7 +11,7 @@
 
 <f:if condition="{proposal.{propertyKey}} == ''">
 <f:then>
-   <span class="aural"><f:translate key="empty" /></span>
+   <span class="aural"><f:translate key="tx_openoap.empty" /></span>
    <span aria-hidden="true">-----</span>
 </f:then>
 <f:else>

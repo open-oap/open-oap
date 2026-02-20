@@ -1,7 +1,6 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+<html
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
       xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
       data-namespace-typo3-fluid="true">
 
 <f:comment><!--
@@ -136,7 +135,7 @@ Available variables:
                           <v:variable.set name="CallDisabled" value="1" />
                   </f:if>
                   <li class="call-list__item">
-                      <h2 class="call-list__title">{call.title} <f:if condition="{byTester} == 1"><span style="color:orange;">TEST</span></f:if></h2>
+                      <h2 class="call-list__title">{call.title} <f:if condition="{byTester} == 1"><span style="color:#b40900">TEST</span></f:if></h2>
                       <f:if condition="{call.teaserText}"><p class="call-list__text">{call.teaserText}</p></f:if>
                       <f:if condition="{call.callEndTime}"><p class="call-list__text">{f:translate(key:'tx_openoap_dashboard.call.active_until')}: <f:format.date format="d.m.Y - H:i:s">{call.callEndTime}</f:format.date></p></f:if>
                       <f:if condition="!{CallDisabled}">

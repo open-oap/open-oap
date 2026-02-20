@@ -2,7 +2,7 @@
     legend {
         float: none;
         font-size: 0.8rem;
-        background-color: #C4C4C4;
+        background-color: var(--typo3-surface-container-highest);
         padding: 5px;
         width: auto;
     }
@@ -10,7 +10,7 @@
         margin-top: 0.5rem;
     }
     h1 .highlighted {
-        display:inline-block;margin-bottom:1px;background-color: #EBEBEB;padding:6px 12px;
+        display:inline-block;margin-bottom:1px;background-color: var(--typo3-surface-container-high);padding:6px 12px;
     }
     .item_label {font-size: smaller;}
     tr td {
@@ -24,17 +24,17 @@
         padding-right: 0.5rem;
     }
     .formular {
-        background-color: #EBEBEB; padding:0.5rem;
+        background-color: var(--typo3-surface-container-high); padding:0.5rem;
     }
     .page {
-        background-color: white;padding:0.5rem;margin-left:1rem;margin-bottom:1rem;margin-top:1rem;margin-right: 0;
+        background-color: var(--typo3-surface-dim);padding:0.5rem;margin-left:1rem;margin-bottom:1rem;margin-top:1rem;margin-right: 0;
     }
     .page:last-child {
         margin-bottom: 0;
         padding-bottom: 0;
     }
     .group {
-        background-color: #EBEBEB;padding:10px;margin-left:20px;margin-bottom:20px;
+        background-color: var(--typo3-surface-container-high);padding:10px;margin-left:20px;margin-bottom:20px;
         margin-top: 20px;margin-right: 0;
     }
     .group:last-child {
@@ -42,7 +42,7 @@
         padding-bottom: 0;
     }
     .items {
-        background-color: white;padding:10px; margin-left:20px;margin-bottom:20px;
+        background-color: var(--typo3-surface-dim);padding:10px; margin-left:20px;margin-bottom:20px;
         margin-top: 20px;margin-right:0;
     }
     .item:last-child {
@@ -65,67 +65,67 @@
         padding-left: 1rem
     }
     .info_table tr:nth-child(even) {
-        background-color: #EBEBEB;
+        background-color: var(--typo3-surface-container-high);
     }
     .info_table tr:nth-child(odd) {
-        background-color: white;
+        background-color: var(--typo3-surface-dim);
     }
     .item_value {
         margin-left: 0.5rem;
         max-width: 50rem;
     }
     .items_divider {
-        background-color: #C4C4C4;
+        background-color: var(--typo3-surface-container-highest);
     }
 
     .section {
-        background-color: #EBEBEB; padding:0.5rem;margin:0 0 40px 0;
+        background-color: var(--typo3-surface-container-high); padding:0.5rem;margin:0 0 40px 0;
     }
     .section.top {
         margin-top: 40px;
     }
     .section-label {
         position:relative;display:inline-block;top:-20px;
-        background-color: #C4C4C4;padding: 5px;width: auto;font-size: 0.8rem;
+        background-color: var(--typo3-surface-container-highest);padding: 5px;width: auto;font-size: 0.8rem;
     }
     .section-button {
         margin-bottom: 12px;
     }
     .section .button,
     .comment-add-form button {
-        background-color:#163986;border:1px solid #163986;border-radius:5px;padding:6px 8px;color:#EBEBEB;
+        /*background-color:#163986;border:1px solid #163986;border-radius:5px;padding:6px 8px;color:var(--typo3-surface-container-high);*/
         display:inline-block;
     }
     .section .button:hover,
     .section .button:focus,
     .comment-add-form button:hover,
     .comment-add-form button:focus {
-        text-decoration:none;
-        background-color: #0078e6
+        /*text-decoration:none;*/
+        /*background-color: #0078e6*/
     }
     .section .button .button-text.icon-text {
         margin-left:6px;
     }
     .section .button:hover .button-text,
     .section .button:focus .button-text {
-        /*border-bottom:1px solid #EBEBEB;*/
+        /*border-bottom:1px solid var(--typo3-surface-container-high);*/
     }
     td.comment-button {
         width:20px;padding:0.5rem 0;
     }
     td.comment-button button {
-        background-color: white;
+        background-color: var(--typo3-surface-dim);
         border:none;
         border-radius:5px;
         padding:1px;
         color:#163986;
         display:inline-block;
     }
-    .button.mailto-action-button {
+    button.mailto-action-button {
         padding-top: 2px;
         padding-bottom: 2px;
     }
-    .button.mailto-action-button svg {
+    button.mailto-action-button svg {
         width: 14px;
         height: 14px;
     }
@@ -141,7 +141,7 @@
     .comment-add-form form {
         margin: 10px 0;
         padding: 10px;
-        background-color: #C4C4C4;
+        background-color: var(--typo3-surface-container-highest);
     }
     #comment-add-form textarea,
     .comment-add-form textarea {

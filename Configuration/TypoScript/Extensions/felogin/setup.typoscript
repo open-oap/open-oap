@@ -41,12 +41,12 @@ plugin.tx_felogin_login {
     }
 
     _LOCAL_LANG.default {
-    # Forgot password mail subject
+        # Forgot password mail subject
         password_recovery_mail_header = Your new password
     }
 
     _LOCAL_LANG.de {
-    # Forgot password mail subject
+        # Forgot password mail subject
         password_recovery_mail_header = Ihr neues Passwort
     }
 }

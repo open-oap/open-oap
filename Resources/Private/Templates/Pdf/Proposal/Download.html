@@ -239,11 +239,11 @@ Available variables:
 
                                 <p class="pdf_list__answer"><f:format.nl2br>
                                     <f:format.stripTags allowedTags="<br><ul><li>"><f:spaceless><f:render partial="Utility/ValueOutput" arguments="{_all}" /></f:spaceless></f:format.stripTags></f:format.nl2br>
-                                    <v:try><f:if condition="{proposal.{propertyKeyComments}}">
+                                    <f:if condition="{proposal.{propertyKeyComments}}">
                                         {v:variable.set(name:'footnoteCounter', value:'{footnoteCounter+1}')}
                                         {v:variable.set(name:'commentsCount', value:'{proposal.{propertyKeyComments} -> f:count()}')}
                                         <br class="brLineHeight"><span class="footnote">({commentsCount} {f:if(condition:'1 == {commentsCount}', then:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.singular.label\')}', else:'{f:translate(key:\'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_notifications.pdf.plural.label\')}')}) <sup>{footnoteCounter}</sup></span>
-                                    </f:if></v:try>
+                                    </f:if>
                                 </p>
                                 <br><br>
                             </div>
@@ -251,7 +251,7 @@ Available variables:
                         </f:then>
                         <f:else>
 
-                            <v:try><f:if condition="{proposal.{propertyKeyComments}}">
+                            <f:if condition="{proposal.{propertyKeyComments}}">
                                 {v:variable.set(name:'footnoteCounter', value:'{footnoteCounter+1}')}
                                 <div></div>
                                 <p>
@@ -259,7 +259,7 @@ Available variables:
                                 </p>
 
                                 <f:format.stripTags allowedTags="<br><dl><dt><dd>"><f:spaceless><f:render partial="Answer/Comments" section="listOfComments" arguments="{comments:'{proposal.{propertyKeyComments}}',answersMap:'{answersMap}',answerId:'{answerId}'}" /></f:spaceless></f:format.stripTags>
-                            </f:if></v:try>
+                            </f:if>
                         </f:else>
                     </f:if>
 
@@ -323,7 +323,7 @@ Available variables:
                     </div>
                 </f:then>
                 <f:else>
-                    <v:try><f:if condition="{proposal.{propertyKeyComments}}">
+                    <f:if condition="{proposal.{propertyKeyComments}}">
                         {v:variable.set(name:'footnoteCounter', value:'{footnoteCounter+1}')}
                         <div></div>
                         <p>
@@ -331,7 +331,7 @@ Available variables:
                         </p>
 
                         <f:format.stripTags allowedTags="<br><dl><dt><dd>"><f:spaceless><f:render partial="Answer/Comments" section="listOfComments" arguments="{comments:'{proposal.{propertyKeyComments}}',answersMap:'{answersMap}',answerId:'{answerId}'}" /></f:spaceless></f:format.stripTags>
-                    </f:if></v:try>
+                    </f:if>
                 </f:else>
             </f:if>
         </f:else>

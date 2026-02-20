@@ -20,6 +20,11 @@
     margin-top: 0;
     border: $border-input;
     border-radius: var(--border-radius-small);
+
+    &:focus {
+        outline: $outline-default;
+        outline-offset: rem(1);
+    }
 }
 
 .dual-listbox__buttons {

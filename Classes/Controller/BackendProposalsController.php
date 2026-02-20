@@ -6,24 +6,21 @@ namespace OpenOAP\OpenOap\Controller;
 
 use OpenOAP\OpenOap\Domain\Model\Answer;
 use OpenOAP\OpenOap\Domain\Model\Call;
-use OpenOAP\OpenOap\Domain\Model\Comment;
 use OpenOAP\OpenOap\Domain\Model\FormGroup;
 use OpenOAP\OpenOap\Domain\Model\FormItem;
 use OpenOAP\OpenOap\Domain\Model\FormPage;
 use OpenOAP\OpenOap\Domain\Model\GroupTitle;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
-
 use OpenOAP\OpenOap\Service\ExcelExportService;
+use OpenOAP\OpenOap\Utility\LocalizationUtility;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-
-use OpenOAP\OpenOap\Domain\Repository\SupporterRepository;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpWord\Exception\Exception;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Attribute\AsController;
 use TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository;
-use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Http\UploadedFile;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Site\SiteFinder;
@@ -31,6 +28,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
@@ -46,6 +44,7 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 /**
  * BackendProposalController
  */
+#[AsController]
 class BackendProposalsController extends OapBackendController
 {
     const SESSION_TAG_OAP_PROPOSAL_BACKEND = 'oapProposalBackend';
@@ -56,11 +55,11 @@ class BackendProposalsController extends OapBackendController
      */
     public function showOverviewProposalsAction(): ResponseInterface
     {
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'actionName' => $this->actionMethodName,
         ]);
 
-        return $this->htmlResponse();
+        return $this->moduleTemplate->renderResponse('ShowOverviewProposals');
     }
 
     /**
@@ -120,7 +119,7 @@ class BackendProposalsController extends OapBackendController
             }
         }
         $paginator = $this->createPaginator($calls, $currentPage);
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'paginator' => $paginator,
             'currentPage' => $currentPage,
             'actionName' => $this->actionMethodName,
@@ -129,7 +128,7 @@ class BackendProposalsController extends OapBackendController
             'states' => $this->getConstants()['PROPOSAL'],
         ]);
 
-        return $this->htmlResponse();
+        return $this->moduleTemplate->renderResponse('ShowOverviewCalls');
     }
 
     /**
@@ -157,6 +156,7 @@ class BackendProposalsController extends OapBackendController
      */
     public function listProposalsAction(?Call $call = null, array $filter = [], array $selection = [], int $currentPage = 1, int $itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE): ResponseInterface
     {
+        /** @var \TYPO3\CMS\Core\Session\UserSession $userSession */
         $userSession = $GLOBALS['BE_USER']->getSession();
         $sessionStoredData = $userSession->get(self::SESSION_TAG_OAP_PROPOSAL_BACKEND);
 
@@ -278,11 +278,11 @@ class BackendProposalsController extends OapBackendController
         }
         $ratings['filter'][] = ['key' => "threshold",'label' => 'threshold ** ('.$call->getAssessmentThreshold().')'];
         $filterSelects = $this->applyFilter($allItems);
-        $sorting = $this->buildSorting();
+        $sorting = $this->buildSorting($sessionStoredData);
         $allItems = $this->proposalRepository->findDemanded($call->getProposalPid(), self::STATE_ACCESS_MIN_FILTER, $call->getAssessmentThreshold(), $filter, $sorting);
         $pagination = $this->createPaginator($allItems, $currentPage, (int) $filter['itemsPerPage']);
 
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'proposalStates' => $this->getConstants()['PROPOSAL'],
             'countOfItems' => count($allItems),
             'filter' => $filter,
@@ -297,6 +297,7 @@ class BackendProposalsController extends OapBackendController
             'pagination' => $pagination['pagination'],
             'sorted' => ['sortField' => $sorting['field'], 'sortRev' => $sorting['revert']],
             'call' => $call,
+            'currentPage' => $currentPage,
             'paginatorPageDirectLink' => true,
             'assessmentFilterShow' => $assessmentFilterShow,
             'importedFilterShow' => $importedFilterShow,
@@ -304,7 +305,8 @@ class BackendProposalsController extends OapBackendController
 
         $dataCollection = ['filter' => $filter, 'sorting' => $sorting, 'selection' => $selection, 'currentPage' => $currentPage, 'itemsPerPage' => $itemsPerPage];
         $userSession->set(self::SESSION_TAG_OAP_PROPOSAL_BACKEND,$dataCollection);
-        return $this->htmlResponse();
+
+        return $this->moduleTemplate->renderResponse('ListProposals');
     }
 
     /**
@@ -352,7 +354,7 @@ class BackendProposalsController extends OapBackendController
                 }
             } else {
                 $proposalId = $allItems[$currentPage - 1]['uid'];
-                $proposal = $this->proposalRepository->findByUid((integer) $proposalId);
+                $proposal = $this->proposalRepository->findByUid((int) $proposalId);
             }
 
             $pagination = $this->createPaginator($allItems, $currentPage, 1,self::PAGINATOR_ITEMS);
@@ -493,11 +495,11 @@ class BackendProposalsController extends OapBackendController
                         if (count($assessmentAnswer->getArrayValue())) {
                             $assessmentAnswer->setValue(json_encode($assessmentAnswer->getArrayValue(), JSON_FORCE_OBJECT));
                             foreach ($assessmentAnswer->getArrayValue() as $value) {
-                                $newValueInt = (integer) $proposal->getAssessmentValue() + (integer) $value;
+                                $newValueInt = (int) $proposal->getAssessmentValue() + (int) $value;
                                 $proposal->setAssessmentValue((string) $newValueInt);
                             }
                         } else {
-                            $newValueInt = (integer) $proposal->getAssessmentValue() + (integer) $assessmentAnswer->getValue();
+                            $newValueInt = (int) $proposal->getAssessmentValue() + (int) $assessmentAnswer->getValue();
                             $proposal->setAssessmentValue((string) $newValueInt);
                         }
                     }
@@ -543,7 +545,7 @@ class BackendProposalsController extends OapBackendController
             $this->persistenceManager->persistAll();
         }
 
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'comments' => $comments,
             'itemTypes' => $this->getConstants()['TYPE'],
             'proposalStates' => $this->getConstants()['PROPOSAL'],
@@ -570,7 +572,7 @@ class BackendProposalsController extends OapBackendController
             'assessmentValues' => $assessmentValues,
         ]);
 
-        return $this->htmlResponse();
+        return $this->moduleTemplate->renderResponse('ShowProposal');
     }
 
     /**
@@ -644,7 +646,7 @@ class BackendProposalsController extends OapBackendController
                     $this->proposalRepository->update($proposal);
                 }
             } elseif ($selectedMailAction == 2) {
-                $proposalList[$key]['mailaction']['mailto']['href'] = $proposal->getApplicant()->getUsername() . '?cc=';
+                $proposalList[$key]['mailaction']['mailto']['href'] = $proposal->getApplicant()?->getUsername() . '?cc=';
                 if ($this->request->hasArgument('cc')) {
                     $proposalList[$key]['mailaction']['mailto']['href'].= htmlspecialchars($this->request->getArgument('cc'));
                 }
@@ -656,7 +658,7 @@ class BackendProposalsController extends OapBackendController
         $proposalList[0]['defaultMailCc'] = $defaultMailCc;
         $proposalList[0]['defaultMailReplyTo'] = is_array($defaultMailCcExploded) && count($defaultMailCcExploded) > 0 ? $defaultMailCcExploded[0] : '';
 
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'proposalStates' => $this->getConstants()['PROPOSAL'],
             'proposals' => $proposals,
             'proposalList' => $proposalList,
@@ -668,7 +670,7 @@ class BackendProposalsController extends OapBackendController
             'call' => $proposal->getCall(),
         ]);
 
-        return $this->htmlResponse();
+        return $this->moduleTemplate->renderResponse('CustomizeStatusMail');
     }
 
     /**
@@ -680,13 +682,15 @@ class BackendProposalsController extends OapBackendController
      */
     public function importXlsxData(Call $call, array $upload): Call
     {
-        if (array_key_exists('name', $upload) == false) {
-            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.file_upload_failed'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+        if (!isset($upload['upload']) || !($upload['upload'] instanceof UploadedFile)) {
+            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.file_upload_failed'), '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
             return $call;
         }
 
-        if ($upload['error'] !== 0) {
-            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.file_upload_error'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+        $uploadedFile = $upload['upload'];
+
+        if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
+            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.file_upload_error'), '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
             return $call;
         }
 
@@ -698,11 +702,11 @@ class BackendProposalsController extends OapBackendController
         $actionNameKey = array_search(self::PROPOSAL_ASSESSMENT_COLUMN_ACTION, $proposalAssessmentImportColumnNames);
 
         if ($idNameKey === false || $scoreNameKey === false || $actionNameKey === false) {
-            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.data_import_failed'), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.data_import_failed'), '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
             return $call;
         }
 
-        $tempFilePath = GeneralUtility::upload_to_tempfile($upload['tmp_name']);
+        $tempFilePath = GeneralUtility::upload_to_tempfile($uploadedFile->getTemporaryFileName());
 
         $spreadsheet = IOFactory::load($tempFilePath);
 
@@ -954,7 +958,7 @@ class BackendProposalsController extends OapBackendController
      */
     protected function createFolder(): Folder
     {
-        $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($this->settings['uploadFolder']);
+        $storage = $this->storageRepository->findByCombinedIdentifier($this->settings['uploadFolder']);
         $tempFolder = time() . '-' . rand(10000, 99999);
 
         //        DebuggerUtility::var_dump($tempFolder);die();
@@ -971,7 +975,7 @@ class BackendProposalsController extends OapBackendController
      */
     protected function createPdfs($records): void
     {
-        $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($this->settings['uploadFolder']);
+        $storage = $this->storageRepository->findByCombinedIdentifier($this->settings['uploadFolder']);
         //        $absoluteBasePath = $this->getBasePath($storage);
 
         $proposals = $this->proposalRepository->findByUids($records);
@@ -1044,7 +1048,7 @@ class BackendProposalsController extends OapBackendController
 
     protected function downloadPdfs($records): void
     {
-        $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($this->settings['uploadFolder']);
+        $storage = $this->storageRepository->findByCombinedIdentifier($this->settings['uploadFolder']);
         $absoluteBasePath = $this->getBasePath($storage);
 
         $proposals = $this->proposalRepository->findByUids($records);
@@ -1235,7 +1239,7 @@ class BackendProposalsController extends OapBackendController
                                 foreach ($groupL1->getItems() as $item) {
                                     $key = $groupL1->getUid() . '--' . $indexL0 . '--' . $indexL1 . '--' . $item->getUid();
                                     $columns[$key] = $columnNo;
-                                    $head[$itemHeadRow][$columnNo] = $item->getQuestion();
+                                    $head[$itemHeadRow][$columnNo] = $item->getShortQuestion() ?: $item->getQuestion();
                                     $columnNo++;
                                     if ($item->isAdditionalValue()) {
                                         $head[$itemHeadRow][$columnNo] = 'additionalAnswer';
@@ -1253,7 +1257,7 @@ class BackendProposalsController extends OapBackendController
                         foreach ($groupL0->getItems() as $item) {
                             $key = $groupL0->getUid() . '--' . '0' . '--' . $indexL0 . '--' . $item->getUid();
                             $columns[$key] = $columnNo;
-                            $head[$itemHeadRow][$columnNo] = $item->getQuestion();
+                            $head[$itemHeadRow][$columnNo] = $item->getShortQuestion() ?: $item->getQuestion();
                             $columnNo++;
                             if ($item->isAdditionalValue()) {
                                 $head[$itemHeadRow][$columnNo] = 'additionalAnswer';
@@ -1286,8 +1290,8 @@ class BackendProposalsController extends OapBackendController
             $export[$proposalUid] = [];
             $colI = 0;
             $export[$proposalUid][$colI++] = $proposalUid;
-            $export[$proposalUid][$colI++] = $proposal->getApplicant()->getEmail();
-            $export[$proposalUid][$colI++] = $proposal->getApplicant()->getUid();
+            $export[$proposalUid][$colI++] = $proposal->getApplicant()?->getEmail() ?? '[Deleted Applicant]';
+            $export[$proposalUid][$colI++] = $proposal->getApplicant()?->getUid() ?? 0;
             $export[$proposalUid][$colI++] = $this->buildSignature($proposal);
             $export[$proposalUid][$colI++] = $states[$proposal->getState()];
             $export[$proposalUid][$colI++] = date("d.m.Y", $proposal->getSubmitTstamp());
@@ -1298,7 +1302,7 @@ class BackendProposalsController extends OapBackendController
             if ($value == '') {
                 $value = '--';
             }
-            if ((string) $value == '0' OR (integer) $value == 0) {
+            if ((string) $value == '0' OR (int) $value == 0) {
                 $value = '0 ';
             }
             $export[$proposalUid][$colI++] = $value;
@@ -1325,7 +1329,7 @@ class BackendProposalsController extends OapBackendController
                     $valueArray = [$assessmentAnswer->getValue()];
                 }
                 foreach ($valueArray as $i => $valueItem) {
-                    if (is_integer((integer) $valueItem) AND $valueItem === '0') {
+                    if (is_integer((int) $valueItem) AND $valueItem === '0') {
                             $valueArray[$i] = $valueItem.' ';
                     }
                 }
@@ -1516,11 +1520,15 @@ class BackendProposalsController extends OapBackendController
      * @return array
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      */
-    private function buildSorting(): array
+    private function buildSorting(?array $sessionStoredData = null): array
     {
         $sorting = [];
-        $sortField = 'signature';
-        $sortRevert = 0;
+        $sortField = !empty($sessionStoredData['sorting']['field'])
+            ? $sessionStoredData['sorting']['field']
+            : 'signature';
+        $sortRevert = !empty($sessionStoredData['sorting']['direction'])
+            ? ($sessionStoredData['sorting']['direction'] === QueryInterface::ORDER_ASCENDING ? 0 : 1)
+            : 1;
 
         // two cases of transmitted values, one nested, one directly
         if ($this->request->hasArgument('sorted')) {
@@ -1535,12 +1543,12 @@ class BackendProposalsController extends OapBackendController
             if ($sortRevert == 1) {
                 $sorting = [
                     'field' => $sortField,
-                    'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
+                    'direction' => QueryInterface::ORDER_DESCENDING,
                 ];
             } else {
                 $sorting = [
                     'field' => $sortField,
-                    'direction' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+                    'direction' => QueryInterface::ORDER_ASCENDING,
                 ];
             }
             $sorting['revert'] = $sortRevert;
@@ -1574,8 +1582,40 @@ class BackendProposalsController extends OapBackendController
      */
     protected function getTranslatedSupporter(int $languageUid, int $supporter): array
     {
-        $supporterRepository = GeneralUtility::makeInstance(SupporterRepository::class);
+        return $this->supporterRepository->findSupporterByLanguage($languageUid, $supporter);
+    }
 
-        return $supporterRepository->findSupporterByLanguage($languageUid, $supporter);
+    protected function handleMenu(string $currentAction): void
+    {
+        $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $menu->setIdentifier('OpenOapBackendProposals');
+
+        if ($this->request->hasArgument('proposal')) {
+            $menu->addMenuItem(
+                $menu->makeMenuItem()
+                    ->setTitle(LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.show_proposal'))
+                    ->setHref($this->uriBuilder->reset()->uriFor('showProposal', ['proposal' => $this->request->getArgument('proposal')]))
+                    ->setActive($currentAction === 'showProposal')
+            );
+
+        }
+
+        if ($this->request->hasArgument('call')) {
+            $menu->addMenuItem(
+                $menu->makeMenuItem()
+                    ->setTitle(LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_proposals'))
+                    ->setHref($this->uriBuilder->reset()->uriFor('listProposals', ['call' => $this->request->getArgument('call')]))
+                    ->setActive($currentAction === 'listProposals')
+            );
+        }
+
+        $menu->addMenuItem(
+            $menu->makeMenuItem()
+                ->setTitle(LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:menu.list_calls'))
+                ->setHref($this->uriBuilder->reset()->uriFor('showOverviewCalls'))
+                ->setActive($currentAction === 'showOverviewCalls')
+        );
+
+        $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
     }
 }

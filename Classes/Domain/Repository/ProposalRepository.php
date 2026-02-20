@@ -28,6 +28,11 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
+    public function __construct(private readonly \TYPO3\CMS\Core\Database\ConnectionPool $connectionPool)
+    {
+        parent::__construct();
+    }
+
     /**
      * Find Calls/Forms by pid
      *
@@ -92,7 +97,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function fetchImportedActionsByCall(Call $call): array
     {
         $table = 'tx_openoap_domain_model_proposal';
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
+        $connection = $this->connectionPool->getConnectionForTable($table);
         $queryBuilder = $connection->createQueryBuilder();
         $result = $queryBuilder
             ->select(
@@ -125,7 +130,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         $table = 'tx_openoap_domain_model_proposal';
 //        $query->getQuerySettings()->setRespectStoragePage(false);
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
+        $connection = $this->connectionPool->getConnectionForTable($table);
         $queryBuilder = $connection->createQueryBuilder();
         $result = $queryBuilder
         ->select(
@@ -205,7 +210,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function findDemanded(int $pid, int $minStatusLevel, int $assessmentThreshold, array $filter = [], array $sorting = [])
     {
 
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_openoap_domain_model_proposal');
+        $connection = $this->connectionPool->getConnectionForTable('tx_openoap_domain_model_proposal');
         $queryBuilder = $connection->createQueryBuilder();
         if (isset($filter['state']) && $filter['state'] !== '') {
             $stateWhere = $queryBuilder->expr()->eq('Proposal.state', $queryBuilder->createNamedParameter($filter['state'], Connection::PARAM_INT));
@@ -214,17 +219,17 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
         if (isset($filter['assessment_value']) AND $filter['assessment_value'] !== '' AND $filter['assessment_value'] !== '-1' AND $filter['assessment_value'] !== null) {
             if ($filter['assessment_value'] == 'threshold') {
-                $ratingWhere = $queryBuilder->expr()->gte('Proposal.assessment_value', $queryBuilder->createNamedParameter((string) $assessmentThreshold, \PDO::PARAM_STR));
+                $ratingWhere = $queryBuilder->expr()->gte('Proposal.assessment_value', $queryBuilder->createNamedParameter((string) $assessmentThreshold, \TYPO3\CMS\Core\Database\Connection::PARAM_STR));
             } else {
-                $ratingWhere = $queryBuilder->expr()->eq('Proposal.assessment_value', $queryBuilder->createNamedParameter((string) $filter['assessment_value'], \PDO::PARAM_STR));
+                $ratingWhere = $queryBuilder->expr()->eq('Proposal.assessment_value', $queryBuilder->createNamedParameter((string) $filter['assessment_value'], \TYPO3\CMS\Core\Database\Connection::PARAM_STR));
             }
         } elseif (isset($filter['assessment_value']) AND $filter['assessment_value'] == '') {
-            $ratingWhere = $queryBuilder->expr()->eq('Proposal.assessment_value', $queryBuilder->createNamedParameter('', \PDO::PARAM_STR));
+            $ratingWhere = $queryBuilder->expr()->eq('Proposal.assessment_value', $queryBuilder->createNamedParameter('', \TYPO3\CMS\Core\Database\Connection::PARAM_STR));
         } else {
             $ratingWhere = '';
         }
         if (isset($filter['imported_action_value']) AND $filter['imported_action_value'] != '-1') {
-            $importedActionWhere = $queryBuilder->expr()->eq('Proposal.imported_action', $queryBuilder->createNamedParameter($filter['imported_action_value'], \PDO::PARAM_STR));
+            $importedActionWhere = $queryBuilder->expr()->eq('Proposal.imported_action', $queryBuilder->createNamedParameter($filter['imported_action_value'], \TYPO3\CMS\Core\Database\Connection::PARAM_STR));
         } else {
             $importedActionWhere = '';
         }
@@ -331,7 +336,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 )
                 ->groupBy('Proposal.uid')
                 ->addSelectLiteral($queryBuilder->expr()->count('*', 'c'))
-                ->add('having', 'c = ' . $filterCounter);
+                ->having('c = ' . $filterCounter);
             }
         }
 
@@ -367,7 +372,9 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(false);
         $query->getQuerySettings()->setRespectSysLanguage(false);
-        $query->getQuerySettings()->setLanguageOverlayMode(false);
+        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
+        $languageAspect = new \TYPO3\CMS\Core\Context\LanguageAspect($languageAspect->getId(), $languageAspect->getContentId(), \TYPO3\CMS\Core\Context\LanguageAspect::OVERLAYS_OFF);
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
         $query->getQuerySettings()->setRespectStoragePage(false);
         //        $query->getQuerySettings()->setStoragePageIds([$pid]);
         //$query->setOrderings(['crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
@@ -398,7 +405,9 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(false);
         $query->getQuerySettings()->setRespectSysLanguage(false);
-        $query->getQuerySettings()->setLanguageOverlayMode(false);
+        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
+        $languageAspect = new \TYPO3\CMS\Core\Context\LanguageAspect($languageAspect->getId(), $languageAspect->getContentId(), \TYPO3\CMS\Core\Context\LanguageAspect::OVERLAYS_OFF);
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
         $query->getQuerySettings()->setRespectStoragePage(false);
         //        $query->getQuerySettings()->setStoragePageIds([$pid]);
         $constraints = [];
@@ -421,7 +430,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             return 0;
         }
         $table = 'tx_openoap_domain_model_proposal';
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);
 
         $updateQuery = $queryBuilder
            ->update($table, 't')
@@ -444,7 +453,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function findMailtextFlexformdata(int $pid, int $langId)
     {
         $table = 'tt_content';
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);
         $where[] = $queryBuilder->expr()->eq('t.pid', $queryBuilder->createNamedParameter($pid, Connection::PARAM_INT));
         $where[] = $queryBuilder->expr()->eq('t.sys_language_uid', $queryBuilder->createNamedParameter($langId, Connection::PARAM_INT));
         $where[] = $queryBuilder->expr()->isNotNull('t.pi_flexform');
@@ -463,7 +472,9 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(true);
         $query->getQuerySettings()->setRespectSysLanguage(false);
-        $query->getQuerySettings()->setLanguageOverlayMode(false);
+        $languageAspect = $query->getQuerySettings()->getLanguageAspect();
+        $languageAspect = new \TYPO3\CMS\Core\Context\LanguageAspect($languageAspect->getId(), $languageAspect->getContentId(), \TYPO3\CMS\Core\Context\LanguageAspect::OVERLAYS_OFF);
+        $query->getQuerySettings()->setLanguageAspect($languageAspect);
         $query->getQuerySettings()->setRespectStoragePage(false);
 
         //        $query->matching($query->like('title', '%' . $search . '%'));

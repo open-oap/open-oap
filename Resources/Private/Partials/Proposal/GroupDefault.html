@@ -1,7 +1,6 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+<html
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
       xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
       data-namespace-typo3-fluid="true">
 
 <v:iterator.loop iteration="counter" count="{groupCurrentN}">
@@ -81,7 +80,7 @@
                             <legend class="form__label-question" id="legend--{propertyKeyIndex}">{item.question} <f:if condition="{answersMap.{answerId}.item.MSign}"><f:render partial="Required.html" arguments="{MSign:'{answersMap.{answerId}.item.MSign}'}" /></f:if></legend>
                     </f:then>
                     <f:else>
-                        <label class="form__label-question" >{item.question} <f:if condition="{answersMap.{answerId}.item.MSign}"><f:render partial="Required.html" arguments="{MSign:'{answersMap.{answerId}.item.MSign}'}" /></f:if></label>
+                        <label class="form__label-question" for="oap-input-{propertyKeyIndex}{f:if(condition:'{item.type}=={itemTypes.TYPE_UPLOAD}',then:'-upload')}">{item.question} <f:if condition="{answersMap.{answerId}.item.MSign}"><f:render partial="Required.html" arguments="{MSign:'{answersMap.{answerId}.item.MSign}'}" /></f:if></label>
                     </f:else>
                 </f:if>
 
@@ -104,11 +103,11 @@
                 --></f:comment>
             </div><!-- 99: type = {item.type} -->
 
-            <v:try><f:if condition="{proposal.{propertyKeyComments}}">
+            <f:if condition="{proposal.{propertyKeyComments}}">
                 <f:render
                     partial="Answer/Comments"
                     arguments="{mode: 'FE', comments:'{proposal.{propertyKeyComments}}',commentStates:'{commentStates}',answersMap:'{answersMap}',answerId:'{answerId}'}" />
-            </f:if></v:try>
+            </f:if>
         </f:for>
     </fieldset>
 </v:iterator.loop>

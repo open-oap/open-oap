@@ -60,7 +60,6 @@ return [
                 'items' => [
                     [
                         'label' => '',
-                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -167,7 +166,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'foreign_table' => 'tx_openoap_domain_model_proposal',
-                'foreign_field' => 'comments',
+                // 'foreign_field' => 'comments',
             ],
 
         ],
