@@ -1,8 +1,10 @@
-#  additional function
+# manuals
 
-Instructions suitable for MergeRequeast are to be stored here.
-These will be transferred to the overall manual after the merge.
+## general:
+- [Open OAP - Elements overview](Elements.md)
+- [Open OAP - Manual for Application Management](Management.md)
+- [Open OAP - Editing Manual for creating a call](Editing.md)
 
-Functions:
+## certain/additional functions:
 - [Assessment.md](Assessment.md)
 - [Import Assessment Values (BE module OAP)](ImportAssessmentValues.md)

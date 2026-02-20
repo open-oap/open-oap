@@ -22,3 +22,7 @@ the suggested changes.
 In the same module `Admin Tools > Maintanance` you can also empty all caches by clicking on the button `Flush cache`.
 
 ![Flush cache](../Images/clear_cache.png)
+
+## initialising pages
+
+https://docs.typo3.org/m/typo3/tutorial-sitepackage/main/en-us/CreatePages/Index.html

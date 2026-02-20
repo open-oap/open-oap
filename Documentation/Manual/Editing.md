@@ -1,7 +1,7 @@
 # Open OAP - Editing Manual for creating a call
 
-**Status:** Version 1.1
-**Date:** 30.10.2023
+**Status:** Version 2.0
+**Date:** 11.2025
 
 ## Structure overview
 
@@ -12,6 +12,7 @@ A call can consist of several pages. Several groups can be arranged on one page.
 This is the top item and thus corresponds to the form itself, but also contains data on the course of the call (start time. end time - if required, logo data, e-mail etc.. )
 
 In this data set, pages are added for the form.
+
 > [see chapter "Creating a call"](#creating-a-call)
 
 ### Call Group
@@ -29,17 +30,20 @@ with supporters calls can grouped in different typs in the call group
 ### Page
 
 A form consists of at least one page that contains groups.
+
 > [see chapter "Pages"](#pages)
 
 ### Group
 
 Groups contain items (=questions/topics)
 In the group records, the items are added and sorted.
+
 > [see chapter "Groups"](#groups)
 
 ### Items
 
 The items are the actual questions that can be created in different formats for the answers.
+
 > [see chapter "Items/Elements"](#itemselements)
 
 <img src="../Images/Manual/Editing/structure.png" style="max-width:566px;height:auto" />
@@ -58,27 +62,26 @@ For the project, the basic editorial roles of "editor" and "website editor" were
 
 <img src="../Images/Manual/Editing/header.png" style="max-width:566px;height:auto" />
 
-| Field | Description |
-|-------|-------------|
-| <img src="../Images/Manual/Editing/bookmark.png" style="max-width:28px;height:auto" /> | Bookmarks: for saving frequently used TYPO3 views. |
+| Field                                                                                   | Description                                                                                                                                                    |
+| --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="../Images/Manual/Editing/bookmark.png" style="max-width:28px;height:auto" />  | Bookmarks: for saving frequently used TYPO3 views.                                                                                                             |
 | <img src="../Images/Manual/Editing/user-icon.png" style="max-width:28px;height:auto" /> | Name and login name of the logged-in TYPO3 user; Clicking takes you to the user settings option (e.g. for new password assignment, backend language settings). |
-| <img src="../Images/Manual/Editing/search.png" style="max-width:211px;height:auto" /> | Search in all TYPO3 data sets with auto-suggest function. |
+| <img src="../Images/Manual/Editing/search.png" style="max-width:211px;height:auto" />   | Search in all TYPO3 data sets with auto-suggest function.                                                                                                      |
 
 ### The module bar
 
 | <img src="../Images/Manual/Editing/sidebar.png"  style="max-width:153px;height:auto" /> | <img src="../Images/Manual/Editing/sidebar-website-editor.png" style="max-width:161px;height:auto" /> |
-|----|----|
-| View for editor / clerk | View for website editor |
+| --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| View for editor / clerk                                                                 | View for website editor                                                                               |
 
-| Field | Description |
-|-------|-------------|
-| List | The "List" module lists all data records that exist in this page. The listing is in tabular form, with each table corresponding to a database table. Data records that are not visible in the "Page" module are also listed here. This view is mainly used for editing data records or dynamic data such as news |
-| Page | Displays all content elements existing on the page in the TYPO3 backend. The arrangement corresponds to the page layout in the frontend. This view is recommended for editing standard pages. |
-| Frontend Users | Here, all logged-in users can be viewed and edited if necessary |
-| OAP Forms | Here you can find the previews of created calls |
-| OAP Proposals | The submitted proposals can then be found here (separate manual) |
-| Filelist | You can access all assets in the system, such as PDF documents or images, via the "File list" module. It is the file repository of the TYPO3 system. |
-
+| Field          | Description                                                                                                                                                                                                                                                                                                      |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| List           | The "List" module lists all data records that exist in this page. The listing is in tabular form, with each table corresponding to a database table. Data records that are not visible in the "Page" module are also listed here. This view is mainly used for editing data records or dynamic data such as news |
+| Page           | Displays all content elements existing on the page in the TYPO3 backend. The arrangement corresponds to the page layout in the frontend. This view is recommended for editing standard pages.                                                                                                                    |
+| Frontend Users | Here, all logged-in users can be viewed and edited if necessary                                                                                                                                                                                                                                                  |
+| OAP Forms      | Here you can find the previews of created calls                                                                                                                                                                                                                                                                  |
+| OAP Proposals  | The submitted proposals can then be found here (separate manual)                                                                                                                                                                                                                                                 |
+| Filelist       | You can access all assets in the system, such as PDF documents or images, via the "File list" module. It is the file repository of the TYPO3 system.                                                                                                                                                             |
 
 ## Creating an application form
 
@@ -87,7 +90,8 @@ When creating a new call, it is advisable to first create the individual element
 If all elements are already available or if a call is to be adapted, you can jump directly to the chapter "[Creating a Call](#creating-a-call)".
 
 **Note:** Do not reuse a call, but copy the call record and adapt it to afterwards. All application records reference the call record and continue to do so as long as they are stored in the system. So if you change a call (because you want to continue using it), the call data on the applications would change with it. When copying a call, the pages it contains remain the original pages and are neither copied nor duplicated.
-> [see chapter "Create a new call based on an existing call"](#create-a-new-call-based-on-an-existing-call)
+
+> [see chapter "Create a new call based on an existing call"](#create-a-new-call-based-on-an-existing-call) and also chapter [“Reuse of items”](#reuse-of-items)
 
 ### Items/Elements
 
@@ -97,15 +101,21 @@ All items consist of a heading/question and input options. Optionally, intro tex
 
 Fixed check criteria/validators can be assigned and lead to error messages when saving the form page. It is possible to specify certain items whose values are displayed in the dashboard.
 
-### Creating an item
+#### Creating an item
 
 <img src="../Images/Manual/Editing/form-item.png" style="max-width:333px;height:auto" />
 
+To create or edit items, please select "List" in the side menu and then click on "Items".
+
+Please chose then “+ New Record” in the headline bar on the right side of the page.
+
 <img src="../Images/Manual/Editing/form-item-fields.png" style="max-width:566px;height:auto" />
 
-### Form view for creating an item
+#### Form view for creating an item
 
-<img src="../Images/Manual/Editing/form-item-view2.png" style="max-width:566px;height:auto" /> <img src="../Images/Manual/Editing/form-item-view.png" style="max-width:96px;height:auto" />
+<img src="../Images/Manual/Editing/form-item-view2.png" style="max-width:566px;height:auto" />
+
+<img src="../Images/Manual/Editing/form-item-view.png" style="max-width:96px;height:auto" />
 
 1. **"Question"** - Question/title of the input field (mandatory)
 
@@ -130,7 +140,7 @@ Fixed check criteria/validators can be assigned and lead to error messages when 
 
 11. **"Save"** - Saving the created item
 
-### Text field
+#### Text field
 
 Text field with heading/question (Front-end view)
 
@@ -146,7 +156,7 @@ Text field with heading/question (Front-end view)
 - Default value
 - Validation (e.g. mandatory field, number, character length, etc.)
 
-### Text area
+#### Text area
 
 Text area with heading/question for longer texts (Front-end view)
 
@@ -159,12 +169,11 @@ Text area with heading/question for longer texts (Front-end view)
 - Default value
 - Validation (e.g. mandatory field, character length, etc.)
 
-### Date selection
+#### Date selection
 
 Input field/calendar function (Front-end view)
 
 <img src="../Images/Manual/Editing/date-picker.png" style="max-width:340px;height:auto" />
-
 
 **Options:**
 
@@ -172,12 +181,11 @@ Input field/calendar function (Front-end view)
 - Help text
 - Validation (e.g. mandatory field, earliest possible
 
-### Period
+#### Period
 
 Combined input fields with calendar function (Front-end view)
 
 <img src="../Images/Manual/Editing/period.png" style="max-width:340px;height:auto" />
-
 
 **Options:**
 
@@ -185,19 +193,17 @@ Combined input fields with calendar function (Front-end view)
 - Help text
 - Validation (e.g. mandatory field, possible time span)
 
-### File upload
+#### File upload
 
 Function for uploading files (Front-end view)
 
 <img src="../Images/Manual/Editing/file-upload.png" style="max-width:396px;height:auto" />
 
-
 Validation options (e.g. mandatory field, number, permitted file format(s))
 
 **Note:** The data upload in the form is a two-step process. Users select a file from their hard drive, which is displayed by name. Then they have to confirm the upload. Only when the page is saved will the data be stored in the database.
 
-
-### Create options for selection fields
+#### Create options for selection fields
 
 For selection fields, such as checkboxes etc., corresponding lists must
 be created in advance under "Options".
@@ -206,19 +212,23 @@ be created in advance under "Options".
 
 <img src="../Images/Manual/Editing/options-list2.png" style="max-width:230px;height:auto" />
 
-### Radio buttons
+A title must be entered to facilitate the selection afterwards.
 
-Single selection with radiobuttons (Front-end view)
+And a simple value and several options can be selected as the type, each of which must then be entered in a line in the field.
+
+#### Radio buttons
+
+Single selection with radiobuttons and additional field (Front-end view)
 
 <img src="../Images/Manual/Editing/radio-buttons.png" style="max-width:340px;height:auto" />
 
 If "radiobutton" is selected as the type in the backend, a previously created option must be selected with the list of checkbox labels.
 
-An additional selection point is possible where the user can freely enter something.
+An additional selection point is possible where the user can freely enter something. Here, it is possible to select a text field or text area.
 
-<img src="../Images/Manual/Editing/radio-buttons-extra.png" style="max-width:566px;height:auto" />
+<img title="" src="../Images/Manual/Editing/radio-buttons-extra.png" alt="" style="max-width:566px;height:auto">
 
-### Checkboxes
+#### Checkboxes
 
 Multiple selection with checkboxes (Front-end view)
 
@@ -230,14 +240,14 @@ An additional selection point is possible where the user can freely enter someth
 
 <img src="../Images/Manual/Editing/checkbox-extra.png" style="max-width:472px;height:auto" />
 
-### Select Dropdown
+#### Select Dropdown
 
 As item type there is the option "Dropdown-Select" which results as a native html select box.
 
 As options you can choose from available items (e.g. country list). Validators can be added as well.
 <img src="../Images/Manual/Editing/select-dropdown.png" style="max-width:464px;height:auto" />
 
-### Select field
+#### Select field
 
 Single or multiple selection with selectbox for long lists (Front-end view)
 
@@ -251,7 +261,9 @@ The order in this list then also corresponds to the output.
 
 How to create options is described in [Create options](#create-options-for-selection-fields).
 
-### Default from master data
+If a value is to be preselected, it must correspond exactly to one of the options and be entered as the default.
+
+#### Default from master data
 
 Default values from the master data can be entered in text fields. These can then be overwritten when filling out the form.
 
@@ -272,21 +284,45 @@ Here is the list with the available values:
 - `@applicant.company`
 - `@applicant.salutation`
 
-### Data transfer for succession call
+#### Validators
+
+Validators make it possible to limit the input in items. They are checked in the frontend and error messages are displayed if the applicant makes a different entry.
+
+There are validators that are already available globally, such as "global mandatory" or "global integer" etc. However, you can also add your own validators as required.
+
+![Validator selection](../Images/Manual/Editing/validator-selection.png)
+
+Go to the "validators" directory and click on "+ New Record" above the list.
+
+![validator folder](../Images/Manual/Editing/validator-folder.png)
+
+1. **Title**: Assign an explanatory title so that you know exactly what you are assigning to a field.
+
+2. **Type**: Here you select the type of validation to be performed. The appropriate entries are then displayed.
+
+Example “Maximum Character”
+
+![validator parameter](../Images/Manual/Editing/validator-parameter.png)
+
+Then enter the desired number for the maximum permitted characters in the "Parameter" field.
+
+#### Data transfer for succession call
 
 Only optionally available in OAP!
 
 **Note:** This special function is only relevant if entries from an already successfully submitted application of a previous call are to be taken over.
 
-If data from a previously submitted request of a predecessor call is to be taken over in an item, the field is filled with the call ID and the item ID. The notation at this point is then
+If data from a previously submitted request from a predecessor call is to be transferred to an item, this happens automatically when the item (group or question) is reused in the subsequent call; however, it can also be done by explicit assignment.
 
-`<call-id>.<item-id>` e.g. `.58.104`
+![item-data-transfer.png](../Images/Manual/Editing/item-data-transfer.png)
 
-Here, the content of a submitted request based on the call with the ID 58 is taken from the item with the ID 104. The transfer cannot take place in nested or repeated groups.
+The source groups for the transfer (with settings for repetitions) are automatically selected if the group is used in both calls, or by selecting a specific group.
+
+![group-data-transfer.png](../Images/Manual/Editing/group-data-transfer.png)
 
 The set-up of the call for this option is described in chapter "[Call with data transfer](#special-function-call-with-data-transfer)".
 
-### Special items / Meta-Settings
+#### Special items / Meta-Settings
 
 Under the tab "Meta-Settings", special settings can be made for items.
 
@@ -310,11 +346,29 @@ For a simple input field of a call with the project title, "enabled title" must 
 
 For selection fields, there is the option to use this as a filter option for submitted proposals in the backend. A label for the filter can be entered.
 
-### Query before submit
+#### Special items / Assessment items and settings
+
+Only optionally available in OAP!
+
+For the evaluation of a proposal in the backend, items can be created for the evaluation questions.
+
+It is important that the "radio button" type and the option with fulfilled/not fulfilled are selected.
+
+![Select options for radiobuttons](../Images/Manual/Editing/item-select-options.png)
+
+In addition, a text field can also be created, which is used as a comment field in the evaluation
+
+For items that are created for the pre-assessment, an item can be assigned in the "Assessment Settings" tab, which then receives a jump mark in the assessment view in the backend.
+
+![Select assessment items](../Images/Manual/Editing/call-assessment-items.png)
+
+Please take a look at the [chapter 4.1.9](file:///Volumes/WORK/COSMOBLONDE/OAP_Manual/Assessment#_Special_function_) on how the assessment items are assigned to the call.
+
+#### Query before submit
 
 For the summary page, queries should be created to obtain consent, e.g. for data processing, before submission.
 
-For this purpose, at least one or more individual checkbox items are to be created, which can then be assigned during the call.
+For this purpose, **at least one** or more individual checkbox items are to be created, which can then be assigned during the call.
 
 On the summary, the submit button is only activated when all these checkboxes have been confirmed by the user.
 
@@ -322,7 +376,7 @@ On the summary, the submit button is only activated when all these checkboxes ha
 
 Frontend view
 
-### Option: Hierarchical sorting
+#### Option: Hierarchical sorting
 
 <img src="../Images/Manual/Editing/sorting.png" style="max-width:199px;height:auto" />
 
@@ -333,6 +387,20 @@ Example: create a new subfolder by drag and drop and create the items for a new 
 <img src="../Images/Manual/Editing/sorting-folder.png" style="max-width:189px;height:auto" />
 
 The subdirectories can then be found at the bottom of the list when selecting items.
+
+#### Reuse of items
+
+Once you have created an item, you can use it in several places in a form and also in other calls.
+
+**Note:** However, it should be noted that a change to this item affects **all occurrencies**. This can be partticulaly problematic if the item was used in a previous call and changes the content there unnoticed.
+
+Typing errors and text changes have no negative impact on the previous forms or the data.
+
+A problem would be changed validators, as data can then suddenly no longer be valid (e.g. shifting min or max values)
+
+Input types, as the data may then no longer be interpreted correctly (this only applies to certain combinations, e.g. turning a multiple selection into a single selection would lead to an error, as the data is saved differently here).
+
+To be on the safe side, it would make sense to duplicate the existing icon and use it for the new position. (how to copy items see chapter “[sorting items](#sorting-items)”)
 
 ### Groups
 
@@ -354,6 +422,9 @@ Please chose then "+" New Record" in the headline bar on the right side of the p
 **Note:** As with items, subdirectories (e.g. per call) can also be created here. Drag and drop the folder symbol into the "Groups" directory.
 
 <img src="../Images/Manual/Editing/group-folder.png" style="max-width:211px;height:auto" />
+
+**Note:** As with items, subdirectories (e.g. per call) can also be created here.
+Drag and drop the folder symbol into the "Groups" directory.
 
 #### Form view for creating a group
 
@@ -406,7 +477,7 @@ In the backend, the following settings are to be created in a group:
 
 4. **"Group Title"** - Column headings can be selected if required. The order is then output from left to right above the columns. Column headings are created on the overview page of the groups in the "Group Title" area.
 
-    <img src="../Images/Manual/Editing/group-table-header.png" style="max-width:488px;height:auto" />
+   <img src="../Images/Manual/Editing/group-table-header.png" style="max-width:488px;height:auto" />
 
 #### Meta group
 
@@ -414,12 +485,9 @@ A special group variant is the meta group. In this meta group, groups can be nes
 
 <img src="../Images/Manual/Editing/meta-group.png" style="max-width:293px;height:auto" />
 
-
 In this example, two groups are subordinate to the meta group. And the meta group can be added multiple times by the user to create multiple partners here.
 
-#### Frontend view - example meta group 1
-
-Form view for creating a meta group
+#### Form view for creating a meta group
 
 <img src="../Images/Manual/Editing/meta-group-form.png" style="max-width:229px;height:auto" />
 
@@ -463,6 +531,12 @@ Please select List – Pages in TYPO3 Backend:
 
 6. **"Item Groups"** - From the groups created, you select here which are to be displayed on the page.
 
+#### Submit page
+
+A special page is the “submit page”. Each call requires such a page, which displays the summary and the consent queries.
+
+Please select the **type "Preview"** for this page and give it a concise name. You can use this page once created for all calls if you wish.
+
 ### Modificators
 
 With modificators you can implement relationships between form fields
@@ -481,7 +555,8 @@ Modificators can be added to items like validators. An example would be to imple
 
 <img src="../Images/Manual/Editing/modificator-example.png" style="max-width:239px;height:auto" />
 
-## Creating a call group
+### Creating a call group
+
 This is the top group for calls
 
 Select "List" in the left navigation column and then "Dashboard Groups" in the directory tree
@@ -512,8 +587,7 @@ The following functions are available in the list of existing call groups:
 
 7. **"Not accessible with these languages in the frontend"** – Language versions can be deactivated
 
-
-## Creating a supporter
+### Creating a supporter
 
 This is categorization of the calls in the call group
 
@@ -531,15 +605,37 @@ The following functions are available in the list of existing supporter:
 
 <img src="../Images/Manual/Editing/supporter-form.png" style="max-width:566px;height:auto" />
 
-1. **"Supporter Name"** - The Supporter Name is displayed as the heading of the supporter
+**"Supporter Name"** - The Supporter Name is displayed as the heading of the supporter
 
-2. **"Proposal submitted - Mailtext"** – Mailtext for submitted proposal
+**"Proposal submitted - Mailtext"** – Mailtext for submitted proposal
 
-3. **"Proposal in revision - Mailtext"** – Mailtext for proposal set in revision
+**"Proposal in revision - Mailtext"** – Mailtext for proposal set in revision
 
-4. **"Proposal accepted - Mailtext"** – Mailtext for accepted proposal
+**"Proposal accepted - Mailtext"** – Mailtext for accepted proposal
 
-5. **"Proposal declined - Mailtext "** – Mailtext for declined proposal
+**"Proposal declined - Mailtext "** – Mailtext for declined proposal
+
+**Note**: The subject line of the emails is generated automatically and contains the signature of the request and the status.
+
+**Note**: A supporter data record **must** be assigned to each call.
+
+Mail texts are pre-filled as suggestions, which can be freely customised or rewritten.
+
+Variables can be inserted into the texts:
+
+- ##APPLICANT-TITLE##
+
+- ##APPLICANT-NAME##
+
+- ##CALL-TITLE##
+
+- ##PROPOSAL-TITLE##
+
+- ##PROPOSAL-SIGNATURE##
+
+- ##COMMENTS-NOTE##
+
+**Note**: At least one mail text should be created for each status change (mandatory for ‘submitted’).
 
 ## Creating a call
 
@@ -557,12 +653,12 @@ The following functions are available in the list of existing calls:
 
 <img src="../Images/Manual/Editing/call-list-functions.png" style="max-width:265px;height:auto" />
 
-| Field | Description |
-|-------|-------------|
-| <img src="../Images/Manual/Editing/call-edit.png" style="max-width:27px;height:auto" /> | edit call |
-| <img src="../Images/Manual/Editing/call-active.png" style="max-width:28px;height:auto" /> | call is active, function: "Hide record" |
+| Field                                                                                       | Description                                  |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| <img src="../Images/Manual/Editing/call-edit.png" style="max-width:27px;height:auto" />     | edit call                                    |
+| <img src="../Images/Manual/Editing/call-active.png" style="max-width:28px;height:auto" />   | call is active, function: "Hide record"      |
 | <img src="../Images/Manual/Editing/call-inactive.png" style="max-width:27px;height:auto" /> | call is inactive, function: "Un-hide record" |
-| <img src="../Images/Manual/Editing/call-delete.png" style="max-width:29px;height:auto" /> | delete call |
+| <img src="../Images/Manual/Editing/call-delete.png" style="max-width:29px;height:auto" />   | delete call                                  |
 
 **Note:** A call should not be deleted lightly or changed after it has been started.
 
@@ -577,10 +673,11 @@ All data of the created and submitted applications refer to the data fields of t
 2. **"Supporter "** – The previously created supporters are now selected here. Extern links are used to link to a extern webpage.
 
 3. **"Call Type(intern or extern)"** – The possibility to set the call to a specify type
-<img src="../Images/Manual/Editing/call-form-extern.png" style="max-width:526px;height:auto" />
 
-    1. **"URL of extern webpage"** - Url of the extern webpage
-    2. **"Title "** - Title of the extern call in the dashbaord view
+   <img src="../Images/Manual/Editing/call-form-extern.png" style="max-width:526px;height:auto" />
+
+   1. **"URL of extern webpage"** - Url of the extern webpage
+   2. **"Title "** - Title of the extern call in the dashbaord view
 
 4. **"Title"** – Name/title of your call (mandatory)
 
@@ -602,14 +699,15 @@ All data of the created and submitted applications refer to the data fields of t
 
 11. **"Proposal Pid"** – A separate directory can be created for each call, where the submitted proposals are stored (optional, see next chapter).
 
-12. **"Form Pages"** – The previously created pages that are to form the application form are now selected here. The pages are then displayed in the order selected here in the frontend. The last page is <span class="underline">always</span> the submit page
-
-
-<img src="../Images/Manual/Editing/submit-checkbox.png" style="max-width:209px;height:auto" />
+12. **"Form Pages"** – The previously created pages that are to form the application form are now selected here. The pages are then displayed in the order selected here in the frontend. The last page is <span class="underline">always</span> the submit page (see chapter "Submit page")
 
 13. **"Items for submit pages"** - Here, previously created items can be selected with a single checkbox, which is displayed under the summary
 
 **Note:** at least one checkbox item is required here
+
+![](../Images/Manual/Editing/submit-checkbox.png)
+
+**Note:** The following section may be found in a separate tab in some versions of OAP.
 
 <img src="../Images/Manual/Editing/call-submit-checkbox.png" style="max-width:566px;height:auto" />
 
@@ -643,6 +741,8 @@ After selecting the corresponding call, all pages, groups and items are displaye
 
 <img src="../Images/Manual/Editing/call-preview2.png" style="max-width:419px;height:auto" />
 
+Basically, it makes sense to also look at the status of a call in the frontend. A call that has not yet started cannot be seen in the frontend. However, if you assign yourself the "TESTER" group in the "Access" tab in the call, your call will be displayed in the frontend for testing after logging in. (see chapter “[Testing and starting a call](#testing-and-starting-a-call)”)
+
 ### Checklist
 
 Please check the most important settings of the call:
@@ -664,6 +764,14 @@ Registered frontend users can be assigned a group "TESTER" (not created here in 
 Only when the call has been set to "visible" does it become selectable in the dashboard – for testing or when the start date has begun.
 
 <img src="../Images/Manual/Editing/call-tester.png" style="max-width:566px;height:auto" />
+
+**Note**: Only when the call has been set to "visible" does it become selectable in the dashboard – for testing or when the start date has begun.
+
+**Note**: Please note that old drafts may no longer work properly after changes in the call. It is therefore better to always create new ones when testing.
+
+A call automatically becomes visible/active for all applicants in the dashboard when the set start date is reached and the call is set to active/visible.
+
+**Note**: As preparation for launching a call – invest in cleaning all drafts that have been uploaded by testers
 
 ### Create a new call based on an existing call
 
@@ -766,6 +874,7 @@ When creating the follow-up call, the following information must be entered in t
 - The **successor call** knows its predecessor
 
   <img src="../Images/Manual/Editing/call-predecessor.png" style="max-width:439px;height:auto" />
+  If a predecessor call has been selected in the call, no new, empty proposal can be created for this call (create proposal is suppressed in the frontend dashboard).
 
 - The **successor call** is connected to a specially created user group that is activated for this call - in this example "outline".
 
@@ -773,30 +882,33 @@ When creating the follow-up call, the following information must be entered in t
 
 This call is then only available for this specific user group and for an application that has the status "accepted".
 
-How to define the data fields for which a data transfer is to take place is described in chapter 3.1.13 "[Data transfer for succession call](#data-transfer-for-succession-call)".
+The data is transferred once when creating the new proposal from the old one.
 
-## Edit email and website texts
+Groups and items of a successor call must know the item/group of the predecessor in order to transfer data from fields.
 
-### Define email texts
+Groups that are repeatable create the same number of groups in the repetition and transfer the relevant items directly.
 
-The definition of the system e-mails are listed in the Dashboard plugin.
+How to define the data fields for which a data transfer is to take place is described in chapter "[Data transfer for succession call](#data-transfer-for-succession-call)".
 
-> List - Dashboard - Dashboard Plugin
+### Special function “Assessment”
 
-<img src="../Images/Manual/Editing/email-list.png" style="max-width:436px;height:auto" />
+Only optionally available in OAP!
 
-All e-mail texts are listed under the "Plugin" tab:
+In order to set up an assessment function for a call in the backend for the submitted proposals, the previously created assessment items must be assigned to the call.
 
-- Proposal submitted (Mail to user when proposal has been submitted)
-- Proposal in revision (Mail to user when proposal has been reassigned to him for correction)
-- Proposal accepted
-- Proposal declined
+You can assign several radio button items and a text field for comments.
 
-<img src="../Images/Manual/Editing/email-variables.png" style="max-width:347px;height:auto" />
+![](/Volumes/WORK/COSMOBLONDE/MAF_Markdown/github-manual--20251013/Images/Manual/Editing/call-assessment.png)
 
-The mail texts can be freely defined. Available variables are displayed when # is entered.
+In addition, you can define a **threshold value** for how many positive questions a proposal should enter the next selection stage (export filter).
 
-### Editing static texts
+Please see [chapter "Assessment items"](#special-items-assessment-items-and-settings) how to define the assessment items.
+
+How the evaluation works with the assessment definitions is described in the Application Management Manual.
+
+#
+
+## Editing static texts
 
 With the appropriate authorization, the static texts can be edited in the backend, such as home page, imprint, contact, data protection.
 
@@ -807,7 +919,9 @@ Select "Page" in the page menu and click on the desired page in the middle menu.
 <img src="../Images/Manual/Editing/static-texts-edit.png" style="max-width:92px;height:auto" />
 
 - To change a text, click on the edit symbol.
+
 - The slider can be used to make a text field visible or invisible.
+
 - The rubbish bin icon can be used for deletion.
 
   <img src="../Images/Manual/Editing/static-texts-delete.png" style="max-width:216px;height:auto"/>
