@@ -1,8 +1,7 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+<html
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
       xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-      xmlns:oap="OpenOAP\OpenOap\ViewHelpers"
-      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+      xmlns:oap="http://typo3.org/ns/OpenOAP/OpenOap/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
 <ul class="proposals__list">
@@ -61,36 +60,45 @@
                                         </li>
                                         <li>
                                             <f:comment><!--
-                                <f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" />
-                                <f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadWord', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadWord'}" />
-                                <f:if condition="{proposal.state} != {constants.PROPOSAL_IN_PROGRESS} && {proposal.state} != {constants.PROPOSAL_RE_OPENED} && {proposal.state} != {constants.PROPOSAL_ARCHIVED}">
-                                    <f:then><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" /></f:then>
-                                    <f:else><f:render section="OptionSpan" arguments="{option:'download'}" /></f:else>
-                                </f:if>
-                                --></f:comment>
-                                            <button class="proposals__item-pulldown-control proposals__item-option proposals__item-option--download" data-disclosure-control data-disclosure-has-overlay aria-controls="download-format-list--{proposal.uid}" aria-expanded="false">Download</button>
-                                            <ul class="proposals__item-pulldown-options" id="download-format-list--{proposal.uid}"  data-disclosure-overlay="" >
-                                                <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" /></li>
-                                                <f:if condition="{proposal.call.enabledFormatWord}">
-                                                    <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadWord', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadWord'}" /></li>
-                                                </f:if>
-                                                <f:if condition="{filesCount.{proposal.uid}} > 0">
-                                                    <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadAttachments', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadAttachments'}" /></li>
-                                                </f:if>
-
-                                            </ul>
+                                            <f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" />
+                                            <f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadWord', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadWord'}" />
+                                            <f:if condition="{proposal.state} != {constants.PROPOSAL_IN_PROGRESS} && {proposal.state} != {constants.PROPOSAL_RE_OPENED} && {proposal.state} != {constants.PROPOSAL_ARCHIVED}">
+                                                <f:then><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" /></f:then>
+                                                <f:else><f:render section="OptionSpan" arguments="{option:'download'}" /></f:else>
+                                            </f:if>
+                                            --></f:comment>
+                                            <f:if condition="{Access} || {proposal.call}">
+                                                <f:then>
+                                                    <button class="proposals__item-pulldown-control proposals__item-option proposals__item-option--download" data-disclosure-control data-disclosure-has-overlay aria-controls="download-format-list--{proposal.uid}" aria-expanded="false">Download</button>
+                                                    <ul class="proposals__item-pulldown-options" id="download-format-list--{proposal.uid}"  data-disclosure-overlay="" >
+                                                        <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'download', controller:'Proposal', option:'download', proposal:proposal}" /></li>
+                                                        <f:if condition="{proposal.call.enabledFormatWord}">
+                                                            <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadWord', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadWord'}" /></li>
+                                                        </f:if>
+                                                        <f:if condition="{filesCount.{proposal.uid}} > 0">
+                                                            <li><f:render section="OptionLink" arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'downloadAttachments', controller:'Proposal', option:'download', proposal:proposal, labelKey:'DownloadAttachments'}" /></li>
+                                                        </f:if>
+                                                    </ul>
+                                                </f:then>
+                                                <f:else>
+                                                    <span class="proposals__item-option proposals__item-option--download proposals__item-option--disabled">Download</span>
+                                                </f:else>
+                                            </f:if>
                                         </li>
                                         <li>
-                                            <f:render section="OptionLink" arguments="{pageId:settings.notificationsPageId, plugin:'notifications', action:'notifications', controller:'Proposal', option:'communication', proposal:proposal, commentsCount:commentsCount}" />
+                                            <f:if condition="{Access} || {proposal.call}">
+                                                <f:then><f:render section="OptionLink" arguments="{pageId:settings.notificationsPageId, plugin:'notifications', action:'notifications', controller:'Proposal', option:'communication', proposal:proposal, commentsCount:commentsCount}" /></f:then>
+                                                <f:else><f:render section="OptionSpan" arguments="{option:'communication'}" /></f:else>
+                                            </f:if>
                                             <f:comment><!--
-                                <f:if condition="{proposal.state} > {constants.PROPOSAL_IN_PROGRESS}">
-                                    <f:then><f:render section="OptionLink" arguments="{pageId:settings.notificationsPageId, plugin:'notifications', action:'notifications', controller:'Proposal', option:'communication', proposal:proposal, commentsCount:commentsCount}" /></f:then>
-                                    <f:else><f:render section="OptionSpan" arguments="{option:'communication', proposal:proposal, commentsCount:commentsCount}" /></f:else>
-                                </f:if>
-                                --></f:comment>
+                                            <f:if condition="{proposal.state} > {constants.PROPOSAL_IN_PROGRESS}">
+                                                <f:then><f:render section="OptionLink" arguments="{pageId:settings.notificationsPageId, plugin:'notifications', action:'notifications', controller:'Proposal', option:'communication', proposal:proposal, commentsCount:commentsCount}" /></f:then>
+                                                <f:else><f:render section="OptionSpan" arguments="{option:'communication', proposal:proposal, commentsCount:commentsCount}" /></f:else>
+                                            </f:if>
+                                            --></f:comment>
                                         </li>
                                         <li>
-                                            <f:if condition="{proposal.state} < {constants.PROPOSAL_SUBMITTED}">
+                                            <f:if condition="{Access} && {proposal.state} < {constants.PROPOSAL_SUBMITTED}">
                                                 <f:then>
                                                     <f:render
                                                             section="OptionLink"
@@ -145,7 +153,7 @@
 
             </f:else>
         </f:if>
-        <v:try><f:if condition="{commentsCount} && {commentsCount.{proposal.uid}.edited}">({commentsCount.{proposal.uid}.edited})</f:if></v:try>
+        <f:if condition="{commentsCount} && {commentsCount.{proposal.uid}.edited}">({commentsCount.{proposal.uid}.edited})</f:if>
     </span>
 </f:section>
 

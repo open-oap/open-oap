@@ -17,6 +17,10 @@ class ReplaceInvitationByNewWizard implements UpgradeWizardInterface
     const EXT_KEY = 'open_oap';
     const CTYPE_REPLACE_INVITATION = 'femanager_invitation';
 
+    public function __construct(private readonly \TYPO3\CMS\Core\Database\ConnectionPool $connectionPool)
+    {
+    }
+
     public function getTitle(): string
     {
         return 'Migrate femanager_invitation to femanager_registration';
@@ -35,7 +39,7 @@ class ReplaceInvitationByNewWizard implements UpgradeWizardInterface
      */
     public function executeUpdate(): bool
     {
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)
+        $connection = $this->connectionPool
             ->getConnectionForTable('tt_content');
 
         // Alle relevanten Datensätze holen
@@ -44,7 +48,7 @@ class ReplaceInvitationByNewWizard implements UpgradeWizardInterface
             ->select('uid', 'pi_flexform', 'CType')
             ->from('tt_content')
             ->where(
-                $queryBuilder->expr()->eq('CType', $queryBuilder->createNamedParameter(self::CTYPE_REPLACE_INVITATION, \PDO::PARAM_STR)),
+                $queryBuilder->expr()->eq('CType', $queryBuilder->createNamedParameter(self::CTYPE_REPLACE_INVITATION, \TYPO3\CMS\Core\Database\Connection::PARAM_STR)),
             )
             ->executeQuery()
             ->fetchAllAssociative();
@@ -69,7 +73,7 @@ class ReplaceInvitationByNewWizard implements UpgradeWizardInterface
 
     public function updateNecessary(): bool
     {
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)
+        $connection = $this->connectionPool
             ->getConnectionForTable('tt_content');
 
         $queryBuilder = $connection->createQueryBuilder();
@@ -77,7 +81,7 @@ class ReplaceInvitationByNewWizard implements UpgradeWizardInterface
             ->count('uid')
             ->from('tt_content')
             ->where(
-                $queryBuilder->expr()->eq('CType', $queryBuilder->createNamedParameter(self::CTYPE_REPLACE_INVITATION, \PDO::PARAM_STR)),
+                $queryBuilder->expr()->eq('CType', $queryBuilder->createNamedParameter(self::CTYPE_REPLACE_INVITATION, \TYPO3\CMS\Core\Database\Connection::PARAM_STR)),
             )
             ->executeQuery()
             ->fetchOne();

@@ -40,12 +40,32 @@
         dualbox.add_all_button.remove();
         dualbox.remove_all_button.remove();
 
-        // if select disabled, deactive controls
+        // if select disabled, deactivate controls
         if (select.disabled) {
             dualbox.add_button.disabled = true;
             dualbox.remove_button.disabled = true;
             dualbox.availableList.classList.add(cssClass.disabled);
             dualbox.selectedList.classList.add(cssClass.disabled);
+
+            if (dualbox.availableList) {
+                dualbox.availableList.setAttribute('tabindex', '-1');
+                dualbox.availableList.setAttribute('aria-disabled', 'true');
+            }
+
+            if (dualbox.selectedList) {
+                dualbox.selectedList.setAttribute('tabindex', '-1');
+                dualbox.selectedList.setAttribute('aria-disabled', 'true');
+            }
+
+            if (dualbox.search_left) {
+                dualbox.search_left.disabled = true;
+                dualbox.search_left.setAttribute('aria-disabled', 'true');
+            }
+
+            if (dualbox.search_right) {
+                dualbox.search_right.disabled = true;
+                dualbox.search_right.setAttribute('aria-disabled', 'true');
+            }
         }
 
 
@@ -81,9 +101,13 @@
         if (dualbox.select.querySelectorAll('[selected]').length >= maxvalue) {
             dualbox.add_button.disabled = true;
             dualbox.availableList.classList.add(cssClass.disabled);
+            dualbox.availableList.setAttribute('tabindex', '-1');
+            dualbox.availableList.setAttribute('aria-disabled', 'true');
         } else {
             dualbox.add_button.disabled = false;
             dualbox.availableList.classList.remove(cssClass.disabled);
+            dualbox.availableList.setAttribute('tabindex', '0');
+            dualbox.availableList.setAttribute('aria-disabled', 'false');
         }
     };
 

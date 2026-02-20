@@ -27,6 +27,13 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected string $question = '';
 
     /**
+     * short question for export
+     *
+     * @var string
+     */
+    protected string $shortQuestion = '';
+
+    /**
      * internal title for TYPO3 backend view (for editors)
      *
      * @var string
@@ -193,6 +200,22 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setQuestion(string $question): void
     {
         $this->question = $question;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShortQuestion(): string
+    {
+        return $this->shortQuestion;
+    }
+
+    /**
+     * @param string $shortQuestion
+     */
+    public function setShortQuestion(string $shortQuestion): void
+    {
+        $this->shortQuestion = $shortQuestion;
     }
 
     /**

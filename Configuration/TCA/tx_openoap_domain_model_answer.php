@@ -8,10 +8,14 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'versioningWS' => false,
-//        'languageField' => 'sys_language_uid',
-//        'transOrigPointerField' => 'l10n_parent',
-//        'transOrigDiffSourceField' => 'l10n_diffsource',
+        // 'languageField' => 'sys_language_uid',
+        // 'transOrigPointerField' => 'l10n_parent',
+        // 'transOrigDiffSourceField' => 'l10n_diffsource',
+        'delete' => 'deleted',
         'enablecolumns' => [
+            // 'disabled' => 'hidden',
+            // 'starttime' => 'starttime',
+            // 'endtime' => 'endtime',
         ],
         'searchFields' => 'value,additional_value,past_answers',
         'security' => [
@@ -23,34 +27,33 @@ return [
         '1' => ['showitem' => 'value, type, element_counter, group_counter_0, group_counter_1, additional_value, past_answers, item, model, comments, '],
     ],
     'columns' => [
-//        'sys_language_uid' => [
-//            'exclude' => true,
-//            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-//            'config' => [
-//                'default' => -1,
-//                'type' => 'language',
-//            ],
-//        ],
-//        'l10n_parent' => [
-//            'displayCond' => 'FIELD:sys_language_uid:>:0',
-//            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-//            'config' => [
-//                'type' => 'select',
-//                'renderType' => 'selectSingle',
-//                'default' => 0,
-//                'items' => [
-//                    ['label' => '', 'value' => 0],
-//                ],
-//                'foreign_table' => 'tx_openoap_domain_model_answer',
-//                'foreign_table_where' => 'AND {#tx_openoap_domain_model_answer}.{#pid}=###CURRENT_PID### AND {#tx_openoap_domain_model_answer}.{#sys_language_uid} IN (-1,0)',
-//            ],
-//        ],
-//        'l10n_diffsource' => [
-//            'config' => [
-//                'type' => 'passthrough',
-//            ],
-//        ],
-
+        // 'sys_language_uid' => [
+        //     'exclude' => true,
+        //     'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
+        //     'config' => [
+        //         'default' => -1,
+        //         'type' => 'language',
+        //     ],
+        // ],
+        // 'l10n_parent' => [
+        //     'displayCond' => 'FIELD:sys_language_uid:>:0',
+        //     'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+        //     'config' => [
+        //         'type' => 'select',
+        //         'renderType' => 'selectSingle',
+        //         'default' => 0,
+        //         'items' => [
+        //             ['label' => '', 'value' => 0],
+        //         ],
+        //         'foreign_table' => 'tx_openoap_domain_model_answer',
+        //         'foreign_table_where' => 'AND {#tx_openoap_domain_model_answer}.{#pid}=###CURRENT_PID### AND {#tx_openoap_domain_model_answer}.{#sys_language_uid} IN (-1,0)',
+        //     ],
+        // ],
+        // 'l10n_diffsource' => [
+        //     'config' => [
+        //         'type' => 'passthrough',
+        //     ],
+        // ],
         'value' => [
             'exclude' => false,
             'l10n_mode' => 'exclude',

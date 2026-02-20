@@ -11,6 +11,10 @@ class SupporterRepository
 {
     public const TABLE = 'tx_openoap_domain_model_supporter';
 
+    public function __construct(private readonly \TYPO3\CMS\Core\Database\ConnectionPool $connectionPool)
+    {
+    }
+
     /**
      * @param int $language
      * @param int $supporter
@@ -37,6 +41,6 @@ class SupporterRepository
      */
     private function getQueryBuilder(): QueryBuilder
     {
-        return GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable(self::TABLE);
+        return $this->connectionPool->getQueryBuilderForTable(self::TABLE);
     }
 }

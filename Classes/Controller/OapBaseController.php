@@ -25,14 +25,13 @@ use OpenOAP\OpenOap\Domain\Repository\CommentRepository;
 use OpenOAP\OpenOap\Domain\Repository\FormItemRepository;
 use OpenOAP\OpenOap\Domain\Repository\ItemOptionRepository;
 use OpenOAP\OpenOap\Domain\Repository\ProposalRepository;
+use OpenOAP\OpenOap\Domain\Repository\SupporterRepository;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\SimpleType\DocProtect;
 use PhpOffice\PhpWord\TemplateProcessor;
-use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
-use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
@@ -45,15 +44,18 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\CommandUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Fluid\View\FluidViewFactory;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 use ZipArchive;
 
@@ -215,11 +217,11 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const LOG_ERROR_INCORRECT_EMAIL_ADDRESS = 300;
 
     // see \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity - just to shorten the vars
-    protected const NOTICE = -2;
-    protected const INFO = -1;
-    protected const OK = 0;
-    protected const WARNING = 1;
-    protected const ERROR = 2;
+    protected const NOTICE = ContextualFeedbackSeverity::NOTICE;
+    protected const INFO = ContextualFeedbackSeverity::INFO;
+    protected const OK = ContextualFeedbackSeverity::OK;
+    protected const WARNING = ContextualFeedbackSeverity::WARNING;
+    protected const ERROR = ContextualFeedbackSeverity::ERROR;
 
     protected const STATE_MIN = 0;
     protected const STATE_MAX = 9;
@@ -327,86 +329,47 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const PROPOSAL_ASSESSMENT_COLUMN_SCORE = 'pred_score';
     protected const PROPOSAL_ASSESSMENT_COLUMN_ACTION = 'pred_action';
 
-    /**
-     * @var Applicant
-     */
     protected $applicant;
 
-    /**
-     * @var Site|null
-     */
     protected ?Site $site = null;
 
-    /**
-     * @var SiteLanguage|null
-     */
     protected ?SiteLanguage $language = null;
 
-    /**
-     * @var string
-     */
     protected string $langCode = '';
 
-    /**
-     * @var ApplicantRepository|null
-     */
     protected ?ApplicantRepository $applicantRepository = null;
 
-    /**
-     * @var CallRepository|null
-     */
     protected ?CallRepository $callRepository = null;
 
-    /**
-     * @var CommentRepository|null
-     */
     protected ?CommentRepository $commentRepository = null;
 
-    /**
-     * @var ProposalRepository|null
-     */
     protected ?ProposalRepository $proposalRepository = null;
 
-    /**
-     * @var AnswerRepository|null
-     */
     protected ?AnswerRepository $answerRepository = null;
 
-    /**
-     * @var FormItemRepository|null
-     */
     protected ?FormItemRepository $formItemRepository = null;
 
-    /**
-     * @var FormItemRepository|null
-     */
     protected ?ItemOptionRepository $itemOptionRepository = null;
 
-    /**
-     * @var PersistenceManager|null
-     */
     protected ?PersistenceManager $persistenceManager = null;
 
-    /**
-     * @var ModuleTemplateFactory|null
-     */
-    protected ?ModuleTemplateFactory $moduleTemplateFactory = null;
+    protected ?ResourceFactory $resourceFactory = null;
 
-    /**
-     * @var ResourceFactory
-     */
-    protected $resourceFactory;
+    protected ?CallGroupRepository $callGroupRepository = null;
+
+    protected ?ExtensionConfiguration $extensionConfiguration = null;
+
+    protected ?StorageRepository $storageRepository = null;
+
+    protected ?FluidViewFactory $fluidViewFactory = null;
+
+    protected ?SupporterRepository $supporterRepository = null;
 
     /**
      * @var array<int, Answer>
      * @see flattenAnswers()
      */
     protected array $answers = [];
-
-    /**
-     * @var CallGroupRepository|null
-     */
-    protected ?CallGroupRepository $callGroupRepository = null;
 
     /**
      * @var array<int, FormItem>
@@ -432,41 +395,74 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected array $groups = [];
 
-    /**
-     * @param ApplicantRepository $applicantRepository
-     * @param CallRepository $callRepository
-     * @param CommentRepository $commentRepository
-     * @param ProposalRepository $proposalRepository
-     * @param AnswerRepository $answerRepository
-     * @param FormItemRepository $formItemRepository
-     * @param ItemOptionRepository $itemOptionRepository
-     * @param PersistenceManager $persistenceManager
-     * @param CallGroupRepository $callGroupRepository
-     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
-     */
-    public function __construct(
-        ApplicantRepository $applicantRepository,
-        CallRepository $callRepository,
-        CommentRepository $commentRepository,
-        ProposalRepository $proposalRepository,
-        AnswerRepository $answerRepository,
-        FormItemRepository $formItemRepository,
-        ItemOptionRepository $itemOptionRepository,
-        PersistenceManager $persistenceManager,
-        CallGroupRepository $callGroupRepository,
-        protected readonly ExtensionConfiguration $extensionConfiguration
-    ) {
+    public function injectApplicantRepository(ApplicantRepository $applicantRepository): void
+    {
         $this->applicantRepository = $applicantRepository;
-        $this->callRepository = $callRepository;
-        $this->commentRepository = $commentRepository;
-        $this->proposalRepository = $proposalRepository;
-        $this->answerRepository = $answerRepository;
-        $this->formItemRepository = $formItemRepository;
-        $this->itemOptionRepository = $itemOptionRepository;
-        $this->persistenceManager = $persistenceManager;
-        $this->callGroupRepository = $callGroupRepository;
+    }
 
-        $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+    public function injectCallRepository(CallRepository $callRepository): void
+    {
+        $this->callRepository = $callRepository;
+    }
+
+    public function injectCommentRepository(CommentRepository $commentRepository): void
+    {
+        $this->commentRepository = $commentRepository;
+    }
+
+    public function injectProposalRepository(ProposalRepository $proposalRepository): void
+    {
+        $this->proposalRepository = $proposalRepository;
+    }
+
+    public function injectAnswerRepository(AnswerRepository $answerRepository): void
+    {
+        $this->answerRepository = $answerRepository;
+    }
+
+    public function injectFormItemRepository(FormItemRepository $formItemRepository): void
+    {
+        $this->formItemRepository = $formItemRepository;
+    }
+
+    public function injectItemOptionRepository(ItemOptionRepository $itemOptionRepository): void
+    {
+        $this->itemOptionRepository = $itemOptionRepository;
+    }
+
+    public function injectPersistenceManager(PersistenceManager $persistenceManager): void
+    {
+        $this->persistenceManager = $persistenceManager;
+    }
+
+    public function injectCallGroupRepository(CallGroupRepository $callGroupRepository): void
+    {
+        $this->callGroupRepository = $callGroupRepository;
+    }
+
+    public function injectExtensionConfiguration(ExtensionConfiguration $extensionConfiguration): void
+    {
+        $this->extensionConfiguration = $extensionConfiguration;
+    }
+
+    public function injectStorageRepository(StorageRepository $storageRepository): void
+    {
+        $this->storageRepository = $storageRepository;
+    }
+
+    public function injectFluidViewFactory(FluidViewFactory $fluidViewFactory): void
+    {
+        $this->fluidViewFactory = $fluidViewFactory;
+    }
+
+    public function injectResourceFactory(ResourceFactory $resourceFactory): void
+    {
+        $this->resourceFactory = $resourceFactory;
+    }
+
+    public function injectSupporterRepository(SupporterRepository $supporterRepository): void
+    {
+        $this->supporterRepository = $supporterRepository;
     }
 
     /**
@@ -1030,9 +1026,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         $uploadFolderId = ($this->settings['uploadFolder'] == '') ? self::$defaultUploadFolder
             : $this->settings['uploadFolder'];
-        $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
         [$storageId, $storagePath] = explode(':', $uploadFolderId, 2);
-        $storage = $resourceFactory->getStorageObject($storageId);
+        // $storage = $this->resourceFactory->getStorageObject($storageId);
         $folderNames = GeneralUtility::trimExplode('/', $storagePath, true);
 
         return $folderNames;
@@ -1118,7 +1113,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public static function convertStrToBytes(string $str): int
     {
         $str = preg_replace(['~ ~', '~,~'], ['', '.'], $str);
-        $num = (double)$str;
+        $num = (float)$str;
         if (strtoupper(substr($str, -1)) == 'B') {
             $str = substr($str, 0, -1);
         }
@@ -1242,17 +1237,17 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $arguments['callLogoPdf'] = $callLogoPdf;
         }
 
-        $templatePath = GeneralUtility::getFileAbsFileName($pdfTemplatePath);
-        $partialRootPath = GeneralUtility::getFileAbsFileName('EXT:open_oap/Resources/Private/Partials');
+        $viewFactoryData = new ViewFactoryData(
+            partialRootPaths: ['EXT:open_oap/Resources/Private/Partials'],
+            templatePathAndFilename: $pdfTemplatePath,
+            request: $this->request,
+            format: 'html',
+        );
 
-        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-        $standaloneView->setRequest($this->request);
-        $standaloneView->setFormat('html');
-        $standaloneView->setTemplatePathAndFilename($templatePath);
-        $standaloneView->setPartialRootPaths([$partialRootPath]);
-        $standaloneView->assignMultiple($arguments);
+        $fluidView = $this->fluidViewFactory->create($viewFactoryData);
+        $fluidView->assignMultiple($arguments);
 
-        $pdf = $standaloneView->render();
+        $pdf = $fluidView->render();
 
         if ($callLogoPdf !== null && $callLogo?->getExtension() !== 'pdf') {
             // delete temporarily generated logo pdf
@@ -2101,7 +2096,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     self::XLF_BASE_IDENTIFIER_DEFAULTS . '.' . self::DEFAULT_TITLE
                 );
             }
-            $proposalTitleShorted = substr($proposalTitle, 0, (integer) $this->settings['zipStructureProppsalFormatTitleLength']);
+            $proposalTitleShorted = substr($proposalTitle, 0, (int) $this->settings['zipStructureProppsalFormatTitleLength']);
             $proposalPathName .= sprintf($this->settings['zipStructureProppsalFormat'], $proposalTitleShorted, $proposal->getUid());
 
         }
@@ -2217,7 +2212,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected function getStorage(): ResourceStorage
     {
         /** @var ResourceStorage $storage */
-        $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($this->settings['uploadFolder']);
+        $storage = $this->storageRepository->findByCombinedIdentifier($this->settings['uploadFolder']);
         return $storage;
     }
 
@@ -2257,7 +2252,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected function createFileName(Proposal $proposal, string $ext, string $postfix = ''): string
     {
-        $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($this->settings['uploadFolder']);
+        $storage = $this->storageRepository->findByCombinedIdentifier($this->settings['uploadFolder']);
         $absoluteBasePath = $this->getBasePath($storage);
 
         $proposalUploadFolder = $this->getUploadFolder($proposal);
@@ -2628,7 +2623,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             ->setTargetPageUid((int)$this->settings['dashboardPageId'])
             ->build();
 
-        throw new PropagateResponseException($this->redirectToURI($uri, 0, 200));
+        throw new PropagateResponseException($this->redirectToURI($uri, 0, 200), 7037268214);
     }
 
     /**

@@ -1,7 +1,6 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+<html
 	  xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
 	  xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-	  v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
 	  data-namespace-typo3-fluid="true">
 <f:comment><!--
 	<f:render partial="Proposal/CommentForm" arguments="{proposal:proposal, id:'comment{pi.cycle}-{ii.cycle}', section:'comments{pi.cycle}{ii.cycle}', answer:'{proposal.{propertyKeyUid}}'}" />
@@ -25,10 +24,10 @@
 			<f:form.hidden name="answer" value="{answer}" />
 		</f:if>
 		<div>
-			<f:form.button type="submit" name="submit" class="button">
+			<f:form.button type="submit" name="submit" class="btn btn-primary">
 				<span class="button-text">{f:translate(key:"LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:preview.proposal.buttonSubmitComment.label")}</span>
 			</f:form.button>
 		</div>
 	</f:form>
-</div>	
+</div>
 </html>

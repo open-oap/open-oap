@@ -35,6 +35,24 @@
         &-error-message {
             color: $color-alert;
         }
+
+        &-option {
+            @include hyphens;
+            padding-left: rem(25);
+            color: $color-text;
+            background: $icon-edit no-repeat 0 rem(5);
+            background-size: rem(15) auto;
+
+            &--disabled {
+                opacity: 0.6;
+            }
+
+            &:not(.preview__item-option--disabled) {
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
 
     &__term {

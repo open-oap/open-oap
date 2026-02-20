@@ -1,8 +1,6 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+<html
       xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-      xmlns:sd="http://typo3.org/ns/BeechIt/FalSecuredownload/ViewHelpers"
-      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
       data-namespace-typo3-fluid="true">
 
 <f:switch expression="{item.type}">
@@ -64,48 +62,42 @@
         </div>
     </f:case>
     <f:case value="{itemTypes.TYPE_CHECKBOX}">
-        <fieldset>
-            <div class="form__checkable-group form__checkable-group--radio {f:if(condition: '{item.additionalValue}', then: 'form__checkable-group--additionalvalue', else: '')} ">
-                <f:form.hidden property="{propertyKey}" value="" />
-                <f:for each="{answersMap.{answerId}.item.options}" as="checkboxItem" iteration="i">
-                    <div class="checkbox">
-                        <label for="cb{itemAnswerMap.{propertyKeyIndex}}_{i.index}" class="form__checkable-label" <f:if condition="{i.isFirst}">data-legend="legend--{propertyKeyIndex}"</f:if> >
-                            <f:form.checkbox
-                                multiple="1"
-                                property="{propertyKeyArray}"
-                                value="{checkboxItem.key}"
-                                class="form__checkable"
-                                id="cb{itemAnswerMap.{propertyKeyIndex}}_{i.index}"
-                                additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
-                            />
-                        <span class="form__styled-checkbox"></span><f:format.raw>{checkboxItem.label}</f:format.raw>
-                        </label>
-                    </div>
-                </f:for>
-                <f:render partial="Proposal/AdditionalValue" arguments="{_all}" />
-
-            </div>
-        </fieldset>
-    </f:case>
-    <f:case value="{itemTypes.TYPE_RADIOBUTTON}">
-        <fieldset>
-            <div class="form__checkable-group form__checkable-group--radio {f:if(condition: '{item.additionalValue}', then: 'form__checkable-group--additionalvalue', else: '')} ">
-                <f:for each="{answersMap.{answerId}.item.options}" as="radiobuttonItem" iteration="i">
-                    <label for="rb{itemAnswerMap.{propertyKeyIndex}}_{i.index}" class="form__checkable-label" <f:if condition="{i.isFirst}">data-legend="legend--{propertyKeyIndex}"</f:if> >
-                        <f:form.radio
-                            property="{propertyKey}"
-                            value="{radiobuttonItem.key}"
+        <div class="form__checkable-group form__checkable-group--radio {f:if(condition: '{item.additionalValue}', then: 'form__checkable-group--additionalvalue', else: '')} ">
+            <f:form.hidden property="{propertyKey}" value="" />
+            <f:for each="{answersMap.{answerId}.item.options}" as="checkboxItem" iteration="i">
+                <div class="checkbox">
+                    <label for="cb{itemAnswerMap.{propertyKeyIndex}}_{i.index}" class="form__checkable-label" <f:if condition="{i.isFirst}">data-legend="legend--{propertyKeyIndex}"</f:if> >
+                        <f:form.checkbox
+                            multiple="1"
+                            property="{propertyKeyArray}"
+                            value="{checkboxItem.key}"
                             class="form__checkable"
-                            id="rb{itemAnswerMap.{propertyKeyIndex}}_{i.index}"
+                            id="cb{itemAnswerMap.{propertyKeyIndex}}_{i.index}"
                             additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
                         />
-                        <span class="form__styled-radio"></span><f:format.raw>{radiobuttonItem.label}</f:format.raw>
+                    <span class="form__styled-checkbox"></span><f:format.raw>{checkboxItem.label}</f:format.raw>
                     </label>
-                </f:for>
-                <f:render partial="Proposal/AdditionalValue" arguments="{_all}" />
-
-            </div>
-        </fieldset>
+                </div>
+            </f:for>
+            <f:render partial="Proposal/AdditionalValue" arguments="{_all}" />
+        </div>
+    </f:case>
+    <f:case value="{itemTypes.TYPE_RADIOBUTTON}">
+        <div class="form__checkable-group form__checkable-group--radio {f:if(condition: '{item.additionalValue}', then: 'form__checkable-group--additionalvalue', else: '')} ">
+            <f:for each="{answersMap.{answerId}.item.options}" as="radiobuttonItem" iteration="i">
+                <label for="rb{itemAnswerMap.{propertyKeyIndex}}_{i.index}" class="form__checkable-label" <f:if condition="{i.isFirst}">data-legend="legend--{propertyKeyIndex}"</f:if> >
+                    <f:form.radio
+                        property="{propertyKey}"
+                        value="{radiobuttonItem.key}"
+                        class="form__checkable"
+                        id="rb{itemAnswerMap.{propertyKeyIndex}}_{i.index}"
+                        additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                    />
+                    <span class="form__styled-radio"></span><f:format.raw>{radiobuttonItem.label}</f:format.raw>
+                </label>
+            </f:for>
+            <f:render partial="Proposal/AdditionalValue" arguments="{_all}" />
+        </div>
     </f:case>
     <f:case value="{itemTypes.TYPE_SELECT_SINGLE}">
         <f:form.hidden property="{propertyKey}" value="" />
@@ -189,6 +181,7 @@
            <!-- >{countFiles} // {answersMap.{answerId}.item.MaxValue} -->
             <div class="" <f:if condition="{countFiles} >= {answersMap.{answerId}.item.MaxValue} OR {answersMap.{answerId}.disabled}">style="display:none;"</f:if>>
                 <f:form.button type="button"
+                               id="oap-input-{propertyKeyIndex}-button"
                                class="button button--linkstyle button--linkstyle-reduced form__add-file-button"  >
                     <f:render partial="ButtonIcon" arguments="{type:'add'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.add_file')}</f:format.raw>
                 </f:form.button>
@@ -203,6 +196,7 @@
             <f:if condition="{answersMap.{answerId}.item.MaxValue} > 1">
                 <f:then>
                     <f:form.upload
+                        id="oap-input-{propertyKeyIndex}-upload"
                         name="file_{propertyKey}"
                         multiple="multiple"
                         style="display: none;"
@@ -211,6 +205,7 @@
                 </f:then>
                 <f:else>
                     <f:form.upload
+                        id="oap-input-{propertyKeyIndex}-upload"
                         name="file_{propertyKey}"
                         style="display: none;"
                         additionalAttributes="{answersMap.{answerId}.item.additionalAttributes}"
@@ -244,13 +239,13 @@
              < f :link.file src="{fileItem.uid}" treatIdAsReference="1">< / f:link.file>
          --></f:comment>
 
-        <f:form.button type="button" value="{fileItem.uid}" title="<f:format.raw>{f:translate(key:'tx_openoap.general.remove_file')}</f:format.raw>"
+        <f:form.button type="button" value="{fileItem.uid}" title="{f:translate(key:'tx_openoap.general.remove_file')}"
                        class="form__upload-btn-remove-file" name="button-remove-file" >
             <f:render partial="ButtonIcon" arguments="{type:'delete'}"/>
         </f:form.button>
-        <sd:downloadLink file="{fileItem}" target="_blank" title="<f:format.raw>{f:translate(key:'tx_openoap.general.download_file')}</f:format.raw>" class="form__upload-btn-download-file" >
+        <f:link.file file="{fileItem}" target="_blank" download="true" title="{f:translate(key:'tx_openoap.general.download_file')}" class="form__upload-btn-download-file">
             <f:render partial="ButtonIcon" arguments="{type:'download'}" />
-        </sd:downloadLink>
+        </f:link.file>
     </li>
     <f:comment><!--<f:link.file file="{fileItem.url}">{fileItem.name} ({fileItem.size -> f:format.bytes()})</f:link.file>--></f:comment>
 </f:section>

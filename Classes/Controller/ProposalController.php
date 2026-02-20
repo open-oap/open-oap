@@ -18,7 +18,8 @@ use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
-use TYPO3\CMS\Core\Resource\DuplicationBehavior;
+use TYPO3\CMS\Core\Http\UploadedFile;
+use TYPO3\CMS\Core\Resource\Enum\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
@@ -691,7 +692,7 @@ class ProposalController extends OapFrontendController
                         'mailtextSetting' => 'eventProposalSubmittedMailtext',
                         'mailTemplate' => self::MAIL_TEMPLATE_PROPOSAL_SUBMIT,
                     ],
-                    $this->settings['dashboardPageId']
+                    (int)$this->settings['dashboardPageId']
                 );
             }
 
@@ -1476,9 +1477,6 @@ class ProposalController extends OapFrontendController
      */
     protected function processUploadedFiles(Proposal $proposal): void
     {
-        $this->resourceFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Resource\ResourceFactory::class
-        );
         foreach ($_FILES[self::PLUGIN_FORM]['name'] as $fileNameKey => $fileNames) {
             if ($this->request->hasArgument($fileNameKey)) {
                 preg_match('~.*\.(.*)\..*~', $fileNameKey, $matches);
@@ -1499,17 +1497,17 @@ class ProposalController extends OapFrontendController
 
                 $uploadFolder = $this->getUploadFolder($proposal);
 
+                /** @var UploadedFile[] $files */
                 $files = $this->request->getArgument($fileNameKey);
 
                 // correction for single upload field... make an array
                 if (!isset($files[0])) {
-                    $tempFile[0] = $files;
-                    $files = $tempFile;
+                    $files = [$files];
                 }
 
                 foreach ($files as $file) {
-                    if (!isset($file['error']) || $file['error'] === 0) {
-                        if (!GeneralUtility::makeInstance(FileNameValidator::class)->isValid($file['name'])) {
+                    if ($file->getError() === UPLOAD_ERR_OK) {
+                        if (!GeneralUtility::makeInstance(FileNameValidator::class)->isValid($file->getClientFilename())) {
                             throw new \TYPO3\CMS\Extbase\Property\Exception\TypeConverterException(
                                 'Uploading files with PHP file extensions is not allowed!',
                                 1471710357
@@ -1636,7 +1634,7 @@ class ProposalController extends OapFrontendController
                 'openoap'
             );
 
-        throw new PropagateResponseException($this->redirectToURI($uri, 0, 200));
+        throw new PropagateResponseException($this->redirectToURI($uri, 0, 200), 8964028837);
     }
 
     /**
@@ -1649,7 +1647,7 @@ class ProposalController extends OapFrontendController
         if (!empty($rawRequest[self::SURVEY_URL_PARAMETER_CALLID]) && !empty($rawRequest[self::SURVEY_URL_PARAMETER_HASH])) {
 
             // surveyRequest: https://oap.ddev.site/survey?survey=78&hash=789
-            $callId = (integer)$rawRequest[self::SURVEY_URL_PARAMETER_CALLID];
+            $callId = (int)$rawRequest[self::SURVEY_URL_PARAMETER_CALLID];
             $hash = (string)$rawRequest[self::SURVEY_URL_PARAMETER_HASH];
             /** @var Call $surveyCall */
             $surveyCall = $this->callRepository->findByUid($callId);
@@ -1675,7 +1673,7 @@ class ProposalController extends OapFrontendController
                     // build redirect for original request
                     // https://oap.ddev.site/surveyform?tx_openoap_form%5Baction%5D=create&tx_openoap_form%5Bcall%5D=78&tx_openoap_form%5Bcontroller%5D=Proposal
                     $this->redirectToSurveyForm(
-                        (integer)$rawRequest[self::SURVEY_URL_PARAMETER_CALLID],
+                        (int)$rawRequest[self::SURVEY_URL_PARAMETER_CALLID],
                         $rawRequest[self::SURVEY_URL_PARAMETER_HASH]
                     );
                 }
@@ -1703,7 +1701,7 @@ class ProposalController extends OapFrontendController
             ->setTargetPageUid($targetPage)
             ->build();
 
-        throw new PropagateResponseException($this->redirectToURI($uri, 0, 200));
+        throw new PropagateResponseException($this->redirectToURI($uri, 0, 200), 6013026480);
     }
 
     /**

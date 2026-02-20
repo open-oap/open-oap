@@ -1,10 +1,15 @@
 /* import ../_settings.scss */
 .form {
+    *:focus {
+        scroll-margin-bottom: rem(150);
+    }
+
     &__navigation {
         &--sticky {
             position: fixed;
             bottom: 0;
             left: 0;
+            z-index: 1;
             width: 100%;
             background-color: $color-background-body;
             box-shadow: 0 -3px 5px 0 rgba(0, 0, 0, 0.2);
@@ -241,6 +246,10 @@
         }
     }
 
+    &__unit {
+        margin-left: 0.5rem;
+    }
+
     &__additional-text {
         margin-left: rem(30);
     }
@@ -438,6 +447,13 @@
         &-download-file,
         &-remove-file {
             float: right;
+            padding: rem(3) 0;
+            margin-left: rem(10);
+            font-size: 0;
+
+            .form__icon {
+                margin-right: 0;
+            }
         }
     }
 

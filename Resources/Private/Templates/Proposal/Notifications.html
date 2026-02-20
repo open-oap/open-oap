@@ -1,4 +1,9 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<html
+    xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
+    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+    xmlns:oap="http://typo3.org/ns/OpenOAP/OpenOap/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
 <f:layout name="Default" />
 
 Notifications page view
@@ -14,7 +19,8 @@ Available variables:
 
 <f:section name="content">
     <f:if condition="{proposal}">
-        <f:if condition="{proposal.state} < {states.PROPOSAL_SUBMITTED} || {proposal.state} == {states.PROPOSAL_RE_OPENED}">
+        <v:variable.set name="Access" value="{oap:controlAccess(proposal: proposal, settings: settings, constants: states)}" />
+        <f:if condition="{Acesss} || {proposal.state} < {states.PROPOSAL_SUBMITTED} || {proposal.state} == {states.PROPOSAL_RE_OPENED}">
             <div class="notifications__edit-proposal">
                 <f:link.action pluginName="form" pageUid="{settings.formPageId}" action="edit" controller="Proposal" arguments="{proposal:proposal}" class="proposals__item-option proposals__item-option--edit">
                     {f:translate(key: 'tx_openoap_dashboard.proposal.linkEdit.title', arguments: {0: '{call.proposalName}'}, default: 'proposal')}

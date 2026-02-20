@@ -32,7 +32,7 @@ return [
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.documents,
                     logo, --palette--;;wordDocPalette,
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_tab,
-                    anonym, survey_codes
+                    anonym, survey_codes,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
                     sys_language_uid, l10n_parent, l10n_diffsource,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
@@ -84,7 +84,6 @@ return [
                 'items' => [
                     [
                         'label' => '',
-                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -140,8 +139,9 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
                 'default' => 'proposal',
+                'required' => true,
             ],
         ],
         'intro_text' => [
@@ -380,9 +380,9 @@ return [
             'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.form_assessment_threshold',
             'config' => [
-                'type' => 'input',
+                'type' => 'number',
                 'size' => 5,
-                'eval' => 'trim,int',
+                'eval' => 'trim',
                 'range' => [
                     'lower' => 0,
                     'upper' => 10,
@@ -496,7 +496,6 @@ return [
         ],
         'anonym' => [
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.anonym',
-            'description' => 'renderType=checkboxToggle single',
             'displayCond' => 'FIELD:type:!=:1',
             'config' => [
                 'type' => 'check',

@@ -1,9 +1,6 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
-     xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
-     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
-     data-namespace-typo3-fluid="true"
->
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 
     <div class="component component--layout-content-width">
         <div class="form__text form__text--intro">
@@ -86,7 +83,6 @@
             </f:if>
         </f:for>
     </div>
-</html>
 
 <f:section name="outputGroup">
     <f:if condition="{itemGroup.displayType} == {groupDisplayTypes.GROUPDISPLAY_DEFAULT}">
@@ -115,10 +111,16 @@
                         </f:if>
 
                         <div class="preview__item">
-                            <dt id="preview__answer--{answerId}" class="preview__term {errorClass}" ><strong>{item.question}{answersMap.{answerId}.item.MSign} <v:try>{validationResults.pages.{groupId}.{item.uid}}</v:try></strong></dt>
+                            <dt id="preview__answer--{answerId}" class="preview__term {errorClass}" ><strong>{item.question}{answersMap.{answerId}.item.MSign} {validationResults.pages.{groupId}.{item.uid}}</strong></dt>
                             <dd class="preview__definition">
 
                                 <f:render partial="Utility/ValueOutput" arguments="{_all}" />
+
+                                <div class="preview__item-options">
+                                    <f:link.action class="preview__item-option preview__item-option--edit" action="edit" arguments="{currentPage: pageIt.cycle,  proposal: proposal}" section="oap-input-{propertyKeyIndex}--item">
+                                        <f:translate key="tx_openoap_form.preview.edit" />
+                                    </f:link.action>
+                                </div>
 
                                 <f:if condition="{validationResults.answers.{answerId}.error}">
                                     <ul class="preview__item-error-message">
@@ -201,6 +203,13 @@
                         <div id="preview__answer--{answerId}" class="form__table-cell form__table-cell--value {errorClass}" style="grid-area: {row}/{counter.cycle +1}/{row}/{counter.cycle +1};">
                             <f:alias map="{hideUnit: '1'}">
                                 <f:render partial="Utility/ValueOutput" arguments="{_all}" />
+
+                                <div class="preview__item-options">
+                                    <f:link.action class="preview__item-option preview__item-option--edit" action="edit" arguments="{currentPage: pageIt.cycle,  proposal: proposal}" section="oap-input-{propertyKeyIndex}">
+                                        <f:translate key="tx_openoap_form.preview.edit" />
+                                    </f:link.action>
+                                </div>
+
                                 <f:if condition="{validationResults.answers.{answerId}.error}">
                                     <ul class="preview__item-error-message">
                                         <f:for each="{validationResults.answers.{answerId}.messsages}" as="message">
@@ -277,4 +286,5 @@
 </f:for>
 </div>
 --></f:comment>
+
 </html>

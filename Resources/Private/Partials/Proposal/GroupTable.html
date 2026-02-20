@@ -1,7 +1,6 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+<html
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers"
       xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
       data-namespace-typo3-fluid="true">
 
 <fieldset>
@@ -61,13 +60,13 @@
 <div class="form__table form__table--{cols}cols">
 
     <f:variable name="row">1</f:variable>
-
     <v:iterator.loop count="{cols}" iteration="counter" >
         <v:variable.set name="groupCounterL1" value="{counter.index}" />
         <f:variable name="col-start">{counter.cycle + 1}</f:variable>
         <f:variable name="col-end">{counter.cycle + 2}</f:variable>
+        <v:variable.set name="propertyLabel" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}" />
 
-        <div class="form__table-cell form__table-cell--head" style="grid-area: {row}/{col-start}/{row}/{col-end};">
+        <div id="oap-label-head-{propertyLabel}" class="form__table-cell form__table-cell--head" style="grid-area: {row}/{col-start}/{row}/{col-end}">
             <f:if condition="{itemGroup.groupTitle}">
                 <f:then>
                     {itemGroup.groupTitle.{counter.index}.title}
@@ -78,6 +77,7 @@
             </f:if>
         </div>
     </v:iterator.loop>
+
     <f:variable name="row">{row + 1}</f:variable>
     <f:for each="{itemGroup.items}" as="item" key="itemId" iteration="itemIt">
 
@@ -102,15 +102,17 @@
             <v:variable.set name="propertyKeyArray" value="answers.{itemAnswerMap.{propertyKeyIndex}}.arrayValue" />
             <v:variable.set name="propertyKeyComments" value="answers.{itemAnswerMap.{propertyKeyIndex}}.comments" />
             <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
+            <v:variable.set name="propertyLabel" value="{itemGroup.uid}--{groupCounterL0}--0--{item.uid}" />
+            <v:variable.set name="propertyLabelHead" value="{itemGroup.uid}--{groupCounterL0}--{groupCounterL1}" />
 
             <f:if condition="{counter.isFirst}">
-                <div class="form__table-cell form__table-cell--label" style="grid-area: {row}/1/{row}/1;">
+                <label id="oap-input-{propertyLabel}--item" class="form__table-cell form__table-cell--label" for="oap-input-{propertyKeyIndex}" style="grid-area: {row}/1/{row}/1;">
                     {item.question}
                     <f:if condition="{answersMap.{answerId}.item.MSign}"><f:render partial="Required.html" arguments="{MSign:'{answersMap.{answerId}.item.MSign}'}" /></f:if>
                     <f:if condition="{item.unit}"><span class="form__unit">[{item.unit}]</span></f:if>
-                </div>
+                </label>
             </f:if>
-            <div class="form__table-cell" style="grid-area: {row}/{counter.cycle +1}/{row}/{counter.cycle +1};" data-errorlabel="{item.question} - {colTitle}">
+            <div class="form__table-cell" style="grid-area: {row}/{counter.cycle +1}/{row}/{counter.cycle +1}" data-errorlabel="{item.question} - {colTitle}">
                 <f:if condition="{item.type} == {itemTypes.TYPE_STRING}">
                     <f:form.textfield
                         type="{answersMap.{answerId}.item.type}"
@@ -118,6 +120,7 @@
                         class="form__textfield {itemsMap.{item.uid}.classStr}"
                         id="oap-input-{propertyKeyIndex}"
                         additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                        aria="{labelledby: 'oap-input-{propertyLabel}--item oap-label-head-{propertyLabelHead}'}"
                     />
                 </f:if>
                 <f:if condition="{item.type} == {itemTypes.TYPE_DROPDOWN}">
@@ -126,6 +129,7 @@
                         property="{propertyKey}"
                         id="oap-input-{propertyKeyIndex}"
                         additionalAttributes='{answersMap.{answerId}.item.additionalAttributes}'
+                        aria="{labelledby: 'oap-input-{propertyLabel}--item oap-label-head-{propertyLabelHead}'}"
                         options="{answersMap.{answerId}.item.options}"
                         optionValueField="key"
                         optionLabelField="label"
@@ -160,7 +164,7 @@
             <v:variable.set name="answerId" value="{proposal.answers.{itemAnswerMap.{propertyKeyIndex}}.uid}" />
             <v:variable.set name="item" value="{item}" />
 
-            <v:try><f:if condition="{proposal.{propertyKeyComments}}">
+            <f:if condition="{proposal.{propertyKeyComments}}">
                 <f:render
                         partial="Answer/Comments"
                         arguments="{
@@ -173,7 +177,7 @@
                         colTitle:'{colTitle}'
                         }"
                 />
-            </f:if></v:try>
+            </f:if>
         </v:iterator.loop>
     </f:for>
 

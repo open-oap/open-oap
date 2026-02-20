@@ -56,7 +56,6 @@ plugin.tx_openoap_dashboard {
         pidFormItems = {$plugin.tx_openoap_dashboard.settings.pidFormItems}
         pidItemOptions = {$plugin.tx_openoap_dashboard.settings.pidItemOptions}
         pidItemValidator = {$plugin.tx_openoap_dashboard.settings.pidItemValidator}
-
         zipFilePrefix = {$plugin.tx_openoap_dashboard.settings.zipFilePrefix}
         zipFileDateFormat = {$plugin.tx_openoap_dashboard.settings.zipFileDateFormat}
         zipStructureApplicantFormat = {$plugin.tx_openoap_dashboard.settings.zipStructureApplicantFormat}
@@ -250,6 +249,22 @@ module.tx_openoap_web_openoapbackendproposals {
     settings < plugin.tx_openoap_dashboard.settings
 }
 
+# Module configuration
+module.tx_openoap_system_openoapbackendbackup {
+    persistence {
+        storagePid = {$module.tx_openoap_backendbackup.persistence.storagePid}
+    }
+    view {
+        templateRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Templates/
+        templateRootPaths.1 = {$module.tx_openoap_backendbackup.view.templateRootPath}
+        partialRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Partials/
+        partialRootPaths.1 = {$module.tx_openoap_backendbackup.view.partialRootPath}
+        layoutRootPaths.0 = EXT:open_oap/Resources/Private/Backend/Layouts/
+        layoutRootPaths.1 = {$module.tx_openoap_backendbackup.view.layoutRootPath}
+    }
+    settings < plugin.tx_openoap_dashboard.settings
+}
+
 page {
     includeCSS {
         open_oap = EXT:open_oap/Resources/Public/Css/styles.css
@@ -257,5 +272,5 @@ page {
 }
 
 # Extension configuration
-<INCLUDE_TYPOSCRIPT: source="FILE:EXT:open_oap/Configuration/TypoScript/Extensions/felogin/setup.typoscript">
-<INCLUDE_TYPOSCRIPT: source="FILE:EXT:open_oap/Configuration/TypoScript/Extensions/femanager/setup.typoscript">
+@import 'EXT:open_oap/Configuration/TypoScript/Extensions/felogin/setup.typoscript'
+@import 'EXT:open_oap/Configuration/TypoScript/Extensions/femanager/setup.typoscript'

@@ -61,7 +61,6 @@ return [
                 'items' => [
                     [
                         'label' => '',
-                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -189,12 +188,6 @@ return [
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
-                'items' => [
-                    [
-                        'label' => '',
-                        'value' => '',
-                    ],
-                ],
                 'default' => 0,
             ],
         ],
@@ -324,10 +317,8 @@ return [
             'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_proposal.review_time',
             'config' => [
                 'dbType' => 'datetime',
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
+                'type' => 'datetime',
                 'size' => 12,
-                'eval' => 'datetime',
                 'default' => null,
             ],
         ],

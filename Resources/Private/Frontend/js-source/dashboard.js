@@ -30,7 +30,7 @@
                         let modalSubmit = labels[link.dataset[dataSet.modalSubmit]];
                         let modalCancel = labels[link.dataset[dataSet.modalCancel]];
 
-                        OAP.utils.modal.show(modalContent, modalSubmit, modalCancel, link);
+                        OAP.utils.modal.show(modalContent, modalSubmit, modalCancel, link, link);
                     }
                 }
             });

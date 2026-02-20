@@ -68,7 +68,7 @@ class ApplicantController extends OapFrontendController
     {
         // Called applicantform action depends on parent page
         if ($this->settings['masterdataEditPageId'] != $this->request->getAttribute('currentContentObject')->data['pid']) {
-            throw new PropagateResponseException($this->redirect('extend'));
+            throw new PropagateResponseException($this->redirect('extend'), 9365896113);
         }
     }
 
@@ -138,7 +138,7 @@ class ApplicantController extends OapFrontendController
             return $this->redirect('edit', 'Applicant', null, ['applicant' => $applicant]);
         }
         $this->applicantRepository->update($applicant);
-        return $this->redirect('dashboard', 'Applicant', null, ['applicant' => $applicant], $this->settings['dashboardPageId']);
+        return $this->redirect('dashboard', 'Applicant', null, ['applicant' => $applicant], (int)$this->settings['dashboardPageId']);
     }
 
     /**
@@ -347,7 +347,7 @@ class ApplicantController extends OapFrontendController
                 if ($answer->getItem()) {
                     if ($answer->getItem()->getType() == self::TYPE_UPLOAD and $answer->getValue() !== '') {
                         $files = array_unique(
-                            \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $answer->getValue(), 1)
+                            \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $answer->getValue(), true)
                         );
                         $countFiles += count($files);
                     }

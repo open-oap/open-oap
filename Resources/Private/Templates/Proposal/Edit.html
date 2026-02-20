@@ -1,8 +1,6 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+<html
       xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-      xmlns:sd="http://typo3.org/ns/BeechIt/FalSecuredownload/ViewHelpers"
-      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
       data-namespace-typo3-fluid="true">
 <f:layout name="Default" />
 
@@ -43,12 +41,9 @@
                 <f:form.hidden name="previewPage" value="0"/>
                 <f:if condition="{pageControl.current} == {pageIt.cycle}">
                     <div class="row" >
-                        <div class="column column--size3">
-                            <f:render partial="Proposal/FormMenu" arguments="{_all}" />
-                        </div>
-                        <div class="column column--size9">
+                        <div class="column column--size9 column--order-1">
 
-                            <div class="form__page">
+                            <div id="form" class="form__page">
                                 <div class="formpage-intro">
                                     <h2 class="formpage-intro__headline">{formPage.title}</h2>
                                     <f:if condition="{formPage.introText}">
@@ -71,6 +66,9 @@
                                 <f:render partial="Utility/StickyNavigation" arguments="{_all}" />
 
                             </div>
+                        </div>
+                        <div id="form-pages" class="column column--size3">
+                            <f:render partial="Proposal/FormMenu" arguments="{_all}" />
                         </div>
                     </div>
                 </f:if>

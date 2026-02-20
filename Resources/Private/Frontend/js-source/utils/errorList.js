@@ -109,7 +109,7 @@
 
                 if (alertBox.id) {
                     // Wanted? Back-button issues?
-                    if (window.location.hash !== '#jumpmark') {
+                    if (window.location.hash === '') {
                         window.location.hash = '#' + alertBox.id;
                     }
                 }

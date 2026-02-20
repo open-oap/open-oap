@@ -199,7 +199,7 @@ class DescendantsSelectItemsProcFunc
             if ($pageId == $proposalsPoolRoot) {
                 continue;
             }
-            $page = $this->pageRepository->getPage($pageId);
+            $page = $this->pageRepository->getPage((int)$pageId);
             $uid = $page['uid'];
             $pid = $page['pid'];
             $label = $title[$uid] = $page['title'];
@@ -212,7 +212,7 @@ class DescendantsSelectItemsProcFunc
                 $label = $prefix . $label;
                 $title[$uid] = $label;
             }
-            $params['items'][] = [$label, (integer)$uid];
+            $params['items'][] = [$label, (int)$uid];
 
         }
     }
@@ -232,7 +232,7 @@ class DescendantsSelectItemsProcFunc
             if (in_array($pageId, $pidRoots) and ! $rootLevelWithTitle) {
                 continue;
             }
-            $page = $this->pageRepository->getPage($pageId);
+            $page = $this->pageRepository->getPage((int)$pageId);
             // perhaps better to catch possible errors here
             if (empty($page)) {
                 continue;
