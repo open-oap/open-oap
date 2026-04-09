@@ -1,0 +1,2 @@
+# Separation of backend and frontend templates
+templates.openoap/open-oap.10 = openoap/open-oap:Resources/Private/Backend
