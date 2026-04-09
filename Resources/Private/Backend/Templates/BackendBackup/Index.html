@@ -1,0 +1,124 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:layout name="Module" />
+
+<f:section name="Content">
+    <f:be.pageRenderer
+        includeCssFiles="{0: 'EXT:open_oap/Resources/Public/Css/backend.css', 1: 'EXT:open_oap/Resources/Public/Css/BackupModule.css'}"
+        includeJavaScriptModules="{0:'@openoap/open-oap/BackupModule.js'}"
+    />
+
+    <h1>OAP Backup Tool</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Create Complete Backup</h3>
+        </div>
+        <div class="panel-body">
+            <p>With this tool you can create a complete backup of your TYPO3 installation. The backup includes:</p>
+            <ul>
+                <li>All files of the TYPO3 installation</li>
+                <li>The complete database</li>
+            </ul>
+
+            <div class="alert alert-info">
+                <strong>Note:</strong> Creating the backup may take some time depending on the size of your installation.
+                The process runs in the background and you will be notified by email once the backup is completed.
+            </div>
+
+            <f:form action="createBackup" method="post" class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <f:form.submit value="Start Backup" class="btn btn-primary" />
+                    </div>
+                </div>
+            </f:form>
+        </div>
+    </div>
+
+    <f:if condition="{backupJobs}">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Backup Jobs</h3>
+            </div>
+            <div class="panel-body">
+                <f:for each="{backupJobs}" as="backupJob">
+                    <div id="backup-status-container-{backupJob.id}" class="backup-status-container panel panel-default mb-3">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                Backup {f:format.date(date: backupJob.started, format: 'Y-m-d H:i')}
+                                <f:if condition="{backupJob.createdBy}">
+                                    <small>by {backupJob.createdBy}</small>
+                                </f:if>
+                            </h4>
+                        </div>
+                        <div class="panel-body">
+                            <p>ID: <code>{backupJob.id}</code></p>
+
+                            <div class="progress mb-3">
+                                <div class="progress-bar backup-progress-bar progress-bar-info"
+                                     role="progressbar"
+                                     aria-valuenow="{backupJob.progress}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100"
+                                     data-progress="{backupJob.progress}"
+                                     style="width:{backupJob.progress}%">
+                                    <span>{backupJob.progress}%</span>
+                                </div>
+                            </div>
+
+                            <p>Status: <span class="backup-status-badge">
+                                <f:if condition="{backupJob.status} == 'running'">
+                                    <span class="badge badge-info">In Progress</span>
+                                </f:if>
+                                <f:if condition="{backupJob.status} == 'completed'">
+                                    <span class="badge badge-success">Completed</span>
+                                </f:if>
+                                <f:if condition="{backupJob.status} == 'error'">
+                                    <span class="badge badge-danger">Error</span>
+                                </f:if>
+                                <f:if condition="{backupJob.status} == 'canceled'">
+                                    <span class="badge badge-warning">Canceled</span>
+                                </f:if>
+                                <f:if condition="{backupJob.status} == 'downloaded'">
+                                    <span class="badge badge-info">Downloaded & Deleted</span>
+                                </f:if>
+                            </span></p>
+
+                            <f:if condition="{backupJob.archiveSizeFormatted}">
+                                <p>Archive size: <span class="backup-archive-size">{backupJob.archiveSizeFormatted}</span></p>
+                            </f:if>
+
+                            <f:if condition="{backupJob.startedAt}">
+                                <p>Started: <span class="backup-started-at">{f:format.date(date: backupJob.startedAt, format: 'Y-m-d H:i')}</span></p>
+                            </f:if>
+
+                            <div class="backup-error-message">
+                                <f:if condition="{backupJob.status} == 'error'">
+                                    <div class="alert alert-danger">
+                                        <p>{backupJob.error}</p>
+                                    </div>
+                                </f:if>
+                            </div>
+
+                            <div class="button-group">
+                                <f:if condition="{backupJob.status} == 'running'">
+                                    <f:link.action action="cancelBackup" arguments="{backupId: backupJob.id}" class="btn btn-danger" additionalAttributes="{data-action: 'cancelBackup', data-backup-id: '{backupJob.id}'}">Cancel Backup</f:link.action>
+                                </f:if>
+
+                                <f:if condition="{backupJob.status} == 'completed'">
+                                    <f:link.action action="download" arguments="{backupId: backupJob.id}" class="btn btn-success backup-download-button">Download Backup</f:link.action>
+                                    <f:link.action action="deleteBackup" arguments="{backupId: backupJob.id}" class="btn btn-danger backup-delete-button" onclick="return confirm('Are you sure you want to delete this backup?')">Delete Backup</f:link.action>
+                                </f:if>
+                            </div>
+                        </div>
+                    </div>
+                </f:for>
+            </div>
+        </div>
+    </f:if>
+
+</f:section>
+</html>
