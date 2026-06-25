@@ -28,7 +28,7 @@ jobs:
       - name: Get comment
         id: get-comment
         run: |
-          readonly local comment=$(git tag -l v${{ env.version }} --format '%(contents))
+          readonly local comment=$(git tag -l v${{ env.version }} --format '%(contents)')
 
           if [[ -z "${comment// }" ]]; then
             echo "comment=Released version ${{ env.version }} of ${{ env.TYPO3_EXTENSION_KEY }}" >> $GITHUB_ENV
