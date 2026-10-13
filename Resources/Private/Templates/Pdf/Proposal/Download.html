@@ -204,7 +204,7 @@ Available variables:
 
                 <f:if condition="1 == {answerSection}">
                     <h4><br><span class="hyphenated">{itemGroup.title}</span> <f:if condition="{groupCurrentN} > 1">#{counter.cycle}</f:if>
-                        <f:if condition="{counterWrapper}"><br>({itemGroupL0.title} #{counterWrapper.cycle})</f:if>
+                        <f:if condition="{counterWrapper}"><br>({itemGroupL0.title}<f:if condition="{groupsCounter.{itemGroupL0.uid}.current} > 1"> #{counterWrapper.cycle}</f:if>)</f:if>
                     </h4>
                     <f:if condition="{itemGroup.introText}">
                         {itemGroup.introText -> f:transform.html()}

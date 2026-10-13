@@ -12,7 +12,7 @@
             <f:comment><!-- MetaGroup --></f:comment>
             <v:iterator.loop iteration="counterWrapper" count="{groupsCounter.{itemGroupL0.uid}.current}" >
                 <fieldset class="form__grouped-fieldset" <f:if condition="{groupsCounter.{itemGroupL0.uid}.current} == {counterWrapper.cycle}">id="jumpmark"</f:if>>
-                    <legend class="form__group-legend form__group-legend--metagroup" >{itemGroupL0.title} #{counterWrapper.cycle}</legend>
+                    <legend class="form__group-legend form__group-legend--metagroup" >{itemGroupL0.title} <f:if condition="{groupsCounter.{itemGroupL0.uid}.current} > 1">#{counterWrapper.cycle}</f:if></legend>
                     <div class="" style="position:relative;padding-left: 2rem; border-left: 3px solid #818994;">
                         <span style="position:absolute;bottom:0;left:-7px;"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="5" fill="#818994"/></svg></span>
                     <div class="formpage-group__intro">
@@ -43,7 +43,7 @@
                                 name="removeGroup"
                                 value="{f:format.json(value: {L1GroupUid: '', L0GroupUid: '{itemGroupL0.uid}', L0GroupIndex: '{counterWrapper.index}', L1GroupIndex: ''})}"
                             >
-                                <f:render partial="ButtonIcon" arguments="{type:'subtract'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.remove_group', arguments: {0: itemGroupL0.title} )} #{counterWrapper.cycle}</f:format.raw>
+                                <f:render partial="ButtonIcon" arguments="{type:'subtract'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.remove_group', arguments: {0: itemGroupL0.title} )} <f:if condition="{groupsCounter.{itemGroupL0.uid}.current} > 1">#{counterWrapper.cycle}</f:if></f:format.raw>
                             </f:form.button>
                         </div>
                     </f:if>

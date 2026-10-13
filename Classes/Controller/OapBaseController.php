@@ -1726,9 +1726,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             /** @var FormGroup $itemGroupL0 */
             foreach ($formPage->getItemGroups() as $itemGroupL0) {
                 if ($itemGroupL0->getType() == self::GROUPTYPE_META) {
-                    $currentL1 = $groupsCounter[$itemGroupL0->getUid()]['current'];
-                    for ($groupIndexL0 = 0; $groupIndexL0 < $groupsCounter[$itemGroupL0->getUid()]['current']; $groupIndexL0++) {
-                        $this->createWordGroupTitleBlock($itemGroupL0, $groupIndexL0, $currentL1, $section, $format, $type);
+                    $currentL0 = (int)$groupsCounter[$itemGroupL0->getUid()]['current'];
+                    for ($groupIndexL0 = 0; $groupIndexL0 < $currentL0; $groupIndexL0++) {
+                        $this->createWordGroupTitleBlock($itemGroupL0, $groupIndexL0, $currentL0, $section, $format, $type);
 
                         foreach ($itemGroupL0->getItemGroups() as $itemGroupL1) {
                             $currentL1 = (int)$groupsCounter[$itemGroupL0->getUid()]['instances'][$groupIndexL0][$itemGroupL1->getUid()]['current'];
@@ -2895,7 +2895,12 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
         }
         if ($itemGroup->getType() == self::GROUPTYPE_META) {
-            $this->addTextToSection($section, $groupTitle . '#' . (int)($i + 1), $format['MetaGroupTitleFontFormat']);
+            // only number the instances if there is more than one - "#1" alone
+            // reads like a second instance is missing
+            if ($current > 1) {
+                $groupTitle .= '#' . (int)($i + 1);
+            }
+            $this->addTextToSection($section, rtrim($groupTitle), $format['MetaGroupTitleFontFormat']);
         } else {
             $this->addTextToSection($section, $groupTitle, $format['GroupTitleFontFormat']);
         }

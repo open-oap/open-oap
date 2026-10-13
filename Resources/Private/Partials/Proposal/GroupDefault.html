@@ -45,7 +45,7 @@
                     name="removeGroup"
                     value="{f:format.json(value: {L1GroupUid: '{L1_Uid}', L0GroupUid: '{L0_Uid}', L0GroupIndex: '{L0_Index}', L1GroupIndex: '{L1_Index}'})}"
                 >
-                    <f:render partial="ButtonIcon" arguments="{type:'subtract'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.remove_group', arguments: {0: itemGroup.title} )} #{counter.cycle}</f:format.raw>
+                    <f:render partial="ButtonIcon" arguments="{type:'subtract'}"/><f:format.raw>{f:translate(key:'tx_openoap.general.remove_group', arguments: {0: itemGroup.title} )} <f:if condition="{groupCurrentN} > 1">#{counter.cycle}</f:if></f:format.raw>
                 </f:form.button>
             </div>
         </f:if>

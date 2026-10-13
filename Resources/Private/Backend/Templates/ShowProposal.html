@@ -167,7 +167,7 @@ Available variables:
                                         {itemGroupL0.groupTitle.{counterWrapper.index}.title}
                                     </f:then>
                                     <f:else>
-                                        #{counterWrapper.cycle}
+                                        <f:if condition="{groupsCounter.{itemGroupL0.uid}.current} > 1">#{counterWrapper.cycle}</f:if>
                                     </f:else>
                                 </f:if>
                             </legend>
@@ -195,7 +195,7 @@ Available variables:
                                                         {itemGroupL1.groupTitle.{counterGroup.index}.title}
                                                     </f:then>
                                                     <f:else>
-                                                        #{counterGroup.cycle}
+                                                        <f:if condition="{groupCurrentN} > 1">#{counterGroup.cycle}</f:if>
                                                     </f:else>
                                                 </f:if>
                                                 </legend>
