@@ -29,3 +29,4 @@ services:
   OpenOAP\OpenOap\Upgrades\ReplaceInvitationByNewWizard:
     tags:
       - name: install.upgradewizard
+        identifier: OpenOAPOpenOapUpgradesReplaceInvitationByNewWizard
