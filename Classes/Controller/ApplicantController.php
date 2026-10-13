@@ -35,7 +35,7 @@ class ApplicantController extends OapFrontendController
     /**
      * @var array
      */
-    protected $countries = [];
+    protected array $countries = [];
 
     /**
      * action initialize
@@ -55,7 +55,7 @@ class ApplicantController extends OapFrontendController
             if (count($countryOptionsArray) > 0) {
                 foreach ($countryOptionsArray as $item) {
                     $itemArray = GeneralUtility::trimExplode(';', $item);
-                    $this->countries[$itemArray[0]] = $itemArray[1];
+                    $this->countries[$itemArray[0]] = $itemArray[1] ?? $itemArray[0];
                 }
             }
         }
