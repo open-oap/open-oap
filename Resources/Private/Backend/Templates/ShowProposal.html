@@ -42,7 +42,7 @@ Available variables:
         <table class="table table__information">
             <tr><th>Applicant</th><td><f:if condition="{proposal.applicant.company}">{proposal.applicant.company} | </f:if>{proposal.applicant.username}</td></tr>
             <tr><th>Signature</th><td><f:if condition="{call.shortcut} !== ''">{call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf></td></tr>
-            <f:if condition="{proposal.submitTstamp} > 0"><tr><th>Submitted</th><td>{proposal.submitTstamf}</td></tr></f:if>
+            <f:if condition="{proposal.submitTstamp} > 0"><tr><th>Submitted</th><td><f:format.date format="d.m.Y H:i ">{proposal.submitTstamp}</f:format.date></td></tr></f:if>
             <f:if condition="{proposal.importedAction}">
                 <tr><th>Imported rating</th><td>{proposal.importedAction} ({proposal.importedScore}) </td></tr>
             </f:if>
