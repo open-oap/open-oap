@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Fluid\View\FluidViewAdapter;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 
 /***
@@ -76,6 +77,35 @@ class OapBackendController extends OapBaseController
         $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->moduleTemplate->assign('settings', $this->settings);
 
+        // TYPO3 v13: BackendViewFactory resolves templates from Resources/Private/Templates/
+        // with controller name "Default" by default. Override to use the Backend/ subdirectory
+        // (where open-oap stores its backend templates) with an empty controller name so that
+        // templates are resolved flat (e.g. Backend/Templates/ListForms.html).
+        $reflectionClass = new \ReflectionClass($this->moduleTemplate);
+        $viewProperty = $reflectionClass->getProperty('view');
+        $viewProperty->setAccessible(true);
+        $moduleView = $viewProperty->getValue($this->moduleTemplate);
+        if ($moduleView instanceof FluidViewAdapter) {
+            $renderingContext = $moduleView->getRenderingContext();
+            $templatePaths = $renderingContext->getTemplatePaths();
+            $templatePaths->setTemplateRootPaths([
+                GeneralUtility::getFileAbsFileName('EXT:open_oap/Resources/Private/Backend/Templates/'),
+            ]);
+            $templatePaths->setLayoutRootPaths([
+                GeneralUtility::getFileAbsFileName('EXT:backend/Resources/Private/Layouts/'),
+                GeneralUtility::getFileAbsFileName('EXT:open_oap/Resources/Private/Backend/Layouts/'),
+                GeneralUtility::getFileAbsFileName('EXT:open_oap/Resources/Private/Layouts/'),
+            ]);
+            $templatePaths->setPartialRootPaths([
+                GeneralUtility::getFileAbsFileName('EXT:backend/Resources/Private/Partials/'),
+                GeneralUtility::getFileAbsFileName('EXT:open_oap/Resources/Private/Backend/Partials/'),
+                GeneralUtility::getFileAbsFileName('EXT:open_oap/Resources/Private/Partials/'),
+            ]);
+            // Templates are stored flat in Backend/Templates/ (no controller subdirectory),
+            // so set an empty controller name to skip the Default/{template}.html resolution.
+            $renderingContext->setControllerName('');
+        }
+
         $this->handleMenu($this->request->getControllerActionName());
     }
 
@@ -96,7 +126,7 @@ class OapBackendController extends OapBaseController
             // todo use constant instead of magic number - even here
             $pagination['array'] = new ArrayPaginator($allItems, $currentPage, $itemsPerPage);
             $pagination['pagination'] = new SimplePagination($pagination['array']);
-            $this->view->assign('pages', range(1, $pagination['pagination']->getLastPageNumber()));
+            $this->moduleTemplate->assign('pages', range(1, $pagination['pagination']->getLastPageNumber()));
             $minPage = 1;
             $maxPage = count($allItems);
             $pagesBefore = self::PAGINATOR_SHOW_BEFORE;
@@ -196,7 +226,7 @@ class OapBackendController extends OapBaseController
         } else {
             $arrayPaginator = new ArrayPaginator($allItems, $currentPage, 100);
             $pagination = new SimplePagination($arrayPaginator);
-            $this->view->assign('pages', range(1, $pagination->getLastPageNumber()));
+            $this->moduleTemplate->assign('pages', range(1, $pagination->getLastPageNumber()));
         }
 
         $this->moduleTemplate->assignMultiple(
