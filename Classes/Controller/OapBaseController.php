@@ -1252,6 +1252,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $logoArguments = [
                     'callLogo' => $callLogo,
                     'filepath' => $callLogoPdf,
+                    'settings' => $this->settings,
                 ];
 
                 // creates an empty PDF consisting only of the logo
