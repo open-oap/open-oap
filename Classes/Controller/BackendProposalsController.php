@@ -1486,7 +1486,8 @@ class BackendProposalsController extends OapBackendController
                     $itemOptionsArray = explode("\r\n", $optionItem->getOptions());
                     foreach ($itemOptionsArray as $itemOption) {
                         $itemOption = $this->cleanupOptionItem($itemOption);
-                        if ($itemOption !== '') {
+                        // empty for a blank line or an empty options column - the type is not checked here
+                        if ($itemOption['key'] !== '') {
                             $filterSelects[$filterItem->getUid()]['options'][$itemOption['key']] = $itemOption['label'];
                         }
                     }

@@ -759,7 +759,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param string $optionItem
      * @return array|string|string[]
      */
-    protected function cleanupOptionItem(string $optionItemStr)
+    protected function cleanupOptionItem(string $optionItemStr): array
     {
         // initialize Item
         $optionItem = [
@@ -824,7 +824,10 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
         }
         if ($item->isAdditionalValue() and $convertLabel) {
-            $options[] = $this->cleanupOptionItem($item->getAdditionalLabel());
+            $additionalOption = $this->cleanupOptionItem($item->getAdditionalLabel());
+            if ($additionalOption['key'] !== '') {
+                $options[] = $additionalOption;
+            }
         }
         if ($mode == 'add') {
             $itemsMap[$item->getUid()]['options'] = $options;
