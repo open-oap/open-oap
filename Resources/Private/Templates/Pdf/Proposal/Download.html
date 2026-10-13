@@ -357,7 +357,14 @@ Available variables:
     <f:if condition="{jsonArray.info}">&nbsp;{settings.metaInfoSeparator}&nbsp;</f:if>{jsonArray.info}
     <f:if condition="{proposal.signature} > 0">
         &nbsp;{settings.metaInfoSeparator}&nbsp;{f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap_dashboard.proposal.signature.label')}:
-        <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+        <f:if condition="{jsonArray.signature}">
+            <f:then>
+                {jsonArray.signature}
+            </f:then>
+            <f:else>
+                <f:if condition="{proposal.call.shortcut} !== ''">{proposal.call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+            </f:else>
+        </f:if>
     </f:if>
     </p>
 </f:spaceless>

@@ -134,25 +134,6 @@ class ExcelExportService extends OapBaseController
     }
 
     /**
-     * @param Proposal $proposal
-     * @return string
-     */
-    protected function buildSignature(Proposal $proposal): string
-    {
-        // default value for signature is 0
-        if (!$proposal->getSignature() or !$proposal->getCall()) {
-            return '';
-        }
-        $signature = '';
-        // use DIVIDER only, if there is a shortcut
-        if (trim($proposal->getCall()->getShortcut()) !== '') {
-            $signature .=  trim($proposal->getCall()->getShortcut());
-        }
-        $signature .=  sprintf($this->settings['signatureFormat'], (int)$proposal->getSignature());
-        return $signature;
-    }
-
-    /**
      * @param int $l0headRow
      * @param int $l1headRow
      * @param array $head
