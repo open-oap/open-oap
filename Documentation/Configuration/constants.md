@@ -35,6 +35,10 @@ settings {
     uploadFolder = 2:/
     signatureFormat = %04d
     wordExportTemplateFile = word-vorlage-oap.docx
+    # Hide the built-in open-oap logo in the header of the PDF export when the call
+    # carries no logo of its own. Set it for installations that want no logo at all
+    # instead of the default one.
+    pdfHideDefaultLogo = 0
     surveyOapUser = 6349
     surveyThanksPageId = 113
     surveyAbortPageId = 114
