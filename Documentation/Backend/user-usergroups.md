@@ -11,6 +11,12 @@ Explanation:
 
 - oap.access.X - X -> id of usergroup for merge multiple usergroup settings
 - value -> comma separeted list of PIDs for granted folder
+- value `*` -> access to all proposal folders, without listing them
+
+The `*` entry is meant for groups that are to see every proposal, for instance a central
+administration. It saves maintaining the PID list of such a group whenever a call gets a new
+proposal folder. A group whose entry is `*` is not restricted by the PIDs of the other groups it
+inherits from.
 
 If there is no entry in the groups (in combination of all related groups) or the BE user is an admin, there is no access control to the folders.
 
