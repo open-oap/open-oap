@@ -12,8 +12,8 @@
 
     <f:render partial="FlashMessages" arguments="{_all}" />
 
-    <h1 class="page__title"><span class="hyphenated">{proposal.call.title}</span></h1>
-    <div class="component component--layout-content-width">
+    <div class="component component--layout-content-width component--page-intro">
+        <h1 class="page__title page__title--wide"><span class="hyphenated">{proposal.call.title}</span></h1>
         <h2><span class="hyphenated">{proposal.title}</span></h2>
         <f:if condition="{pageControl.current} == 1">
             <div class="form__text form__text--intro">
