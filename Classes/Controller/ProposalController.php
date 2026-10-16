@@ -1501,7 +1501,7 @@ class ProposalController extends OapFrontendController
                 $files = $this->request->getArgument($fileNameKey);
 
                 // correction for single upload field... make an array
-                if (!isset($files[0])) {
+                if (!is_array($files)) {
                     $files = [$files];
                 }
 
