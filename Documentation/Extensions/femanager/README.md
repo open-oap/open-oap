@@ -25,6 +25,18 @@ The wizard can only be executed once.
 
 ## Configuration
 
+### Confirmation of the registration
+
+The registration mail carries a link the applicant has to follow to activate the account. Some
+virus scanners and mail clients preload every link in an incoming mail, which follows that link
+before the applicant ever sees the mail - the account is then activated by the scanner.
+
+open-oap therefore sets `confirmUserConfirmation = 1`: following the link opens a page with a
+confirmation the applicant has to submit, so a preloaded link activates nothing. The same
+mechanism exists for the admin confirmation as `confirmAdminConfirmation`, which is left off
+because the admin confirmation is not part of the standard registration here.
+
+
 These imports should then appear in the SitePackage:
 
 In all.typoscript:
