@@ -33,6 +33,10 @@ settings {
     defaultMaxCharTextfield = 200
     defaultSourcesModel = applicant.companyEmail, applicant.firstName, applicant.lastName, applicant.address, applicant.country, applicant.telephone, applicant.fax, applicant.email, applicant.zip, applicant.city, applicant.www, applicant.company, applicant.salutation
     uploadFolder = 2:/
+    # The signature of a proposal is composed of the shortcut of its call and a running
+    # number formatted with signatureFormat. It is composed once, when the proposal is
+    # submitted, and stored with the submission. Changing the format or the shortcut of a
+    # call afterwards therefore does not rewrite the signatures already given out.
     signatureFormat = %04d
     wordExportTemplateFile = word-vorlage-oap.docx
     surveyOapUser = 6349
