@@ -3,7 +3,7 @@
     data-namespace-typo3-fluid="true">
 
 
-<f:if condition="{survey} == 0">
+<f:if condition="{survey} == 0 || {survey} == ''">
     <f:form.button
         type="submit" class="button button--linkstyle button--linkstyle-reduced button--linkstyle-plain form__controls-button form__controls-button--line1 form__navigation-button--slot1" name="close"
         additionalAttributes="{'data-oap-modaltext':'JSMSG_MODAL_CONTENT','data-oap-modalsubmit':'JSMSG_MODAL_SAVECLOSE','data-oap-modalcancel':'JSMSG_MODAL_KEEPEDITING'}"  >
