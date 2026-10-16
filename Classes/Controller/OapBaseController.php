@@ -1006,6 +1006,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         // sum of validations
         $itemsMap[$itemUid]['additionalAttributes']['data-oap-validat'] = implode(',', $validationCodes);
+        if ($item->getType() == 0) {
+            return;
+        }
         $type = $this->convertConstantsIntoString('TYPE')[$item->getType()];
         $itemsMap[$itemUid]['additionalAttributes']['data-oap-type'] = $type;
 
