@@ -125,7 +125,12 @@ class ExcelExportService extends OapBaseController
             if ($countGroupTitles > 0 and $index <= $countGroupTitles) {
                 /** @var GroupTitle $groupTitle */
                 $groupTitle = $group->getGroupTitle()[$index];
-                $postfix = ' - ' . $groupTitle->getTitle();
+                if ($groupTitle) {
+                    $postfix = ' - ' . $groupTitle->getTitle();
+                } else {
+                    // if no title set for this column
+                    $postfix = ' #' . (int)($index + 1);
+                }
             } else {
                 $postfix = ' #' . (int)($index + 1);
             }
