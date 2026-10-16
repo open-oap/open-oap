@@ -326,9 +326,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const PAGINATOR_SHOW_BEFORE = 10;
 
     // ASSESSMENT IMPORT COLUMN NAMES TO COMPARE
-    protected const PROPOSAL_ASSESSMENT_COLUMN_ID = 'id';
-    protected const PROPOSAL_ASSESSMENT_COLUMN_SCORE = 'pred_score';
-    protected const PROPOSAL_ASSESSMENT_COLUMN_ACTION = 'pred_action';
+    protected const ASSESSMENT_COLUMN_ID = 'id';
+    protected const ASSESSMENT_COLUMN_SCORE = 'pred_score';
+    protected const ASSESSMENT_COLUMN_ACTION = 'pred_action';
 
     protected $applicant;
 

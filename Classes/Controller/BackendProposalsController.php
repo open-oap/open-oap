@@ -696,9 +696,9 @@ class BackendProposalsController extends OapBackendController
         $extensionConfiguration = $this->extensionConfiguration->get('open_oap');
         $proposalAssessmentImportColumnNames = $extensionConfiguration['proposalAssessmentImportColumnNames'] ?? '';
         $proposalAssessmentImportColumnNames = GeneralUtility::trimExplode(',', $proposalAssessmentImportColumnNames, true);
-        $idNameKey = array_search(self::PROPOSAL_ASSESSMENT_COLUMN_ID, $proposalAssessmentImportColumnNames);
-        $scoreNameKey = array_search(self::PROPOSAL_ASSESSMENT_COLUMN_SCORE, $proposalAssessmentImportColumnNames);
-        $actionNameKey = array_search(self::PROPOSAL_ASSESSMENT_COLUMN_ACTION, $proposalAssessmentImportColumnNames);
+        $idNameKey = array_search(self::ASSESSMENT_COLUMN_ID, $proposalAssessmentImportColumnNames);
+        $scoreNameKey = array_search(self::ASSESSMENT_COLUMN_SCORE, $proposalAssessmentImportColumnNames);
+        $actionNameKey = array_search(self::ASSESSMENT_COLUMN_ACTION, $proposalAssessmentImportColumnNames);
 
         if ($idNameKey === false || $scoreNameKey === false || $actionNameKey === false) {
             $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.data_import_failed'), '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
