@@ -288,6 +288,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const DEFAULT_TITLE = 'default_title';
     protected const DEFAULT_TITLE_SURVEY = 'default_title_survey';
     protected const SIGNATURE_DIVIDER = '_';
+    protected const SIGNATURE_SOURCE_PATTERN = '/\[(.*)\]/U';
+    protected const SIGNATURE_SOURCE_PARAMETER = '/^%(.*),(.*)$/U';
     protected const KEY_VALUE_DIVIDER = ';';
     protected const DATE_FORMAT_JS = 'dd.mm.yyyy';
     protected const DATE_FORMAT = 'd.m.Y';
@@ -1209,15 +1211,92 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected function buildSignature(Proposal $proposal): string
     {
         // default value for signature is 0
-        if (!$proposal->getSignature() or !$proposal->getCall()) {
+        if (!$proposal->getSignature() || !$proposal->getCall()) {
             return '';
         }
         $signature = '';
-        // use DIVIDER only, if there is a shortcut
-        if (trim($proposal->getCall()->getShortcut()) !== '') {
-            $signature .=  trim($proposal->getCall()->getShortcut());
+
+        // check if signature is already set (done on first submit in ProposalController::updateAction)
+        $metaInformation = new MetaInformation($proposal->getMetaInformation());
+        if($metaInformation->getSignature() && $metaInformation->getSignature() !==''){
+            return $metaInformation->getSignature();
         }
-        $signature .=  sprintf($this->settings['signatureFormat'], (int)$proposal->getSignature());
+
+        $shortCutOriginal = trim((string)$proposal->getCall()->getShortcut());
+        if ($shortCutOriginal !== '') {
+            $this->flattenAnswers($proposal);
+
+            // interpret shortcut...
+            // e.g.: 23_[%19,%02d]_
+            // meaning:
+            // prefix: 23_ (for the year?)
+            // between square brackets source and format
+
+            // example $string = '23_[%19,$02d]_[%2,$s]_';
+            $matches = [];
+
+            preg_match_all(self::SIGNATURE_SOURCE_PATTERN, $shortCutOriginal, $matches, PREG_SET_ORDER);
+
+            $patternSourceParameter = self::SIGNATURE_SOURCE_PARAMETER;
+            $replaceStrings = [];
+            $replaceSubstring = [];
+            $shortCut = $shortCutOriginal;
+            foreach ($matches as $match) {
+                if (!isset($match[0], $match[1])) {
+                    continue;
+                }
+                $replaceSubstring[] = $match[0];
+                $matchesInside = [];
+                if (preg_match($patternSourceParameter, $match[1], $matchesInside) !== 1) {
+                    continue;
+                }
+                if (!isset($matchesInside[1], $matchesInside[2])) {
+                    continue;
+                }
+                $sourceId = $matchesInside[1];
+                $format = $matchesInside[2];
+                if (!isset($this->answers[$sourceId]) || !$this->answers[$sourceId] instanceof Answer) {
+                    continue;
+                }
+                /** @var Answer $answer */
+                $answer = $this->answers[$sourceId];
+                $answerRawValue = $answer->getValue();
+                $answerJsonArray = json_decode((string)$answerRawValue, true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($answerJsonArray) && $answerJsonArray !== []) {
+                    $answerValue = reset($answerJsonArray); // just take the first element
+                } else {
+                    $answerValue = $answerRawValue;
+                }
+                if (is_array($answerValue) || is_object($answerValue)) {
+                    $answerValue = json_encode($answerValue);
+                }
+                if (!is_scalar($answerValue) && $answerValue !== null) {
+                    $answerValue = '';
+                }
+                $answerValue = (string)$answerValue;
+                // todo fallback for missing formatting
+                try {
+                    $replaceStrings[] = sprintf($format, $answerValue);
+                } catch (\Throwable $exception) {
+                    $replaceStrings[] = $answerValue;
+                }
+            }
+
+            if ($replaceStrings) {
+                $shortCut = str_replace($replaceSubstring, $replaceStrings, $shortCutOriginal);
+            }
+
+            $signature .= $shortCut;
+        }
+        $signatureFormat = $this->settings['signatureFormat'] ?? '%d';
+        if (!is_string($signatureFormat) || $signatureFormat === '') {
+            $signatureFormat = '%d';
+        }
+        try {
+            $signature .= sprintf($signatureFormat, (int)$proposal->getSignature());
+        } catch (\Throwable $exception) {
+            $signature .= (string)(int)$proposal->getSignature();
+        }
         return $signature;
     }
 

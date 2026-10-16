@@ -630,10 +630,17 @@ class ProposalController extends OapFrontendController
                 }
 
                 // todo establish with signals (or hooks) the possibility to extend createSignature with own functions and values
-                $proposalPid = $this->determineProposalPid($proposal->getCall());
-                $signatureNumber = $this->proposalRepository->getMaxSignature($proposalPid);
-                $newSignatureNumber = $signatureNumber + 1;
-                $proposal->setSignature($newSignatureNumber);
+                if ($proposal->getSignature() == 0) {
+                    $proposalPid = $this->determineProposalPid($proposal->getCall());
+                    $signatureNumber = $this->proposalRepository->getMaxSignature($proposalPid);
+                    $newSignatureNumber = $signatureNumber + 1;
+                    $proposal->setSignature($newSignatureNumber);
+
+                    // build signature and save in metainformation for all later use
+                    $newSignature = $this->buildSignature($proposal);
+                    $metaInfo->setSignature($newSignature);
+                    $proposal->setMetaInformation($metaInfo->jsonSerialize());
+                }
 
                 // check if there are comments for items - then set read
                 /** @var Answer $answer */
