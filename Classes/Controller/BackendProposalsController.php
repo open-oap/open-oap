@@ -76,8 +76,12 @@ class BackendProposalsController extends OapBackendController
             $accessGroups = $userTsConfig['oap.']['access.'] ?? null;
             if ($accessGroups) {
                 foreach ($accessGroups as $accessGroup) {
-                    $listOfPids = explode(',', $accessGroup);
-                    array_push($accessPids, ...$listOfPids);
+                    if (trim($accessGroup) == '*') {
+                        $grantedToAll = true;
+                    } else {
+                        $listOfPids = explode(',', $accessGroup);
+                        array_push($accessPids, ...$listOfPids);
+                    }
                 }
             }
         } else {
