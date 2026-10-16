@@ -560,7 +560,7 @@ class BackendProposalsController extends OapBackendController
             'limitEditableFields' => $limitEditableFields,
             'call' => $proposal->getCall(),
             'paginator' => $pagination['array'],
-            'paginationButtons' => $pagination['buttons'],
+            'paginationButtons' => $pagination['buttons'] ?? [],
             'allItems' => $allItems,
             'pagination' => $pagination['pagination'],
             'paginationShow' => $pagination['show'],
