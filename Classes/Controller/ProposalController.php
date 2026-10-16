@@ -317,7 +317,7 @@ class ProposalController extends OapFrontendController
 
             // check: is this answer is existing - in case of changing the form after creating this proposal
             /** @var Answer $answer */
-            if (empty($this->answers[$itemUid])) {
+            if (empty($this->answers[$itemUid]) && $this->groups[$itemUid]->getRepeatableMin() > 0) {
                 // TODO: create correct answers for table or repeatable (groupCounter0/1 + x)
                 $answer = new Answer($item, $this->groups[$itemUid], 0, 0, (int)$this->settings['answersPoolId']);
                 $this->answerRepository->add($answer);
