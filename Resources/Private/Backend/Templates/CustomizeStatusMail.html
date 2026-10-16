@@ -124,7 +124,10 @@ Available variables:
                 </td>
                 <td>
                     <f:if condition="{item.proposal.signature} > 0">
-                        {item.proposal.call.shortcut}<f:format.printf arguments="{0: item.proposal.signature}">{settings.signatureFormat}</f:format.printf>
+                        <f:if condition="{item.maildata.signature}">
+                            <f:then>{item.maildata.signature}</f:then>
+                            <f:else>{item.proposal.call.shortcut}<f:format.printf arguments="{0: item.proposal.signature}">{settings.signatureFormat}</f:format.printf></f:else>
+                        </f:if>
                     </f:if>
                 </td>
                 <td>
@@ -186,7 +189,10 @@ Available variables:
                 </td>
                 <td>
                     <f:if condition="{item.proposal.signature} > 0">
-                        {item.proposal.call.shortcut}<f:format.printf arguments="{0: item.proposal.signature}">{settings.signatureFormat}</f:format.printf>
+                        <f:if condition="{item.maildata.signature}">
+                            <f:then>{item.maildata.signature}</f:then>
+                            <f:else>{item.proposal.call.shortcut}<f:format.printf arguments="{0: item.proposal.signature}">{settings.signatureFormat}</f:format.printf></f:else>
+                        </f:if>
                     </f:if>
                 </td>
                 <td>

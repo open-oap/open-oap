@@ -228,6 +228,12 @@ If the individual mail is selected, a preview opens in the personal e-mail progr
 
 ### Export functions
 
+The signature shown in the proposals module, in the spreadsheet export and in the PDF is the one
+the proposal was given when it was submitted. It is read from the submission itself, so all three
+show the same value, and a later change to the signature format of the installation does not
+change it.
+
+
 #### Export of a single application as PDF
 
 In the preview of an application (see chapter "preview of the proposals"), the function for downloading the application as a PDF document is at the top right.

@@ -41,7 +41,8 @@ Available variables:
         <span class="section-label ">Info</span>
         <table class="table table__information">
             <tr><th>Applicant</th><td><f:if condition="{proposal.applicant.company}">{proposal.applicant.company} | </f:if>{proposal.applicant.username}</td></tr>
-            <tr><th>Signature</th><td><f:if condition="{call.shortcut} !== ''">{call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf></td></tr>
+            <v:variable.set name="jsonArray" value="{proposal.metaInformation -> v:format.json.decode()}"/>
+            <tr><th>Signature</th><td><f:if condition="{jsonArray.signature}"><f:then>{jsonArray.signature}</f:then><f:else><f:if condition="{call.shortcut} !== ''">{call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf></f:else></f:if></td></tr>
             <f:if condition="{proposal.submitTstamp} > 0"><tr><th>Submitted</th><td>{proposal.submitTstamf}</td></tr></f:if>
             <f:if condition="{proposal.importedAction}">
                 <tr><th>Imported rating</th><td>{proposal.importedAction} ({proposal.importedScore}) </td></tr>
