@@ -247,6 +247,7 @@ Available variables:
         </thead>
         <tbody id="proposals" data-multi-record-selection-row-selection="true">
         <f:for each="{paginator.paginatedItems}" as="proposal">
+            <v:variable.set name="jsonArray" value="{proposal.metaInformation -> v:format.json.decode()}"/>
             <tr data-table="tx_openoap_domain_model_proposal" class="t3js-entity" data-uid="{proposal.uid}" title="id={proposal.uid}">
                 <!-- check -->
                 <td nowrap="nowrap" class="col-selector nowrap">
@@ -271,7 +272,6 @@ Available variables:
                     <f:link.action action="showProposal" arguments="{proposal:proposal.uid,call:proposal.call}" class="" title="{f:translate(key:'action.show_proposal')}">
                         {proposal.title}
                     </f:link.action><br />
-                    <v:variable.set name="jsonArray" value="{proposal.metaInformation -> v:format.json.decode()}"/>
                     <f:if condition="{jsonArray.info}">
                     <div class="metainfo">
                         <span class="metainfo__label">
@@ -283,7 +283,14 @@ Available variables:
                 </td>
                 <td nowrap="nowrap" class="col-title">
                     <f:if condition="{proposal.signature} > 0">
-                        <f:if condition="{call.shortcut} !== ''">{call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+                        <f:if condition="{jsonArray.signature}">
+                            <f:then>
+                                {jsonArray.signature}
+                            </f:then>
+                            <f:else>
+                                <f:if condition="{call.shortcut} !== ''">{call.shortcut}</f:if><f:format.printf arguments="{0: '{proposal.signature}'}">{settings.signatureFormat}</f:format.printf>
+                            </f:else>
+                        </f:if>
                     </f:if>
 
                 </td>

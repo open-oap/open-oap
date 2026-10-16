@@ -27,6 +27,11 @@ class MetaInformation implements JsonSerializable
     protected string $info = '';
 
     /**
+     * @var string
+     */
+    protected string $signature = '';
+
+    /**
      * @var array
      */
     protected array $filter = [];
@@ -69,6 +74,8 @@ class MetaInformation implements JsonSerializable
         $jsonArray = json_decode($json, true);
 
         $this->info = $jsonArray['info'];
+
+        $this->signature = isset($jsonArray['signature']) ? $jsonArray['signature'] : '';
 
         $filterArray = $jsonArray['filter'];
         if (is_array($filterArray)) {
@@ -115,6 +122,7 @@ class MetaInformation implements JsonSerializable
             'lastPage'   => $this->lastPage,
             'groupsCounter' => $this->groupsCounter,
             'limitEditableFields' => $this->limitEditableFields,
+            'signature' => $this->signature,
         ]);
     }
 
@@ -137,6 +145,22 @@ class MetaInformation implements JsonSerializable
     public function setInfo(string $info): void
     {
         $this->info = $info;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSignature(): string
+    {
+        return $this->signature;
+    }
+
+    /**
+     * @param string $signature
+     */
+    public function setSignature(string $signature): void
+    {
+        $this->signature = $signature;
     }
 
     /**

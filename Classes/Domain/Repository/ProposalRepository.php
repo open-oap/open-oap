@@ -249,6 +249,7 @@ class ProposalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'Proposal.imported_score',
                 'Proposal.imported_action',
                 'Proposal.tx_openoap_call AS `call`',
+                'Proposal.meta_information AS metaInformation',
                 'Applicant.company AS applicant_company',
                 'Applicant.username AS applicant_username',
                 'Call.title AS call_title'
