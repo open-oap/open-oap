@@ -55,13 +55,15 @@ class CallRepository extends OapAbstractRepository
         $constraints[] = $query->equals('anonym', 0);
 
         // usergroup / callStartTime/callEndTime
+        /** @var ApplicantGroup $applicantGroup */
         foreach ($applicant->getUsergroup() as $applicantGroup) {
             if ($applicantGroup->getUid() == (int)$testerFeGroupsId) {
                 $testUsergroupConstraints[] = $query->contains('usergroup', $applicantGroup->getUid());
             } else {
                 $stdUsergroupConstraints[] = $query->contains('usergroup', $applicantGroup->getUid());
             }
-            if (count($applicantGroup->getSubgroup()) > 0) {
+            $subgroups = $applicantGroup->getSubgroup();
+            if (!empty($subgroups) && $subgroups->count() > 0) {
                 foreach ($applicantGroup->getSubgroup() as $subgroup) {
                     if ($subgroup->getUid() == (int)$testerFeGroupsId) {
                         $testUsergroupConstraints[] = $query->contains('usergroup', $applicantGroup->getUid());
