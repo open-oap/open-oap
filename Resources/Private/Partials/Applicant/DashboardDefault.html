@@ -135,7 +135,7 @@ Available variables:
                           <v:variable.set name="CallDisabled" value="1" />
                   </f:if>
                   <li class="call-list__item">
-                      <h2 class="call-list__title">{call.title} <f:if condition="{byTester} == 1"><span style="color:#b40900">TEST</span></f:if></h2>
+                      <h2 class="call-list__title">{call.title} <f:if condition="{byTester} == 1"><span class="call-list__tester">TEST</span></f:if></h2>
                       <f:if condition="{call.teaserText}"><p class="call-list__text">{call.teaserText}</p></f:if>
                       <f:if condition="{call.callEndTime}"><p class="call-list__text">{f:translate(key:'tx_openoap_dashboard.call.active_until')}: <f:format.date format="d.m.Y - H:i:s">{call.callEndTime}</f:format.date></p></f:if>
                       <f:if condition="!{CallDisabled}">

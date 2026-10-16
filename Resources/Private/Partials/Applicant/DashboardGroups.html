@@ -240,7 +240,7 @@ Available variables:
                     </f:if>
                     <li class="call-list__item column column--size12 {class}">
                         <h2 class="call-list__title">{call.title}
-                            <f:if condition="{byTester} == 1"><span style="color:#b40900">TEST</span></f:if>
+                            <f:if condition="{byTester} == 1"><span class="call-list__tester">TEST</span></f:if>
                         </h2>
                         <f:if condition="{call.hint}">
                             <a class="call-list__hint" data-fslightbox="call-text-{call.uid}" data-class="d-block" href="#call-hint-{call.uid}" aria-controls="call-hint-{call.uid}" aria-label="{f:translate(key:'tx_openoap_dashboard.call.hint.info')}"></a>
