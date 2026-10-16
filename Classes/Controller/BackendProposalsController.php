@@ -141,7 +141,18 @@ class BackendProposalsController extends OapBackendController
         foreach ($call->getFormPages() as $formPage) {
             /** @var FormGroup $itemGroup */
             foreach ($formPage->getItemGroups() as $itemGroup) {
-                /** @var formItem $item */
+                // a meta group carries its items in the nested groups, not in its own
+                if ($itemGroup->getType() == self::GROUPTYPE_META) {
+                    /** @var FormGroup $nestedGroup */
+                    foreach ($itemGroup->getItemGroups() as $nestedGroup) {
+                        /** @var FormItem $item */
+                        foreach ($nestedGroup->getItems() as $item) {
+                            $allItems[$item->getUid()] = $item;
+                        }
+                    }
+                    continue;
+                }
+                /** @var FormItem $item */
                 foreach ($itemGroup->getItems() as $item) {
                     $allItems[$item->getUid()] = $item;
                 }
