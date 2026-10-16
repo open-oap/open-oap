@@ -47,6 +47,7 @@ plugin.tx_openoap_dashboard {
         uploadFolder = {$plugin.tx_openoap_dashboard.settings.uploadFolder}
         signatureFormat = {$plugin.tx_openoap_dashboard.settings.signatureFormat}
         wordExportTemplateFile = {$plugin.tx_openoap_dashboard.settings.wordExportTemplateFile}
+        pdfHideDefaultLogo = {$plugin.tx_openoap_dashboard.settings.pdfHideDefaultLogo}
         surveyOapUser = {$plugin.tx_openoap_dashboard.settings.surveyOapUser}
         surveyThanksPageId = {$plugin.tx_openoap_dashboard.settings.surveyThanksPageId}
         surveyAbortPageId = {$plugin.tx_openoap_dashboard.settings.surveyAbortPageId}

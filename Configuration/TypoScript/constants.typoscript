@@ -66,6 +66,8 @@ plugin.tx_openoap_dashboard {
         signatureFormat = %04d
         # cat=plugin.tx_openoap_dashboard/settings; type=string; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.word_export_template_file
         wordExportTemplateFile = word-vorlage-oap.docx
+        # cat=plugin.tx_openoap_dashboard/settings; type=boolean; label=Hide the built-in default logo in the PDF export header when no call logo is assigned
+        pdfHideDefaultLogo = 0
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_oap_user
         surveyOapUser =
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.survey_thanks_page_id

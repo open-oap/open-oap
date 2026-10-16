@@ -15,7 +15,9 @@ Available variables:
                 <pdf:image src="{callLogo}" alignment="left"/>
             </f:then>
             <f:else>
-                <pdf:image src="EXT:open_oap/Resources/Public/Images/logo-main.svg" width="20%" alignment="left"/>
+                <f:if condition="!{settings.pdfHideDefaultLogo}">
+                    <pdf:image src="EXT:open_oap/Resources/Public/Images/logo-main.svg" width="20%" alignment="left"/>
+                </f:if>
             </f:else>
         </f:if>
     </pdf:page>
