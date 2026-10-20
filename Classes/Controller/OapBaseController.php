@@ -287,6 +287,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const XLF_BASE_IDENTIFIER_DEFAULTS = 'tx_openoap.default';
     protected const DEFAULT_TITLE = 'default_title';
     protected const DEFAULT_TITLE_SURVEY = 'default_title_survey';
+    protected const DEFAULT_TYPE_USER = 'user';
+    protected const DEFAULT_TYPE_STATIC = 'static';
+    protected const DEFAULT_TYPE_EMPTY = 'empty';
     protected const SIGNATURE_DIVIDER = '_';
     protected const KEY_VALUE_DIVIDER = ';';
     protected const DATE_FORMAT_JS = 'dd.mm.yyyy';

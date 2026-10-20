@@ -1199,40 +1199,71 @@ class ProposalController extends OapFrontendController
     }
 
     /**
-     * @param string $answerValue
+     * Resolve model.property placeholders (each written with a leading at-sign,
+     * e.g. applicant.firstName) in an item default value against the proposal's
+     * foreign objects, supporting multiple placeholders embedded anywhere.
+     *
+     * @param string $defaultValue
      * @param int $groupCounter
-     * @return string
+     * @param Proposal $proposal
+     * @return array{value: string, additionalValue: string, type: string}
      */
-    protected function getDefaultValueFromForeignObject(string $answerValue, int $groupCounter, Proposal $proposal): string
+    protected function getDefaultValueFromForeignObject(string $defaultValue, int $groupCounter, Proposal $proposal): array
     {
-        if (strpos($answerValue, '@') === 0 and $groupCounter == 0) {
-            $answerValueDefault = $answerValue;
-            $parameter = substr($answerValue, 1);
-            $sources = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(
-                ',',
-                $this->settings['defaultSourcesModel'],
-                true
-            );
-            $sources = array_flip($sources);
-            if (isset($sources[$parameter])) {
-                $access = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('.', $parameter, true);
-                $modelName = $access[0];
+        $newValue = [];
 
+        if ($groupCounter === 0 && str_contains($defaultValue, '@')) {
+            $answerValueDefault = $defaultValue;
+
+            // read allowed placeholder sources from settings
+            $allowedSources = array_flip(
+                GeneralUtility::trimExplode(',', $this->settings['defaultSourcesModel'], true)
+            );
+
+            // find all placeholders in the format @model.property
+            preg_match_all('/@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_]+)/', $defaultValue, $matches, PREG_SET_ORDER);
+
+            foreach ($matches as $match) {
+                [$placeholder, $modelName, $propertyName] = $match;
+
+                // is the model.property authorized?
+                if (!isset($allowedSources["$modelName.$propertyName"])) {
+                    continue;
+                }
+
+                // retrieve the model object from the proposal
                 $model = null;
                 if ($proposal->_hasProperty($modelName)) {
                     $model = $proposal->_getProperty($modelName);
                 }
-                if (is_object($model)) {
-                    if ($model->_hasProperty($access[1])) {
-                        $answerValue = $model->_getProperty($access[1]);
-                    }
+
+                // replace if object and property exist
+                if (is_object($model) && $model->_hasProperty($propertyName)) {
+                    // cast to string to avoid errors
+                    $replacement = (string)$model->_getProperty($propertyName);
+                    $defaultValue = str_replace($placeholder, $replacement, $defaultValue);
+                    $newValue['type'] = self::DEFAULT_TYPE_USER;
                 }
             }
-            if ($answerValueDefault == $answerValue) {
-                $answerValue = ''; // clear if no default value determinable
+
+            $newValue['value'] = $defaultValue;
+
+            // no placeholder resolved -> clear the value
+            if ($newValue['value'] === $answerValueDefault) {
+                $newValue['value'] = '';
+                $newValue['type'] = self::DEFAULT_TYPE_EMPTY;
             }
+            $newValue['additionalValue'] = '';
+
+            return $newValue;
         }
-        return (string)$answerValue;
+
+        // no placeholder -> take the given value as it is (static default)
+        $newValue['value'] = $defaultValue;
+        $newValue['additionalValue'] = '';
+        $newValue['type'] = self::DEFAULT_TYPE_STATIC;
+
+        return $newValue;
     }
 
     /**
@@ -1252,13 +1283,23 @@ class ProposalController extends OapFrontendController
             // only in level 1 are items
             if ($groupCounterL0 == 0 and $groupCounterL1 == 0) {
                 $answerValueDefault = $this->getDefaultValueFromForeignObject($item->getDefaultValue(), $groupCounterL1, $proposal);
-                // convert value to array - if item is multiple
-                if ($answerValueDefault !== '' and (in_array($item->getType(), [self::TYPE_CHECKBOX, self::TYPE_SELECT_SINGLE, self::TYPE_SELECT_MULTIPLE]))) {
-                    $answerValue = [];
-                    $answerValue[0] = $answerValueDefault;
-                    $answerValueDefault = json_encode($answerValue, JSON_FORCE_OBJECT);
+                switch ($answerValueDefault['type']) {
+                    case self::DEFAULT_TYPE_USER:
+                    case self::DEFAULT_TYPE_STATIC:
+                        $defaultValue = (string)$answerValueDefault['value'];
+                        // convert value to array - if item is multiple
+                        if ($defaultValue !== '' and (in_array($item->getType(), [self::TYPE_CHECKBOX, self::TYPE_SELECT_SINGLE, self::TYPE_SELECT_MULTIPLE]))) {
+                            $answerValue = [];
+                            $answerValue[0] = $defaultValue;
+                            $defaultValue = json_encode($answerValue, JSON_FORCE_OBJECT);
+                        }
+                        $answer->setValue($defaultValue);
+                        $answer->setAdditionalValue((string)$answerValueDefault['additionalValue']);
+                        break;
+                    default: // DEFAULT_TYPE_EMPTY
+                        $answer->setValue('');
+                        $answer->setAdditionalValue('');
                 }
-                $answer->setValue($answerValueDefault);
             }
             // todo just for testing
             //             $answer->setValue($group->getUid().'--'.$groupCounterL0.'--'.$groupCounterL1.' '.$item->getUid());

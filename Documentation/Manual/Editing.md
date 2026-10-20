@@ -284,6 +284,22 @@ Here is the list with the available values:
 - `@applicant.company`
 - `@applicant.salutation`
 
+Several variables can be combined in one default value, and the text around them is kept:
+
+`Dear @applicant.salutation @applicant.lastName,`
+
+Only the variables listed above are replaced. They come from the constant `defaultSourcesModel`
+(see [Constants](../Configuration/constants.md)); anything written with an @ that is not in that
+list stays untouched.
+
+If a default value contains such a variable and none of them could be filled - because the
+master data field is empty, for example - the item starts empty. The applicant never sees the
+raw variable name.
+
+In a repeatable group, variables are only filled for the first instance; further instances the
+applicant adds start empty. A default value without variables, on the other hand, is used for
+every instance.
+
 #### Validators
 
 Validators make it possible to limit the input in items. They are checked in the frontend and error messages are displayed if the applicant makes a different entry.
