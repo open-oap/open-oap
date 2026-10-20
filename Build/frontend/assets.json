@@ -1,0 +1,39 @@
+{
+  "comment": [
+    "Which sources make up the JavaScript in Resources/Public, and in which order.",
+    "The modules are concatenated in the order given here: init.js has to come first,",
+    "because it creates the OAP namespace the others extend, and the files under lib/ are",
+    "the third-party libraries the modules build on.",
+    "An entry that does not exist is skipped with a notice, so the list may already name a",
+    "module that a pending change will add.",
+    "The stylesheets are not built here - see Documentation/Build/README.md for the reason."
+  ],
+  "javascript": [
+    {
+      "output": "Resources/Public/JavaScript/scripts.js",
+      "sources": [
+        "init.js",
+        "lib/a11y-dialog.min.js",
+        "lib/datepicker-full.min.js",
+        "lib/datepicker-locale-de.js",
+        "lib/oap_dual-listbox.js",
+        "lib/fslightbox.js",
+        "utils/errorList.js",
+        "utils/modal.js",
+        "utils/formatNumber.js",
+        "characterCounter.js",
+        "submitAccepted.js",
+        "dualListBox.js",
+        "modificator.js",
+        "validator.js",
+        "dashboard.js",
+        "datePicker.js",
+        "upload.js",
+        "additionalValue.js",
+        "formattingNumbers.js",
+        "elasticTextareas.js",
+        "formPosition.js"
+      ]
+    }
+  ]
+}

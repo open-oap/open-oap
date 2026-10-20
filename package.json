@@ -1,0 +1,13 @@
+{
+    "name": "open-oap-frontend",
+    "description": "Builds the JavaScript in Resources/Public from the modules in Resources/Private/Frontend",
+    "license": "GPL-2.0-or-later",
+    "private": true,
+    "scripts": {
+        "build": "node Build/frontend/build.mjs",
+        "build:dev": "node Build/frontend/build.mjs --dev"
+    },
+    "devDependencies": {
+        "uglify-js": "^3.17"
+    }
+}
