@@ -31,6 +31,8 @@ return [
                 proposal_pid, form_pages, items, blocked_languages,
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.documents,
                     logo, --palette--;;wordDocPalette,
+                --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.states,
+                    available_states,
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_tab,
                     anonym, survey_codes,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
@@ -582,5 +584,33 @@ return [
                 'enableRichtext' => true,
             ]
         ],
+        'available_states' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.available_states',
+            'description' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.available_states.description',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'tx_openoap_domain_model_state',
+                'MM' => 'tx_openoap_call_state_mm',
+                'size' => 10,
+                'autoSizeMax' => 30,
+                'maxitems' => 9999,
+                'multiple' => 0,
+                'fieldControl' => [
+                    'editPopup' => [
+                        'disabled' => false,
+                    ],
+                    'addRecord' => [
+                        'disabled' => false,
+                    ],
+                    'listModule' => [
+                        'disabled' => true,
+                    ],
+                ],
+            ],
+
+        ],
+
     ],
 ];

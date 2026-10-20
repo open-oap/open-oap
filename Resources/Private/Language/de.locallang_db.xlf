@@ -36,6 +36,10 @@
 				<source>Assessment</source>
 				<target>Bewertung</target>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.tab.states" resname="tx_openoap_domain_model_call.tab.states">
+				<source>States</source>
+				<target>Status</target>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.form_items" resname="tx_openoap_domain_model_call.form_items">
 				<source>Items for submit page</source>
 				<target>Fragen für die Abschlussseite</target>
@@ -114,6 +118,11 @@
 				<source>Call hint</source>
 				<target>Call Hinweis</target>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.available_states" resname="tx_openoap_domain_model_call.available_states">
+				<source>Available States</source>
+				<target>Verfügbare Status</target>
+			</trans-unit>
+
 			<trans-unit id="tx_openoap_domain_model_proposal.state" resname="tx_openoap_domain_model_proposal.state">
 				<source>State</source>
 				<target>Status</target>
@@ -263,6 +272,41 @@
                 Mit freundlichen Grüßen,
                 Ihr develoPPP-Team]]></target>
             </trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_state" resname="tx_openoap_domain_model_state">
+				<source>State</source>
+				<target>Status</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.title" resname="tx_openoap_domain_model_state.title">
+				<source>Title</source>
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.internal_title" resname="tx_openoap_domain_model_state.internal_title">
+				<source>Internal Title</source>
+				<target>Interner Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.legend" resname="tx_openoap_domain_model_state.legend">
+				<source>Legend</source>
+				<target>Legende</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.mail_text" resname="tx_openoap_domain_model_state.mail_text">
+				<source>Mail Text</source>
+				<target>Mail-Text</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.mail_subject" resname="tx_openoap_domain_model_state.mail_subject">
+				<source>Mail subject</source>
+				<target>Mail-Betreff</target>
+			</trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_state.functions" resname="tx_openoap_domain_model_state.functions">
+				<source>Functions</source>
+				<target>Funktionen</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.function.accepted" resname="tx_openoap_domain_model_state.function.accepted">
+				<source>Accept functions, e.g. for data transfer</source>
+				<target>Akzeptiert-Funktionen, z.B. bei der Datenübernahme</target>
+			</trans-unit>
+
 		</body>
 	</file>
 </xliff>

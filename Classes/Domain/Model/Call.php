@@ -197,6 +197,11 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected string $hint = '';
 
     /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\State>|null
+     */
+    protected ?\TYPO3\CMS\Extbase\Persistence\ObjectStorage $availableStates = null;
+
+    /**
      * __construct
      */
     public function __construct()
@@ -699,6 +704,16 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setHint(string $hint): void
     {
         $this->hint = $hint;
+    }
+
+    public function getAvailableStates(): ?\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->availableStates;
+    }
+
+    public function setAvailableStates(?\TYPO3\CMS\Extbase\Persistence\ObjectStorage $availableStates): void
+    {
+        $this->availableStates = $availableStates;
     }
 
     public function getAssessmentItems(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage

@@ -42,6 +42,9 @@
 			<trans-unit id="tx_openoap_domain_model_call.tab.assessment" resname="tx_openoap_domain_model_call.tab.assessment">
 				<source>Assessment</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.tab.states" resname="tx_openoap_domain_model_call.tab.states">
+				<source>States</source>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.form_pages" resname="tx_openoap_domain_model_call.form_pages">
 				<source>Form Pages</source>
 			</trans-unit>
@@ -109,6 +112,10 @@
 			<trans-unit id="tx_openoap_domain_model_call.hint" resname="tx_openoap_domain_model_call.hint">
 				<source>Call hint</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.available_states" resname="tx_openoap_domain_model_call.available_states">
+				<source>Available States</source>
+			</trans-unit>
+
 			<trans-unit id="tx_openoap_domain_model_formpage" resname="tx_openoap_domain_model_formpage">
 				<source>Form Page</source>
 			</trans-unit>
@@ -531,6 +538,32 @@
                 Yours sincerely,
                 develoPPP team]]></source>
             </trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_state" resname="tx_openoap_domain_model_state">
+				<source>State</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.title" resname="tx_openoap_domain_model_state.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.internal_title" resname="tx_openoap_domain_model_state.internal_title">
+				<source>Internal Title</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.legend" resname="tx_openoap_domain_model_state.legend">
+				<source>Legend</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.mail_text" resname="tx_openoap_domain_model_state.mail_text">
+				<source>Mail Text</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.mail_subject" resname="tx_openoap_domain_model_state.mail_subject">
+				<source>Mail subject</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.functions" resname="tx_openoap_domain_model_state.functions">
+				<source>Functions</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.function.accepted" resname="tx_openoap_domain_model_state.function.accepted">
+				<source>Accept functions, e.g. for data transfer</source>
+			</trans-unit>
+
 		</body>
 	</file>
 </xliff>
