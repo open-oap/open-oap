@@ -9,10 +9,14 @@
     Available variables:
         {proposal} proposal with submodells applicant, call...
         {signature} dynamic builded signature (based upon call data and signature-number of proposal
+        {mailsubject} subject of the state record - empty for states without an own subject
 
-<f:section name="Subject">
-    <f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.email.status_{proposal.state}.subject" languageKey="{languageKey}" arguments="{0: siteName, 1: signature}"/>
-</f:section>
+Do not add any whitespace inside the subject section - FluidEmail overrides the subject
+set in PHP with the rendered section as soon as it is not empty, and whitespace counts as
+not empty. States without an own subject label would end up with an empty subject line.
+Keep this in sync with EmailStatus.txt - that one is rendered last and wins.
+
+<f:section name="Subject"><f:if condition="{mailsubject}"><f:then>{mailsubject}</f:then><f:else><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.email.status_{proposal.state}.subject" languageKey="{languageKey}" arguments="{0: siteName, 1: signature}"/></f:else></f:if></f:section>
 
 <f:section name="Mailcontent">
     <f:transform.html>{mailtext}</f:transform.html>

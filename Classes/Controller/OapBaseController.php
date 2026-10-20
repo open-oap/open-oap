@@ -669,11 +669,12 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param TemplatePaths $templatePaths
      * @param string $template
      * @param string $mailtext
+     * @param string $mailsubject Overrides the default subject if not empty
      * @param string|null $langCode
      * @param array $additionalData
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    protected function sendEmail(Proposal $proposal, TemplatePaths $templatePaths, string $template, string $mailtext='', $langCode=null, $additionalData=[]): void
+    protected function sendEmail(Proposal $proposal, TemplatePaths $templatePaths, string $template, string $mailtext='', string $mailsubject='', $langCode=null, $additionalData=[]): void
     {
         /** @var Applicant $user */
         $user = $proposal->getApplicant();
@@ -694,7 +695,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->addFlashMessage($flashMessageTxt, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
             return;
         }
-        $data = ['proposal' => $proposal, 'signature' => $this->buildSignature($proposal), 'mailtext' => $mailtext, 'siteName' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'], 'languageKey' => $langCode];
+        $data = ['proposal' => $proposal, 'signature' => $this->buildSignature($proposal), 'mailtext' => $mailtext, 'mailsubject' => $mailsubject, 'siteName' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'], 'languageKey' => $langCode];
 
         // do not send to real e-mails on stage or other none productive instances
         $openOAPConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('open_oap');
@@ -712,11 +713,14 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $emailTo = $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
         }
 
+        // a subject given by the caller (e.g. from a state record) wins over the generic default subject
+        $defaultSubject = (string)LocalizationUtility::translate($this->locallangFile . ':tx_openoap.email.submit_subject', 'openOap', [$data['siteName'], $data['signature']], $langCode);
+
         $email = GeneralUtility::makeInstance(FluidEmail::class, $templatePaths);
         $email
                 ->setRequest($this->request)
                 ->to($emailTo)
-                ->subject(LocalizationUtility::translate($this->locallangFile . ':tx_openoap.email.submit_subject', 'openOap', [$data['siteName'], $data['signature']], $langCode))
+                ->subject($mailsubject !== '' ? $mailsubject : $defaultSubject)
                 // ->from(new Address($GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'], $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName']))
                 ->setTemplate($template)
                 ->assignMultiple($data)

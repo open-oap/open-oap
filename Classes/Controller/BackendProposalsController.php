@@ -625,6 +625,10 @@ class BackendProposalsController extends OapBackendController
             } else {
                 $unparsedDefaultMailtext = 'Missing Email Text';
             }
+            // no placeholder for a missing subject on purpose - an empty subject makes the mail
+            // template fall back to tx_openoap.email.status_<state>.subject and, if that does not
+            // exist either, to the generic subject built in sendEmail(). A supporter mail text
+            // never comes with a subject, so this is the regular case for accepted/declined.
             $proposalList[$key]['maildata']['mailtext'] = $this->parseMailtext($proposal, $unparsedDefaultMailtext, $additionalMailData, $proposalLangCode);
 
             if ($selectedMailAction == 1) {
@@ -636,7 +640,7 @@ class BackendProposalsController extends OapBackendController
                     $rto = GeneralUtility::trimExplode(',', htmlspecialchars($this->request->getArgument('reply')), true);
                     $additionalData['replyTo'] = $rto[0];
                 }
-                $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $proposalList[$key]['maildata']['mailtext'], $proposalLangCode, $additionalData);
+                $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $proposalList[$key]['maildata']['mailtext'], '', $proposalLangCode, $additionalData);
 
                 if ($selectedState === self::PROPOSAL_DECLINED) {
                     $proposal->setRejectionTstamp(time());
@@ -906,7 +910,7 @@ class BackendProposalsController extends OapBackendController
             $mailTemplatePaths = $this->getMailTemplatePaths();
             $mailTemplate = self::MAIL_TEMPLATE_PROPOSAL_REVISION;
             $mailText = $this->parseMailtext($proposal, $mailtextInRevision, $additionalMailData, $proposalLangCode);
-            $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $mailText, $proposalLangCode);
+            $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $mailText, '', $proposalLangCode);
         }
         return $proposal;
     }

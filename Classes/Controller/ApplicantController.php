@@ -287,7 +287,7 @@ class ApplicantController extends OapFrontendController
         }
 
         $mailText = $this->parseMailtext($proposal, $unparsedMailtext, [], $proposalLangCode);
-        $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $mailText, $proposalLangCode);
+        $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $mailText, '', $proposalLangCode);
 
         $uri = $this->uriBuilder
             ->reset()
