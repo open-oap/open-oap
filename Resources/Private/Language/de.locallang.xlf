@@ -833,6 +833,11 @@
                 <source><![CDATA[Problem with given e-mail: %s]]></source>
                 <target><![CDATA[Problem mit der gegebenen E-Mail-Adresse: %s]]></target>
             </trans-unit>
+            <trans-unit id='tx_openoap_domain_model_proposal.log.301'
+                        resname='tx_openoap_domain_model_proposal.log.301'>
+                <source><![CDATA[Saving failed:]]></source>
+                <target><![CDATA[Speichern fehlgeschlagen:]]></target>
+            </trans-unit>
             <!-- Dashboard -->
             <trans-unit id='tx_openoap_dashboard.proposalsActive.header'
                         resname='tx_openoap_dashboard.proposalsActive.header'>
@@ -989,6 +994,11 @@
                     <![CDATA[The editing of the proposal was cancelled. The changes after the last save or page change were discarded.]]></source>
                 <target>
                     <![CDATA[Die Bearbeitung des Antrags wurde abgebrochen. Die Änderungen nach dem letzten Speichern oder Seitenwechsel wurden verworfen.]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.save_failed'
+                        resname='tx_openoap.flash.save_failed'>
+                <source><![CDATA[Saving failed, possibly because the proposal was edited at the same time. Please reload the page and try again.]]></source>
+                <target><![CDATA[Speichern fehlgeschlagen, möglicherweise wurde der Antrag gleichzeitig bearbeitet. Bitte laden Sie die Seite neu und versuchen Sie es erneut.]]></target>
             </trans-unit>
             <trans-unit id='tx_openoap.flash.proposal_editing_saved'
                         resname='tx_openoap.flash.proposal_editing_saved'>

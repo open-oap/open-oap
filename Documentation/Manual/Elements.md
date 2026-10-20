@@ -210,3 +210,16 @@ If submitted applications have been commented by editors, this is shown here and
 <img src="../Images/Manual/Elements/dashboard-comments.jpg" style="max-width:415px;height:auto" />
 
 Commented form fields are specially marked in the "Revision" status when the form is called up again and the comment texts are displayed with the field.
+
+### Notices in the protocol of a proposal
+
+A proposal carries a protocol of what happened to it, which the applicant reads together with the
+status messages and the comments of the editors.
+
+Two of its entries concern changes to the form of a running call. If a question was removed from
+the form after an application had already been started, the protocol notes the removed question.
+If a repeatable group could not be saved completely, the group is removed and the protocol asks
+the applicant to review the entries of that group.
+
+Both are notices, not errors: the application itself is saved. They exist so that a form that
+changed underneath an applicant does not silently lose entries.

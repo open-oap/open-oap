@@ -214,8 +214,14 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const LOG_FORM_CHANGED = 200;
     protected const LOG_FORM_CHANGED_ADDED_ITEM = 201;
     protected const LOG_FORM_CHANGED_REMOVED_ITEM = 202;
+    protected const LOG_GROUP_COUNTER_CORRECTED = 203;
 
     protected const LOG_ERROR_INCORRECT_EMAIL_ADDRESS = 300;
+    protected const LOG_ERROR_PERSIST_FAILED = 301;
+
+    protected const FLASH_MSG_GROUP_COUNTER_RAISED  = 'group_counter_raised';
+    protected const FLASH_MSG_GROUP_COUNTER_LOWERED = 'group_counter_lowered';
+    protected const FLASH_MSG_SAVE_FAILED           = 'save_failed';
 
     // see \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity - just to shorten the vars
     protected const NOTICE = ContextualFeedbackSeverity::NOTICE;
@@ -615,6 +621,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 break;
             case self::LOG_PROPOSAL_CHANGE_STATE:
             case self::LOG_ERROR_INCORRECT_EMAIL_ADDRESS:
+            case self::LOG_ERROR_PERSIST_FAILED:
                 $log->setText($parameter);
                 break;
             case self::LOG_PROPOSAL_ANNOTATED:
@@ -622,6 +629,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             case self::LOG_FORM_CHANGED:
             case self::LOG_FORM_CHANGED_ADDED_ITEM:
             case self::LOG_FORM_CHANGED_REMOVED_ITEM:
+            case self::LOG_GROUP_COUNTER_CORRECTED:
                 $log->setState(self::COMMENT_STATE_AUTO_ACCEPTED);
                 $log->setText($parameter);
                 break;
@@ -1920,6 +1928,293 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $proposalPid = $this->settings['proposalsPoolId'];
         }
         return $proposalPid;
+    }
+
+    /**
+     * Reconcile groupsCounter against actual answer records in the database.
+     *
+     * The counter stored in MetaInformation can diverge from the actual answer
+     * records when two users edit the same proposal concurrently, or when a page
+     * reload interrupts an add-group / remove-group operation. This method reads
+     * the real answer records as the authoritative source and corrects the counter.
+     *
+     * For non-meta groups the repetition index (counter1, counter0 always 0)
+     * determines the actual instance count.
+     *
+     * For meta groups both indices can have gaps independently:
+     *   - counter0 gaps: an outer (L0) instance is missing from the DB
+     *   - counter1 gaps: an inner (L1) repetition is missing for a given L0 instance
+     *
+     * When a gap is detected, the remaining answer records are re-indexed in memory
+     * to form a consecutive sequence (e.g. 0, 2 → 0, 1). The instances array in
+     * the MetaInformation is rebuilt to match. Changes to answer objects are
+     * persisted when the calling action calls persistAll().
+     *
+     * @param array $changes  Populated by reference with one entry per corrected group:
+     *                        ['groupUid', 'oldCurrent', 'newCurrent', 'reindexed' (bool)]
+     */
+    protected function reconcileGroupsCounter(array $groupsCounter, Proposal $proposal, array &$changes = []): array
+    {
+        // Step 1: Collect distinct counter1 values per (groupUid, counter0).
+        $counter1Sets = [];
+        foreach ($proposal->getAnswers() as $answer) {
+            if (!$answer->getItem() || !$answer->getModel()) {
+                continue;
+            }
+            $gUid = $answer->getModel()->getUid();
+            $c0   = $answer->getGroupCounter0();
+            $c1   = $answer->getGroupCounter1();
+            $counter1Sets[$gUid][$c0][$c1] = true;
+        }
+
+        // Step 2: Build a reverse map from L1 group UID → parent meta group UID.
+        // Even if the instances structure is stale, the L1 UIDs it lists are correct.
+        $l1ToMetaGroup = [];
+        foreach ($groupsCounter as $groupUid => $groupData) {
+            if (!empty($groupData['meta'])) {
+                foreach ($groupData['instances'] as $nestedGroups) {
+                    foreach (array_keys($nestedGroups) as $nestedGroupUid) {
+                        $l1ToMetaGroup[$nestedGroupUid] = $groupUid;
+                    }
+                }
+            }
+        }
+
+        // Step 3: Detect gaps.
+        //
+        // counter1 gaps — for every group, every (groupUid, counter0) combination:
+        // Map: [groupUid => [counter0 => [oldC1 => newC1]]]
+        $reindexC1 = [];
+        foreach ($counter1Sets as $gUid => $c0Data) {
+            foreach ($c0Data as $c0 => $c1Set) {
+                $sorted = array_keys($c1Set);
+                sort($sorted, SORT_NUMERIC);
+                foreach ($sorted as $newIdx => $oldIdx) {
+                    if ($oldIdx !== $newIdx) {
+                        $reindexC1[$gUid][$c0] = array_flip($sorted);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // counter0 gaps — for each meta group, collect all counter0 values that
+        // appear in any of its L1 children's answer records:
+        // Map: [metaGroupUid => [oldC0 => newC0]]
+        $metaC0Sets   = [];
+        $reindexC0    = [];
+        foreach ($counter1Sets as $gUid => $c0Data) {
+            if (!isset($l1ToMetaGroup[$gUid])) {
+                continue;
+            }
+            $metaGroupUid = $l1ToMetaGroup[$gUid];
+            foreach (array_keys($c0Data) as $c0) {
+                $metaC0Sets[$metaGroupUid][$c0] = true;
+            }
+        }
+
+        // A meta L0 instance can be legitimately empty: if the applicant added it
+        // but every nested group is optional (repeatableMin == 0), no answer
+        // records exist for it. Such instances must NOT be treated as stale/missing.
+        // Build a min-repetition lookup from the form definition (the authoritative
+        // source for optionality) to tell "empty but optional" apart from "stale".
+        $groupMinByUid = [];
+        $call = $proposal->getCall();
+        if ($call !== null) {
+            foreach ($call->getFormPages() as $formPage) {
+                foreach ($formPage->getItemGroups() as $formGroupL0) {
+                    $groupMinByUid[$formGroupL0->getUid()] = $formGroupL0->getRepeatableMin();
+                    foreach ($formGroupL0->getItemGroups() as $formGroupL1) {
+                        $groupMinByUid[$formGroupL1->getUid()] = $formGroupL1->getRepeatableMin();
+                    }
+                }
+            }
+        }
+
+        // Collect the L0 instances that have no answer records but are legitimately
+        // empty (all nested groups optional). Fold their counter0 into metaC0Sets so
+        // the re-indexing keeps the whole sequence consecutive, and remember them so
+        // the drop-check in Step 5 preserves them.
+        $keepEmptyL0 = [];
+        foreach ($groupsCounter as $metaGroupUid => $metaGroupData) {
+            if (empty($metaGroupData['meta']) || empty($metaGroupData['instances'])) {
+                continue;
+            }
+            foreach ($metaGroupData['instances'] as $l0Index => $nestedGroups) {
+                if (empty($nestedGroups)) {
+                    continue;
+                }
+                $instanceHasAnswers = false;
+                foreach (array_keys($nestedGroups) as $nestedGroupUid) {
+                    if (isset($counter1Sets[$nestedGroupUid][$l0Index])) {
+                        $instanceHasAnswers = true;
+                        break;
+                    }
+                }
+                if ($instanceHasAnswers) {
+                    continue;
+                }
+                $allOptional = true;
+                foreach (array_keys($nestedGroups) as $nestedGroupUid) {
+                    if (($groupMinByUid[$nestedGroupUid] ?? 0) > 0) {
+                        $allOptional = false;
+                        break;
+                    }
+                }
+                if ($allOptional) {
+                    $keepEmptyL0[$metaGroupUid][$l0Index] = true;
+                    $metaC0Sets[$metaGroupUid][$l0Index] = true;
+                }
+            }
+        }
+
+        foreach ($metaC0Sets as $metaGroupUid => $c0Set) {
+            $sorted = array_keys($c0Set);
+            sort($sorted, SORT_NUMERIC);
+            foreach ($sorted as $newIdx => $oldIdx) {
+                if ($oldIdx !== $newIdx) {
+                    $reindexC0[$metaGroupUid] = array_flip($sorted);
+                    break;
+                }
+            }
+        }
+
+        // Step 4: Apply re-indexing to answer objects in memory.
+        // counter0 must be updated before counter1 because the counter1 re-index
+        // map was built using the original counter0 as key.
+        if ($reindexC0 || $reindexC1) {
+            foreach ($proposal->getAnswers() as $answer) {
+                if (!$answer->getItem() || !$answer->getModel()) {
+                    continue;
+                }
+                $gUid    = $answer->getModel()->getUid();
+                $origC0  = $answer->getGroupCounter0();
+                $origC1  = $answer->getGroupCounter1();
+
+                if (isset($l1ToMetaGroup[$gUid])) {
+                    $metaGroupUid = $l1ToMetaGroup[$gUid];
+                    if (isset($reindexC0[$metaGroupUid][$origC0])) {
+                        $answer->setGroupCounter0($reindexC0[$metaGroupUid][$origC0]);
+                    }
+                }
+
+                if (isset($reindexC1[$gUid][$origC0][$origC1])) {
+                    $answer->setGroupCounter1($reindexC1[$gUid][$origC0][$origC1]);
+                }
+            }
+
+            // Rebuild counter1Sets to reflect the new indices so Step 5 can use count().
+            if ($reindexC0) {
+                foreach ($l1ToMetaGroup as $l1Uid => $metaGroupUid) {
+                    if (!isset($counter1Sets[$l1Uid], $reindexC0[$metaGroupUid])) {
+                        continue;
+                    }
+                    $rebuilt = [];
+                    foreach ($counter1Sets[$l1Uid] as $oldC0 => $c1Set) {
+                        $newC0 = $reindexC0[$metaGroupUid][$oldC0] ?? $oldC0;
+                        $rebuilt[$newC0] = $c1Set;
+                    }
+                    $counter1Sets[$l1Uid] = $rebuilt;
+                }
+            }
+            foreach ($reindexC1 as $gUid => $c0Data) {
+                foreach ($c0Data as $c0 => $mapping) {
+                    $n = count($counter1Sets[$gUid][$c0]);
+                    $counter1Sets[$gUid][$c0] = array_fill_keys(range(0, $n - 1), true);
+                }
+            }
+        }
+
+        // Step 5: Reconcile groupsCounter using the now-consecutive counts.
+        $reindexedGroups = array_keys($reindexC1) + array_keys($reindexC0);
+        foreach ($groupsCounter as $groupUid => &$groupData) {
+            if (empty($groupData['meta'])) {
+                // Unnested repeatable group: counter0 is always 0.
+                $oldCurrent  = $groupData['current'];
+                $actualCount = isset($counter1Sets[$groupUid][0])
+                    ? count($counter1Sets[$groupUid][0])
+                    : 0;
+                $groupData['current'] = $actualCount;
+
+                if ($oldCurrent !== $actualCount || isset($reindexC1[$groupUid])) {
+                    $changes[] = [
+                        'groupUid'   => $groupUid,
+                        'oldCurrent' => $oldCurrent,
+                        'newCurrent' => $actualCount,
+                        'reindexed'  => isset($reindexC1[$groupUid]),
+                    ];
+                }
+            } else {
+                // Meta group: rebuild instances using the corrected counter0 keys.
+                // Re-map the stale instances array through the counter0 re-index map
+                // so that each L0 instance is addressed by its new, consecutive key.
+                $oldCurrent = $groupData['current'];
+                $remappedInstances = [];
+                foreach ($groupData['instances'] as $oldL0Index => $nestedGroups) {
+                    $newL0Index = isset($reindexC0[$groupUid][$oldL0Index])
+                        ? $reindexC0[$groupUid][$oldL0Index]
+                        : $oldL0Index;
+                    $remappedInstances[$newL0Index] = $nestedGroups;
+                }
+
+                // Keep instances that have answer records, plus legitimately empty
+                // optional instances (all nested groups optional); correct L1 counts.
+                $reconciledInstances = [];
+                $l1Changes = [];
+                // Translate the "keep empty" L0 indices into the re-indexed space.
+                $keepEmptyNew = [];
+                foreach (array_keys($keepEmptyL0[$groupUid] ?? []) as $emptyOldIndex) {
+                    $emptyNewIndex = $reindexC0[$groupUid][$emptyOldIndex] ?? $emptyOldIndex;
+                    $keepEmptyNew[$emptyNewIndex] = true;
+                }
+                foreach ($remappedInstances as $l0Index => $nestedGroups) {
+                    $instanceHasAnswers = false;
+                    $reconciledNestedGroups = [];
+                    foreach ($nestedGroups as $nestedGroupUid => $nestedGroupData) {
+                        $actualL1Count = isset($counter1Sets[$nestedGroupUid][$l0Index])
+                            ? count($counter1Sets[$nestedGroupUid][$l0Index])
+                            : 0;
+                        $oldL1Count = $nestedGroupData['current'] ?? 0;
+                        if ($oldL1Count !== $actualL1Count) {
+                            $l1Changes[] = [
+                                'l1GroupUid' => $nestedGroupUid,
+                                'l0Index'    => $l0Index,
+                                'old'        => $oldL1Count,
+                                'new'        => $actualL1Count,
+                            ];
+                        }
+                        $nestedGroupData['current'] = $actualL1Count;
+                        $reconciledNestedGroups[$nestedGroupUid] = $nestedGroupData;
+                        if ($actualL1Count > 0) {
+                            $instanceHasAnswers = true;
+                        }
+
+                    }
+
+                    if ($instanceHasAnswers || isset($keepEmptyNew[$l0Index])) {
+                        $reconciledInstances[$l0Index] = $reconciledNestedGroups;
+                    }
+                }
+                $groupData['instances'] = $reconciledInstances;
+                $newCurrent = count($reconciledInstances);
+                $groupData['current'] = $newCurrent;
+
+                $wasReindexed = isset($reindexC0[$groupUid])
+                    || !empty(array_intersect(array_keys($reindexC1), array_keys(array_merge(...array_values($reconciledInstances) ?: [[]]))));
+                if ($oldCurrent !== $newCurrent || $wasReindexed || $l1Changes) {
+                    $changes[] = [
+                        'groupUid'   => $groupUid,
+                        'oldCurrent' => $oldCurrent,
+                        'newCurrent' => $newCurrent,
+                        'reindexed'  => $wasReindexed,
+                        'l1Adjusted' => $l1Changes,
+                    ];
+                }
+            }
+        }
+        unset($groupData);
+
+        return $groupsCounter;
     }
 
     /**
