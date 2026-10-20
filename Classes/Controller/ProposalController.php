@@ -295,6 +295,22 @@ class ProposalController extends OapFrontendController
             $this->redirectToDashboard();
         }
 
+        $editLockService = GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\EditLockService::class);
+        $editLockToken = $this->request->hasArgument('editLockToken')
+            ? trim((string)$this->request->getArgument('editLockToken'))
+            : '';
+        if ($editLockToken === '') {
+            $editLockToken = $editLockService->generateToken();
+        }
+        $feUserId = (int)(GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\FrontendAccessControlService::class)->getFrontendUserId() ?? 0);
+        $lockResult = $editLockService->tryAcquire((int)$proposal->getUid(), $editLockToken, $feUserId);
+        if (!$lockResult->acquired) {
+            $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_EDIT_LOCKED);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
+
+            $this->redirectToDashboard();
+        }
+
         $itemsMap = [];
         // build linear items array
         $this->flattenItems($proposal);
@@ -453,6 +469,7 @@ class ProposalController extends OapFrontendController
             'groupsCounter' => $groupsCounter,
             'submitItemOptions' => $submitItemOptions,
             'survey' => $this->survey,
+            'editLockToken' => $editLockToken,
         ]);
         return $this->htmlResponse();
     }
@@ -468,6 +485,31 @@ class ProposalController extends OapFrontendController
     {
         // todo check if proposal editable (= in_progress / re-opened)
 
+        $editLockService = GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\EditLockService::class);
+        $feUserId = (int)(GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\FrontendAccessControlService::class)->getFrontendUserId() ?? 0);
+        if ($feUserId === 0) {
+            $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_SESSION_EXPIRED);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
+
+            $this->redirectToDashboard();
+        }
+
+        $editLockToken = $this->request->hasArgument('editLockToken')
+            ? trim((string)$this->request->getArgument('editLockToken'))
+            : '';
+        $isCancel = $this->request->hasArgument('cancel');
+        if (!$isCancel && !$editLockService->isValid((int)$proposal->getUid(), $editLockToken)) {
+            $reacquired = $editLockToken !== ''
+                ? $editLockService->tryAcquire((int)$proposal->getUid(), $editLockToken, $feUserId)
+                : null;
+            if ($reacquired === null || !$reacquired->acquired) {
+                $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_EDIT_LOCK_LOST);
+                $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
+
+                $this->redirectToDashboard();
+            }
+        }
+
         // add check for call end time and access groups
         $this->isRestricted($proposal->getCall());
 
@@ -480,6 +522,7 @@ class ProposalController extends OapFrontendController
         $flashMessageSaved = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_SAVED);
 
         if ($this->request->hasArgument('cancel')) {
+            $editLockService->release((int)$proposal->getUid(), $editLockToken);
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_CANCELLED);
             $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
 
@@ -657,6 +700,7 @@ class ProposalController extends OapFrontendController
         $this->checkFiles($proposal);
 
         if ($submitted) {
+            $editLockService->release((int)$proposal->getUid(), $editLockToken);
             $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_SUBMITTED_OKAY);
             $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
 
@@ -697,6 +741,7 @@ class ProposalController extends OapFrontendController
             }
 
         } elseif ($close) {
+            $editLockService->release((int)$proposal->getUid(), $editLockToken);
             $this->addFlashMessage($flashMessageSaved, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
 
             if ($this->survey !== '') {
@@ -709,6 +754,7 @@ class ProposalController extends OapFrontendController
                 ->setTargetPageUid($targetPage)
                 ->build();
         } else {
+            $editLockService->renew((int)$proposal->getUid(), $editLockToken);
             $this->addFlashMessage($flashMessageSaved, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
 
             if ($this->survey !== '') {
@@ -733,7 +779,7 @@ class ProposalController extends OapFrontendController
                 $uriBuilder->setSection('jumpmark');
             }
 
-            $uri = $uriBuilder->uriFor('edit', ['proposal' => $proposal, 'currentPage' => $nextPage, 'survey' => $this->survey], 'Proposal', $this->ext, 'form');
+            $uri = $uriBuilder->uriFor('edit', ['proposal' => $proposal, 'currentPage' => $nextPage, 'survey' => $this->survey, 'editLockToken' => $editLockToken], 'Proposal', $this->ext, 'form');
         }
         return $this->redirectToURI($uri, 0, 200);
     }

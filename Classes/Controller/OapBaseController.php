@@ -306,6 +306,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const FLASH_MSG_PROPOSAL_ACCESS_DENIED = 'proposal_access_denied';
     protected const FLASH_MSG_PROPOSAL_NOT_FOUND = 'proposal_not_found';
     protected const FLASH_MSG_CALL_MISSING = 'proposal_access_denied';
+    protected const FLASH_MSG_PROPOSAL_EDIT_LOCKED = 'proposal_edit_locked';
+    protected const FLASH_MSG_SESSION_EXPIRED = 'session_expired';
+    protected const FLASH_MSG_EDIT_LOCK_LOST = 'edit_lock_lost';
 
     protected const PAGINATOR_ITEMS_PER_PAGE = 50;
     /**

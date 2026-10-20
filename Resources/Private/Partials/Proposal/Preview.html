@@ -117,7 +117,7 @@
                                 <f:render partial="Utility/ValueOutput" arguments="{_all}" />
 
                                 <div class="preview__item-options">
-                                    <f:link.action class="preview__item-option preview__item-option--edit" action="edit" arguments="{currentPage: pageIt.cycle,  proposal: proposal}" section="oap-input-{propertyKeyIndex}--item">
+                                    <f:link.action class="preview__item-option preview__item-option--edit" action="edit" arguments="{currentPage: pageIt.cycle,  proposal: proposal, editLockToken: editLockToken}" section="oap-input-{propertyKeyIndex}--item">
                                         <f:translate key="tx_openoap_form.preview.edit" />
                                     </f:link.action>
                                 </div>
@@ -205,7 +205,7 @@
                                 <f:render partial="Utility/ValueOutput" arguments="{_all}" />
 
                                 <div class="preview__item-options">
-                                    <f:link.action class="preview__item-option preview__item-option--edit" action="edit" arguments="{currentPage: pageIt.cycle,  proposal: proposal}" section="oap-input-{propertyKeyIndex}">
+                                    <f:link.action class="preview__item-option preview__item-option--edit" action="edit" arguments="{currentPage: pageIt.cycle,  proposal: proposal, editLockToken: editLockToken}" section="oap-input-{propertyKeyIndex}">
                                         <f:translate key="tx_openoap_form.preview.edit" />
                                     </f:link.action>
                                 </div>

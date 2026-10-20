@@ -224,6 +224,7 @@ class ApplicantController extends OapFrontendController
             'jsMessages' => $jsMessages,
             'nowTimestamp' => time(),
             'language' => $this->language->getLanguageId(),
+            'editLocks' => $this->buildEditLocksMap($proposalsActive),
         ]);
         return $this->htmlResponse();
     }
@@ -234,6 +235,27 @@ class ApplicantController extends OapFrontendController
      * @param int|null $archive
      * @return \Psr\Http\Message\ResponseInterface
      */
+    /**
+     * @param iterable<Proposal>|null $proposals
+     * @return array<int, true> Map proposalUid => true if currently locked
+     */
+    protected function buildEditLocksMap(?iterable $proposals): array
+    {
+        if ($proposals === null) {
+            return [];
+        }
+
+        $uids = [];
+        foreach ($proposals as $proposal) {
+            $uids[] = (int)$proposal->getUid();
+        }
+        if ($uids === []) {
+            return [];
+        }
+
+        return GeneralUtility::makeInstance(\OpenOAP\OpenOap\Service\EditLockService::class)->findActiveLocks($uids);
+    }
+
     public function proposalsAction(int $archive = null): \Psr\Http\Message\ResponseInterface
     {
         if ($this->applicant != null) {
@@ -254,6 +276,7 @@ class ApplicantController extends OapFrontendController
             'proposals' => $proposals,
             'proposalsCommentsCount' => $proposalsCommentsCount,
             'settings' => $this->settings,
+            'editLocks' => $this->buildEditLocksMap($proposals),
         ]);
         return $this->htmlResponse();
     }

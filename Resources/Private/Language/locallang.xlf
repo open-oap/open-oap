@@ -713,6 +713,10 @@
                         resname='tx_openoap_dashboard.proposal.links.show'>
                 <source><![CDATA[Show options]]></source>
             </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.editLocked.badge'
+                        resname='tx_openoap_dashboard.proposal.editLocked.badge'>
+                <source><![CDATA[This is currently being worked on in another session]]></source>
+            </trans-unit>
             <trans-unit id='tx_openoap_domain_model_proposal.status' resname='tx_openoap_domain_model_proposal.status'>
                 <source><![CDATA[Status]]></source>
             </trans-unit>
@@ -812,6 +816,30 @@
             <trans-unit id='tx_openoap.flash.proposal_not_found'
                         resname='tx_openoap.flash.proposal_not_found'>
                 <source><![CDATA[The form was made without specifying the record ID.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.proposal_edit_locked'
+                        resname='tx_openoap.flash.proposal_edit_locked'>
+                <source><![CDATA[This record is currently being edited in another session. Please try again later.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.session_expired'
+                        resname='tx_openoap.flash.session_expired'>
+                <source><![CDATA[Your session has expired. Please log in again to save your changes.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.edit_lock_lost'
+                        resname='tx_openoap.flash.edit_lock_lost'>
+                <source><![CDATA[Your editing session has expired or has been taken over. Please open the record again.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.editLock.banner.session'
+                        resname='tx_openoap.editLock.banner.session'>
+                <source><![CDATA[Your session has expired. Log in again in another browser tab, then come back here and save — your entries are kept. Do not reload this page.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.editLock.banner.lock'
+                        resname='tx_openoap.editLock.banner.lock'>
+                <source><![CDATA[Your editing lock was released or taken over by another session. Please reload the page — changes can no longer be saved.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.editLock.banner.duplicateTab'
+                        resname='tx_openoap.editLock.banner.duplicateTab'>
+                <source><![CDATA[This proposal is already open in another tab. Please continue editing there — saving in this tab is disabled.]]></source>
             </trans-unit>
 
             <!-- Word Export, validators  -->

@@ -195,6 +195,29 @@ Registration and log-in (with existing access data) can be carried out via the s
 - Assigning a password
 - Optional: Enter company data/master data (later default transfer to forms)
 
+### One proposal, one editing session
+
+A proposal is only ever edited in one place at a time. As soon as it is opened for editing, it is
+locked for every other session and tab of the same account.
+
+In the dashboard, a proposal that is open elsewhere is marked "This is currently being worked on
+in another session", and its edit and delete actions are shown without a link.
+
+In the form itself, three situations are reported at the top of the page:
+
+- **The session has expired.** The entries are kept. Log in again in another browser tab, come
+  back to the form and save.
+- **The editing lock was released or taken over** by another session. Changes can no longer be
+  saved here; reload the page to see the current state.
+- **The proposal is already open in another tab.** Editing continues in that tab, saving in the
+  second one is switched off.
+
+The lock is held while the form is open: the page reports in every few minutes, and the lock is
+released when the applicant leaves the form or switches away from the tab for longer than half a
+minute. A session that ends without leaving the form properly - a closed laptop, a lost
+connection - keeps the lock until it has been quiet for 30 minutes; after that another session
+can take the proposal over.
+
 ### Dashboard
 
 <img src="../Images/Manual/Elements/dashboard.jpg" style="max-width:506px;height:auto" />

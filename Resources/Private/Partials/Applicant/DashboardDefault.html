@@ -48,7 +48,7 @@ Available variables:
 
   <div class="accordion" data-preopen="1">
     <f:comment>ACTIVE PROPOSALS</f:comment>
-    <f:render section="ProposalBlock" arguments="{header:'tx_openoap_dashboard.proposalsActive.header', proposals:proposalsActive, commentsCount:proposalsActiveCommentsCount, filesCount:proposalsActiveFilesCount, constants:constants, mode:'Active', total:countAll.active}" />
+    <f:render section="ProposalBlock" arguments="{header:'tx_openoap_dashboard.proposalsActive.header', proposals:proposalsActive, commentsCount:proposalsActiveCommentsCount, filesCount:proposalsActiveFilesCount, constants:constants, mode:'Active', total:countAll.active, editLocks:editLocks}" />
 
     <f:comment>ARCHIVED PROPOSALS</f:comment>
     <f:render section="ProposalBlock" arguments="{header:'tx_openoap_dashboard.proposalsArchived.header', proposals:proposalsArchived, commentsCount:proposalsArchivedCommentsCount, filesCount:proposalsArchivedFilesCount, mode:'Archived', archived:1, total:countAll.archived}" />
@@ -76,7 +76,7 @@ Available variables:
                   <f:render partial="Applicant/Legend" arguments="{constants:constants}" />
               </f:if>
 
-              <f:render partial="Applicant/Proposals" arguments="{proposals:proposals, commentsCount:commentsCount, constants:constants, filesCount:filesCount}" />
+              <f:render partial="Applicant/Proposals" arguments="{proposals:proposals, commentsCount:commentsCount, constants:constants, filesCount:filesCount, editLocks:editLocks}" />
 
               <f:if condition="{total} > {proposals -> f:count()}">
                 <div class="proposals__show-all">

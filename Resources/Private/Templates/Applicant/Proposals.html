@@ -20,7 +20,7 @@ Available variables:
         <f:if condition="{proposals}">
             <f:then>
                 <f:render partial="Applicant/Legend" arguments="{constants:constants}" />
-                <f:render partial="Applicant/Proposals" arguments="{proposals:proposals, commentsCount:proposalsCommentsCount, constants:constants}" />
+                <f:render partial="Applicant/Proposals" arguments="{proposals:proposals, commentsCount:proposalsCommentsCount, constants:constants, editLocks:editLocks}" />
             </f:then>
 
             <f:else>

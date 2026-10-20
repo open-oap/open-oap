@@ -216,3 +216,13 @@ CREATE TABLE tx_openoap_call_formitem_mm (
 		KEY fieldname (fieldname),
 
 );
+
+CREATE TABLE tx_openoap_domain_model_proposallock (
+	proposal int(11) unsigned DEFAULT '0' NOT NULL,
+	token varchar(36) DEFAULT '' NOT NULL,
+	fe_user int(11) unsigned DEFAULT '0' NOT NULL,
+	last_activity int(11) unsigned DEFAULT '0' NOT NULL,
+	session_started int(11) unsigned DEFAULT '0' NOT NULL,
+
+	UNIQUE KEY proposal (proposal)
+);

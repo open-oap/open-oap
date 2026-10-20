@@ -12,6 +12,26 @@
 
     <f:render partial="FlashMessages" arguments="{_all}" />
 
+    <f:comment>
+        role="alert" is set by JS only when the banner becomes visible; otherwise some
+        screen readers would announce the content already on the initial page load.
+    </f:comment>
+    <div id="editlock-banner-session" class="form__status" hidden="hidden">
+        <p class="form__message form__message-error form__message-2">
+            <f:translate key="tx_openoap.editLock.banner.session" default="Your session has expired. Log in again in another browser tab, then come back here and save — your entries are kept. Do not reload this page." />
+        </p>
+    </div>
+    <div id="editlock-banner-lock" class="form__status" hidden="hidden">
+        <p class="form__message form__message-error form__message-2">
+            <f:translate key="tx_openoap.editLock.banner.lock" default="Your editing lock was released or taken over by another session. Please reload the page — changes can no longer be saved." />
+        </p>
+    </div>
+    <div id="editlock-banner-duplicate-tab" class="form__status" hidden="hidden">
+        <p class="form__message form__message-error form__message-2">
+            <f:translate key="tx_openoap.editLock.banner.duplicateTab" default="This proposal is already open in another tab. Please continue editing there — saving in this tab is disabled." />
+        </p>
+    </div>
+
     <h1 class="page__title"><span class="hyphenated">{proposal.call.title}</span></h1>
     <div class="component component--layout-content-width">
         <h2><span class="hyphenated">{proposal.title}</span></h2>
@@ -29,6 +49,7 @@
         <div>
             <f:form.hidden name="currentPage" value="{pageControl.current}"/>
             <f:form.hidden name="survey" value="{survey}"/>
+            <f:form.hidden name="editLockToken" value="{editLockToken}"/>
             <f:for each="{proposal.answers}" as="answer" iteration="a">
                 <v:variable.set name="aIndex" value="{a.index}"/>
                 <f:form.hidden property="answers.{aIndex}.__identity" value="{answer.uid}"/>

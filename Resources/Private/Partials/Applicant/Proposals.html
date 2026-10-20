@@ -14,6 +14,12 @@
                     </span>
                     {proposal.title}
                 </h3>
+                <f:if condition="{editLocks.{proposal.uid}}">
+                    <p class="proposals__edit-lock" role="status">
+                        <span class="proposals__edit-lock-icon" aria-hidden="true"></span>
+                        {f:translate(key:'tx_openoap_dashboard.proposal.editLocked.badge')}
+                    </p>
+                </f:if>
                 <f:if condition="{proposal.call.hidden} == 1">
                     <p><f:format.raw>{f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage')}</f:format.raw></p>
                 </f:if>
@@ -53,9 +59,14 @@
                                     </f:then>
                                     <f:else>
                                         <li>
-                                            <f:if condition="{Access}">
-                                                <f:then><f:render section="OptionLink" arguments="{pageId:settings.formPageId, plugin:'form', action:'edit', controller:'Proposal', option:'edit', proposal:proposal}" /></f:then>
-                                                <f:else><f:render section="OptionSpan" arguments="{option:'edit',proposal:proposal}" /></f:else>
+                                            <f:if condition="{editLocks.{proposal.uid}}">
+                                                <f:then><f:render section="OptionSpan" arguments="{option:'edit', proposal:proposal, locked:1}" /></f:then>
+                                                <f:else>
+                                                    <f:if condition="{Access}">
+                                                        <f:then><f:render section="OptionLink" arguments="{pageId:settings.formPageId, plugin:'form', action:'edit', controller:'Proposal', option:'edit', proposal:proposal}" /></f:then>
+                                                        <f:else><f:render section="OptionSpan" arguments="{option:'edit',proposal:proposal}" /></f:else>
+                                                    </f:if>
+                                                </f:else>
                                             </f:if>
                                         </li>
                                         <li>
@@ -98,12 +109,17 @@
                                             --></f:comment>
                                         </li>
                                         <li>
-                                            <f:if condition="{Access} && {proposal.state} < {constants.PROPOSAL_SUBMITTED}">
-                                                <f:then>
-                                                    <f:render
-                                                            section="OptionLink"
-                                                            arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'delete', controller:'Proposal', option:'delete', proposal:proposal, data-oap-modaltext:'JSMSG_MODAL_CONTENT_DELETE',data-oap-modalsubmit:'JSMSG_MODAL_DELETE',data-oap-modalcancel:'JSMSG_MODAL_CANCEL'}" /></f:then>
-                                                <f:else><f:render section="OptionSpan" arguments="{option:'delete',proposal:proposal}" /></f:else>
+                                            <f:if condition="{editLocks.{proposal.uid}}">
+                                                <f:then><f:render section="OptionSpan" arguments="{option:'delete', proposal:proposal, locked:1}" /></f:then>
+                                                <f:else>
+                                                    <f:if condition="{Access} && {proposal.state} < {constants.PROPOSAL_SUBMITTED}">
+                                                        <f:then>
+                                                            <f:render
+                                                                    section="OptionLink"
+                                                                    arguments="{pageId:settings.dashboardPageId, plugin:'dashboard', action:'delete', controller:'Proposal', option:'delete', proposal:proposal, data-oap-modaltext:'JSMSG_MODAL_CONTENT_DELETE',data-oap-modalsubmit:'JSMSG_MODAL_DELETE',data-oap-modalcancel:'JSMSG_MODAL_CANCEL'}" /></f:then>
+                                                        <f:else><f:render section="OptionSpan" arguments="{option:'delete',proposal:proposal}" /></f:else>
+                                                    </f:if>
+                                                </f:else>
                                             </f:if>
                                         </li>
                                     </f:else>
@@ -143,7 +159,7 @@
 </f:section>
 
 <f:section name="OptionSpan">
-    <span class="proposals__item-option proposals__item-option--{option} proposals__item-option--disabled">
+    <span class="proposals__item-option proposals__item-option--{option} proposals__item-option--disabled{f:if(condition:locked, then:' proposals__item-option--locked')}" aria-disabled="true">
         <f:if condition="{labelKey}">
             <f:then>
                 {f:translate(key:'tx_openoap_dashboard.proposal.link{labelKey}.title', arguments: {0: '{proposal.call.proposalName}'}, default: 'proposal')}

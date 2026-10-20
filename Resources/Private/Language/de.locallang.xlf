@@ -904,6 +904,11 @@
                 <source><![CDATA[Show options]]></source>
                 <target><![CDATA[Optionen]]></target>
             </trans-unit>
+            <trans-unit id='tx_openoap_dashboard.proposal.editLocked.badge'
+                        resname='tx_openoap_dashboard.proposal.editLocked.badge'>
+                <source><![CDATA[This is currently being worked on in another session]]></source>
+                <target><![CDATA[Wird derzeit in einer anderen Sitzung bearbeitet]]></target>
+            </trans-unit>
             <trans-unit id='tx_openoap_domain_model_proposal.status' resname='tx_openoap_domain_model_proposal.status'>
                 <source><![CDATA[Status]]></source>
                 <target><![CDATA[Status]]></target>
@@ -1022,6 +1027,36 @@
                         resname='tx_openoap.flash.proposal_not_found'>
                 <source><![CDATA[The form was made without specifying the record ID.]]></source>
                 <target><![CDATA[Das Formular wurde ohne Angabe der Datensatz-ID gemacht.]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.proposal_edit_locked'
+                        resname='tx_openoap.flash.proposal_edit_locked'>
+                <source><![CDATA[This record is currently being edited in another session. Please try again later.]]></source>
+                <target><![CDATA[Dieser Datensatz wird aktuell in einer anderen Sitzung bearbeitet. Bitte später erneut versuchen.]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.session_expired'
+                        resname='tx_openoap.flash.session_expired'>
+                <source><![CDATA[Your session has expired. Please log in again to save your changes.]]></source>
+                <target><![CDATA[Ihre Sitzung ist abgelaufen. Bitte melden Sie sich neu an, um Ihre Änderungen zu speichern.]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.edit_lock_lost'
+                        resname='tx_openoap.flash.edit_lock_lost'>
+                <source><![CDATA[Your editing session has expired or has been taken over. Please open the record again.]]></source>
+                <target><![CDATA[Ihre Bearbeitungssitzung ist abgelaufen oder wurde übernommen. Bitte öffnen Sie den Datensatz erneut.]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap.editLock.banner.session'
+                        resname='tx_openoap.editLock.banner.session'>
+                <source><![CDATA[Your session has expired. Log in again in another browser tab, then come back here and save — your entries are kept. Do not reload this page.]]></source>
+                <target><![CDATA[Ihre Sitzung ist abgelaufen. Melden Sie sich in einem anderen Browser-Tab neu an und speichern Sie danach hier — Ihre Eingaben bleiben erhalten. Laden Sie diese Seite nicht neu.]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap.editLock.banner.lock'
+                        resname='tx_openoap.editLock.banner.lock'>
+                <source><![CDATA[Your editing lock was released or taken over by another session. Please reload the page — changes can no longer be saved.]]></source>
+                <target><![CDATA[Ihre Bearbeitungssperre wurde freigegeben oder von einer anderen Sitzung übernommen. Bitte laden Sie die Seite neu — Änderungen können nicht mehr gespeichert werden.]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap.editLock.banner.duplicateTab'
+                        resname='tx_openoap.editLock.banner.duplicateTab'>
+                <source><![CDATA[This proposal is already open in another tab. Please continue editing there — saving in this tab is disabled.]]></source>
+                <target><![CDATA[Dieser Antrag ist bereits in einem anderen Tab geöffnet. Bitte arbeiten Sie dort weiter — Speichern in diesem Tab ist gesperrt.]]></target>
             </trans-unit>
 
 

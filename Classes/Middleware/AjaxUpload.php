@@ -26,7 +26,10 @@ class AjaxUpload implements MiddlewareInterface
         $response = $handler->handle($request);
         //        DebuggerUtility::var_dump($response);
         //        DebuggerUtility::var_dump($request);
-        if (!isset($request->getQueryParams()['oap-ajax-task'])) {
+        // Only handle this middleware's own tasks; pass everything else through
+        // (e.g. the editlock-* tasks handled by the EditLockAjax middleware).
+        $task = $request->getQueryParams()['oap-ajax-task'] ?? null;
+        if (!in_array($task, ['info', 'upload'], true)) {
             return $response;
         }
 

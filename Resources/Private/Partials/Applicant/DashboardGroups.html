@@ -63,7 +63,7 @@ Available variables:
         <f:comment>ACTIVE PROPOSALS</f:comment>
         <f:if condition="{proposalsActiveCommentsCount}">
             <f:render section="ProposalBlock"
-                      arguments="{header:'tx_openoap_dashboard.proposalsActive.header', proposals:proposalsActive, commentsCount:proposalsActiveCommentsCount, filesCount:proposalsActiveFilesCount, constants:constants, mode:'Active', total:countAll.active}"/>
+                      arguments="{header:'tx_openoap_dashboard.proposalsActive.header', proposals:proposalsActive, commentsCount:proposalsActiveCommentsCount, filesCount:proposalsActiveFilesCount, constants:constants, mode:'Active', total:countAll.active, editLocks:editLocks}"/>
         </f:if>
         <f:comment>ARCHIVED PROPOSALS</f:comment>
         <f:if condition="{proposalsArchivedCommentsCount}">
@@ -94,7 +94,7 @@ Available variables:
                         </f:if>
 
                         <f:render partial="Applicant/Proposals"
-                                  arguments="{proposals:proposals, commentsCount:commentsCount, constants:constants, filesCount:filesCount}"/>
+                                  arguments="{proposals:proposals, commentsCount:commentsCount, constants:constants, filesCount:filesCount, editLocks:editLocks}"/>
 
                         <f:if condition="{total} > {proposals -> f:count()}">
                             <div class="proposals__show-all">
