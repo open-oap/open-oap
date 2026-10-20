@@ -306,6 +306,9 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const FLASH_MSG_PROPOSAL_ACCESS_DENIED = 'proposal_access_denied';
     protected const FLASH_MSG_PROPOSAL_NOT_FOUND = 'proposal_not_found';
     protected const FLASH_MSG_CALL_MISSING = 'proposal_access_denied';
+    protected const FLASH_MSG_UPLOAD_FILE_TYPE_INVALID = 'upload_file_type_invalid';
+    protected const FLASH_MSG_UPLOAD_FILE_SIZE_EXCEEDED = 'upload_file_size_exceeded';
+    protected const JSMSG_UPLOAD_ERROR_FILE_TYPE = 'upload_error_file_type';
 
     protected const PAGINATOR_ITEMS_PER_PAGE = 50;
     /**

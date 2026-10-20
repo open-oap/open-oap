@@ -1023,6 +1023,21 @@
                 <source><![CDATA[The form was made without specifying the record ID.]]></source>
                 <target><![CDATA[Das Formular wurde ohne Angabe der Datensatz-ID gemacht.]]></target>
             </trans-unit>
+            <trans-unit id='tx_openoap.flash.upload_file_type_invalid'
+                        resname='tx_openoap.flash.upload_file_type_invalid'>
+                <source><![CDATA[The file "%1$s" could not be uploaded. The file type is not allowed.]]></source>
+                <target><![CDATA[Die Datei "%1$s" konnte nicht hochgeladen werden. Der Dateityp ist nicht zulässig.]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.upload_file_size_exceeded'
+                        resname='tx_openoap.flash.upload_file_size_exceeded'>
+                <source><![CDATA[The file "%1$s" could not be uploaded. The file size exceeds the allowed limit.]]></source>
+                <target><![CDATA[Die Datei "%1$s" konnte nicht hochgeladen werden. Die Dateigröße überschreitet das zulässige Limit.]]></target>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.upload_error_file_type'
+                        resname='tx_openoap.js_msg.upload_error_file_type'>
+                <source><![CDATA[The file type is not allowed.]]></source>
+                <target><![CDATA[Der Dateityp ist nicht zulässig.]]></target>
+            </trans-unit>
 
 
             <!-- Word Export, validators  -->

@@ -813,6 +813,18 @@
                         resname='tx_openoap.flash.proposal_not_found'>
                 <source><![CDATA[The form was made without specifying the record ID.]]></source>
             </trans-unit>
+            <trans-unit id='tx_openoap.flash.upload_file_type_invalid'
+                        resname='tx_openoap.flash.upload_file_type_invalid'>
+                <source><![CDATA[The file "%1$s" could not be uploaded. The file type is not allowed.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.flash.upload_file_size_exceeded'
+                        resname='tx_openoap.flash.upload_file_size_exceeded'>
+                <source><![CDATA[The file "%1$s" could not be uploaded. The file size exceeds the allowed limit.]]></source>
+            </trans-unit>
+            <trans-unit id='tx_openoap.js_msg.upload_error_file_type'
+                        resname='tx_openoap.js_msg.upload_error_file_type'>
+                <source><![CDATA[The file type is not allowed.]]></source>
+            </trans-unit>
 
             <!-- Word Export, validators  -->
             <trans-unit id='tx_openoap.word.group_repeatable' resname='tx_openoap.word.group_repeatable'>

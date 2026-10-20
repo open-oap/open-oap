@@ -1513,6 +1513,36 @@ class ProposalController extends OapFrontendController
                                 1471710357
                             );
                         }
+                        // validate file type and size against the item's validators
+                        $validators = $uploadAnswer->getItem()->getValidators();
+                        $typeIsValid = false;
+                        $sizeIsValid = true; // default: no size validator = allowed
+                        foreach ($validators as $validator) {
+                            if ($validator->getType() == self::VALIDATOR_FILE_TYPE && !$typeIsValid) {
+                                $typeIsValid = $this->isFileAllowed($file, $validator->getParam1());
+                            }
+                            if ($validator->getType() == self::VALIDATOR_FILE_SIZE) {
+                                $sizeIsValid = $this->isFileSizeAllowed($file, $validator->getParam1());
+                            }
+                        }
+
+                        if (!$typeIsValid) {
+                            $flashMessage = $this->getTranslationString(
+                                self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_UPLOAD_FILE_TYPE_INVALID,
+                                [$file->getClientFilename()]
+                            );
+                            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
+                            continue;
+                        }
+                        if (!$sizeIsValid) {
+                            $flashMessage = $this->getTranslationString(
+                                self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_UPLOAD_FILE_SIZE_EXCEEDED,
+                                [$file->getClientFilename()]
+                            );
+                            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
+                            continue;
+                        }
+
                         $uploadedFile = $uploadFolder->addUploadedFile($file, DuplicationBehavior::RENAME);
                         $valueString = $uploadAnswer->getValue();
                         $fileIds = GeneralUtility::trimExplode(',', $valueString, true);
@@ -1756,5 +1786,59 @@ class ProposalController extends OapFrontendController
 
             $this->redirectToDashboard();
         }
+    }
+
+    protected function isFileAllowed(UploadedFile $file, string $allowedFormats): bool
+    {
+        $allowed = array_map('trim', explode(',', $allowedFormats));
+
+        $allowedExtensions = [];
+        $allowedMimeTypes = [];
+
+        foreach ($allowed as $entry) {
+            if ($entry === '') {
+                continue;
+            }
+            if (str_starts_with($entry, '.')) {
+                $allowedExtensions[] = strtolower(ltrim($entry, '.'));
+            } else {
+                $allowedMimeTypes[] = strtolower($entry);
+            }
+        }
+
+        // Check extension
+        $ext = strtolower(pathinfo($file->getClientFilename(), PATHINFO_EXTENSION));
+        if (in_array($ext, $allowedExtensions, true)) {
+            return true;
+        }
+
+        // Check MIME type
+        if (in_array(strtolower($file->getClientMediaType()), $allowedMimeTypes, true)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function isFileSizeAllowed(UploadedFile $file, string $maxSize): bool
+    {
+        // Parse "6MB", "512KB", "2GB", "1024" (plain bytes)
+        if (preg_match('/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB|TB)?$/i', trim($maxSize), $m)) {
+            $value = (float)$m[1];
+            $unit = strtoupper($m[2] ?? 'B');
+            $multiplier = match ($unit) {
+                'KB' => 1_024,
+                'MB' => 1_048_576,
+                'GB' => 1_073_741_824,
+                'TB' => 1_099_511_627_776,
+                default => 1,
+            };
+            $maxBytes = (int)($value * $multiplier);
+        } else {
+            // Unparseable → deny to be safe
+            return false;
+        }
+
+        return $file->getSize() <= $maxBytes;
     }
 }
