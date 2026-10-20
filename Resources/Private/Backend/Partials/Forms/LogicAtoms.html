@@ -1,0 +1,29 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:comment><!--
+    The logic atoms behind an item, a validator or an option: they decide when a field appears,
+    against which value it compares and which foreign item it reads.
+
+    Arguments: atoms, parameter (the dependentOnParameter of the owner), labels
+--></f:comment>
+
+<f:if condition="{atoms -> f:count()}">
+    <f:for each="{atoms}" as="logicAtom">
+        <span class="oapfp-atom">
+            <span class="oapfp-atom__head">{logicAtom.title -> f:format.raw()} #{logicAtom.uid}<f:if condition="{logicAtom.type}">, type: {labels.logicTypes.{logicAtom.type}}</f:if><f:if condition="{logicAtom.logic}">, compare: {labels.logicCompares.{logicAtom.logic}}</f:if><f:if condition="{logicAtom.value}">, value: {logicAtom.value}</f:if><f:if condition="{logicAtom.event}">, event: {logicAtom.event}</f:if><f:if condition="{logicAtom.function}">, function: {logicAtom.function}</f:if></span>
+            <f:if condition="{logicAtom.parameter}">
+                <pre>{logicAtom.parameter}</pre>
+            </f:if>
+            <f:if condition="{logicAtom.items -> f:count()}">
+                <span class="oapfp-atom__head">reads: <f:for each="{logicAtom.items}" as="atomItem" iteration="ai"><f:if condition="{ai.index} > 0">, </f:if>{atomItem.question} #{atomItem.uid}</f:for></span>
+            </f:if>
+        </span>
+    </f:for>
+    <f:if condition="{parameter}">
+        <span class="oapfp-atom__head">dependentOnParameter: {parameter}</span>
+    </f:if>
+</f:if>
+
+</html>

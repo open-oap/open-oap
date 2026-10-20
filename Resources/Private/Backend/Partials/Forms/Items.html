@@ -1,0 +1,129 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:comment><!--
+    A list of items - of a group, or the submit questions of the call. An item is folded; it opens
+    by itself when a finding of the protocol points at it, so an error is visible without searching
+    for it.
+
+    Arguments: items, labels, itemFindings, folderTitles
+--></f:comment>
+
+<f:if condition="{items -> f:count()}">
+    <div class="oapfp-items">
+        <f:for each="{items}" as="formItem">
+            <f:variable name="findings" value="{itemFindings.{formItem.uid}}" />
+
+            <f:variable name="mandatory" value="0" />
+            <f:for each="{formItem.validators}" as="validator">
+                <f:if condition="{validator.type} == 1">
+                    <f:variable name="mandatory" value="1" />
+                </f:if>
+            </f:for>
+
+            <f:variable name="itemOpen" value="" />
+            <f:if condition="{findings}">
+                <f:variable name="itemOpen" value="open" />
+            </f:if>
+
+            <details class="oapfp-item" id="oapfp-item-{formItem.uid}" {itemOpen}>
+                <summary>
+                    <span class="oapfp-item__question">{formItem.question}</span>
+                    <span class="oapfp-badges">
+                        <span class="oapfp-badge oapfp-badge--type">{labels.itemTypes.{formItem.type}}</span>
+                        <f:if condition="{mandatory}">
+                            <span class="oapfp-badge oapfp-badge--mandatory">mandatory</span>
+                        </f:if>
+                        <f:if condition="{formItem.enabledTitle}">
+                            <span class="oapfp-badge oapfp-badge--flag">title</span>
+                        </f:if>
+                        <f:if condition="{formItem.enabledInfo}">
+                            <span class="oapfp-badge oapfp-badge--flag">meta info</span>
+                        </f:if>
+                        <f:if condition="{formItem.enabledFilter}">
+                            <span class="oapfp-badge oapfp-badge--flag">filter</span>
+                        </f:if>
+                    </span>
+                    <f:variable name="folder" value="{folderTitles.items.{formItem.pid}}" />
+                    <f:variable name="folderLabel" value="folder #{formItem.pid}" />
+                    <f:if condition="{folder}">
+                        <f:variable name="folderLabel" value="folder: {folder} (#{formItem.pid})" />
+                    </f:if>
+                    <a class="oapfp-uid"
+                       href="{be:uri.editRecord(uid: formItem.uid, table: 'tx_openoap_domain_model_formitem')}"
+                       title="Edit this item record - {folderLabel}">#{formItem.uid}</a>
+                </summary>
+
+                <div class="oapfp-item__body">
+                    <f:for each="{findings}" as="finding">
+                        <f:variable name="calloutClass" value="oapfp-callout" />
+                        <f:if condition="{finding.code} == 'error'">
+                            <f:variable name="calloutClass" value="oapfp-callout oapfp-callout--error" />
+                        </f:if>
+                        <div class="{calloutClass}">
+                            <span class="oapfp-callout__code">{finding.code}</span>
+                            <p>{finding.text}</p>
+                        </div>
+                    </f:for>
+
+                    <dl class="oapfp-attrs">
+                        <f:if condition="{formItem.internalTitle}">
+                            <dt>internalTitle</dt>
+                            <dd>{formItem.internalTitle}</dd>
+                        </f:if>
+                        <dt>type</dt>
+                        <dd>{labels.itemTypes.{formItem.type}} <span class="oapfp-note">({formItem.type})</span></dd>
+                        <f:if condition="{formItem.unit}">
+                            <dt>unit</dt>
+                            <dd>{formItem.unit}</dd>
+                        </f:if>
+                        <f:if condition="{formItem.defaultValue}">
+                            <dt>defaultValue</dt>
+                            <dd>{formItem.defaultValue}</dd>
+                        </f:if>
+                        <f:if condition="{formItem.enabledFilter}">
+                            <dt>filterLabel</dt>
+                            <dd><f:if condition="{formItem.filterLabel}"><f:then>{formItem.filterLabel}</f:then><f:else><span class="oapfp-empty">&mdash; falls back to the question</span></f:else></f:if></dd>
+                        </f:if>
+                        <dt>introText</dt>
+                        <dd><f:if condition="{formItem.introText}"><f:then>{formItem.introText -> f:format.raw()}</f:then><f:else><span class="oapfp-empty">&mdash;</span></f:else></f:if></dd>
+                        <dt>helpText</dt>
+                        <dd><f:if condition="{formItem.helpText}"><f:then>{formItem.helpText -> f:format.raw()}</f:then><f:else><span class="oapfp-empty">&mdash;</span></f:else></f:if></dd>
+                        <f:if condition="{formItem.options -> f:count()}">
+                            <dt>options</dt>
+                            <dd>
+                                <ul>
+                                    <f:for each="{formItem.options}" as="itemOption">
+                                        <li>{itemOption.title -> f:format.raw()} <span class="oapfp-note">#{itemOption.uid}<f:if condition="{itemOption.optionGroup}">, group: {itemOption.optionGroup}</f:if><f:if condition="{itemOption.dataTable}">, table: {itemOption.dataTable}</f:if></span>
+                                            <f:render partial="Forms/LogicAtoms" arguments="{atoms: itemOption.dependentOn, parameter: '', labels: labels}" />
+                                        </li>
+                                    </f:for>
+                                </ul>
+                            </dd>
+                        </f:if>
+                        <f:if condition="{formItem.validators -> f:count()}">
+                            <dt>validators</dt>
+                            <dd>
+                                <ul>
+                                    <f:for each="{formItem.validators}" as="validator">
+                                        <li>{validator.title -> f:format.raw()} <span class="oapfp-note">{labels.validatorTypes.{validator.type}} ({validator.type})<f:if condition="{validator.param1}">, param1: {validator.param1}</f:if><f:if condition="{validator.param2}">, param2: {validator.param2}</f:if></span>
+                                            <f:render partial="Forms/LogicAtoms" arguments="{atoms: validator.dependentOn, parameter: validator.dependentOnParameter, labels: labels}" />
+                                        </li>
+                                    </f:for>
+                                </ul>
+                            </dd>
+                        </f:if>
+                        <f:if condition="{formItem.dependentOn -> f:count()}">
+                            <dt>dependentOn</dt>
+                            <dd><f:render partial="Forms/LogicAtoms" arguments="{atoms: formItem.dependentOn, parameter: formItem.dependentOnParameter, labels: labels}" /></dd>
+                        </f:if>
+                    </dl>
+                </div>
+            </details>
+        </f:for>
+    </div>
+</f:if>
+
+</html>

@@ -1,0 +1,78 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:comment><!--
+    One page of the form preview. The first page is unfolded, the others stay folded - a form with
+    seven pages and two hundred items is unreadable when everything is open at once.
+
+    The submit page carries no groups but the questions of the call record, which gate the submit.
+
+    Arguments: formPage, cycle, isFirst, labels, itemFindings, folderTitles, callItems
+--></f:comment>
+
+<f:variable name="pageOpen" value="" />
+<f:if condition="{isFirst}">
+    <f:variable name="pageOpen" value="open" />
+</f:if>
+
+<details class="oapfp-page" id="oapfp-page-{formPage.uid}" {pageOpen}>
+    <summary>
+        <span class="oapfp-page__title">Page {cycle} &middot; {formPage.title}</span>
+        <span class="oapfp-badges">
+            <f:if condition="{formPage.submitPage}">
+                <span class="oapfp-badge oapfp-badge--submit">submit page</span>
+                <f:if condition="{callItems -> f:count()}">
+                    <span class="oapfp-badge">{callItems -> f:count()} submit questions</span>
+                </f:if>
+            </f:if>
+            <span class="oapfp-badge">{formPage.itemGroups -> f:count()} groups</span>
+        </span>
+        <f:variable name="folder" value="{folderTitles.pages.{formPage.pid}}" />
+        <f:variable name="folderLabel" value="folder #{formPage.pid}" />
+        <f:if condition="{folder}">
+            <f:variable name="folderLabel" value="folder: {folder} (#{formPage.pid})" />
+        </f:if>
+        <a class="oapfp-uid"
+           href="{be:uri.editRecord(uid: formPage.uid, table: 'tx_openoap_domain_model_formpage')}"
+           title="Edit this page record - {folderLabel}">#{formPage.uid}</a>
+    </summary>
+    <div class="oapfp-page__body">
+        <dl class="oapfp-attrs">
+            <f:if condition="{formPage.internalTitle}">
+                <dt>internalTitle</dt>
+                <dd>{formPage.internalTitle}</dd>
+            </f:if>
+            <dt>menuTitle</dt>
+            <dd><f:if condition="{formPage.menuTitle}"><f:then>{formPage.menuTitle -> f:format.raw()}</f:then><f:else><span class="oapfp-empty">&mdash;</span></f:else></f:if></dd>
+            <dt>introText</dt>
+            <dd><f:if condition="{formPage.introText}"><f:then>{formPage.introText -> f:format.raw()}</f:then><f:else><span class="oapfp-empty">&mdash;</span></f:else></f:if></dd>
+        </dl>
+
+        <f:variable name="submitQuestions" value="0" />
+        <f:if condition="{formPage.submitPage} AND {callItems -> f:count()}">
+            <f:variable name="submitQuestions" value="1" />
+        </f:if>
+
+        <f:if condition="{submitQuestions}">
+            <div class="oapfp-submit">
+                <p class="oapfp-submit__label">Submit questions, from the call record ({callItems -> f:count()}): they gate the submit and are never stored as answers</p>
+                <f:render partial="Forms/Items" arguments="{items: callItems, labels: labels, itemFindings: itemFindings, folderTitles: folderTitles}" />
+            </div>
+        </f:if>
+
+        <f:if condition="{formPage.itemGroups -> f:count()} == 0 AND {submitQuestions} == 0">
+            <div class="oapfp-callout">
+                <span class="oapfp-callout__code">warning</span>
+                <p>This page has no groups, so it stays empty in the frontend.</p>
+            </div>
+        </f:if>
+
+        <f:for each="{formPage.itemGroups}" as="formGroup" iteration="gi">
+            <f:render partial="Forms/Group" arguments="{formGroup: formGroup, cycle: gi.cycle, level: 0, labels: labels, itemFindings: itemFindings, folderTitles: folderTitles}" />
+        </f:for>
+    </div>
+</details>
+
+</html>

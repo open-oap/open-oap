@@ -6,131 +6,112 @@
 <f:layout name="Module" />
 
 <f:section name="Content">
-    <f:render partial="Style" />
+    <f:be.pageRenderer
+        includeCssFiles="{0: 'EXT:open_oap/Resources/Public/Css/oap-forms-preview.css'}"
+        includeJavaScriptModules="{0: '@openoap/open-oap/BackendFormsPreview.js'}"
+    />
 
     <f:flashMessages />
 
-    <h2>Check/Test-Protocol</h2>
-    <dl>
-    <f:for each="{evaluationResults}" as="evaluationResult">
-        <dt>{evaluationResult.text}</dt>
-            <dd>{evaluationResult.result}</dd>
-    </f:for>
-    </dl>
+    <div class="oapfp">
 
-    <fieldset style="" class="formular">
-        <legend>Form</legend>
-        <!-- <strong><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.preview_form" /></strong> -->
-        <h1 title="Call/Form: {call.uid}">{call.title}</h1>
-        <table width="100%">
-            <tr><td width="10%">teaserText</td><td> <div class="item_value"><f:if condition="{call.teaserText} == ''">--</f:if>{call.teaserText}</div></td></tr>
-            <tr><td width="10%">introText</td><td> <div class="item_value"><f:if condition="{call.introText} == ''">--</f:if>{call.introText -> f:format.raw()}</div></td></tr>
-        </table>
+        <div class="oapfp-head">
+            <h1 title="Call/Form: {call.uid}">{call.title}</h1>
+            <p class="oapfp-head__meta">
+                <span>Call #{call.uid}</span>
+                <span>&middot;</span>
+                <span>{call.formPages -> f:count()} pages</span>
+                <span>&middot;</span>
+                <span>{evaluationCounts.groups} groups, {evaluationCounts.items} items</span>
+            </p>
+            <dl class="oapfp-attrs">
+                <dt>teaserText</dt>
+                <dd><f:if condition="{call.teaserText}"><f:then>{call.teaserText}</f:then><f:else><span class="oapfp-empty">&mdash;</span></f:else></f:if></dd>
+                <dt>introText</dt>
+                <dd><f:if condition="{call.introText}"><f:then>{call.introText -> f:format.raw()}</f:then><f:else><span class="oapfp-empty">&mdash;</span></f:else></f:if></dd>
+            </dl>
+        </div>
 
-
-    <f:for each="{call.formPages}" as="formPage" iteration="pi">
-        <fieldset class="page">
-            <legend>Page #{pi.cycle}</legend>
-        <h2 title="Page: {formPage.uid}">{formPage.title}</h2>
-        <table width="100%">
-            <tr><td width="10%">menuTitle</td><td> <div class="item_value"><f:if condition="{formPage.menuTitle} == ''">--</f:if>{formPage.menuTitle -> f:format.raw()}</div></td></tr>
-            <tr><td width="10%">introText</td><td> <div class="item_value">{formPage.introtext -> f:format.raw()}</div></td></tr>
-        </table>
-
-        <f:for each="{formPage.itemGroups}" as="formGroup">
-            <fieldset class="group">
-                <legend>Group</legend>
-            <h3 title="FormGroup: {formGroup.uid}">{formGroup.title}</h3>
-            <div class="items">
-                <f:for each="{formGroup.items}" as="formItem" iteration="ii">
-                    <f:variable name="mandatory" value="0" />
-                    <f:for each="{formItem.validators}" as="validator">
-                        <f:if condition="{validator.type} == 1">
-                            <f:variable name="mandatory" value="1" />
-                        </f:if>
-                    </f:for>
-                    <strong title="FormItem: {formItem.uid}">{formItem.question} <f:if condition="{mandatory}">*</f:if></strong>
-                    <table style="margin-left: 5rem;width:100%;">
-                    <tr>
-                        <td>
-                            <table class="info_table" style="width: calc(100% - 5rem);">
-                                <tr><td>
-                                    <span class="item_label">type:</span> <span class="item_value">{formItem.type}</span>
-                                </td></tr>
-                                <tr><td>
-                                    <div class="item_label">introText:</div>
-                                    <div class="item_value"><f:if condition="{formItem.introText} == ''">--</f:if>{formItem.introText -> f:format.raw()}</div>
-                                </td></tr>
-                                <tr><td>
-                                    <div class="item_label">helpText:</div>
-                                    <div class="item_value"><f:if condition="{formItem.helpText} == ''">--</f:if>{formItem.helpText -> f:format.raw()}</div>
-                                </td></tr>
-                                <f:if condition="{formItem.options}">
-                                    <tr><td>
-                                        <div class="item_label">options:</div>
-                                        <div class="item_value">
-                                            <ul>
-                                                <f:for each="{formItem.options}" as="itemOption">
-                                                    <li>{itemOption.title -> f:format.raw()}</li>
-                                                </f:for>
-                                            </ul>
-                                        </div>
-                                    </td></tr>
-                                </f:if>
-                                <f:if condition="{formItem.modificators}">
-                                    <tr><td>
-                                        <div class="item_label">modificators:</div>
-                                        <div class="item_value">
-                                            <ul>
-                                            <f:for each="{formItem.modificators}" as="modificator">
-                                                <li>{modificator.title -> f:format.raw()} (#{modificator.logic})
-                                                    <f:if condition="{modificator.items}">
-                                                        Items:
-                                                        <ul>
-                                                        <f:for each="{modificator.items}" as="item">
-                                                            <li>{item.question}</li>
-                                                        </f:for>
-                                                        </ul>
-                                                    </f:if>
-                                                </li>
-                                            </f:for>
-                                            </ul>
-                                        </div>
-                                    </td></tr>
-                                </f:if>
-                                <f:if condition="{formItem.validators}">
-                                    <tr><td>
-                                        <div class="item_label">validators:</div>
-                                        <div class="item_value">
-                                            <ul>
-                                            <f:for each="{formItem.validators}" as="validator">
-                                                <li>{validator.title -> f:format.raw()} (#{validator.type})
-                                                    <f:if condition="{validator.param1}">Parameter 1: {validator.param1}</f:if>
-                                                    <f:if condition="{validator.param2}">Parameter 2: {validator.param2}</f:if>
-                                                    <f:if condition="{validator.item}">Item: {validator.item.0.question}</f:if>
-                                                </li>
-                                            </f:for>
-                                            </ul>
-                                        </div>
-                                    </td></tr>
-                                </f:if>
-                            </table>
-                        </td>
-                    </tr>
-                    </table>
-                    <f:if condition="!{ii.isLast}">
-                        <hr class="items_divider">
+        <f:comment><!-- the protocol: what can only be judged for the form as a whole --></f:comment>
+        <section class="oapfp-findings">
+            <div class="oapfp-findings__head">
+                <h2>Findings</h2>
+                <div class="oapfp-tally">
+                    <f:if condition="{evaluationCounts.errors} > 0">
+                        <span class="oapfp-tally__error">{evaluationCounts.errors} error(s)</span>
                     </f:if>
-
-                </f:for>
+                    <f:if condition="{evaluationCounts.warnings} > 0">
+                        <span class="oapfp-tally__warning">{evaluationCounts.warnings} warning(s)</span>
+                    </f:if>
+                    <f:if condition="{evaluationCounts.errors} == 0 AND {evaluationCounts.warnings} == 0">
+                        <span>nothing to fix</span>
+                    </f:if>
                 </div>
-            </fieldset>
-        </f:for>
-        </fieldset>
-    </f:for>
+            </div>
 
-    </fieldset>
+            <div class="oapfp-counts">
+                <div class="oapfp-count">
+                    <span class="oapfp-count__value">{evaluationCounts.pages}</span>
+                    <span class="oapfp-count__label">Pages</span>
+                </div>
+                <div class="oapfp-count">
+                    <span class="oapfp-count__value">{evaluationCounts.groups}</span>
+                    <span class="oapfp-count__label">Groups</span>
+                </div>
+                <div class="oapfp-count">
+                    <span class="oapfp-count__value">{evaluationCounts.metaGroups}</span>
+                    <span class="oapfp-count__label">Meta groups</span>
+                </div>
+                <div class="oapfp-count">
+                    <span class="oapfp-count__value">{evaluationCounts.nestedGroups}</span>
+                    <span class="oapfp-count__label">Nested</span>
+                </div>
+                <div class="oapfp-count">
+                    <span class="oapfp-count__value">{evaluationCounts.items}</span>
+                    <span class="oapfp-count__label">Items</span>
+                </div>
+                <div class="oapfp-count">
+                    <span class="oapfp-count__value">{evaluationCounts.submitQuestions}</span>
+                    <span class="oapfp-count__label">Submit questions</span>
+                </div>
+            </div>
+
+            <ul class="oapfp-finding-list">
+                <f:for each="{evaluationResults}" as="evaluationResult">
+                    <li class="oapfp-finding oapfp-finding--{evaluationResult.code}">
+                        <span class="oapfp-finding__code">{evaluationResult.code}</span>
+                        <div class="oapfp-finding__text">
+                            <p>{evaluationResult.text}<f:if condition="{evaluationResult.result}">: {evaluationResult.result}</f:if></p>
+                            <f:if condition="{evaluationResult.refs}">
+                                <p class="oapfp-finding__why">
+                                    <f:for each="{evaluationResult.refs}" as="ref" iteration="ri"><f:if condition="{ri.index} > 0">, </f:if><a class="oapfp-ref" href="#{ref.anchor}">{ref.label}</a></f:for>
+                                </p>
+                            </f:if>
+                        </div>
+                    </li>
+                </f:for>
+            </ul>
+        </section>
+
+        <div class="oapfp-toolbar">
+            <button class="btn btn-default btn-sm" type="button" id="oapfp-expand-all">
+                <core:icon identifier="actions-chevron-down" size="small" /> Expand all
+            </button>
+            <button class="btn btn-default btn-sm" type="button" id="oapfp-collapse-all">
+                <core:icon identifier="actions-chevron-end" size="small" /> Collapse all
+            </button>
+            <label class="oapfp-switch" for="oapfp-structure-only">
+                <input type="checkbox" id="oapfp-structure-only"> Structure only
+            </label>
+            <span class="oapfp-toolbar__hint">The uid of a page, a group or an item opens its record &mdash; its folder is in the tooltip</span>
+        </div>
+
+        <div class="oapfp-tree" id="oapfp-tree">
+            <f:for each="{call.formPages}" as="formPage" iteration="pi">
+                <f:render partial="Forms/Page" arguments="{formPage: formPage, cycle: pi.cycle, isFirst: pi.isFirst, labels: typeLabels, itemFindings: itemFindings, folderTitles: folderTitles, callItems: call.items}" />
+            </f:for>
+        </div>
+    </div>
 </f:section>
-
 
 </html>

@@ -1,0 +1,145 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<f:comment><!--
+    One group of the form preview.
+
+    A meta group (type 1) carries its content in the nested groups, every other group carries
+    its items directly - the same branch every other renderer uses (see Partials/Proposal/Edit.html).
+    The TCA of tx_openoap_domain_model_formgroup only offers groups of type 0 as children, so the
+    recursion ends after the first descent.
+
+    Arguments: formGroup, cycle, level (0 = group of the page, 1 = nested group), labels,
+    itemFindings, folderTitles
+--></f:comment>
+
+<f:variable name="groupClass" value="oapfp-group" />
+<f:if condition="{level}">
+    <f:variable name="groupClass" value="{groupClass} oapfp-group--nested" />
+</f:if>
+<f:if condition="{formGroup.type} == 1">
+    <f:variable name="groupClass" value="{groupClass} oapfp-group--meta" />
+</f:if>
+
+<details class="{groupClass}" id="oapfp-group-{formGroup.uid}" open>
+    <summary>
+        <span class="oapfp-group__title">{formGroup.title}</span>
+        <span class="oapfp-badges">
+            <f:if condition="{formGroup.type} == 1">
+                <span class="oapfp-badge oapfp-badge--meta">meta group</span>
+                <span class="oapfp-badge">{formGroup.itemGroups -> f:count()} nested</span>
+            </f:if>
+            <span class="oapfp-badge oapfp-badge--repeat">{formGroup.repeatableMin}&hellip;{formGroup.repeatableMax}</span>
+            <f:if condition="{formGroup.repeatableMin} == 0">
+                <span class="oapfp-badge">optional</span>
+            </f:if>
+            <f:if condition="{formGroup.displayType} > 0">
+                <span class="oapfp-badge oapfp-badge--type">{labels.groupDisplayTypes.{formGroup.displayType}}</span>
+            </f:if>
+            <f:if condition="{formGroup.primaryGroup}">
+                <span class="oapfp-badge oapfp-badge--flag">follows #{formGroup.primaryGroup.uid}</span>
+            </f:if>
+        </span>
+        <f:variable name="folder" value="{folderTitles.groups.{formGroup.pid}}" />
+        <f:variable name="folderLabel" value="folder #{formGroup.pid}" />
+        <f:if condition="{folder}">
+            <f:variable name="folderLabel" value="folder: {folder} (#{formGroup.pid})" />
+        </f:if>
+        <a class="oapfp-uid"
+           href="{be:uri.editRecord(uid: formGroup.uid, table: 'tx_openoap_domain_model_formgroup')}"
+           title="Edit this group record - {folderLabel}">#{formGroup.uid}</a>
+    </summary>
+
+    <div class="oapfp-group__body">
+
+        <f:comment><!-- findings that are visible at the group itself --></f:comment>
+        <f:if condition="{formGroup.type} == 1">
+            <f:then>
+                <f:if condition="{formGroup.items -> f:count()}">
+                    <div class="oapfp-callout">
+                        <span class="oapfp-callout__code">warning</span>
+                        <p>This meta group carries {formGroup.items -> f:count()} own item(s). The frontend renders the items of the nested groups only, so they stay invisible to the applicant.</p>
+                    </div>
+                </f:if>
+                <f:if condition="{formGroup.itemGroups -> f:count()} == 0">
+                    <div class="oapfp-callout">
+                        <span class="oapfp-callout__code">warning</span>
+                        <p>This meta group has no nested groups, so it stays empty in the frontend.</p>
+                    </div>
+                </f:if>
+            </f:then>
+            <f:else>
+                <f:if condition="{formGroup.itemGroups -> f:count()}">
+                    <div class="oapfp-callout oapfp-callout--error">
+                        <span class="oapfp-callout__code">error</span>
+                        <p>This group is not a meta group but has {formGroup.itemGroups -> f:count()} nested group(s). The frontend descends into nested groups of meta groups only, so they are never rendered - either set the type to meta group or move the items up.</p>
+                    </div>
+                </f:if>
+                <f:if condition="{formGroup.items -> f:count()} == 0">
+                    <div class="oapfp-callout">
+                        <span class="oapfp-callout__code">warning</span>
+                        <p>This group has no items.</p>
+                    </div>
+                </f:if>
+            </f:else>
+        </f:if>
+
+        <dl class="oapfp-attrs">
+            <f:if condition="{formGroup.internalTitle}">
+                <dt>internalTitle</dt>
+                <dd>{formGroup.internalTitle}</dd>
+            </f:if>
+            <dt>type</dt>
+            <dd>{labels.groupTypes.{formGroup.type}} <span class="oapfp-note">({formGroup.type})</span></dd>
+            <dt>displayType</dt>
+            <dd>{labels.groupDisplayTypes.{formGroup.displayType}} <span class="oapfp-note">({formGroup.displayType})</span></dd>
+            <dt>repeatable</dt>
+            <dd>{formGroup.repeatableMin}&hellip;{formGroup.repeatableMax}</dd>
+            <f:if condition="{formGroup.primaryGroup}">
+                <dt>primaryGroup</dt>
+                <dd title="FormGroup: {formGroup.primaryGroup.uid}">{formGroup.primaryGroup.title} <span class="oapfp-note">#{formGroup.primaryGroup.uid}</span> &mdash; this group repeats with its primary group</dd>
+            </f:if>
+            <f:if condition="{formGroup.modelName}">
+                <dt>modelName</dt>
+                <dd>{formGroup.modelName}</dd>
+            </f:if>
+            <f:if condition="{formGroup.groupTitle -> f:count()}">
+                <dt>groupTitle</dt>
+                <dd>
+                    <ul>
+                        <f:for each="{formGroup.groupTitle}" as="groupTitle">
+                            <li>{groupTitle.title}</li>
+                        </f:for>
+                    </ul>
+                </dd>
+            </f:if>
+            <f:if condition="{formGroup.dependentOn -> f:count()}">
+                <dt>dependentOn</dt>
+                <dd><f:render partial="Forms/LogicAtoms" arguments="{atoms: formGroup.dependentOn, parameter: '', labels: labels}" /></dd>
+            </f:if>
+            <dt>introText</dt>
+            <dd><f:if condition="{formGroup.introText}"><f:then>{formGroup.introText -> f:format.raw()}</f:then><f:else><span class="oapfp-empty">&mdash;</span></f:else></f:if></dd>
+            <dt>helpText</dt>
+            <dd><f:if condition="{formGroup.helpText}"><f:then>{formGroup.helpText -> f:format.raw()}</f:then><f:else><span class="oapfp-empty">&mdash;</span></f:else></f:if></dd>
+        </dl>
+
+        <f:if condition="{formGroup.type} == 1">
+            <f:then>
+                <f:if condition="{formGroup.itemGroups -> f:count()}">
+                    <div class="oapfp-children">
+                        <f:for each="{formGroup.itemGroups}" as="nestedGroup" iteration="ni">
+                            <f:render partial="Forms/Group" arguments="{formGroup: nestedGroup, cycle: ni.cycle, level: 1, labels: labels, itemFindings: itemFindings, folderTitles: folderTitles}" />
+                        </f:for>
+                    </div>
+                </f:if>
+            </f:then>
+            <f:else>
+                <f:render partial="Forms/Items" arguments="{items: formGroup.items, labels: labels, itemFindings: itemFindings, folderTitles: folderTitles}" />
+            </f:else>
+        </f:if>
+    </div>
+</details>
+
+</html>

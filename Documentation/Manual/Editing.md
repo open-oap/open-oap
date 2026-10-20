@@ -741,6 +741,27 @@ After selecting the corresponding call, all pages, groups and items are displaye
 
 <img src="../Images/Manual/Editing/call-preview2.png" style="max-width:419px;height:auto" />
 
+#### Findings
+
+Below the structure, the preview lists what it found in the form. The findings are sorted by
+severity - errors first, then warnings, then notes and confirmations - and each one names the
+items it refers to, so the record can be opened straight from the list.
+
+The preview reports, among other things:
+
+- whether there is exactly one submit page and whether it is in the last position
+- questions of the call record placed on the submit page without options: they render nothing
+  and never reach the applicant
+- items set as a filter without options attached, which the proposals module cannot build a
+  filter from
+- the title attribute: whether no item carries it, in which case no proposal of this call ever
+  gets a title, whether exactly one does, or whether several compete for it
+- items carrying meta information
+- switches that can never fire, because no answer can satisfy their condition
+
+Nested groups are shown with their items, so a form built from groups inside groups can be read
+in one pass.
+
 Basically, it makes sense to also look at the status of a call in the frontend. A call that has not yet started cannot be seen in the frontend. However, if you assign yourself the "TESTER" group in the "Access" tab in the call, your call will be displayed in the frontend for testing after logging in. (see chapter “[Testing and starting a call](#testing-and-starting-a-call)”)
 
 ### Checklist
