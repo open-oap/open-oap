@@ -70,12 +70,6 @@
 
         if (type === 'TYPE_CHECKBOX' || type === 'TYPE_RADIOBUTTON') {
             insertionParent = formField.closest('.form__checkable-group');
-
-            formField.addEventListener('change', function () {
-                selectValues = {};
-
-                validateFormField(formField, type, validators, messageBox);
-            });
         }
 
         const messageBox = addMessageBox(insertionParent, formField);
@@ -91,6 +85,18 @@
         }
 
         formField.addEventListener('blur', function () {
+            selectValues = {};
+
+            validateFormField(formField, type, validators, messageBox);
+        });
+
+        /*
+         * Not every field is written by typing: a checkable group changes on click, and the dual
+         * listbox hides its original select and writes the selection programmatically, so that
+         * select never receives a blur of its own. Registered for every type, so each field has
+         * exactly one change listener.
+         */
+        formField.addEventListener('change', function () {
             selectValues = {};
 
             validateFormField(formField, type, validators, messageBox);

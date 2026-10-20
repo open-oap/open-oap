@@ -72,6 +72,28 @@
         if (select.dataset[dataSet.maxvalue]) {
             enforceMaxvalue(dualbox);
         }
+
+        notifyValidation(dualbox, select);
+    };
+
+    /**
+     * Tell the original select that its selection changed.
+     *
+     * The library writes the selection back to the select - _selectOption() and _deselectOption()
+     * set option.selected - but it only fires its own added/removed events on the widget. The
+     * validators of the select listen to change, so without this they never run again after a
+     * transfer: mandatory is judged at a moment when the select was still empty.
+     *
+     * @param dualbox
+     * @param select
+     */
+    const notifyValidation = function (dualbox, select) {
+        const announce = function () {
+            select.dispatchEvent(new Event('change'));
+        };
+
+        dualbox.addEventListener('added', announce);
+        dualbox.addEventListener('removed', announce);
     };
 
     /**
