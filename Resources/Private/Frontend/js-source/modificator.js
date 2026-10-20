@@ -1,4 +1,4 @@
-(function (window) {
+(function (window, OAP) {
 
     'use strict';
 
@@ -60,7 +60,7 @@
             return 0;
         }
 
-        return Number(value.toString().replace(/\./g, '').replace(/,/g, '.'));
+        return Number(OAP.utils.formatNumber.unformat(value));
     };
 
     const modifyFormField = function (formField, type, modificators) {
@@ -105,7 +105,7 @@
                         value += convertStringToNumber(fieldItem.value);
                     }
 
-                    fieldTrigger.value = value;
+                    fieldTrigger.value = OAP.utils.formatNumber.format(value);
 
                     // trigger validators/formatNumber
                     fieldTrigger.dispatchEvent(new Event('blur'));
@@ -135,4 +135,4 @@
 
     initialize();
 
-}(this));
+}(this, this.OAP || {}));

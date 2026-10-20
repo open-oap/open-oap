@@ -294,6 +294,12 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const FLOAT_FORMAT_DECIMALS = 2;
     protected const FLOAT_FORMAT_DECIMAL_SEPARATOR = ',';
     protected const FLOAT_FORMAT_THOUSANDS_SEPARATOR = '.';
+    protected const FLOAT_FORMAT_DECIMAL_SEPARATOR_EU = ',';
+    protected const FLOAT_FORMAT_THOUSANDS_SEPARATOR_EU = '.';
+    protected const FLOAT_FORMAT_DECIMAL_SEPARATOR_US = '.';
+    protected const FLOAT_FORMAT_THOUSANDS_SEPARATOR_US = ',';
+    protected const NUMBER_STYLE_EU = 'EU';
+    protected const NUMBER_STYLE_US = 'US';
 
     protected const XLF_BASE_IDENTIFIER_FLASH = 'tx_openoap.flash.';
     protected const XLF_BASE_IDENTIFIER_LOG = 'tx_openoap_domain_model_proposal.log.';
@@ -1134,8 +1140,14 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param string $str
      * @return float
      */
-    public static function convertStrToNumber(string $str): float
+    public static function convertStrToNumber(string $str, string $numberStyle = self::NUMBER_STYLE_EU): float
     {
+        if ($numberStyle === self::NUMBER_STYLE_US) {
+            // US: comma is the thousands separator, dot the decimal separator
+            return (float)strtr($str, [',' => '']);
+        }
+
+        // EU: dot is the thousands separator, comma the decimal separator
         return (float)strtr($str, ['.' => '', ',' => '.']);
     }
 
@@ -1421,7 +1433,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
                             if ($modificatorItemPage !== $totalPage) {
                                 // item is on a different page, carryover the value for clientside javascript
-                                $totalCarryover += static::convertStrToNumber($modificatorItemAnswer->getValue());
+                                $totalCarryover += static::convertStrToNumber($modificatorItemAnswer->getValue(), $this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU);
                             } else {
                                 $answersMap[$modificatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-modificators'] = join(',', array_unique(array_filter(explode(',', ($answersMap[$modificatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-modificators'] ?? '') . ',MODIFICATOR_TOTAL'))));
 
@@ -1435,7 +1447,6 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                                     ]),
                                     ','
                                 );
-
                                 $totalItems[] = '#oap-input-' . join('--', [
                                         $modificatorItemAnswer->getModel()->getUid(),
                                         $modificatorItemAnswer->getGroupCounter0(),
@@ -1501,7 +1512,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         if ($item->getType() === self::TYPE_STRING && $validatorItem->getType() === self::TYPE_STRING) {
                             if ($validatorItemPage !== $itemPage) {
                                 // item is on a different page, carryover the value for clientside javascript
-                                $answersMap[$answerUid]['item']['additionalAttributes']['data-oap-' . $type . '-carryover'] = static::convertStrToNumber($validatorItemAnswer->getValue());
+                                $answersMap[$answerUid]['item']['additionalAttributes']['data-oap-' . $type . '-carryover'] = static::convertStrToNumber($validatorItemAnswer->getValue(), $this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU);
                             } else {
                                 $answersMap[$validatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-validat'] = join(',', array_unique(array_filter(explode(',', ($answersMap[$validatorItemAnswer->getUid()]['item']['additionalAttributes']['data-oap-validat'] ?? '') . ',' . $this->convertConstantsIntoString('VALIDATOR')[$validator->getType()]))));
 
@@ -2368,12 +2379,19 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 if ($item->getUnit() !== '') {
                     $this->addTextToSection($section, 'in ' . $item->getUnit());
                     if (is_numeric($answer->getValue())) {
-                        $outputString = number_format(
-                            (float)$answer->getValue(),
-                            self::FLOAT_FORMAT_DECIMALS,
-                            self::FLOAT_FORMAT_DECIMAL_SEPARATOR,
-                            self::FLOAT_FORMAT_THOUSANDS_SEPARATOR
-                        );
+                        $outputString = ($this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU) === self::NUMBER_STYLE_US
+                            ? number_format(
+                                (float)$answer->getValue(),
+                                self::FLOAT_FORMAT_DECIMALS,
+                                self::FLOAT_FORMAT_DECIMAL_SEPARATOR_US,
+                                self::FLOAT_FORMAT_THOUSANDS_SEPARATOR_US
+                            )
+                            : number_format(
+                                (float)$answer->getValue(),
+                                self::FLOAT_FORMAT_DECIMALS,
+                                self::FLOAT_FORMAT_DECIMAL_SEPARATOR_EU,
+                                self::FLOAT_FORMAT_THOUSANDS_SEPARATOR_EU
+                            );
                     }
                 }
                 $this->addTextToSection($section, $outputString, null, $valueOutputFormat);
@@ -3220,11 +3238,26 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         if (trim($value) == '') {
             return $value;
         }
-        //   if ($this->settings['numberStyle'] == 'US') {
-        //      return preg_replace('~'.self::FLOAT_FORMAT_THOUSANDS_SEPARATOR_US.'~', '', $value);
-        //   }
+        if (($this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU) === self::NUMBER_STYLE_US) {
+            return preg_replace('~' . self::FLOAT_FORMAT_THOUSANDS_SEPARATOR_US . '~', '', $value);
+        }
 
-        //   return preg_replace(['~\.~','~'.self::FLOAT_FORMAT_DECIMAL_SEPARATOR_EU.'~'], ['',self::FLOAT_FORMAT_DECIMAL_SEPARATOR_US], $value);
-        return preg_replace(['~\.~','~,~'], ['','.'], $value);
+        return preg_replace(['~\.~', '~' . self::FLOAT_FORMAT_DECIMAL_SEPARATOR_EU . '~'], ['', self::FLOAT_FORMAT_DECIMAL_SEPARATOR_US], $value);
+    }
+
+    /**
+     * Format a machine number (float) into the instance's number style for display/storage.
+     * Mirrors the JS OAP.utils.formatNumber.format(): integers get no decimals,
+     * fractional values get FLOAT_FORMAT_DECIMALS digits.
+     */
+    protected function formatNumber(float $value): string
+    {
+        $decimals = ($value == floor($value)) ? 0 : self::FLOAT_FORMAT_DECIMALS;
+
+        if (($this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU) === self::NUMBER_STYLE_US) {
+            return number_format($value, $decimals, self::FLOAT_FORMAT_DECIMAL_SEPARATOR_US, self::FLOAT_FORMAT_THOUSANDS_SEPARATOR_US);
+        }
+
+        return number_format($value, $decimals, self::FLOAT_FORMAT_DECIMAL_SEPARATOR_EU, self::FLOAT_FORMAT_THOUSANDS_SEPARATOR_EU);
     }
 }

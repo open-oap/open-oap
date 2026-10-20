@@ -276,19 +276,50 @@
                  * Only run if field has a value
                  * Value could be a string - need to convert with Number(), then check if it's an integer.
                  * NOTE: '1.000', '123.00' etc would match as integer
+                 * Separators are stripped according to the current number style (EU/US).
                  */
-                if (fieldHasValue && !Number.isInteger(Number(formField.value.toString().replace(/\./g, '').replace(/,/g, '.')))) {
+                let unformattedValue = OAP.utils.formatNumber.isUs()
+                    ? formField.value.toString().replace(/,/g, '')
+                    : formField.value.toString().replace(/\./g, '').replace(/,/g, '.');
+                let regexUS = /^\d{1,3}(,\d{3})*(\.\d+)?$/;
+                let isFormattedValue = formField.value.indexOf(',') > -1;
+
+                if (fieldHasValue && OAP.utils.formatNumber.isUs() && !regexUS.test(formField.value) && isFormattedValue) {
+                    showErrorMessage(messageBox, labels.JSMSG_NO_INTEGER, formField);
+                    passedValidation.critical = false;
+                }
+
+                if (fieldHasValue && !Number.isInteger(Number(unformattedValue))) {
                     showErrorMessage(messageBox, labels.JSMSG_NO_INTEGER, formField);
                     passedValidation.critical = false;
                 }
                 break;
             }
             case 'VALIDATOR_FLOAT': {
+                let unformattedValue = OAP.utils.formatNumber.isUs()
+                    ? formField.value.toString().replace(/,/g, '')
+                    : formField.value.toString().replace(/\./g, '').replace(/,/g, '.');
+                let regexEUfloat = /^-?(?:\d{1,3}(?:\.\d{3})+|\d+)(?:,\d{1,2})?$/;
+                let regexUSfloat = /^-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?$/;
+                let check = true;
+
                 /**
                  * Only run if field has a value
                  * Value could be a string - need to convert with Number(), then check if it's an float/finite.
+                 * The format must also match the current number style (EU/US).
                  */
-                if (fieldHasValue && !Number.isFinite(Number(formField.value.toString().replace(/\./g, '').replace(/,/g, '.')))) {
+                if (fieldHasValue) {
+                    if (OAP.utils.formatNumber.isUs() && !regexUSfloat.test(formField.value)) {
+                        check = false;
+                    }
+                    if (!OAP.utils.formatNumber.isUs() && !regexEUfloat.test(formField.value)) {
+                        check = false;
+                    }
+                    if (!Number.isFinite(Number(unformattedValue))) {
+                        check = false;
+                    }
+                }
+                if (!check) {
                     showErrorMessage(messageBox, labels.JSMSG_NO_FLOAT, formField);
                     passedValidation.critical = false;
                 }
@@ -336,9 +367,9 @@
                 }
 
                 default: {
-                    let unformattedValue = formField.value.toString().replace(/\./g, '').replace(/,/g, '.');
+                    let unformattedValue = OAP.utils.formatNumber.unformat(formField.value);
 
-                    if (!fieldValueIsNumber || Number(unformattedValue) < formField.dataset[dataSet.minvalue]) {
+                    if (isNaN(unformattedValue) || Number(unformattedValue) < formField.dataset[dataSet.minvalue]) {
                         passedValidation.critical = false;
                     }
                 }
@@ -388,9 +419,9 @@
                 }
 
                 default: {
-                    let unformattedValue = formField.value.toString().replace(/\./g, '').replace(/,/g, '.');
+                    let unformattedValue = OAP.utils.formatNumber.unformat(formField.value);
 
-                    if (!fieldValueIsNumber || Number(unformattedValue) > formField.dataset[dataSet.maxvalue]) {
+                    if (isNaN(unformattedValue) || Number(unformattedValue) > formField.dataset[dataSet.maxvalue]) {
                         passedValidation.critical = false;
                     }
                 }
@@ -473,7 +504,7 @@
                 if (typeof formField.dataset[dataSet.greaterthanItem] !== 'undefined') {
                     const fieldItem = document.querySelector(formField.dataset[dataSet.greaterthanItem]);
 
-                    minValue = Number(fieldItem.value.toString().replace(/\./g, '').replace(/,/g, '.'));
+                    minValue = Number(OAP.utils.formatNumber.unformat(fieldItem.value));
                 } else if (typeof formField.dataset[dataSet.greaterthanCarryover] !== 'undefined') {
                     minValue = Number(formField.dataset[dataSet.greaterthanCarryover]);
                 }
@@ -484,9 +515,9 @@
                     break;
                 }
                 default: {
-                    let unformattedValue = Number(formField.value.toString().replace(/\./g, '').replace(/,/g, '.'));
+                    let unformattedValue = Number(OAP.utils.formatNumber.unformat(formField.value));
 
-                    if (fieldHasValue && (!fieldValueIsNumber || unformattedValue < minValue)) {
+                    if (fieldHasValue && (isNaN(unformattedValue) || unformattedValue < minValue)) {
                         passed = false;
                     }
                 }
@@ -527,7 +558,7 @@
                 if (typeof formField.dataset[dataSet.lessthanItem] !== 'undefined') {
                     const fieldItem = document.querySelector(formField.dataset[dataSet.lessthanItem]);
 
-                    maxValue = Number(fieldItem.value.toString().replace(/\./g, '').replace(/,/g, '.'));
+                    maxValue = Number(OAP.utils.formatNumber.unformat(fieldItem.value));
                 } else if (typeof formField.dataset[dataSet.lessthanCarryover] !== 'undefined') {
                     maxValue = Number(formField.dataset[dataSet.lessthanCarryover]);
                 }
@@ -538,9 +569,9 @@
                     break;
                 }
                 default: {
-                    let unformattedValue = Number(formField.value.toString().replace(/\./g, '').replace(/,/g, '.'));
+                    let unformattedValue = Number(OAP.utils.formatNumber.unformat(formField.value));
 
-                    if (fieldHasValue && (!fieldValueIsNumber || unformattedValue > maxValue)) {
+                    if (fieldHasValue && (isNaN(unformattedValue) || unformattedValue > maxValue)) {
                         passed = false;
                     }
                 }

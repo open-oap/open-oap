@@ -19,7 +19,7 @@
                 }
 
                 if (OAP.utils && OAP.utils.formatNumber) {
-                    let fieldValue = this.value.toString().replace(/\./g, '').replace(/,/g, '.');
+                    let fieldValue = OAP.utils.formatNumber.unformat(this.value);
 
                     this.value = OAP.utils.formatNumber.format(fieldValue);
                 }

@@ -1030,10 +1030,10 @@ class ProposalController extends OapFrontendController
                                 continue;
                             }
 
-                            $totalValue += static::convertStrToNumber($modificatorItemAnswer->getValue());
+                            $totalValue += static::convertStrToNumber($modificatorItemAnswer->getValue(), $this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU);
                         }
 
-                        $answer->setValue((string)$totalValue);
+                        $answer->setValue($this->formatNumber($totalValue));
                         $this->answerRepository->update($answer);
                         break;
                 }
@@ -1083,7 +1083,8 @@ class ProposalController extends OapFrontendController
                             }
                             break;
                         }
-                        if ($answer->getValue() < $validator->getParam1()) {
+                        $rawNumber = static::convertStrToNumber($answer->getValue(), $this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU);
+                        if ($rawNumber < $validator->getParam1()) {
                             $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'min_value', [$validator->getParam1()]);
                         }
                         break;
@@ -1108,14 +1109,18 @@ class ProposalController extends OapFrontendController
                             }
                             break;
                         }
-                        if ($answer->getValue() > $validator->getParam1()) {
+                        $rawNumber = static::convertStrToNumber($answer->getValue(), $this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU);
+                        if ($rawNumber > $validator->getParam1()) {
                             $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'max_value', [$validator->getParam1()]);
                         }
                         break;
                     case self::VALIDATOR_INTEGER:
                         if ($answer->getValue() !== '') {
-                            // values are formatted with dots - remove for validation
-                            $cleanupValue = preg_replace('~\.~', '', $answer->getValue());
+                            // remove the thousands separator (style-dependent) for validation
+                            $thousandsSeparator = ($this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU) === self::NUMBER_STYLE_US
+                                ? self::FLOAT_FORMAT_THOUSANDS_SEPARATOR_US
+                                : self::FLOAT_FORMAT_THOUSANDS_SEPARATOR_EU;
+                            $cleanupValue = preg_replace('~' . preg_quote($thousandsSeparator, '~') . '~', '', $answer->getValue());
                             if ($this->integerValidator->validate($cleanupValue)->hasErrors()) {
                                 $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'is_not_an_integer');
                             }
@@ -1123,11 +1128,12 @@ class ProposalController extends OapFrontendController
                         break;
                     case self::VALIDATOR_FLOAT:
                         if ($answer->getValue() !== '') {
-                            break;
-                        }
-                        if ($this->floatValidator->validate($answer->getValue())->hasErrors()) {
-                            if ($this->integerValidator->validate($answer->getValue())->hasErrors()) {
-                                $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'is_not_a_float');
+                            // normalize the style-formatted value to a machine float string before validating
+                            $cleanupValue = $this->cleanupByNumberStyle($answer->getValue());
+                            if ($this->floatValidator->validate($cleanupValue)->hasErrors()) {
+                                if ($this->integerValidator->validate($cleanupValue)->hasErrors()) {
+                                    $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'is_not_a_float');
+                                }
                             }
                         }
                         break;
@@ -1161,8 +1167,8 @@ class ProposalController extends OapFrontendController
                         }
 
                         if ($item->getType() === self::TYPE_STRING && $validatorItem->getType() === self::TYPE_STRING) {
-                            $answerValue = static::convertStrToNumber($answer->getValue());
-                            $validatorItemAnswerValue = static::convertStrToNumber($validatorItemAnswer->getValue());
+                            $answerValue = static::convertStrToNumber($answer->getValue(), $this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU);
+                            $validatorItemAnswerValue = static::convertStrToNumber($validatorItemAnswer->getValue(), $this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU);
 
                             if ($answer->getValue() !== '' && $answerValue < $validatorItemAnswerValue) {
                                 $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'min_value', [$validatorItemAnswerValue]);
@@ -1184,8 +1190,8 @@ class ProposalController extends OapFrontendController
                         }
 
                         if ($item->getType() === self::TYPE_STRING && $validatorItem->getType() === self::TYPE_STRING) {
-                            $answerValue = static::convertStrToNumber($answer->getValue());
-                            $validatorItemAnswerValue = static::convertStrToNumber($validatorItemAnswer->getValue());
+                            $answerValue = static::convertStrToNumber($answer->getValue(), $this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU);
+                            $validatorItemAnswerValue = static::convertStrToNumber($validatorItemAnswer->getValue(), $this->settings['numberStyle'] ?? self::NUMBER_STYLE_EU);
 
                             if ($answer->getValue() !== '' && $answerValue > $validatorItemAnswerValue) {
                                 $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'max_value', [$validatorItemAnswerValue]);

@@ -61,6 +61,7 @@ plugin.tx_openoap_dashboard {
         zipStructureApplicantFormat = {$plugin.tx_openoap_dashboard.settings.zipStructureApplicantFormat}
         zipStructureProppsalFormat = {$plugin.tx_openoap_dashboard.settings.zipStructureProppsalFormat}
         zipStructureProppsalFormatTitleLength = {$plugin.tx_openoap_dashboard.settings.zipStructureProppsalFormatTitleLength}
+        numberStyle = {$plugin.tx_openoap_dashboard.settings.numberStyle}
     }
 }
 

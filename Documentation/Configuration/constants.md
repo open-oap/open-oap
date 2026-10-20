@@ -31,6 +31,10 @@ settings {
     metaInfoSeparator = |
     defaultMaxCharTextarea = 2000
     defaultMaxCharTextfield = 200
+    # Number style of all number items: EU writes 1.234,56 and US writes 1,234.56.
+    # It is used both when a value is parsed from the form and when it is written out,
+    # in the frontend as well as in the PDF and spreadsheet exports.
+    numberStyle = EU
     defaultSourcesModel = applicant.companyEmail, applicant.firstName, applicant.lastName, applicant.address, applicant.country, applicant.telephone, applicant.fax, applicant.email, applicant.zip, applicant.city, applicant.www, applicant.company, applicant.salutation
     uploadFolder = 2:/
     signatureFormat = %04d

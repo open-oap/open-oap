@@ -24,6 +24,7 @@
     <v:variable.set name="errorCounts" value="{validationResults.pages.{pageControl.current} -> f:count()}"/>
     <f:form
         action="update" name="proposal" object="{proposal}" class="form form--proposal" id="proposal-form-{proposal.uid}"
+        data="{oap-numberstyle:settings.numberStyle}"
         additionalAttributes="{'data-oap-servererror':errorCounts,'data-oap-proposal':proposal.uid}" enctype="multipart/form-data" method="post">
         <div role="alert" id="proposal-form-{proposal.uid}-alert"></div>
         <div>
