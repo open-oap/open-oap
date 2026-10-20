@@ -13,6 +13,8 @@ Available variables:
 --></f:comment>
 
 <f:section name="content">
+    <f:render partial="IncludeJs" />
+
     <h2 class="accordion__item-header"><span class="hyphenated">{f:translate(key:'tx_openoap_dashboard.proposalsActive.header')} ({proposals -> f:count()})</span></h2>
 
     <f:comment>LISTING</f:comment>

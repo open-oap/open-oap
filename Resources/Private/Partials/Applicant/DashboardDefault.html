@@ -22,7 +22,7 @@ Available variables:
 
 <f:section name="content">
     <script>(function () {window.OAP = window.OAP || {}; window.OAP.labels = <f:format.raw><f:format.json>{jsMessages}</f:format.json></f:format.raw>}());</script>
-  <f:asset.script identifier="open_oap_scripts" src="EXT:open_oap/Resources/Public/JavaScript/scripts.js" defer="1"/>
+  <f:render partial="IncludeJs" />
 
   <f:render partial="FlashMessages" arguments="{_all}" />
 
