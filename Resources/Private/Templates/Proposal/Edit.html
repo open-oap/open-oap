@@ -24,7 +24,7 @@
     <v:variable.set name="errorCounts" value="{validationResults.pages.{pageControl.current} -> f:count()}"/>
     <f:form
         action="update" name="proposal" object="{proposal}" class="form form--proposal" id="proposal-form-{proposal.uid}"
-        additionalAttributes="{'data-oap-servererror':errorCounts,'data-oap-proposal':proposal.uid}" enctype="multipart/form-data" method="post">
+        additionalAttributes="{'data-oap-servererror':errorCounts,'data-oap-proposal':proposal.uid,'data-oap-reminder-to-save':settings.reminderToSaveMinutes}" enctype="multipart/form-data" method="post">
         <div role="alert" id="proposal-form-{proposal.uid}-alert"></div>
         <div>
             <f:form.hidden name="currentPage" value="{pageControl.current}"/>
@@ -164,7 +164,11 @@
             </f:if>
         </f:for>
     </f:form>
-    </f:spaceless>
+
+    <f:comment><!-- text content will be replaced by JS --></f:comment>
+    <div id="toast" class="toast">Don't forget to save!</div>
+
+</f:spaceless>
 
     <f:render partial="Modal"
               arguments='{message:"{f:translate(key:\'tx_openoap_form.modal.hint\')}",cancel:"{f:translate(key:\'tx_openoap_form.modal.edit\')}",submit:"{f:translate(key:\'tx_openoap_form.modal.save\')}"}'

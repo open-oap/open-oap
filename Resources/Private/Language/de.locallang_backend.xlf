@@ -535,6 +535,10 @@
                     <source>Deep Copy Call</source>
                     <target>Tiefe Kopie des Calls</target>
                 </trans-unit>
+                <trans-unit id="constants.reminder_to_save.minutes">
+                    <source>Minutes between showing reminders to save the data.</source>
+                    <target>Minuten zwischen Erinnerungen, dass noch nicht gespeichert wurden.</target>
+                </trans-unit>
         </body>
     </file>
 </xliff>

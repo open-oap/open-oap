@@ -1269,6 +1269,9 @@
                         resname='tx_openoap.js_msg.upload_max_files_reached'>
                 <source><![CDATA[The maximum number of files has been reached.]]></source>
             </trans-unit>
+			<trans-unit id='tx_openoap.js_msg.reminder_to_save' resname='tx_openoap.js_msg.reminder_to_save'>
+				<source><![CDATA[Please remember to save your entries!]]></source>
+			</trans-unit>
 
             <trans-unit id='tx_openoap.js_label.duallist.search.label'
                         resname='tx_openoap.js_label.duallist_search.label'>

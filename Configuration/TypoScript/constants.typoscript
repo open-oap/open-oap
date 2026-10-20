@@ -94,6 +94,9 @@ plugin.tx_openoap_dashboard {
         zipStructureProppsalFormat = %1$s--%2$05d
         # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.zip_structure.proposal.titlelength
         zipStructureProppsalFormatTitleLength = 30
+        # cat=plugin.tx_openoap_dashboard/settings; type=integer; label=LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:constants.reminder_to_save.minutes
+        reminderToSaveMinutes = 5
+
     }
 }
 

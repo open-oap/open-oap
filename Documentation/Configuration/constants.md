@@ -23,6 +23,9 @@ settings {
     itemsPoolId = 21
     proposalsActiveLimit = 5
     proposalsArchivedLimit = 5
+    # Minutes between two reminders to save while a proposal is being edited.
+    # A value of 0 switches the reminder off.
+    reminderToSaveMinutes = 5
     answersPoolId = 29
     commentsPoolId = 53
     countriesItemOptionId = 28

@@ -273,6 +273,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const JSMSG_UPLOAD_FILE_REMOVED = 'upload_file_removed_not_saved';
     protected const JSMSG_UPLOAD_UPLOADED = 'upload_files_uploaded';
     protected const JSMSG_UPLOAD_MAX_FILES_REACHED = 'upload_max_files_reached';
+    protected const JSMSG_REMINDER_TO_SAVE = 'reminder_to_save';
 
     protected const XLF_BASE_IDENTIFIER_JSLABEL = 'tx_openoap.js_label.';
 

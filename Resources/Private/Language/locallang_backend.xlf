@@ -479,6 +479,9 @@
     <trans-unit id="menu.deep_copy_call" resname="menu.deep_copy_call">
         <source>Deep Copy Call</source>
     </trans-unit>
+    <trans-unit id="constants.reminder_to_save.minutes">
+        <source>Minutes between showing reminders to save the data.</source>
+    </trans-unit>
         </body>
     </file>
 </xliff>

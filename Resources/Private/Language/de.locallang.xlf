@@ -1620,7 +1620,12 @@
                 <target><![CDATA[Sie haben die maximale Anzahl an Uploads erreicht.]]></target>
             </trans-unit>
 
-            <trans-unit id='tx_openoap.js_label.duallist.search.label'
+			<trans-unit id='tx_openoap.js_msg.reminder_to_save' resname='tx_openoap.js_msg.reminder_to_save'>
+				<source><![CDATA[Please remember to save your entries!]]></source>
+				<target><![CDATA[Bitte denken Sie daran, Ihre Eingaben zu speichern!]]></target>
+			</trans-unit>
+
+			<trans-unit id='tx_openoap.js_label.duallist.search.label'
                         resname='tx_openoap.js_label.duallist_search.label'>
                 <source><![CDATA[Search]]></source>
                 <target><![CDATA[Suchen]]></target>
