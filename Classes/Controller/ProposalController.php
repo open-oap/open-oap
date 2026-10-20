@@ -17,6 +17,9 @@ use OpenOAP\OpenOap\Domain\Model\ItemValidator;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
 use Psr\Http\Message\ResponseInterface;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\ParameterType;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Http\UploadedFile;
 use TYPO3\CMS\Core\Resource\Enum\DuplicationBehavior;
@@ -598,6 +601,81 @@ class ProposalController extends OapFrontendController
         $info = implode(' ' . $this->settings['metaInfoSeparator'] . ' ', $infos);
 
         $metaInfo = new MetaInformation($proposal->getMetaInformation());
+
+        $groupsCounter = $metaInfo->getGroupsCounter();
+        if ($groupsCounter) {
+            $reconcileChanges = [];
+            $metaInfo->setGroupsCounter($this->reconcileGroupsCounter($groupsCounter, $proposal, $reconcileChanges));
+
+            foreach ($reconcileChanges as $change) {
+                $logParts = [];
+
+                if ($change['oldCurrent'] !== $change['newCurrent']) {
+                    $suffix = $change['reindexed'] ? ' (re-indexed)' : '';
+                    $logParts[] = sprintf(
+                        'groupsCounter[%d]: current %d → %d%s',
+                        $change['groupUid'],
+                        $change['oldCurrent'],
+                        $change['newCurrent'],
+                        $suffix
+                    );
+                } elseif ($change['reindexed']) {
+                    $logParts[] = sprintf('groupsCounter[%d]: re-indexed', $change['groupUid']);
+                }
+
+                if (!empty($change['l1Adjusted'])) {
+                    foreach ($change['l1Adjusted'] as $l1) {
+                        $logParts[] = sprintf(
+                            'groupsCounter[%d].instances[%d][%d]: current %d → %d',
+                            $change['groupUid'],
+                            $l1['l0Index'],
+                            $l1['l1GroupUid'],
+                            $l1['old'],
+                            $l1['new']
+                        );
+                    }
+                }
+
+                $logText = implode('; ', $logParts);
+                $logItem = $this->createLog(self::LOG_GROUP_COUNTER_CORRECTED, $proposal, $logText);
+                $proposal->addLog($logItem);
+            }
+
+            // Every correction is logged, but only the ones that can mean lost input
+            // are reported to the applicant: a correction of an optional group
+            // (repeatableMin 0) is marked 'silent', because an instance without any
+            // answers is a legitimate state there and nothing got lost.
+            // The direction decides the wording - repetitions inside a meta group can
+            // be corrected upwards too, which used to be announced as a removal.
+            $raised  = (bool)array_filter($reconcileChanges, fn($c) => $c['newCurrent'] > $c['oldCurrent'] && empty($c['silent']));
+            $lowered = (bool)array_filter($reconcileChanges, fn($c) => $c['newCurrent'] < $c['oldCurrent'] && empty($c['silent']));
+            foreach ($reconcileChanges as $change) {
+                foreach ($change['l1Adjusted'] ?? [] as $l1) {
+                    if (!empty($l1['silent'])) {
+                        continue;
+                    }
+                    if ($l1['new'] > $l1['old']) {
+                        $raised = true;
+                    } elseif ($l1['new'] < $l1['old']) {
+                        $lowered = true;
+                    }
+                }
+            }
+
+            if ($raised) {
+                $flashMessage = $this->getTranslationString(
+                    self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_GROUP_COUNTER_RAISED
+                );
+                $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
+            }
+            if ($lowered) {
+                $flashMessage = $this->getTranslationString(
+                    self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_GROUP_COUNTER_LOWERED
+                );
+                $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
+            }
+        }
+
         $metaInfo->setFilter($filter);
         $metaInfo->setInfo($info);
         $metaInfo->addPage($currentPage, $allPages[$currentPage]);
@@ -653,7 +731,18 @@ class ProposalController extends OapFrontendController
         $proposal->setFeLanguageUid($this->language->getLanguageId());
         $proposal->setEditTstamp(time());
         $this->proposalRepository->update($proposal);
-        $this->persistenceManager->persistAll();
+        try {
+            $this->persistenceManager->persistAll();
+        } catch (\Exception $e) {
+            $logText = sprintf('persistAll failed (concurrent modification?): %s', $e->getMessage());
+            $logItem = $this->createLog(self::LOG_ERROR_PERSIST_FAILED, $proposal, $logText);
+            $proposal->addLog($logItem);
+            $flashMessage = $this->getTranslationString(
+                self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_SAVE_FAILED
+            );
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
+            return $this->redirect('edit', null, null, ['proposal' => $proposal->getUid()]);
+        }
         $this->checkFiles($proposal);
 
         if ($submitted) {
