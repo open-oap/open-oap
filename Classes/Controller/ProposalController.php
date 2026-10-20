@@ -19,11 +19,13 @@ use OpenOAP\OpenOap\Domain\Model\Proposal;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Http\UploadedFile;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Resource\Enum\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Validation\ResultException;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
@@ -1513,7 +1515,53 @@ class ProposalController extends OapFrontendController
                                 1471710357
                             );
                         }
-                        $uploadedFile = $uploadFolder->addUploadedFile($file, DuplicationBehavior::RENAME);
+                        // validate file type and size against the item's validators
+                        $validators = $uploadAnswer->getItem()->getValidators();
+                        $typeIsValid = false;
+                        $sizeIsValid = true; // default: no size validator = allowed
+                        foreach ($validators as $validator) {
+                            if ($validator->getType() == self::VALIDATOR_FILE_TYPE && !$typeIsValid) {
+                                $typeIsValid = $this->isFileAllowed($file, $validator->getParam1());
+                            }
+                            if ($validator->getType() == self::VALIDATOR_FILE_SIZE) {
+                                $sizeIsValid = $this->isFileSizeAllowed($file, $validator->getParam1());
+                            }
+                        }
+
+                        if (!$typeIsValid) {
+                            $flashMessage = $this->getTranslationString(
+                                self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_UPLOAD_FILE_TYPE_INVALID,
+                                [$file->getClientFilename()]
+                            );
+                            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
+                            continue;
+                        }
+                        if (!$sizeIsValid) {
+                            $flashMessage = $this->getTranslationString(
+                                self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_UPLOAD_FILE_SIZE_EXCEEDED,
+                                [$file->getClientFilename()]
+                            );
+                            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
+                            continue;
+                        }
+
+                        try {
+                            $uploadedFile = $uploadFolder->addUploadedFile($file, DuplicationBehavior::RENAME);
+                        } catch (ResultException $exception) {
+                            // The file abstraction layer rejects files whose content does not match
+                            // their file extension, and - when the feature toggle
+                            // security.system.enforceAllowedFileExtensions is on - extensions outside
+                            // textfile_ext/mediafile_ext/miscfile_ext. Without this guard the
+                            // exception aborts the whole update action: the applicant gets an error
+                            // page and loses every change of that submit, not just the upload.
+                            $this->logRejectedUpload($file, $exception);
+                            $flashMessage = $this->getTranslationString(
+                                self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_UPLOAD_FILE_REJECTED,
+                                [$file->getClientFilename()]
+                            );
+                            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
+                            continue;
+                        }
                         $valueString = $uploadAnswer->getValue();
                         $fileIds = GeneralUtility::trimExplode(',', $valueString, true);
                         $fileIds[] = $uploadedFile->getUid();
@@ -1756,5 +1804,83 @@ class ProposalController extends OapFrontendController
 
             $this->redirectToDashboard();
         }
+    }
+
+    protected function isFileAllowed(UploadedFile $file, string $allowedFormats): bool
+    {
+        $allowed = array_map('trim', explode(',', $allowedFormats));
+
+        $allowedExtensions = [];
+        $allowedMimeTypes = [];
+
+        foreach ($allowed as $entry) {
+            if ($entry === '') {
+                continue;
+            }
+            if (str_starts_with($entry, '.')) {
+                $allowedExtensions[] = strtolower(ltrim($entry, '.'));
+            } else {
+                $allowedMimeTypes[] = strtolower($entry);
+            }
+        }
+
+        // Check extension
+        $ext = strtolower(pathinfo($file->getClientFilename(), PATHINFO_EXTENSION));
+        if (in_array($ext, $allowedExtensions, true)) {
+            return true;
+        }
+
+        // Check MIME type
+        if (in_array(strtolower($file->getClientMediaType()), $allowedMimeTypes, true)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function isFileSizeAllowed(UploadedFile $file, string $maxSize): bool
+    {
+        // Parse "6MB", "512KB", "2GB", "1024" (plain bytes)
+        if (preg_match('/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB|TB)?$/i', trim($maxSize), $m)) {
+            $value = (float)$m[1];
+            $unit = strtoupper($m[2] ?? 'B');
+            $multiplier = match ($unit) {
+                'KB' => 1_024,
+                'MB' => 1_048_576,
+                'GB' => 1_073_741_824,
+                'TB' => 1_099_511_627_776,
+                default => 1,
+            };
+            $maxBytes = (int)($value * $multiplier);
+        } else {
+            // Unparseable → deny to be safe
+            return false;
+        }
+
+        return $file->getSize() <= $maxBytes;
+    }
+
+    /**
+     * Write the details of a file rejected by the file abstraction layer to the log.
+     *
+     * The exception message itself only says "Resource consistency check failed"; the
+     * detected mime-type, the file extension and the expected mime-types are carried in
+     * the ResultMessage objects and would be lost otherwise.
+     */
+    protected function logRejectedUpload(UploadedFile $file, ResultException $exception): void
+    {
+        $details = [];
+        foreach ($exception->messages as $message) {
+            $details[] = $message->message;
+        }
+
+        GeneralUtility::makeInstance(LogManager::class)->getLogger(static::class)->warning(
+            'Upload rejected by the file abstraction layer: ' . implode(' ', $details),
+            [
+                'fileName' => $file->getClientFilename(),
+                'clientMimeType' => $file->getClientMediaType(),
+                'fileSize' => $file->getSize(),
+            ]
+        );
     }
 }

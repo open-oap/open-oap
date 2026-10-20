@@ -169,6 +169,22 @@ Single or multiple selection with selectbox for long lists
 - Help text
 - Validation (e.g. mandatory field, number, permitted file format(s))
 
+The permitted file formats and the maximum file size of the validation are checked twice: in the
+browser while the file is chosen, and again on the server when the form is saved. A file that
+gets past the browser - a renamed file, an upload from a script - is rejected on saving with a
+message naming the file:
+
+- the file type is not allowed
+- the file size exceeds the allowed limit
+
+The rest of the form is saved either way; only the rejected file is missing.
+
+A third case is reported the same way: a file whose content does not match its file extension -
+a spreadsheet saved in a different format than its name suggests, for instance. The message asks
+for the file to be saved again in the format its extension names. Where exactly the file failed
+is written to the log of the installation, which is the place to look when an applicant reports
+a file that will not go through.
+
 ### Table (Group)
 
 Special group element for tabular presentation. 1 to a maximum of 4 columns are possible.
