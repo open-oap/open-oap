@@ -17,6 +17,15 @@ the suggested changes.
 
 ![Analyze database](../Images/analyza_database.png)
 
+## Upgrade wizards
+
+Run the upgrade wizards in Admin Tools > Upgrade > Upgrade Wizard after updating the extension.
+
+**Migrate "open oap" plugins to content elements**: the open-oap plugins used to be registered
+as plugins of the generic "Insert plugin" content element and are now content elements of their
+own. The wizard rewrites the existing content records and the backend user permissions that go
+with them. Without it, pages keep records the backend no longer offers an editing form for.
+
 ## Flush all caches
 
 In the same module `Admin Tools > Maintanance` you can also empty all caches by clicking on the button `Flush cache`.
