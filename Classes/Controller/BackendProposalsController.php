@@ -12,6 +12,7 @@ use OpenOAP\OpenOap\Domain\Model\FormPage;
 use OpenOAP\OpenOap\Domain\Model\GroupTitle;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
+use OpenOAP\OpenOap\Domain\Model\State;
 use OpenOAP\OpenOap\Service\ExcelExportService;
 use OpenOAP\OpenOap\Utility\LocalizationUtility;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -227,7 +228,7 @@ class BackendProposalsController extends OapBackendController
 
                         if ($selection['state'] == self::PROPOSAL_RE_OPENED) {
                             $proposal = $this->processInnerComments($proposal);
-                        } elseif ($selection['state'] == self::PROPOSAL_ACCEPTED || $selection['state'] == self::PROPOSAL_DECLINED) {
+                        } elseif ($selection['state'] == self::PROPOSAL_ACCEPTED || $selection['state'] == self::PROPOSAL_DECLINED || $this->isEditorialState((int)$selection['state'])) {
                             $proposalsArr[] = $proposal;
                         }
 
@@ -256,8 +257,8 @@ class BackendProposalsController extends OapBackendController
         }
 
         $allItems = $this->getItemsOfCall($call);
-        $states['filter'] = $this->createStatesArray('selected');
-        $states['task'] = $this->createStatesArray('task');
+        $states['filter'] = $this->createStatesArray('selected', $call);
+        $states['task'] = $this->createStatesArray('task', $call);
         $ratings['filter'] = [];
 
         $importedAction['filter'] = $this->proposalRepository->fetchImportedActionsByCall($call);
@@ -386,7 +387,7 @@ class BackendProposalsController extends OapBackendController
                     $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.state_updated'), '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
                     $this->proposalRepository->update($proposal);
 
-                    if ($selectedState == self::PROPOSAL_ACCEPTED || $selectedState == self::PROPOSAL_DECLINED) {
+                    if ($selectedState == self::PROPOSAL_ACCEPTED || $selectedState == self::PROPOSAL_DECLINED || $this->isEditorialState($selectedState)) {
                         // Send status mail
                         return $this->redirect('customizeStatusMail', 'BackendProposals', null, ['proposals' => [$proposal], 'selectedState' => $selectedState]);
                     }
@@ -444,7 +445,7 @@ class BackendProposalsController extends OapBackendController
 
         $answersMap = $this->createAnswersMap($proposal);
 
-        $states['task'] = $this->createStatesArray('task');
+        $states['task'] = $this->createStatesArray('task', $call);
 
         $callLogo = $this->getCallLogo($proposal);
 
@@ -608,24 +609,55 @@ class BackendProposalsController extends OapBackendController
             $proposalList[$key]['maildata']['signature'] = $this->buildSignature($proposal);
             $proposalList[$key]['maildata']['siteName'] = $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
             $proposalList[$key]['maildata']['langCode'] = $proposalLangCode;
+            $unparsedDefaultMailtext = '';
+            $unparsedDefaultMailSubject = '';
             if ($supporter = $proposal->getCall()->getSupporter()) {
-                if ($proposal->getFeLanguageUid() > 0)
-                {
+                if ($proposal->getFeLanguageUid() > 0) {
                     $translatedSupporter = $this->getTranslatedSupporter($proposal->getFeLanguageUid(), $supporter->getUid());
-                    $unparsedDefaultMailtext = $selectedState == self::PROPOSAL_ACCEPTED
-                        ? $translatedSupporter['event_proposal_accepted_mailtext'] ?? ''
-                        : $translatedSupporter['event_proposal_declined_mailtext'] ?? '';
+                    switch ($selectedState) {
+                        case self::PROPOSAL_ACCEPTED:
+                            $unparsedDefaultMailtext = $translatedSupporter['event_proposal_accepted_mailtext'];
+                            break;
+                        case self::PROPOSAL_DECLINED:
+                            $unparsedDefaultMailtext = $translatedSupporter['event_proposal_declined_mailtext'];
+                            break;
+                    }
                 }
                 else {
-                    $unparsedDefaultMailtext = $selectedState == self::PROPOSAL_ACCEPTED
-                        ? $supporter->getEventProposalAcceptedMailtext()
-                        : $supporter->getEventProposalDeclinedMailtext();
+                    switch ($selectedState) {
+                        case self::PROPOSAL_ACCEPTED:
+                            $unparsedDefaultMailtext = $supporter->getEventProposalAcceptedMailtext();
+                            break;
+                        case self::PROPOSAL_DECLINED:
+                            $unparsedDefaultMailtext = $supporter->getEventProposalDeclinedMailtext();
+                            break;
+                    }
                 }
+            }
 
-            } else {
+            if ($unparsedDefaultMailtext == '') {
+                // mail text from state dataset
+                if ($proposal->getFeLanguageUid() > 0) {
+                    // raw database row - the columns are named as in the schema
+                    $translatedState = $this->getTranslatedState($proposal->getFeLanguageUid(), $proposal->getState());
+                    $unparsedDefaultMailtext = (string)($translatedState['mail_text'] ?? '');
+                    $unparsedDefaultMailSubject = (string)($translatedState['mail_subject'] ?? '');
+                } else {
+                    /** @var State|null $state */
+                    $state = $this->stateRepository->findByUid((int)$proposal->getState());
+                    $unparsedDefaultMailtext = (string)$state?->getMailText();
+                    $unparsedDefaultMailSubject = (string)$state?->getMailSubject();
+                }
+            }
+
+            if ($unparsedDefaultMailtext == '') {
                 $unparsedDefaultMailtext = 'Missing Email Text';
             }
+            if ($unparsedDefaultMailSubject == '') {
+                $unparsedDefaultMailSubject = 'Missing Email Subject';
+            }
             $proposalList[$key]['maildata']['mailtext'] = $this->parseMailtext($proposal, $unparsedDefaultMailtext, $additionalMailData, $proposalLangCode);
+            $proposalList[$key]['maildata']['mailsubject'] = strip_tags($this->parseMailtext($proposal, $unparsedDefaultMailSubject, $additionalMailData, $proposalLangCode));
 
             if ($selectedMailAction == 1) {
                 $additionalData = [];
@@ -636,7 +668,7 @@ class BackendProposalsController extends OapBackendController
                     $rto = GeneralUtility::trimExplode(',', htmlspecialchars($this->request->getArgument('reply')), true);
                     $additionalData['replyTo'] = $rto[0];
                 }
-                $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $proposalList[$key]['maildata']['mailtext'], $proposalLangCode, $additionalData);
+                $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $proposalList[$key]['maildata']['mailtext'], $proposalList[$key]['maildata']['mailsubject'], $proposalLangCode, $additionalData);
 
                 if ($selectedState === self::PROPOSAL_DECLINED) {
                     $proposal->setRejectionTstamp(time());
@@ -652,6 +684,20 @@ class BackendProposalsController extends OapBackendController
             }
         }
 
+        /// take call from last proposal
+        /** @var Call $call */
+        $call = $proposal->getCall();
+
+        $states = [];
+        $stateName = '';
+        /** @var State $state */
+        foreach ($call->getAvailableStates() as $state) {
+            if ($state->getUid() == $selectedState) {
+                $stateName = $state->getTitle();
+                $stateInternalName = $state->getInternalTitle();
+            }
+        }
+
         $defaultMailCc = $proposalList[0]['proposal']->getCall()->getEmails();
         $defaultMailCcExploded = GeneralUtility::trimExplode(',', $defaultMailCc, true);
         $proposalList[0]['defaultMailCc'] = $defaultMailCc;
@@ -662,8 +708,11 @@ class BackendProposalsController extends OapBackendController
             'proposals' => $proposals,
             'proposalList' => $proposalList,
             'state' => $selectedState,
+            'stateName' => $stateName,
+            'stateInternalName' => $stateInternalName,
             'siteName' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
             'mailtext' => count($proposals) == 1 ? $proposalList[0]['maildata']['mailtext'] : $unparsedDefaultMailtext,
+            'mailSubject' => count($proposals) == 1 ? $proposalList[0]['maildata']['mailsubject'] : $unparsedDefaultMailSubject,
             'submitted' => $submitted,
             'settings' => $this->settings,
             'call' => $proposal->getCall(),
@@ -1555,6 +1604,38 @@ class BackendProposalsController extends OapBackendController
         return $filter;
     }
 
+
+    /**
+     * Is the given state an editorially created one (a state record), as opposed
+     * to one of the built-in states that are handled separately?
+     *
+     * Do not test this by uid range: uids below 10 are reserved for the built-in
+     * states by convention only. Whether an installation's state records actually
+     * start at 10 depends on the auto increment of the table, so a freshly created
+     * state can well end up with uid 7, 8 or 9.
+     *
+     * @param int $state
+     * @return bool
+     */
+    protected function isEditorialState(int $state): bool
+    {
+        if (in_array($state, [self::PROPOSAL_IN_PROGRESS, self::PROPOSAL_SUBMITTED, self::PROPOSAL_RE_OPENED], true)) {
+            return false;
+        }
+
+        return $this->stateRepository->findByUid($state) !== null;
+    }
+
+    /**
+     * @param int $languageUid
+     * @param int $stateUid
+     * @return array
+     * @throws \Doctrine\DBAL\Exception
+     */
+    protected function getTranslatedState(int $languageUid, int $stateUid): array
+    {
+        return $this->stateRepository->findStateByLanguage($languageUid, $stateUid);
+    }
 
     protected function handleMenu(string $currentAction): void
     {

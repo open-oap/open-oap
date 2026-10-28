@@ -161,6 +161,13 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $modificators = null;
 
     /**
+     * dataTransferItem
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormItem>
+     */
+    protected $dataTransferItem = null;
+
+    /**
      * __construct
      */
     public function __construct()
@@ -180,6 +187,17 @@ class FormItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->options = $this->options ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->validators = $this->validators ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->modificators = $this->modificators ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->dataTransferItem = $this->dataTransferItem ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+    }
+
+    public function getDataTransferItem(): ?\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->dataTransferItem;
+    }
+
+    public function setDataTransferItem(?\TYPO3\CMS\Extbase\Persistence\ObjectStorage $dataTransferItem): void
+    {
+        $this->dataTransferItem = $dataTransferItem;
     }
 
     /**

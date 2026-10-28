@@ -113,6 +113,13 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $modificators = null;
 
     /**
+     * dataTransferGroup
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormGroup>
+     */
+    protected $dataTransferGroup;
+
+    /**
      * __construct
      */
     public function __construct()
@@ -132,6 +139,17 @@ class FormGroup extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->items = $this->items ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->groupTitle = $this->groupTitle ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->modificators = $this->modificators ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->dataTransferGroup = $this->dataTransferGroup ?: new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+    }
+
+    public function getDataTransferGroup(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->dataTransferGroup;
+    }
+
+    public function setDataTransferGroup(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $dataTransferGroup): void
+    {
+        $this->dataTransferGroup = $dataTransferGroup;
     }
 
     /**

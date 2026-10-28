@@ -71,6 +71,15 @@ class ProposalController extends OapFrontendController
     /** @var string */
     protected string $survey = '';
 
+    /** @var Proposal|null $predecessorProposal */
+    protected ?Proposal $predecessorProposal = null;
+
+    /** @var Call|null $predecessorCall */
+    protected ?Call $predecessorCall = null;
+
+    /** @var array|null $predecessorAnswers */
+    protected ?array $predecessorAnswers = null;
+
     /**
      * action initialize
      *
@@ -255,6 +264,275 @@ class ProposalController extends OapFrontendController
             ->setTargetPageUid($formPage)
             ->uriFor('edit', ['proposal' => $newProposal, 'survey' => $this->survey], 'Proposal', $this->ext, 'form');
         return $this->redirectToURI($uri, 0, 200);
+    }
+
+    /**
+     * action createBasedOn
+     *
+     * Creates a new proposal for a (successor) call, prefilling answers from an
+     * existing predecessor proposal according to the configured data-transfer
+     * mappings (FormGroup::dataTransferGroup / FormItem::dataTransferItem).
+     *
+     * @param Applicant $applicant
+     * @param Call $call
+     * @param Proposal $proposal predecessor proposal
+     * @return ResponseInterface
+     */
+    public function createBasedOnAction(Applicant $applicant, Call $call, Proposal $proposal): ResponseInterface
+    {
+        // Guard: only accepted predecessor proposals may be carried over. Without this
+        // server-side check the data transfer could be triggered by a crafted request
+        // even when the frontend button is hidden.
+        if (!$this->isProposalAcceptedForTransfer($proposal)) {
+            $flashMessage = $this->getTranslationString(self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_PROPOSAL_ACCESS_DENIED);
+            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
+            $this->redirectToDashboard();
+        }
+
+        $this->predecessorCall = $proposal->getCall();
+        $this->predecessorProposal = $proposal;
+        // collect all Answers for default function and data overtake
+        $this->predecessorAnswers = [];
+        /** @var Answer $answer */
+        foreach ($this->predecessorProposal->getAnswers() as $answer) {
+            // only the first value can be valid
+            $modelId = $answer->getModel()->getUid();
+            $itemId = $answer->getItem()->getUid();
+            $counter0 = $answer->getGroupCounter0();
+            $counter1 = $answer->getGroupCounter1();
+            if (empty($this->predecessorAnswers[$modelId][$counter0][$counter1][$itemId])) {
+                $this->predecessorAnswers[$modelId][$counter0][$counter1][$itemId] = [];
+            }
+            $this->predecessorAnswers[$modelId][$counter0][$counter1][$itemId]['value'] = $answer->getValue();
+            $this->predecessorAnswers[$modelId][$counter0][$counter1][$itemId]['additionalValue'] = $answer->getAdditionalValue();
+            $this->predecessorAnswers[$modelId][$counter0][$counter1][$itemId]['item'] = $answer->getItem();
+        }
+
+        $newProposal = new Proposal();
+
+        // set current user
+        $newProposal->setApplicant($applicant);
+        $newProposal->setCall($call);
+        $proposalPid = $this->determineProposalPid($call);
+        ObjectAccess::setProperty($newProposal, 'pid', $proposalPid);
+        $newProposal->setState(self::PROPOSAL_IN_PROGRESS);
+        $newProposal->setFeLanguageUid($this->language->getLanguageId());
+
+        $newProposal->setTitle($this->getTranslationString(self::XLF_BASE_IDENTIFIER_DEFAULTS . '.' . self::DEFAULT_TITLE));
+
+        // take signature from predecessor proposal
+        $newProposal->setSignature($this->predecessorProposal->getSignature());
+
+        $groupsCounter = $this->createAnswersBasedOn($call, $newProposal);
+
+        // save groupsCounter in MetaInformation
+        /** @var MetaInformation $metaInfo */
+        $metaInfo = new MetaInformation($newProposal->getMetaInformation());
+        $metaInfo->setGroupsCounter($groupsCounter);
+        $newProposal->setMetaInformation($metaInfo->jsonSerialize());
+
+        $this->proposalRepository->add($newProposal);
+        $this->persistenceManager->persistAll();
+
+        // Set auto comment with created state on the proposal
+        $logItem = $this->createLog(self::LOG_PROPOSAL_CREATE, $newProposal);
+        $newProposal->addLog($logItem);
+        $newProposal->setEditTstamp(time());
+        $this->proposalRepository->update($newProposal);
+        $this->persistenceManager->persistAll();
+
+        $formPage = (int)$this->settings['formPageId'];
+        $uri = $this->uriBuilder
+            ->reset()
+            ->setTargetPageUid($formPage)
+            ->uriFor('edit', ['proposal' => $newProposal, 'survey' => $this->survey], 'Proposal', $this->ext, 'form');
+        return $this->redirectToURI($uri, 0, 200);
+    }
+
+    /**
+     * Builds the answers of a new proposal based on the predecessor proposal.
+     * Mirrors createAction's answer creation but transfers values from the
+     * predecessor according to the data-transfer mappings.
+     *
+     * @param Call $call
+     * @param Proposal $newProposal
+     * @return array groupsCounter for the MetaInformation
+     */
+    private function createAnswersBasedOn(Call $call, Proposal $newProposal): array
+    {
+        /** @var MetaInformation $metaInfoPredecessorProposal */
+        $metaInfoPredecessorProposal = new MetaInformation($this->predecessorProposal->getMetaInformation());
+
+        $groupCounterOfPredecessorProposal = $metaInfoPredecessorProposal->getGroupsCounter();
+
+        $basedOnData = [];
+        $groupsCounter = [];
+        /** @var FormPage $page */
+        foreach ($call->getFormPages() as $page) {
+            $groupsMap[$page->getUid()] = [];
+            /** @var FormGroup $groupL0 */
+            foreach ($page->getItemGroups() as $groupL0) {
+                if (!isset($groupsCounter[$groupL0->getUid()])) {
+                    $groupsCounter[$groupL0->getUid()] = [];
+                }
+                $groupsCounter[$groupL0->getUid()]['current'] = $groupL0->getRepeatableMin();
+                $groupsCounter[$groupL0->getUid()]['min'] = $groupL0->getRepeatableMin();
+                $groupsCounter[$groupL0->getUid()]['max'] = $groupL0->getRepeatableMax();
+                $groupsCounter[$groupL0->getUid()]['instances'] = [];
+                $groupsCounter[$groupL0->getUid()]['meta'] = false;
+
+                // check if there is a basedOnGroup
+                $sourceGroups = $groupL0->getDataTransferGroup()->toArray();
+                // if there is a reference to a basedOn Group?
+                if ($sourceGroups) {
+                    $sourceGroup = $sourceGroups[0];
+                    $basedOnData[$groupL0->getUid()] = $sourceGroup->getUid();
+
+                    if ($groupL0->getType() == self::GROUPTYPE_META) {
+                        $groupsCounter[$groupL0->getUid()]['meta'] = true;
+
+                        $groupsCounter[$groupL0->getUid()]['min'] =
+                            ($groupL0->getRepeatableMin() > $groupCounterOfPredecessorProposal[$sourceGroup->getUid()]['current'])
+                                ? $groupL0->getRepeatableMin() : $groupCounterOfPredecessorProposal[$sourceGroup->getUid()]['current'];
+
+                        for ($groupCounterL0 = 0; $groupCounterL0 < $groupsCounter[$groupL0->getUid()]['min']; $groupCounterL0++) {
+                            $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0] = [];
+                            /** @var FormGroup $groupL1 */
+                            foreach ($groupL0->getItemGroups() as $groupL1) {
+                                if (!isset($groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()])) {
+                                    $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()] = [];
+                                }
+
+                                $sourceGroupsL1 = $groupL1->getDataTransferGroup()->toArray();
+                                if ($sourceGroupsL1) {
+                                    $sourceGroupL1 = $sourceGroupsL1[0];
+                                    $basedOnData[$groupL1->getUid()] = $sourceGroupL1->getUid();
+
+                                    $current =
+                                        ($groupL1->getRepeatableMin() > $groupCounterOfPredecessorProposal[$basedOnData[$groupL0->getUid()]]['instances'][$groupCounterL0][$basedOnData[$groupL1->getUid()]]['current'])
+                                            ? $groupL1->getRepeatableMin() : $groupCounterOfPredecessorProposal[$basedOnData[$groupL0->getUid()]]['instances'][$groupCounterL0][$basedOnData[$groupL1->getUid()]]['current'];
+
+                                    $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]['current'] = $current;
+
+                                    // create all items for the instances
+                                    for ($groupCounterL1 = 0; $groupCounterL1 < $current; $groupCounterL1++) {
+                                        $this->createAnswersOfGroup($newProposal, $groupL1, $groupCounterL0, $groupCounterL1);
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        // create empty answers - basedOn new repeatable settings (min, max)
+                        $current = max(
+                            $groupL0->getRepeatableMin(),
+                            $groupCounterOfPredecessorProposal[$sourceGroup->getUid()]['current'] ?? 0
+                        );
+
+                        $groupsCounter[$groupL0->getUid()]['current'] = $current;
+                        for ($groupCounterL0 = 0; $groupCounterL0 < $current; $groupCounterL0++) {
+                            $this->createAnswersOfGroup($newProposal, $groupL0, 0, $groupCounterL0);
+                        }
+                    }
+                } else {
+                    if ($groupL0->getType() == self::GROUPTYPE_META) {
+                        $groupsCounter[$groupL0->getUid()]['meta'] = true;
+                        for ($groupCounterL0 = 0; $groupCounterL0 < $groupL0->getRepeatableMin(); $groupCounterL0++) {
+                            $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0] = [];
+                            /** @var FormGroup $groupL1 */
+                            foreach ($groupL0->getItemGroups() as $groupL1) {
+                                if (!isset($groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()])) {
+                                    $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()] = [];
+                                }
+                                $groupsCounter[$groupL0->getUid()]['instances'][$groupCounterL0][$groupL1->getUid()]['current'] = $groupL1->getRepeatableMin();
+
+                                // create all items for the instances
+                                for ($groupCounterL1 = 0; $groupCounterL1 < $groupL1->getRepeatableMin(); $groupCounterL1++) {
+                                    $this->createAnswersOfGroup($newProposal, $groupL1, $groupCounterL0, $groupCounterL1);
+                                }
+                            }
+                        }
+                    } else {
+                        for ($groupCounterL0 = 0; $groupCounterL0 < $groupL0->getRepeatableMin(); $groupCounterL0++) {
+                            $this->createAnswersOfGroup($newProposal, $groupL0, 0, $groupCounterL0);
+                        }
+                    }
+                }
+            }
+        }
+
+        // collect all answers (ignore repeatable groups) - one answer per item
+        // for data transfer for group unrelated transfers
+        $predecessorAnswers = [];
+        foreach ($this->predecessorAnswers as $groupL0Uid => $counterL0) {
+            foreach ($counterL0[0][0] as $itemUid => $item) {
+                $predecessorAnswers[$itemUid] = $item;
+            }
+        }
+        /** @var Answer $answer */
+        foreach ($newProposal->getAnswers() as $answer) {
+            // only the first value can be valid
+            $modelId = $answer->getModel()->getUid();
+            $itemId = $answer->getItem()->getUid();
+            $counter0 = $answer->getGroupCounter0();
+            $counter1 = $answer->getGroupCounter1();
+
+            $itemSource = 0;
+            // transferItemValue if group is set for transfer
+            if (!empty($basedOnData[$modelId])) {
+                $itemSource = $itemId;
+                if (count($answer->getItem()->getDataTransferItem())) {
+                    $itemSources = $answer->getItem()->getDataTransferItem()->toArray();
+                    $itemSource = $itemSources[0]->getUid();
+                }
+
+                if (!empty($this->predecessorAnswers[$basedOnData[$modelId]][$counter0][$counter1][$itemSource])) {
+                    $answer->setValue($this->predecessorAnswers[$basedOnData[$modelId]][$counter0][$counter1][$itemSource]['value']);
+                    $answer->setAdditionalValue($this->predecessorAnswers[$basedOnData[$modelId]][$counter0][$counter1][$itemSource]['additionalValue']);
+                } else {
+                    if (!empty($predecessorAnswers[$itemSource])) {
+                        $answer->setValue($predecessorAnswers[$itemSource]['value']);
+                        $answer->setAdditionalValue($predecessorAnswers[$itemSource]['additionalValue']);
+                    }
+                }
+            } else {
+                // item transfers independent from groups / group unrelated transfers
+                if (count($answer->getItem()->getDataTransferItem())) {
+                    $itemSources = $answer->getItem()->getDataTransferItem()->toArray();
+                    $itemSource = $itemSources[0]->getUid();
+
+                    if (!empty($predecessorAnswers[$itemSource])) {
+                        $answer->setValue($predecessorAnswers[$itemSource]['value']);
+                        $answer->setAdditionalValue($predecessorAnswers[$itemSource]['additionalValue']);
+                    }
+                }
+            }
+        }
+        return $groupsCounter;
+    }
+
+    /**
+     * Whether a predecessor proposal is in an "accepted" state and may therefore
+     * be carried over into a successor proposal. Accepted means either the
+     * built-in PROPOSAL_ACCEPTED state, or a custom state (of the proposal's call)
+     * flagged with the STATE_FUNCTION_ACCEPTED function.
+     */
+    private function isProposalAcceptedForTransfer(Proposal $proposal): bool
+    {
+        if ($proposal->getState() === self::PROPOSAL_ACCEPTED) {
+            return true;
+        }
+        $call = $proposal->getCall();
+        if ($call === null) {
+            return false;
+        }
+        foreach ($call->getAvailableStates() ?? [] as $state) {
+            if ($state->getUid() === $proposal->getState()
+                && in_array((string)self::STATE_FUNCTION_ACCEPTED, $state->getFunctions(), true)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

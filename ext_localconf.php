@@ -63,11 +63,11 @@ defined('TYPO3') || die();
         'OpenOap',
         'Form',
         [
-            \OpenOAP\OpenOap\Controller\ProposalController::class => 'create, edit, update',
+            \OpenOAP\OpenOap\Controller\ProposalController::class => 'create, createBasedOn, edit, update',
         ],
         // non-cacheable actions
         [
-            \OpenOAP\OpenOap\Controller\ProposalController::class => 'create, edit, update, delete',
+            \OpenOAP\OpenOap\Controller\ProposalController::class => 'create, createBasedOn, edit, update, delete',
         ],
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );

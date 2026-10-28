@@ -17,6 +17,7 @@ use OpenOAP\OpenOap\Domain\Model\ItemOption;
 use OpenOAP\OpenOap\Domain\Model\ItemValidator;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
+use OpenOAP\OpenOap\Domain\Model\State;
 use OpenOAP\OpenOap\Domain\Repository\AnswerRepository;
 use OpenOAP\OpenOap\Domain\Repository\ApplicantRepository;
 use OpenOAP\OpenOap\Domain\Repository\CallGroupRepository;
@@ -25,6 +26,7 @@ use OpenOAP\OpenOap\Domain\Repository\CommentRepository;
 use OpenOAP\OpenOap\Domain\Repository\FormItemRepository;
 use OpenOAP\OpenOap\Domain\Repository\ItemOptionRepository;
 use OpenOAP\OpenOap\Domain\Repository\ProposalRepository;
+use OpenOAP\OpenOap\Domain\Repository\StateRepository;
 use OpenOAP\OpenOap\Domain\Repository\SupporterRepository;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\PhpWord;
@@ -231,6 +233,13 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const STATE_ACCESS_MIN_ADMINS = 1;
     protected const STATE_SKIP = 3;
 
+    /**
+     * State function flag: a (custom) state carrying this function counts as
+     * "accepted" — e.g. it enables the follow-up (createBasedOn) data transfer.
+     * Matches the value of the "accepted" option in the State.functions TCA select.
+     */
+    protected const STATE_FUNCTION_ACCEPTED = 1;
+
     protected const UPLOAD_MAX_DEFAULT = 10;
     protected const UPLOAD_MAXSIZE_DEFAULT = 1048576;  // 1MB
 
@@ -352,6 +361,8 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     protected ?ItemOptionRepository $itemOptionRepository = null;
 
+    protected ?StateRepository $stateRepository = null;
+
     protected ?PersistenceManager $persistenceManager = null;
 
     protected ?ResourceFactory $resourceFactory = null;
@@ -429,6 +440,11 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function injectItemOptionRepository(ItemOptionRepository $itemOptionRepository): void
     {
         $this->itemOptionRepository = $itemOptionRepository;
+    }
+
+    public function injectStateRepository(StateRepository $stateRepository): void
+    {
+        $this->stateRepository = $stateRepository;
     }
 
     public function injectPersistenceManager(PersistenceManager $persistenceManager): void
@@ -1560,7 +1576,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param string $mode
      * @return array
      */
-    protected function createStatesArray(string $mode = 'selected'): array
+    protected function createStatesArray(string $mode = 'selected', ?Call $call = null): array
     {
         // create state-Array
         $states = [];
@@ -1596,7 +1612,31 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $states[$i] = $localizedString;
             }
         }
-        return $states;
+
+        if (!$call) {
+            return $states;
+        }
+
+        $additionalStates = [];
+        // UIDs, die auf jeden Fall bleiben sollen
+        $alwaysKeep = [self::PROPOSAL_IN_PROGRESS, self::PROPOSAL_SUBMITTED];
+        /** @var State $state */
+        foreach ($call->getAvailableStates() as $state) {
+            $additionalStates[$state->getUid()] = $state->getInternalTitle();
+        }
+        // Existing IDs from $statusArray that should always be retained
+        foreach ($alwaysKeep as $uid) {
+            if (isset($additionalStates[$uid])) {
+                // If present in the objectArray, has already been set - fits
+                continue;
+            } elseif (isset($states[$uid])) {
+                // Nicht im objectArray, aber im ursprünglichen Status – übernehmen
+                $additionalStates[$uid] = $states[$uid];
+            }
+        }
+        ksort($additionalStates);
+
+        return $additionalStates;
     }
 
     public function createWordIntroBlock(Section $section, Proposal $proposal, array $format): void

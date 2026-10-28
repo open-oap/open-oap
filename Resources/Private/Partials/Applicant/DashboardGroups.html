@@ -264,12 +264,21 @@ Available variables:
                                         </f:link.external>
                                     </f:then>
                                     <f:else>
-                                        <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form"
-                                                       action="create" controller="Proposal"
-                                                       arguments="{applicant:applicant,call:call}"
-                                                       class="call-list__create-proposal">
-                                            {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title', arguments: {0: '{call.proposalName}'}, default: 'proposal')}
-                                        </f:link.action>
+                                        <f:if condition="!{call.predecessorCall}">
+                                            <f:then>
+                                                <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form" action="create" controller="Proposal" arguments="{applicant:applicant,call:call}" class="call-list__create-proposal">
+                                                    {f:translate(key: 'tx_openoap_dashboard.proposal.buttonCreateNew.title', arguments: {0: '{call.proposalName}'}, default: 'proposal')}
+                                                </f:link.action>
+                                            </f:then>
+                                            <f:else>
+                                                <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form"
+                                                               action="create" controller="Proposal"
+                                                               arguments="{applicant:applicant,call:call}"
+                                                               class="call-list__create-proposal">
+                                                    {f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.title', arguments: {0: '{call.proposalName}'}, default: 'proposal')}
+                                                </f:link.action>
+                                            </f:else>
+                                        </f:if>
                                     </f:else>
                                 </f:if>
                             </f:then>

@@ -1812,6 +1812,15 @@
                 <source>Edit</source>
                 <target>Bearbeiten</target>
             </trans-unit>
-        </body>
+            <trans-unit id="tx_openoap_dashboard.proposal.buttonCreateNewBasedOn.title" resname="tx_openoap_dashboard.proposal.buttonCreateNewBasedOn.title">
+                <source><![CDATA[Create new %s based on %s]]></source>
+                <target><![CDATA[Neuen %s erstellen, basierend auf %s]]></target>
+            </trans-unit>
+			<trans-unit id='tx_openoap_dashboard.proposal.remarkNoCreateButton' resname='tx_openoap_dashboard.proposal.remarkNoCreateButton'>
+				<source><![CDATA[Your %1$s has to be based on the %2$s selected to proceed to the phase before. To start working on the %1$s, please click on the button “Create new %1$s based on %2$s” below. <br>The system will automatically prefill some fields of the %1$s form with data provided by you in the respective fields of the %2$s. <br>All fields remain editable.]]></source>
+				<target><![CDATA[Ihr %1$s muss auf dem ausgewählten %2$s basieren, um zur vorherigen Phase überzugehen. Um mit der Bearbeitung des %1$s zu beginnen, klicken Sie bitte unten auf die Schaltfläche „Neues %1$s basierend auf %2$s erstellen“. <br>Das System füllt einige Felder des %1$s-Formulars automatisch mit den Daten aus, die Sie in den entsprechenden Feldern des %2$s angegeben haben. <br>Alle Felder bleiben bearbeitbar.]]></target>
+			</trans-unit>
+
+		</body>
     </file>
 </xliff>

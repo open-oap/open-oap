@@ -18,7 +18,51 @@
                     <p><f:format.raw>{f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage')}</f:format.raw></p>
                 </f:if>
 
-                <f:render partial="Proposal/Info" arguments="{proposal:proposal, constants:constants}" />
+                <f:render partial="Proposal/Info" arguments="{proposal:proposal, constants:constants, states:states}" />
+
+                <f:if condition="{proposal.call.successorCall} ">
+                    <v:variable.set name="byTester" value="0" />
+                    <v:variable.set name="CallIsRunning" value="0" />
+                    <f:if condition="{nowTimestamp} < {proposal.call.successorCall.callStartTime.timestamp} || {nowTimestamp} > {proposal.call.successorCall.callEndTime.timestamp}">
+                        <f:then>
+                            <f:for each="{proposal.call.successorCall.usergroup}" as="callUsergroup">
+                                <f:if condition="{settings.testerFeGroupsId} == {callUsergroup.uid}">
+                                    <f:then>
+                                        <f:for each="{applicant.usergroup}" as="applicantUsergroup">
+                                            <f:if condition="{applicantUsergroup.uid} == {callUsergroup.uid}">
+                                                <v:variable.set name="byTester" value="1" />
+                                            </f:if>
+                                        </f:for>
+                                    </f:then>
+                                    <f:else if="{callUsergroup.subgroup}">
+                                        <f:for each="{callUsergroup.subgroup}" as="subgroup">
+                                            <f:if condition="{settings.testerFeGroupsId} == {subgroup.uid}">
+                                                <v:variable.set name="byTester" value="1" />
+                                            </f:if>
+                                        </f:for>
+                                    </f:else>
+                                </f:if>
+                            </f:for>
+                        </f:then>
+                        <f:else>
+                            <v:variable.set name="CallIsRunning" value="1" />
+                        </f:else>
+                    </f:if>
+
+                    <f:if condition="{proposal.call.successorCall.hidden} == 1 && {byTester} == 0 && {CallIsRunning} == 0">
+                        <v:variable.set name="CallDisabled" value="1" />
+                    </f:if>
+                    <f:if condition="{nowTimestamp} > {proposal.call.successorCall.callEndTime.timestamp}">
+                        <v:variable.set name="CallDisabled" value="1" />
+                    </f:if>
+                    <f:if condition="({proposal.state} == {constants.PROPOSAL_ACCEPTED} || {states.functions.{proposal.state}.{statesConstants.STATE_FUNCTION_ACCEPTED}}) && {CallDisabled} == 0">
+                        <div class="proposals__create-based-on"><f:if condition="{byTester} == 1">by Tester</f:if>
+                            <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form" action="createBasedOn" controller="Proposal" arguments="{applicant:proposal.applicant,call:proposal.call.successorCall,proposal:proposal}" class="call-list__create-proposal">
+                                {f:translate(key: 'tx_openoap_dashboard.proposal.buttonCreateNewBasedOn.title', arguments: {0: '{proposal.call.successorCall.proposalName}', 1:'{proposal.call.proposalName}'}, default: 'proposal')}
+                            </f:link.action>
+                        </div>
+                    </f:if>
+                </f:if>
             </div>
             <div class="proposals__item-options">
                 <f:if condition="{proposal.call.hidden} == 0">

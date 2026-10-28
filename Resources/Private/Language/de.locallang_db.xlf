@@ -36,6 +36,10 @@
 				<source>Assessment</source>
 				<target>Bewertung</target>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.tab.states" resname="tx_openoap_domain_model_call.tab.states">
+				<source>States</source>
+				<target>Status</target>
+			</trans-unit>
 			<trans-unit id="tx_openoap_domain_model_call.form_items" resname="tx_openoap_domain_model_call.form_items">
 				<source>Items for submit page</source>
 				<target>Fragen für die Abschlussseite</target>
@@ -114,6 +118,11 @@
 				<source>Call hint</source>
 				<target>Call Hinweis</target>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.available_states" resname="tx_openoap_domain_model_call.available_states">
+				<source>Available States</source>
+				<target>Verfügbare Status</target>
+			</trans-unit>
+
 			<trans-unit id="tx_openoap_domain_model_proposal.state" resname="tx_openoap_domain_model_proposal.state">
 				<source>State</source>
 				<target>Status</target>
@@ -263,6 +272,69 @@
                 Mit freundlichen Grüßen,
                 Ihr develoPPP-Team]]></target>
             </trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_state" resname="tx_openoap_domain_model_state">
+				<source>State</source>
+				<target>Status</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.title" resname="tx_openoap_domain_model_state.title">
+				<source>Title</source>
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.internal_title" resname="tx_openoap_domain_model_state.internal_title">
+				<source>Internal Title</source>
+				<target>Interner Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.legend" resname="tx_openoap_domain_model_state.legend">
+				<source>Legend</source>
+				<target>Legende</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.mail_text" resname="tx_openoap_domain_model_state.mail_text">
+				<source>Mail Text</source>
+				<target>Mail-Text</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.mail_subject" resname="tx_openoap_domain_model_state.mail_subject">
+				<source>Mail subject</source>
+				<target>Mail-Betreff</target>
+			</trans-unit>
+
+			<trans-unit id="tx_openoap_domain_model_state.functions" resname="tx_openoap_domain_model_state.functions">
+				<source>Functions</source>
+				<target>Funktionen</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_state.function.accepted" resname="tx_openoap_domain_model_state.function.accepted">
+				<source>Accept functions, e.g. for data transfer</source>
+				<target>Akzeptiert-Funktionen, z.B. bei der Datenübernahme</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.tab.data_transfer" resname="tx_openoap_domain_model_call.tab.data_transfer">
+				<source>Data transfer</source>
+				<target>Datenübernahme</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.successor_call" resname="tx_openoap_domain_model_call.successor_call">
+				<source><![CDATA[Successor call for data overtake]]></source>
+				<target><![CDATA[Nachfolge-Call zur Datenübernahme]]></target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.no_successor_call" resname="tx_openoap_domain_model_call.no_successor_call">
+				<source>No successor call (yet)</source>
+				<target>kein Nachfolge-Call (zur Zeit)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.predecessor_call" resname="tx_openoap_domain_model_call.predecessor_call">
+				<source><![CDATA[Predecessor call - if this is selected no new empty proposal is possible]]></source>
+				<target><![CDATA[Vorgänger-Call - wenn dieser ausgewählt ist, kann kein leerer, neuer Antrag erstellt werden]]></target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.no_predecessor_call" resname="tx_openoap_domain_model_call.no_predecessor_call">
+				<source>No predecessor call (yet)</source>
+				<target>kein Vorgänger-Call (zur Zeit)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.data_transfer_group" resname="tx_openoap_domain_model_formgroup.data_transfer_group">
+				<source>Data transfer from group(s)</source>
+				<target>Datenübernahme aus Gruppe(n)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.data_transfer_item" resname="tx_openoap_domain_model_formitem.data_transfer_item">
+				<source>Data transfer from item</source>
+				<target>Datenübernahme aus Feld</target>
+			</trans-unit>
+
 		</body>
 	</file>
 </xliff>

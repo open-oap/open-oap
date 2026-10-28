@@ -1466,6 +1466,13 @@
 			<trans-unit id="backup.config.mysqlDumpBinaryPath">
 				<source><![CDATA[MySQL Dump Binary Path (leave empty to use default "mysqldump")]]></source>
 			</trans-unit>
-        </body>
+			<trans-unit id="tx_openoap_dashboard.proposal.buttonCreateNewBasedOn.title" resname="tx_openoap_dashboard.proposal.buttonCreateNewBasedOn.title">
+				<source><![CDATA[Create new %s based on %s]]></source>
+			</trans-unit>
+			<trans-unit id='tx_openoap_dashboard.proposal.remarkNoCreateButton' resname='tx_openoap_dashboard.proposal.remarkNoCreateButton'>
+				<source><![CDATA[Your %1$s has to be based on the %2$s selected to proceed to the phase before. To start working on the %1$s, please click on the button “Create new %1$s based on %2$s” below. <br>The system will automatically prefill some fields of the %1$s form with data provided by you in the respective fields of the %2$s. <br>All fields remain editable.]]></source>
+			</trans-unit>
+
+		</body>
     </file>
 </xliff>

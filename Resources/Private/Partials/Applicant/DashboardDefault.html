@@ -48,10 +48,10 @@ Available variables:
 
   <div class="accordion" data-preopen="1">
     <f:comment>ACTIVE PROPOSALS</f:comment>
-    <f:render section="ProposalBlock" arguments="{header:'tx_openoap_dashboard.proposalsActive.header', proposals:proposalsActive, commentsCount:proposalsActiveCommentsCount, filesCount:proposalsActiveFilesCount, constants:constants, mode:'Active', total:countAll.active}" />
+    <f:render section="ProposalBlock" arguments="{header:'tx_openoap_dashboard.proposalsActive.header', proposals:proposalsActive, commentsCount:proposalsActiveCommentsCount, filesCount:proposalsActiveFilesCount, constants:constants, mode:'Active', total:countAll.active, states:states, statesConstants: statesConstants}" />
 
     <f:comment>ARCHIVED PROPOSALS</f:comment>
-    <f:render section="ProposalBlock" arguments="{header:'tx_openoap_dashboard.proposalsArchived.header', proposals:proposalsArchived, commentsCount:proposalsArchivedCommentsCount, filesCount:proposalsArchivedFilesCount, mode:'Archived', archived:1, total:countAll.archived}" />
+    <f:render section="ProposalBlock" arguments="{header:'tx_openoap_dashboard.proposalsArchived.header', proposals:proposalsArchived, commentsCount:proposalsArchivedCommentsCount, filesCount:proposalsArchivedFilesCount, constants:constants, mode:'Archived', archived:1, total:countAll.archived, states:states}" />
   </div>
 
 
@@ -73,10 +73,10 @@ Available variables:
             <f:then>
               <f:comment>LEGEND</f:comment>
               <f:if condition="{constants}">
-                  <f:render partial="Applicant/Legend" arguments="{constants:constants}" />
+                  <f:render partial="Applicant/Legend" arguments="{constants:constants, states:states}" />
               </f:if>
 
-              <f:render partial="Applicant/Proposals" arguments="{proposals:proposals, commentsCount:commentsCount, constants:constants, filesCount:filesCount}" />
+              <f:render partial="Applicant/Proposals" arguments="{proposals:proposals, commentsCount:commentsCount, constants:constants, filesCount:filesCount, states:states, statesConstants:statesConstants}" />
 
               <f:if condition="{total} > {proposals -> f:count()}">
                 <div class="proposals__show-all">
@@ -140,9 +140,16 @@ Available variables:
                       <f:if condition="{call.callEndTime}"><p class="call-list__text">{f:translate(key:'tx_openoap_dashboard.call.active_until')}: <f:format.date format="d.m.Y - H:i:s">{call.callEndTime}</f:format.date></p></f:if>
                       <f:if condition="!{CallDisabled}">
                           <f:then>
-                          <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form" action="create" controller="Proposal" arguments="{applicant:applicant,call:call}" class="call-list__create-proposal">
-                              {f:translate(key: 'tx_openoap_dashboard.proposal.buttonCreateNew.title', arguments: {0: '{call.proposalName}'}, default: 'proposal')}
-                          </f:link.action>
+                              <f:if condition="!{call.predecessorCall}">
+                              <f:then>
+                                  <f:link.action pageUid="{settings.formPageId}" extensionName="OpenOap" pluginName="form" action="create" controller="Proposal" arguments="{applicant:applicant,call:call}" class="call-list__create-proposal">
+                                      {f:translate(key: 'tx_openoap_dashboard.proposal.buttonCreateNew.title', arguments: {0: '{call.proposalName}'}, default: 'proposal')}
+                                  </f:link.action>
+                              </f:then>
+                              <f:else>
+                                  <p class="call-list__text call-list__remark" style="margin-top: 1rem;"><f:format.raw>{f:translate(key: 'tx_openoap_dashboard.proposal.remarkNoCreateButton', arguments: {0: '{call.proposalName}',1: '{call.predecessorCall.proposalName}'}, default: 'proposal')}</f:format.raw></p>
+                              </f:else>
+                              </f:if>
                           </f:then>
                           <f:else>
                               <p class="call-list__text"><f:format.raw>{f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage')}</f:format.raw></p>

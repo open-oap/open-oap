@@ -294,7 +294,7 @@ Available variables:
                     </f:if>
                 </td>
                 <td nowrap="nowrap" class="col-title">
-                    <f:translate key="tx_openoap_domain_model_proposal.state.{proposal.state}" />
+                    {states.filter.{proposal.state}}
                     <f:if condition="{proposal.rejectionTstamp} && {proposal.state} == {proposalStates.PROPOSAL_DECLINED}">
                         <br>
                         {proposal.rejectionTstamp -> f:format.date(format: 'd.m.Y H:i')}<br>

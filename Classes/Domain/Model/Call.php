@@ -98,6 +98,20 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $proposalPid = 0;
 
     /**
+     * successorCall
+     *
+     * @var Call
+     */
+    protected $successorCall = null;
+
+    /**
+     * predecessorCall
+     *
+     * @var Call
+     */
+    protected $predecessorCall = null;
+
+    /**
      * formPages
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\FormPage>
@@ -195,6 +209,11 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected string $hint = '';
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\OpenOAP\OpenOap\Domain\Model\State>|null
+     */
+    protected ?\TYPO3\CMS\Extbase\Persistence\ObjectStorage $availableStates = null;
 
     /**
      * __construct
@@ -449,6 +468,26 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->proposalPid = $proposalPid;
     }
 
+    public function getSuccessorCall(): ?Call
+    {
+        return $this->successorCall;
+    }
+
+    public function setSuccessorCall(?Call $successorCall): void
+    {
+        $this->successorCall = $successorCall;
+    }
+
+    public function getPredecessorCall(): ?Call
+    {
+        return $this->predecessorCall;
+    }
+
+    public function setPredecessorCall(?Call $predecessorCall): void
+    {
+        $this->predecessorCall = $predecessorCall;
+    }
+
     /**
      * Returns the usergroup
      *
@@ -699,6 +738,16 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setHint(string $hint): void
     {
         $this->hint = $hint;
+    }
+
+    public function getAvailableStates(): ?\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->availableStates;
+    }
+
+    public function setAvailableStates(?\TYPO3\CMS\Extbase\Persistence\ObjectStorage $availableStates): void
+    {
+        $this->availableStates = $availableStates;
     }
 
     public function getAssessmentItems(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage

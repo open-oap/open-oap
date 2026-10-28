@@ -719,6 +719,33 @@ All data of the created and submitted applications refer to the data fields of t
 
 17. **"Not accessible with these languages in the frontend"** – Language versions can be deactivated
 
+### States
+
+Beside the states every installation brings along, further states can be created as records and
+offered per call. A state is what an editor sets a submitted proposal to in the proposals module,
+and what the applicant then sees on the dashboard.
+
+A state record carries these fields:
+
+1. **Title**: the wording the applicant sees for this state.
+2. **Internal Title**: the wording in the backend list and in the proposals module. Keep it
+   unambiguous - this is what editors pick from.
+3. **Legend**: the explanation shown with the state, where the dashboard and the module print a
+   legend of the states.
+4. **Mail subject** and **Mail text**: used for the status mail that goes out when a proposal is
+   set to this state.
+5. **Functions**: what the state means for the application logic. The function available today
+   marks a state as accepting, which other features build on - the data transfer of a succession
+   call, for instance, starts from an accepted proposal (see chapter "[Special function "Call
+   with data transfer"](#special-function-call-with-data-transfer)").
+
+Which of the states a call offers is set in the call itself, in the field **Available States**.
+A state that is not selected there cannot be set for a proposal of that call, so a call can be
+run with a short list of states even when the installation knows many.
+
+**Note**: The title of a state is what applicants read. Changing it changes the wording for
+every proposal already in that state, including the ones already communicated by mail.
+
 ### Proposal Pid
 
 This is the filing directory for the submitted applications.
