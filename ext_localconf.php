@@ -131,4 +131,16 @@ defined('TYPO3') || die();
 //    if (!in_array('status', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Invitation']['controllers'][\In2code\Femanager\Controller\InvitationController::class]['nonCacheableActions'])) {
 //        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['Femanager']['plugins']['Invitation']['controllers'][\In2code\Femanager\Controller\InvitationController::class]['nonCacheableActions'][] = 'status';
 //    }
+
+    // Initialize archive fields on newly created Call records
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
+        = \OpenOAP\OpenOap\Hooks\CallArchiveHook::class;
+
+    // Scheduler task: archive proposals and cleanup related data
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\OpenOAP\OpenOap\Task\ArchiveProposalsTask::class] = [
+        'extension' => 'open_oap',
+        'title' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.task.archiveProposalsTask.name',
+        'description' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang.xlf:tx_openoap.task.archiveProposalsTask.description',
+        'additionalFields' => \OpenOAP\OpenOap\Task\ArchiveProposalsTaskAdditionalFieldProvider::class,
+    ];
 })();

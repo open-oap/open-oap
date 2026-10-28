@@ -63,6 +63,9 @@ Available variables:
             <th nowrap="nowrap">
                 {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.endTime')}
             </th>
+            <th nowrap="nowrap">
+                {f:translate(key:'LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.archiving')}
+            </th>
             </tr>
         </thead>
             <tbody id="proposals" data-multi-record-selection-row-selection="true">
@@ -90,6 +93,23 @@ Available variables:
                     </td>
                     <td nowrap="nowrap" class="cell__date cell__date<f:if condition="{f:format.date(date:'now', format:'YmdHi')} >  {f:format.date(date:'{call.callStartTime}', format:'YmdHi')} && {f:format.date(date:'now', format:'YmdHi')} <  {f:format.date(date:'{call.callEndTime}', format:'YmdHi')}">--live</f:if>">
                         {call.callEndTime -> f:format.date(format:'d.m.Y H:i')}
+                    </td>
+                    <td nowrap="nowrap" class="col-title">
+                        <f:switch expression="{call.archivedState}">
+                            <f:case value="2">
+                                <span class="text-muted"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.archiving.finished"/></span>
+                                <f:if condition="{call.archivedAt}"><br><small class="text-muted">{call.archivedAt -> f:format.date(format:'d.m.Y')}</small></f:if>
+                            </f:case>
+                            <f:case value="1">
+                                <span class="text-info"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.archiving.running"/></span>
+                            </f:case>
+                            <f:defaultCase>
+                                <f:if condition="{call.archived}">
+                                    <f:then><span class="text-warning"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:table.call.archiving.requested"/></span></f:then>
+                                    <f:else><span class="text-muted">&#8211;</span></f:else>
+                                </f:if>
+                            </f:defaultCase>
+                        </f:switch>
                     </td>
                 </tr>
             </f:for>

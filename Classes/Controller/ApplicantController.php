@@ -8,6 +8,7 @@ use OpenOAP\OpenOap\Domain\Model\Answer;
 use OpenOAP\OpenOap\Domain\Model\Applicant;
 use OpenOAP\OpenOap\Domain\Model\Call;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
+use OpenOAP\OpenOap\Domain\Model\State;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -205,12 +206,24 @@ class ApplicantController extends OapFrontendController
             }
         }
 
+        $allStates = $this->stateRepository->findAll();
+        $states = [];
+        /** @var State $state */
+        foreach ($allStates as $state) {
+            $states['label'][$state->getUid()] = $state->getTitle();
+            $states['legend'][$state->getTitle()] = $state->getLegend();
+            $states['functions'][$state->getUid()] = [];
+            foreach ($state->getFunctions() as $functionOfState) {
+                $states['functions'][$state->getUid()][$functionOfState] = $functionOfState;
+            }
+        }
         $jsMessages = $this->getJsMessages();
 
         $this->view->assignMultiple([
             'applicant' => $this->applicant,
             'countries' => $this->countries,
             'constants' => $this->getConstants()['PROPOSAL'],
+            'statesConstants' => $this->getConstants()['STATE'],
             'proposalsActive' => $proposalsActive,
             'proposalsArchived' => $proposalsArchived,
             'proposalsActiveCommentsCount' => $proposalsActiveCommentsCount,
@@ -224,6 +237,7 @@ class ApplicantController extends OapFrontendController
             'jsMessages' => $jsMessages,
             'nowTimestamp' => time(),
             'language' => $this->language->getLanguageId(),
+            'states' => $states,
         ]);
         return $this->htmlResponse();
     }
@@ -247,13 +261,26 @@ class ApplicantController extends OapFrontendController
             $proposalsCommentsCount = $this->countProposalComments($proposals, $archived);
         }
 
+        $allStates = $this->stateRepository->findAll();
+        $states = [];
+        /** @var State $state */
+        foreach ($allStates as $state) {
+            $states['label'][$state->getUid()] = $state->getTitle();
+            $states['legend'][$state->getTitle()] = $state->getLegend();
+            $states['functions'][$state->getUid()] = [];
+            foreach ($state->getFunctions() as $functionOfState) {
+                $states['functions'][$state->getUid()][$functionOfState] = $functionOfState;
+            }
+        }
         $this->view->assignMultiple([
             'applicant' => $this->applicant,
             'archived' => $archived,
             'constants' => $this->getConstants()['PROPOSAL'],
+            'statesConstants' => $this->getConstants()['STATE'],
             'proposals' => $proposals,
             'proposalsCommentsCount' => $proposalsCommentsCount,
             'settings' => $this->settings,
+            'states' => $states,
         ]);
         return $this->htmlResponse();
     }

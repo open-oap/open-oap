@@ -22,6 +22,10 @@ CREATE TABLE tx_openoap_domain_model_call (
 	survey_codes text,
 	assessment_items int(11) unsigned NOT NULL DEFAULT '0',
 	assessment_threshold int(11) unsigned NOT NULL DEFAULT '0',
+	available_states int(11) unsigned NOT NULL DEFAULT '0',
+	archived smallint(1) unsigned NOT NULL DEFAULT '0',
+	archived_at datetime DEFAULT NULL,
+	archived_state smallint(1) unsigned NOT NULL DEFAULT '0',
 );
 
 CREATE TABLE tx_openoap_domain_model_formpage (

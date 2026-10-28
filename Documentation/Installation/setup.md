@@ -26,3 +26,16 @@ In the same module `Admin Tools > Maintanance` you can also empty all caches by 
 ## initialising pages
 
 https://docs.typo3.org/m/typo3/tutorial-sitepackage/main/en-us/CreatePages/Index.html
+
+## Upgrade wizard: proposal folder sharding
+
+Proposal uploads used to be stored as `<base>/<applicantUid>/<proposalUid>/`. With a few
+thousand applicants that puts a few thousand directories next to each other in one folder, which
+file systems and the file list of the backend both handle badly.
+
+The uploads are therefore stored one level deeper, in a bucket derived from the applicant uid:
+`<base>/<applicantUid divided by the bucket size>/<applicantUid>/<proposalUid>/`.
+
+Run **OAP: shard proposal upload folders by applicant uid** in Admin Tools > Upgrade > Upgrade
+Wizard once after the update. It moves the existing folders through the file abstraction layer,
+so the file references of the proposals stay intact. New uploads use the new layout right away.

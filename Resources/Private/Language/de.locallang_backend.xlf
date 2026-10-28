@@ -253,6 +253,39 @@
                 <source>End of call</source>
                 <target>Fristende</target>
             </trans-unit>
+            <trans-unit id="table.call.archiving" resname="table.call.archiving">
+                <source>Archiving</source>
+                <target>Archivierung</target>
+            </trans-unit>
+            <trans-unit id="table.call.archiving.requested" resname="table.call.archiving.requested">
+                <source>queued</source>
+                <target>vorgemerkt</target>
+            </trans-unit>
+            <trans-unit id="table.call.archiving.running" resname="table.call.archiving.running">
+                <source>in progress</source>
+                <target>läuft …</target>
+            </trans-unit>
+            <trans-unit id="table.call.archiving.finished" resname="table.call.archiving.finished">
+                <source>done</source>
+                <target>abgeschlossen</target>
+            </trans-unit>
+
+            <trans-unit id="archived.notice.header" resname="archived.notice.header">
+                <source>This call is being archived</source>
+                <target>Dieser Call wird archiviert</target>
+            </trans-unit>
+            <trans-unit id="archived.notice.requested" resname="archived.notice.requested">
+                <source>Archiving has been requested for this call. The proposals can still be viewed, but no action can be carried out on them any more - no status change, no status mail, no assessment import. Only the reduced list export remains available.</source>
+                <target>Für diesen Call ist die Archivierung angefordert. Die Anträge sind weiterhin einsehbar, es lässt sich aber keine Aktion mehr auf ihnen ausführen - kein Statuswechsel, keine Statusmail, kein Bewertungsimport. Verfügbar bleibt allein der reduzierte Listenexport.</target>
+            </trans-unit>
+            <trans-unit id="archived.notice.finished" resname="archived.notice.finished">
+                <source>This call has been archived. The answers and the uploaded files have been removed; what you see here is the proposal list without its content. No action can be carried out any more - only the reduced list export, which covers title, signature, applicant and state.</source>
+                <target>Dieser Call ist archiviert. Die Antworten und die hochgeladenen Dateien sind entfernt; was Sie hier sehen, ist die Antragsliste ohne ihre Inhalte. Aktionen sind nicht mehr möglich - allein der reduzierte Listenexport mit Titel, Signatur, Antragsteller und Status.</target>
+            </trans-unit>
+            <trans-unit id="message.archived.no_actions" resname="message.archived.no_actions">
+                <source>This call is archived. No action can be carried out on its proposals any more.</source>
+                <target>Dieser Call ist archiviert. Auf seinen Anträgen lässt sich keine Aktion mehr ausführen.</target>
+            </trans-unit>
 
             <!-- PREVIEW - proposal -->
             <trans-unit id="preview.proposal.comments.label" resname="preview.proposal.comments.label">

@@ -12,8 +12,11 @@ use OpenOAP\OpenOap\Domain\Model\FormPage;
 use OpenOAP\OpenOap\Domain\Model\GroupTitle;
 use OpenOAP\OpenOap\Domain\Model\MetaInformation;
 use OpenOAP\OpenOap\Domain\Model\Proposal;
+use OpenOAP\OpenOap\Domain\Model\State;
 use OpenOAP\OpenOap\Service\ExcelExportService;
+use OpenOAP\OpenOap\Task\ArchiveProposalsTask;
 use OpenOAP\OpenOap\Utility\LocalizationUtility;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpWord\Exception\Exception;
@@ -48,6 +51,12 @@ class BackendProposalsController extends OapBackendController
 {
     const SESSION_TAG_OAP_PROPOSAL_BACKEND = 'oapProposalBackend';
 
+    /**
+     * The one export an archived call still offers. Chosen deliberately over the regular formats,
+     * whose column labels are built from the live call configuration - which no longer reliably
+     * describes what was once submitted.
+     */
+    public const EXPORT_FORMAT_ARCHIVED = 'archived_list';
 
     /**
      * overview page
@@ -151,6 +160,41 @@ class BackendProposalsController extends OapBackendController
     }
 
     /**
+     * True as soon as archiving has been requested for the call - the flag is set deliberately by
+     * an editor, and from that moment on the call is on its way out.
+     *
+     * Nothing may be changed on its proposals from here on, and no mail may go out: a state change
+     * would alter records that are about to be archived, and a status mail would reach applicants
+     * about a closed procedure. Note that the proposal rows themselves give no hint of this - the
+     * archiving run flags the answers as deleted and removes the uploads, while the proposals stay
+     * behind as ordinary, undeleted records. The call is the only place the state is readable.
+     */
+    protected function isArchivingRequested(Call $call): bool
+    {
+        return $call->isArchived();
+    }
+
+    /**
+     * True once the archiving run has finished, i.e. the answers are flagged deleted and the
+     * uploads are gone for good.
+     */
+    protected function isArchivingFinished(Call $call): bool
+    {
+        return $call->getArchivedState() === ArchiveProposalsTask::ARCHIVE_STATE_FINISHED;
+    }
+
+    /**
+     * Refuses an action on an archived call. Leaving the controls out of the template is the hint
+     * for the user; this is the guard, because a request can be replayed or built by hand.
+     */
+    protected function denyOnArchivedCall(Call $call): ResponseInterface
+    {
+        $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.archived.no_actions'), '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
+
+        return $this->redirect('listProposals', 'BackendProposals', null, ['call' => $call]);
+    }
+
+    /**
      * @throws InvalidQueryException
      */
     public function listProposalsAction(?Call $call = null, array $filter = [], array $selection = [], int $currentPage = 1, int $itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE): ResponseInterface
@@ -185,6 +229,16 @@ class BackendProposalsController extends OapBackendController
 
         // update state of proposal selection
         if (count($selection) > 0 && is_array($selection['records'])) {
+            // Archived call: the reduced list export is the only action left. Everything else
+            // either writes to the proposals, sends mail, or reads answers and files that the
+            // archiving run has removed.
+            $wantsArchivedExport = ($selection['todo'] ?? '') == 'submit-export'
+                && ($selection['export'] ?? '') == self::EXPORT_FORMAT_ARCHIVED;
+
+            if ($this->isArchivingRequested($call) && !$wantsArchivedExport) {
+                return $this->denyOnArchivedCall($call);
+            }
+
             if ($selection['todo'] == 'submit-assessment') {
                 // forwarding to the assessment detail page with the list of ids from selection
                 if ($selection['records'][0]) {
@@ -212,6 +266,9 @@ class BackendProposalsController extends OapBackendController
                         //                        $pdfFolder = $this->createPdfs($selection['records']);
                         $this->downloadPdfs($selection['records']);
                         break;
+                    case self::EXPORT_FORMAT_ARCHIVED:
+                        $this->exportArchivedList($selection['records']);
+                        break;
                 }
             }
 
@@ -227,7 +284,7 @@ class BackendProposalsController extends OapBackendController
 
                         if ($selection['state'] == self::PROPOSAL_RE_OPENED) {
                             $proposal = $this->processInnerComments($proposal);
-                        } elseif ($selection['state'] == self::PROPOSAL_ACCEPTED || $selection['state'] == self::PROPOSAL_DECLINED) {
+                        } elseif ($selection['state'] == self::PROPOSAL_ACCEPTED || $selection['state'] == self::PROPOSAL_DECLINED || $this->isEditorialState((int)$selection['state'])) {
                             $proposalsArr[] = $proposal;
                         }
 
@@ -256,8 +313,8 @@ class BackendProposalsController extends OapBackendController
         }
 
         $allItems = $this->getItemsOfCall($call);
-        $states['filter'] = $this->createStatesArray('selected');
-        $states['task'] = $this->createStatesArray('task');
+        $states['filter'] = $this->createStatesArray('selected', $call);
+        $states['task'] = $this->createStatesArray('task', $call);
         $ratings['filter'] = [];
 
         $importedAction['filter'] = $this->proposalRepository->fetchImportedActionsByCall($call);
@@ -281,6 +338,15 @@ class BackendProposalsController extends OapBackendController
         $allItems = $this->proposalRepository->findDemanded($call->getProposalPid(), self::STATE_ACCESS_MIN_FILTER, $call->getAssessmentThreshold(), $filter, $sorting);
         $pagination = $this->createPaginator($allItems, $currentPage, (int) $filter['itemsPerPage']);
 
+        $callArchived = $this->isArchivingRequested($call);
+
+        // An archived call keeps exactly one export: the reduced list. The regular formats would
+        // either read answers and files the archiving run has removed, or label their columns from
+        // a form configuration that no longer describes what was submitted.
+        $exportFormats = $callArchived
+            ? [self::EXPORT_FORMAT_ARCHIVED => 'Excel (list only)']
+            : ['csv' => 'CSV', 'excel' => 'Excel', 'downloadDocuments' => 'Documents', 'pdf' => 'PDF'];
+
         $this->moduleTemplate->assignMultiple([
             'proposalStates' => $this->getConstants()['PROPOSAL'],
             'countOfItems' => count($allItems),
@@ -289,7 +355,9 @@ class BackendProposalsController extends OapBackendController
             'ratings' => $ratings,
             'importedAction' => $importedAction,
             'filterSelects' => $filterSelects,
-            'exportFormats' => ['csv' => 'CSV', 'excel' => 'Excel', 'downloadDocuments' => 'Documents', 'pdf' => 'PDF'],
+            'exportFormats' => $exportFormats,
+            'callArchived' => $callArchived,
+            'callArchivingFinished' => $this->isArchivingFinished($call),
             'stateReopenedValue' => self::PROPOSAL_RE_OPENED,
             'actionName' => $this->actionMethodName,
             'paginator' => $pagination['array'],
@@ -315,6 +383,12 @@ class BackendProposalsController extends OapBackendController
      */
     public function uploadAssessmentExcelAction(Call $call, array $upload = []): ResponseInterface
     {
+        // Importing assessments writes to records on their way out. The upload form is left out of
+        // the template for such a call; this covers the replayed request.
+        if ($this->isArchivingRequested($call)) {
+            return $this->denyOnArchivedCall($call);
+        }
+
         $call = $this->importXlsxData($call, $upload);
         return (new ForwardResponse('listProposals'))->withArguments(['call' => $call]);
     }
@@ -330,6 +404,13 @@ class BackendProposalsController extends OapBackendController
 
         $updateProposal = false;
         $call = $proposal->getCall();
+
+        // Archived call: this action writes as well - state change, answers, limitEditableFields -
+        // and the answers it would show are flagged deleted. The list leaves the link out for such
+        // a call; this covers a request that is replayed or built by hand.
+        if ($call !== null && $this->isArchivingRequested($call)) {
+            return $this->denyOnArchivedCall($call);
+        }
         $filter = !empty($sessionStoredData['filter']) ? $sessionStoredData['filter'] : $filter;
 
         $states['filter'] = $this->createStatesArray('selected', $call);
@@ -386,7 +467,7 @@ class BackendProposalsController extends OapBackendController
                     $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:message.state_updated'), '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK);
                     $this->proposalRepository->update($proposal);
 
-                    if ($selectedState == self::PROPOSAL_ACCEPTED || $selectedState == self::PROPOSAL_DECLINED) {
+                    if ($selectedState == self::PROPOSAL_ACCEPTED || $selectedState == self::PROPOSAL_DECLINED || $this->isEditorialState($selectedState)) {
                         // Send status mail
                         return $this->redirect('customizeStatusMail', 'BackendProposals', null, ['proposals' => [$proposal], 'selectedState' => $selectedState]);
                     }
@@ -444,7 +525,7 @@ class BackendProposalsController extends OapBackendController
 
         $answersMap = $this->createAnswersMap($proposal);
 
-        $states['task'] = $this->createStatesArray('task');
+        $states['task'] = $this->createStatesArray('task', $call);
 
         $callLogo = $this->getCallLogo($proposal);
 
@@ -582,6 +663,13 @@ class BackendProposalsController extends OapBackendController
      */
     public function customizeStatusMailAction(array $proposals, int $selectedState, array $selection = []): ResponseInterface
     {
+        // Reachable by URL, so it needs its own guard: a status mail about an archived call would
+        // reach applicants about a procedure that has been closed and whose content is gone.
+        $archivedCall = $this->proposalRepository->findByUid((int)($proposals[0] ?? 0))?->getCall();
+        if ($archivedCall !== null && $this->isArchivingRequested($archivedCall)) {
+            return $this->denyOnArchivedCall($archivedCall);
+        }
+
         $submitted = $this->request->hasArgument('submit');
         $mailCC = $this->request->hasArgument('cc') ? htmlspecialchars($this->request->getArgument('cc')) : '';
         $mailReplyTo = $this->request->hasArgument('reply') ? htmlspecialchars($this->request->getArgument('reply')) : '';
@@ -608,24 +696,55 @@ class BackendProposalsController extends OapBackendController
             $proposalList[$key]['maildata']['signature'] = $this->buildSignature($proposal);
             $proposalList[$key]['maildata']['siteName'] = $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
             $proposalList[$key]['maildata']['langCode'] = $proposalLangCode;
+            $unparsedDefaultMailtext = '';
+            $unparsedDefaultMailSubject = '';
             if ($supporter = $proposal->getCall()->getSupporter()) {
-                if ($proposal->getFeLanguageUid() > 0)
-                {
+                if ($proposal->getFeLanguageUid() > 0) {
                     $translatedSupporter = $this->getTranslatedSupporter($proposal->getFeLanguageUid(), $supporter->getUid());
-                    $unparsedDefaultMailtext = $selectedState == self::PROPOSAL_ACCEPTED
-                        ? $translatedSupporter['event_proposal_accepted_mailtext'] ?? ''
-                        : $translatedSupporter['event_proposal_declined_mailtext'] ?? '';
+                    switch ($selectedState) {
+                        case self::PROPOSAL_ACCEPTED:
+                            $unparsedDefaultMailtext = $translatedSupporter['event_proposal_accepted_mailtext'];
+                            break;
+                        case self::PROPOSAL_DECLINED:
+                            $unparsedDefaultMailtext = $translatedSupporter['event_proposal_declined_mailtext'];
+                            break;
+                    }
                 }
                 else {
-                    $unparsedDefaultMailtext = $selectedState == self::PROPOSAL_ACCEPTED
-                        ? $supporter->getEventProposalAcceptedMailtext()
-                        : $supporter->getEventProposalDeclinedMailtext();
+                    switch ($selectedState) {
+                        case self::PROPOSAL_ACCEPTED:
+                            $unparsedDefaultMailtext = $supporter->getEventProposalAcceptedMailtext();
+                            break;
+                        case self::PROPOSAL_DECLINED:
+                            $unparsedDefaultMailtext = $supporter->getEventProposalDeclinedMailtext();
+                            break;
+                    }
                 }
+            }
 
-            } else {
+            if ($unparsedDefaultMailtext == '') {
+                // mail text from state dataset
+                if ($proposal->getFeLanguageUid() > 0) {
+                    // raw database row - the columns are named as in the schema
+                    $translatedState = $this->getTranslatedState($proposal->getFeLanguageUid(), $proposal->getState());
+                    $unparsedDefaultMailtext = (string)($translatedState['mail_text'] ?? '');
+                    $unparsedDefaultMailSubject = (string)($translatedState['mail_subject'] ?? '');
+                } else {
+                    /** @var State|null $state */
+                    $state = $this->stateRepository->findByUid((int)$proposal->getState());
+                    $unparsedDefaultMailtext = (string)$state?->getMailText();
+                    $unparsedDefaultMailSubject = (string)$state?->getMailSubject();
+                }
+            }
+
+            if ($unparsedDefaultMailtext == '') {
                 $unparsedDefaultMailtext = 'Missing Email Text';
             }
+            if ($unparsedDefaultMailSubject == '') {
+                $unparsedDefaultMailSubject = 'Missing Email Subject';
+            }
             $proposalList[$key]['maildata']['mailtext'] = $this->parseMailtext($proposal, $unparsedDefaultMailtext, $additionalMailData, $proposalLangCode);
+            $proposalList[$key]['maildata']['mailsubject'] = strip_tags($this->parseMailtext($proposal, $unparsedDefaultMailSubject, $additionalMailData, $proposalLangCode));
 
             if ($selectedMailAction == 1) {
                 $additionalData = [];
@@ -636,7 +755,7 @@ class BackendProposalsController extends OapBackendController
                     $rto = GeneralUtility::trimExplode(',', htmlspecialchars($this->request->getArgument('reply')), true);
                     $additionalData['replyTo'] = $rto[0];
                 }
-                $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $proposalList[$key]['maildata']['mailtext'], $proposalLangCode, $additionalData);
+                $this->sendEmail($proposal, $mailTemplatePaths, $mailTemplate, $proposalList[$key]['maildata']['mailtext'], $proposalList[$key]['maildata']['mailsubject'], $proposalLangCode, $additionalData);
 
                 if ($selectedState === self::PROPOSAL_DECLINED) {
                     $proposal->setRejectionTstamp(time());
@@ -652,6 +771,20 @@ class BackendProposalsController extends OapBackendController
             }
         }
 
+        /// take call from last proposal
+        /** @var Call $call */
+        $call = $proposal->getCall();
+
+        $states = [];
+        $stateName = '';
+        /** @var State $state */
+        foreach ($call->getAvailableStates() as $state) {
+            if ($state->getUid() == $selectedState) {
+                $stateName = $state->getTitle();
+                $stateInternalName = $state->getInternalTitle();
+            }
+        }
+
         $defaultMailCc = $proposalList[0]['proposal']->getCall()->getEmails();
         $defaultMailCcExploded = GeneralUtility::trimExplode(',', $defaultMailCc, true);
         $proposalList[0]['defaultMailCc'] = $defaultMailCc;
@@ -662,8 +795,11 @@ class BackendProposalsController extends OapBackendController
             'proposals' => $proposals,
             'proposalList' => $proposalList,
             'state' => $selectedState,
+            'stateName' => $stateName,
+            'stateInternalName' => $stateInternalName,
             'siteName' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
             'mailtext' => count($proposals) == 1 ? $proposalList[0]['maildata']['mailtext'] : $unparsedDefaultMailtext,
+            'mailSubject' => count($proposals) == 1 ? $proposalList[0]['maildata']['mailsubject'] : $unparsedDefaultMailSubject,
             'submitted' => $submitted,
             'settings' => $this->settings,
             'call' => $proposal->getCall(),
@@ -1170,6 +1306,94 @@ class BackendProposalsController extends OapBackendController
     }
 
     /**
+     * State labels as the list view shows them: the editorial states of the call carry their
+     * internal title, the built-in labels fill the gaps. Keyed by state uid.
+     */
+    protected function buildStateLabels(?Call $call): array
+    {
+        // 'all' is none of the modes the method branches on - it falls through to the widest
+        // range, so even a state below the filter minimum carries its label here.
+        $states = $this->createStatesArray('all');
+        if ($call !== null) {
+            // the editorial states of the call win, the built-in labels fill the gaps
+            $states = $this->createStatesArray('selected', $call) + $states;
+        }
+
+        return $states;
+    }
+
+    /**
+     * Reduced list export for an archived call: proposal level only - internal id, signature,
+     * title, applicant, state, assessment and the date of the last edit.
+     *
+     * Builds no column from the call configuration on purpose. The regular exports take their
+     * labels from the live form items, and those no longer reliably describe what was once
+     * submitted; the answers behind them are flagged deleted after the archiving run anyway, so
+     * those columns would come out empty under headings that may since have changed.
+     *
+     * The internal raw values sit beside the readable ones, since only those sort sensibly in
+     * Excel.
+     *
+     * @throws InvalidQueryException
+     */
+    protected function exportArchivedList($records): void
+    {
+        $proposals = $this->proposalRepository->findByUids($records, ['signature' => 'ASC']);
+        $states = $this->buildStateLabels(($proposals[0] ?? null)?->getCall());
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $head = [
+            'ID (intern)',
+            'Signature',
+            'Signature (no.)',
+            'Title',
+            'Applicant (company)',
+            'Applicant (user)',
+            'State',
+            'State (intern)',
+            'Assessment (intern)',
+            'Last Changed',
+        ];
+        foreach ($head as $columnNo => $label) {
+            $sheet->setCellValue([$columnNo + 1, 1], $label);
+            $sheet->getStyle([$columnNo + 1, 1])->getFont()->setBold(true);
+        }
+
+        $rowNo = 2;
+        /** @var Proposal $proposal */
+        foreach ($proposals as $proposal) {
+            $applicant = $proposal->getApplicant();
+            $state = (int)$proposal->getState();
+            $line = [
+                (int)$proposal->getUid(),
+                $this->buildSignature($proposal),
+                $proposal->getSignature(),
+                (string)$proposal->getTitle(),
+                $applicant ? $applicant->getCompany() : '[Deleted Applicant]',
+                $applicant ? $applicant->getUsername() : '',
+                $states[$state] ?? (string)$state,
+                $state,
+                $proposal->getAssessmentValue(),
+                $proposal->getEditTstamp() ? date('d.m.Y H:i', $proposal->getEditTstamp()) : '',
+            ];
+            foreach ($line as $columnNo => $value) {
+                $sheet->setCellValue([$columnNo + 1, $rowNo], $value);
+            }
+            $rowNo++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'proposal-archive-list--' . date('Ymd-Hi');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0, must-revalidate');
+        $writer->save('php://output');
+        die();
+    }
+
+    /**
      * @param $records
      * @throws InvalidQueryException
      */
@@ -1555,6 +1779,38 @@ class BackendProposalsController extends OapBackendController
         return $filter;
     }
 
+
+    /**
+     * Is the given state an editorially created one (a state record), as opposed
+     * to one of the built-in states that are handled separately?
+     *
+     * Do not test this by uid range: uids below 10 are reserved for the built-in
+     * states by convention only. Whether an installation's state records actually
+     * start at 10 depends on the auto increment of the table, so a freshly created
+     * state can well end up with uid 7, 8 or 9.
+     *
+     * @param int $state
+     * @return bool
+     */
+    protected function isEditorialState(int $state): bool
+    {
+        if (in_array($state, [self::PROPOSAL_IN_PROGRESS, self::PROPOSAL_SUBMITTED, self::PROPOSAL_RE_OPENED], true)) {
+            return false;
+        }
+
+        return $this->stateRepository->findByUid($state) !== null;
+    }
+
+    /**
+     * @param int $languageUid
+     * @param int $stateUid
+     * @return array
+     * @throws \Doctrine\DBAL\Exception
+     */
+    protected function getTranslatedState(int $languageUid, int $stateUid): array
+    {
+        return $this->stateRepository->findStateByLanguage($languageUid, $stateUid);
+    }
 
     protected function handleMenu(string $currentAction): void
     {

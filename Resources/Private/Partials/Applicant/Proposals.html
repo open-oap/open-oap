@@ -18,7 +18,7 @@
                     <p><f:format.raw>{f:translate(key:'tx_openoap_dashboard.proposal.buttonCreateNew.noAccessOnCurrentLanguage')}</f:format.raw></p>
                 </f:if>
 
-                <f:render partial="Proposal/Info" arguments="{proposal:proposal, constants:constants}" />
+                <f:render partial="Proposal/Info" arguments="{proposal:proposal, constants:constants, states:states}" />
             </div>
             <div class="proposals__item-options">
                 <f:if condition="{proposal.call.hidden} == 0">
