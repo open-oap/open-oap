@@ -987,7 +987,14 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     $itemsMap[$itemUid]['type'] = 'email';
                     break;
                 case self::VALIDATOR_WEBSITE:
-                    $itemsMap[$itemUid]['type'] = 'url';
+                    // No input type on purpose: type="url" makes the browser require a
+                    // scheme, so an address like "www.example.org" is refused before the
+                    // form is submitted, with a native message that cannot be localized
+                    // or placed next to the field. Website answers are validated in
+                    // ProposalController::validateProposal() instead.
+                    // The original line is kept, commented out, while the validation
+                    // approach is still being discussed:
+                    // $itemsMap[$itemUid]['type'] = 'url';
                     break;
                 case self::VALIDATOR_PHONE:
                     $itemsMap[$itemUid]['type'] = 'tel';

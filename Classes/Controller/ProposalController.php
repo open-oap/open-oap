@@ -31,7 +31,9 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Validation\Validator\EmailAddressValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\FloatValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\IntegerValidator;
-use TYPO3\CMS\Extbase\Validation\Validator\UrlValidator;
+
+// Unused since website answers are validated by pattern; see $urlValidator below.
+// use TYPO3\CMS\Extbase\Validation\Validator\UrlValidator;
 
 /**
  * This file is part of the "Open Application Platform" Extension for TYPO3 CMS.
@@ -63,10 +65,12 @@ class ProposalController extends OapFrontendController
      */
     protected ?EmailAddressValidator $emailValidator = null;
 
-    /**
-     * @var UrlValidator|null
-     */
-    protected ?UrlValidator $urlValidator = null;
+    // Kept, commented out, while the approach for validating website answers is still
+    // being discussed: UrlValidator checks through FILTER_VALIDATE_URL and therefore
+    // requires a scheme, which is what this change deliberately drops. Website answers
+    // are validated by pattern in validateProposal() instead.
+    // /** @var UrlValidator|null */
+    // protected ?UrlValidator $urlValidator = null;
 
     /** @var string */
     protected string $survey = '';
@@ -135,7 +139,8 @@ class ProposalController extends OapFrontendController
             $this->integerValidator = new IntegerValidator();
             $this->floatValidator = new FloatValidator();
             $this->emailValidator = new EmailAddressValidator();
-            $this->urlValidator = new UrlValidator();
+            // See $urlValidator above: kept while the website validation is discussed.
+            // $this->urlValidator = new UrlValidator();
         }
     }
 
@@ -1137,8 +1142,17 @@ class ProposalController extends OapFrontendController
                         }
                         break;
                     case self::VALIDATOR_WEBSITE:
-                        if ($this->urlValidator->validate($answer->getValue())->hasErrors() and $answer->getValue() !== '') {
-                            $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'invalid_webaddress');
+                        // Mirror the JS VALIDATOR_WEBSITE (validator.js): strip a leading
+                        // http(s):// scheme, then validate domain + optional port/path/query/
+                        // fragment with the same pattern the frontend uses, so FE and BE
+                        // validate website fields identically (protocol optional).
+                        $webValue = $answer->getValue();
+                        if ($webValue !== '') {
+                            $webValue = preg_replace('~^https?://~', '', $webValue);
+                            $webPattern = '@^(([a-z\d]([a-z\d-]*[a-z\d])*)\.)+([a-z]{2,})(:\d+)?(/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$@i';
+                            if (!preg_match($webPattern, (string)$webValue)) {
+                                $this->setValidationResult($validationResult, $answer, self::XLF_BASE_IDENTIFIER_JSMSG . 'invalid_webaddress');
+                            }
                         }
                         break;
                     case self::VALIDATOR_PHONE:
