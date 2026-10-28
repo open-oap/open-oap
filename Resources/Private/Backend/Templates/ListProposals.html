@@ -33,7 +33,27 @@ Available variables:
     <p style="margin-bottom:0;"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:module_headline.list_of_proposals"/>:</p>
     <h2 style="margin-bottom:2rem;margin-top:0;">{call.title}</h2>
 
-    <f:render partial="ProposalList/UploadForm.html" arguments="{_all}" />
+    <f:if condition="{callArchived}">
+        <div class="alert alert-warning">
+            <h4 class="alert-title"><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:archived.notice.header"/></h4>
+            <p class="alert-message">
+                <f:if condition="{callArchivingFinished}">
+                    <f:then><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:archived.notice.finished"/></f:then>
+                    <f:else><f:translate key="LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:archived.notice.requested"/></f:else>
+                </f:if>
+            </p>
+        </div>
+    </f:if>
+
+    <f:comment>
+        The assessment upload writes to the proposals, so it is gone for an archived call.
+        The controller refuses it as well - leaving it out here is only the hint.
+    </f:comment>
+    <f:if condition="{callArchived}">
+        <f:else>
+            <f:render partial="ProposalList/UploadForm.html" arguments="{_all}" />
+        </f:else>
+    </f:if>
 
     <f:form action="listProposals" enctype="multipart/form-data">
         <f:form.hidden value="{call}" name="call" />
@@ -123,6 +143,13 @@ Available variables:
         <f:form.hidden value="{call}" name="call" />
         <div id="selection-row"  style="display:none;">
             <h3><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.header' /></h3>
+            <f:comment>
+                No state change on an archived call - it would alter records on their way out, and
+                for accepted or declined it would send status mail to the applicants. The controller
+                refuses it as well; leaving the control out here is only the hint.
+            </f:comment>
+            <f:if condition="{callArchived}">
+            <f:else>
             <div class="form-inline table-bg">
                 <fieldset class="form-group">
                     <label for="state-bulk-select">
@@ -141,6 +168,8 @@ Available variables:
                     <f:form.button class="btn btn-primary" name="selection[todo]" value="submit-state" ><f:translate key='LLL:EXT:open_oap/Resources/Private/Language/locallang_backend.xlf:selection.state.submit' /> </f:form.button>
                 </fieldset>
             </div>
+            </f:else>
+            </f:if>
             <div class="form-inline table-bg">
                 <fieldset class="form-group">
                     <label for="state-bulk-select">
@@ -268,9 +297,21 @@ Available variables:
                     </span>
                 </td>
                 <td class="col-title">
-                    <f:link.action action="showProposal" arguments="{proposal:proposal.uid,call:proposal.call}" class="" title="{f:translate(key:'action.show_proposal')}">
-                        {proposal.title}
-                    </f:link.action><br />
+                    <f:comment>
+                        No link into the detail view for an archived call: that action writes too,
+                        and the answers it would show are flagged deleted. The controller refuses
+                        it as well - leaving the link out here is only the hint.
+                    </f:comment>
+                    <f:if condition="{callArchived}">
+                        <f:then>
+                            {proposal.title}<br />
+                        </f:then>
+                        <f:else>
+                            <f:link.action action="showProposal" arguments="{proposal:proposal.uid,call:proposal.call}" class="" title="{f:translate(key:'action.show_proposal')}">
+                                {proposal.title}
+                            </f:link.action><br />
+                        </f:else>
+                    </f:if>
                     <v:variable.set name="jsonArray" value="{proposal.metaInformation -> v:format.json.decode()}"/>
                     <f:if condition="{jsonArray.info}">
                     <div class="metainfo">
@@ -294,7 +335,7 @@ Available variables:
                     </f:if>
                 </td>
                 <td nowrap="nowrap" class="col-title">
-                    <f:translate key="tx_openoap_domain_model_proposal.state.{proposal.state}" />
+                    {states.filter.{proposal.state}}
                     <f:if condition="{proposal.rejectionTstamp} && {proposal.state} == {proposalStates.PROPOSAL_DECLINED}">
                         <br>
                         {proposal.rejectionTstamp -> f:format.date(format: 'd.m.Y H:i')}<br>

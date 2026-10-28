@@ -19,8 +19,8 @@ Available variables:
     <div class="accordion__item-content">
         <f:if condition="{proposals}">
             <f:then>
-                <f:render partial="Applicant/Legend" arguments="{constants:constants}" />
-                <f:render partial="Applicant/Proposals" arguments="{proposals:proposals, commentsCount:proposalsCommentsCount, constants:constants}" />
+                <f:render partial="Applicant/Legend" arguments="{constants:constants,states:states}" />
+                <f:render partial="Applicant/Proposals" arguments="{proposals:proposals, commentsCount:proposalsCommentsCount, constants:constants, states: states, statesConstants:statesConstants}" />
             </f:then>
 
             <f:else>

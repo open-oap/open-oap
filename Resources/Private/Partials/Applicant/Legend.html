@@ -2,10 +2,10 @@
 <div class="proposals__legend">
     <button class="proposals__legend-control" aria-controls="proposals-status-legend" aria-expanded="false" data-disclosure-control>{f:translate(key:'tx_openoap_dashboard.proposalStatesLegend.header')}</button>
     <dl class="proposals__legend-list" id="proposals-status-legend">
-      <f:for each="{constants}" as="state">
+      <f:for each="{states.legend}" key="label" as="legend">
           <div class="proposals__legend-item">
-              <dt class="proposals__status">{f:translate(key:'tx_openoap_domain_model_proposal.state.{state}')}</dt>
-              <dd class="proposals__legend-definition">{f:translate(key:'tx_openoap_domain_model_proposal.state.{state}.legend')}</dd>
+              <dt class="proposals__status">{label}</dt>
+              <dd class="proposals__legend-definition">{legend}</dd>
           </div>
       </f:for>
     </dl>

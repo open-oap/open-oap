@@ -1466,6 +1466,24 @@
 			<trans-unit id="backup.config.mysqlDumpBinaryPath">
 				<source><![CDATA[MySQL Dump Binary Path (leave empty to use default "mysqldump")]]></source>
 			</trans-unit>
-        </body>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.name" resname="tx_openoap.task.archiveProposalsTask.name">
+				<source>Archiving of submissions</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.description" resname="tx_openoap.task.archiveProposalsTask.description">
+				<source>Submissions for a call marked as archived will be consolidated, deleted and will no longer be available.</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.field.startTimeHour" resname="tx_openoap.task.archiveProposalsTask.field.startTimeHour">
+				<source>Run only from hour (0–24)</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.field.endTimeHour" resname="tx_openoap.task.archiveProposalsTask.field.endTimeHour">
+				<source>Run only until hour (0–24)</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.field.chunk" resname="tx_openoap.task.archiveProposalsTask.field.chunk">
+				<source>Proposals per call per run (chunk size)</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.field.error" resname="tx_openoap.task.archiveProposalsTask.field.error">
+				<source>Please enter valid hours (0–24, start before end) and a chunk size of at least 1.</source>
+			</trans-unit>
+		</body>
     </file>
 </xliff>

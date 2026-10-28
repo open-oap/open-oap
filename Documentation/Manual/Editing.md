@@ -719,6 +719,33 @@ All data of the created and submitted applications refer to the data fields of t
 
 17. **"Not accessible with these languages in the frontend"** – Language versions can be deactivated
 
+### States
+
+Beside the states every installation brings along, further states can be created as records and
+offered per call. A state is what an editor sets a submitted proposal to in the proposals module,
+and what the applicant then sees on the dashboard.
+
+A state record carries these fields:
+
+1. **Title**: the wording the applicant sees for this state.
+2. **Internal Title**: the wording in the backend list and in the proposals module. Keep it
+   unambiguous - this is what editors pick from.
+3. **Legend**: the explanation shown with the state, where the dashboard and the module print a
+   legend of the states.
+4. **Mail subject** and **Mail text**: used for the status mail that goes out when a proposal is
+   set to this state.
+5. **Functions**: what the state means for the application logic. The function available today
+   marks a state as accepting, which other features build on - the data transfer of a succession
+   call, for instance, starts from an accepted proposal (see chapter "[Special function "Call
+   with data transfer"](#special-function-call-with-data-transfer)").
+
+Which of the states a call offers is set in the call itself, in the field **Available States**.
+A state that is not selected there cannot be set for a proposal of that call, so a call can be
+run with a short list of states even when the installation knows many.
+
+**Note**: The title of a state is what applicants read. Changing it changes the wording for
+every proposal already in that state, including the ones already communicated by mail.
+
 ### Proposal Pid
 
 This is the filing directory for the submitted applications.
@@ -788,6 +815,41 @@ In the section "Clipboard" you can see the copy
 Then, using the function above "Paste clipboard content", the copied call is inserted into the list.
 
 <img src="../Images/Manual/Editing/call-paste.png" style="max-width:172px;height:auto" />
+
+### Archiving a call
+
+When a call is over and its submissions no longer have to be kept, the call can be marked for
+archiving. The **Archiving** tab of the call record holds three fields:
+
+1. **Archive submissions for this call**: the switch an editor sets. It requests the archiving,
+   it does not perform it.
+2. **Archiving status**: filled by the system - archiving not yet started, started, or finished.
+3. **Date of archiving**: filled by the system when the archiving ran.
+
+The archiving itself is done by a scheduler task, so it starts after the switch has been set,
+not at the moment of saving.
+
+**Note**: Archiving removes data and cannot be undone. What happens to a call's submissions:
+
+- the answers, the comments and the drafts are flagged as deleted and disappear from the
+  proposals module
+- the uploaded files and the generated Word exports are deleted from the file storage for good
+- the generated PDF of a submitted proposal is kept, so the submission itself stays readable
+
+Set the switch only once it is settled that the uploads are no longer needed. If in doubt, export
+what is needed before marking the call.
+
+#### Administration of the archiving task
+
+The task is set up in the TYPO3 scheduler as "Archiving of submissions". It works through the
+calls marked for archiving and carries three settings:
+
+- **Run only from hour** and **Run only until hour** (0-24): the time window the task is allowed
+  to work in. Archiving a large call means deleting many files, which is better done outside the
+  hours applicants work in.
+- **Proposals per call per run** (chunk size): how many proposals of one call are processed in a
+  single run. A call with thousands of submissions is archived over several runs rather than in
+  one long one; the task picks up a call it has started before the ones it has not begun.
 
 ### Special function "anonymous survey"
 

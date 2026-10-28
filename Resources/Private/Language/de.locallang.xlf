@@ -1812,6 +1812,30 @@
                 <source>Edit</source>
                 <target>Bearbeiten</target>
             </trans-unit>
-        </body>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.name" resname="tx_openoap.task.archiveProposalsTask.name">
+				<source>Archiving of submissions</source>
+				<target>Archivierung von Einreichungen</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.description" resname="tx_openoap.task.archiveProposalsTask.description">
+				<source>Submissions for a call marked as archived will be consolidated, deleted and will no longer be available.</source>
+				<target>Einreichungen eines Calls, der als archiviert markiert ist, werden konsolidiert, gelöscht und stehen nicht mehr zur Verfügung.</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.field.startTimeHour" resname="tx_openoap.task.archiveProposalsTask.field.startTimeHour">
+				<source>Run only from hour (0–24)</source>
+				<target>Nur ausführen ab Stunde (0–24)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.field.endTimeHour" resname="tx_openoap.task.archiveProposalsTask.field.endTimeHour">
+				<source>Run only until hour (0–24)</source>
+				<target>Nur ausführen bis Stunde (0–24)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.field.chunk" resname="tx_openoap.task.archiveProposalsTask.field.chunk">
+				<source>Proposals per call per run (chunk size)</source>
+				<target>Anträge pro Call pro Lauf (Chunk-Größe)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap.task.archiveProposalsTask.field.error" resname="tx_openoap.task.archiveProposalsTask.field.error">
+				<source>Please enter valid hours (0–24, start before end) and a chunk size of at least 1.</source>
+				<target>Bitte gültige Stunden (0–24, Start vor Ende) und eine Chunk-Größe von mindestens 1 eingeben.</target>
+			</trans-unit>
+		</body>
     </file>
 </xliff>
